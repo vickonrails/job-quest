@@ -3,13 +3,20 @@ import clsx from 'clsx'
 import { getSize, type Size } from '@components/utils'
 import Spinner from '@components/spinner/Spinner'
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+    /** specifies if the button should fill all horizontal space */
     fullWidth?: boolean
+    /** size of button */
     size?: Size
+    /** specifies loading state */
     loading?: boolean
+    /** specifies if button is disabled */
     disabled?: boolean
 }
 
+/**
+ * Button component - handles clickable actions
+ */
 export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', className, disabled, loading, ...rest }) => {
     const isFullWidth = clsx(fullWidth && 'w-full');
     return (
