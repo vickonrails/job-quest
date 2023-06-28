@@ -2,17 +2,26 @@
   "name": "job.quest",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "types:pregen": "npx supabase start",
+    "types:gen": "npx supabase gen types typescript --project-id",
+    "db:seed": "ts-node --esm ./src/utils/seed.ts"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.6.1",
+    "@supabase/auth-helpers-react": "^0.3.1",
+    "@supabase/supabase-js": "^2.20.0",
     "clsx": "^1.2.1",
+    "dotenv": "^16.0.3",
     "next": "^13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-feather": "^2.0.10",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -29,7 +38,9 @@
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.6",
+    "supabase": "^1.50.8",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
   "ct3aMetadata": {

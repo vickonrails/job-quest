@@ -1,5 +1,6 @@
 import { type Config } from "tailwindcss";
 import defaultTheme from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
@@ -13,7 +14,17 @@ export default {
         'light': '0px 1px 2px rgba(16, 24, 40, 0.05)'
       },
       colors: {
-        'primary': '#683DF5'
+        'light-text': '#728292',
+        primary: colors.indigo[700],
+        'primary-light': colors.indigo[600]
+      },
+      fontSize: {
+        '6xl': '4rem',
+        '5xl': '3.1rem',
+        '4xl': '2.6rem',
+        '3xl': '2.1rem',
+        '2xl': '1.5rem',
+        'xl': '1.25rem'
       }
     },
   },
