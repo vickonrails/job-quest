@@ -33,7 +33,7 @@ export const Typography: FC<TypographyProps> = ({ as = 'p', variant, className, 
             return <h1 className={classes} {...rest} />;
 
         case 'h2':
-            return <h2 className={variant} {...rest} />;
+            return <h2 className={classes} {...rest} />;
 
         case 'h3':
             return <h3 className={variant} {...rest} />;

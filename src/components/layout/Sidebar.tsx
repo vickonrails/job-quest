@@ -20,7 +20,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
 
             <nav>
                 <NavGroup className='mb-6'>
-                    <NavLink href="/app">
+                    <NavLink href="/app/dashboard">
                         <Grid className='mr-2' />
                         <span>Dashboard</span>
                     </NavLink>

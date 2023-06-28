@@ -2,11 +2,9 @@ import { Avatar } from '@components/avatar';
 import { Input } from '@components/input';
 import React, { type FC, type HTMLAttributes, useCallback } from 'react'
 import { Sidebar } from './Sidebar';
-import { Button } from '@components/button';
 
 import { useRouter } from 'next/router'
-import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { type Database } from 'lib/database.types';
+import { type Session } from '@supabase/auth-helpers-react'
 
 interface LayoutProps extends HTMLAttributes<HTMLElement> {
     session: Session | null
@@ -14,23 +12,15 @@ interface LayoutProps extends HTMLAttributes<HTMLElement> {
 
 export const Layout: FC<LayoutProps> = ({ children, session, ...rest }) => {
     const router = useRouter();
-    const client = useSupabaseClient<Database>();
-
-    const handleLogout = useCallback(() => {
-        client.auth.signOut().then(_ => {
-            return router.push('/sign-in');
-        }).catch(err => {
-            console.log(err)
-        });
-    }, [client.auth, router])
 
     return (
         <div className='flex min-h-screen' {...rest}>
             <Sidebar className='basis-64' />
             <main className='bg-indigo-50 flex-1 p-6 pr-10'>
                 <Navbar session={session} />
-                <Button size='sm' onClick={handleLogout} className='mr-3'>Log out</Button>
-                {children}
+                <div className='mt-10'>
+                    {children}
+                </div>
             </main>
         </div>
     )
