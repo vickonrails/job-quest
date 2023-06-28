@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,10 +20,12 @@
     "jsx": "preserve",
     "incremental": true,
     "noUncheckedIndexedAccess": true,
+    "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
       "@components/*": [
-        "./src/components/*"
+        "./src/components/*",
+        "./src/hooks/*"
       ]
     }
   },
@@ -34,7 +36,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "src/components/button"
+    "src/components/button",
+    "src/utils/seed.ts"
   ],
   "exclude": [
     "node_modules"
