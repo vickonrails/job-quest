@@ -2,7 +2,7 @@ import { Layout } from '@components/layout'
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Spinner from '@components/spinner/Spinner';
-import { useSession, useUser } from 'src/hooks';
+import { useSession, useUser } from '@hooks';
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session

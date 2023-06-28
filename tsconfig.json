@@ -24,9 +24,11 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": [
-        "./src/components/*",
-        "./src/hooks/*"
-      ]
+        "./src/components/*"
+      ],
+      "@hooks": [
+        "./src/hooks"
+      ],
     }
   },
   "include": [
