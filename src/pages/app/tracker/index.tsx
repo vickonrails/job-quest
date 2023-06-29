@@ -5,7 +5,7 @@ import { Database } from 'lib/database.types';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useJobs } from '@hooks';
-import { Job } from 'lib/types';
+import { type Job } from 'lib/types';
 import Spinner from '@components/spinner/Spinner';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
@@ -27,7 +27,7 @@ const Tracker = () => {
 
     return (
         // TODO: see how to make use of suspense right inside the layout component and other places
-        <Layout session={session}>
+        <Layout session={session ?? undefined} >
             {profileLoading ? <Spinner /> : (
                 <>
                     <div className='flex justify-between mb-4'>

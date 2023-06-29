@@ -40,3 +40,5 @@ export const Avatar = ({ border = 'round', className, size = 'sm', alt, ...rest 
         />
     )
 }
+
+// TODO: support for image url fallback

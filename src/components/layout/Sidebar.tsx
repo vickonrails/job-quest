@@ -10,7 +10,7 @@ type SidebarProps = HTMLAttributes<HTMLElement>;
 
 export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
-        <aside className={
+        <aside data-testid='sidebar' className={
             clsx(
                 'p-5',
                 className

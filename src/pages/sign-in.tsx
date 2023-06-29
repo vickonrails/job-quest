@@ -72,7 +72,6 @@ const SignIn: NextPage<SignInProps> = () => {
                         <Input autoFocus size='lg' placeholder='Enter email' value={email} onChange={(ev) => setEmail(ev.target.value)} className='mb-4' label='Email' name="email" fullWidth />
                         <Button disabled={emailSent || isLoading} loading={isLoading} size='lg' fullWidth className='mb-4'>Send Magic Link</Button>
                     </form>
-                    {/* <p className='text-center'>Don&#39;t have an account? <Link href="sign-up">Create account</Link></p> */}
                 </div>
             </AuthCard>
         </>

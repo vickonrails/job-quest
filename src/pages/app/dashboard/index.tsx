@@ -34,7 +34,7 @@ const Index = () => {
     }, [session, router, sessionLoading]);
 
     return (
-        <Layout session={session}>
+        <Layout session={session ?? undefined}>
             <Button size='sm' onClick={handleLogout} className='mr-3'>Log out</Button>
             {(sessionLoading || loadingProfile) ? <Spinner /> : (
                 <>
