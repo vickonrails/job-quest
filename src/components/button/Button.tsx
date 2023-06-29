@@ -21,14 +21,18 @@ export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', clas
     const isFullWidth = clsx(fullWidth && 'w-full');
     return (
         <button
+            disabled
             className={clsx(
                 'bg-primary hover:bg-primary-light transition-colors rounded-lg text-white py-2 px-3.5 font-medium',
                 isFullWidth,
                 size && getSize(size),
-                disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
+                disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                loading && 'pointer-events-none',
                 className
             )} {...rest}>
-            {loading ? <div><Spinner variant='secondary' /></div> : children}
+            {loading ? (<div>
+                <Spinner variant='secondary' />
+            </div>) : children}
         </button>
     )
 }

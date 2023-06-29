@@ -14,7 +14,10 @@ export default defineConfig({
         coverage: {
             all: true,
             include: ["src/**/*.{ts,tsx}"],
-        }
+            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}", "src/**/index.{ts,tsx}"],
+        },
+        globals: true,
+        setupFiles: ["./vitest/setup.ts"],
     },
     resolve: {
         alias: {

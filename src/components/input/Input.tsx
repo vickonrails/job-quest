@@ -2,7 +2,7 @@ import { type InputHTMLAttributes, type FC } from "react"
 import clsx from 'clsx'
 import { type Size, getSize } from "@components/utils"
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
     /**
      * 
      */
@@ -16,22 +16,28 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">
     hint?: string
     fullWidth?: boolean
 
+    /** size of the input */
     size?: Size
 }
 
-export const Input: FC<InputProps> = ({ label, name, hint, className, size = 'md', fullWidth, ...rest }) => {
+/** Input component - for taking user's input */
+export const Input: FC<InputProps> = ({ label, name, hint, className, disabled, size = 'md', fullWidth, ...rest }) => {
     return (
-        <div>
-            <label className="block m-1.5 text-sm text-gray-600" htmlFor={name}>{label}</label>
+        <div className={clsx(fullWidth ? 'w-full' : 'w-60')}>
+            <label aria-labelledby={name} htmlFor={name} className="block m-1.5 text-sm text-gray-600">{label}</label>
             <input className={
                 clsx(
-                    'border rounded-lg px-3.5 active:border-primary shadow-light',
-                    fullWidth && 'w-full',
+                    'border block rounded-lg px-3.5 w-full mb-1 active:border-primary shadow-light',
+                    // fullWidth && 'w-full',
                     size && getSize(size),
+                    disabled && 'pointer-events-none',
                     className,
                 )
-            } id={name} {...rest} />
-            {hint && <span>{hint}</span>}
+            } id={name} disabled={disabled} {...rest} />
+            {hint && <span className="text-sm block text-gray-400 px-2" data-testid='hint'>{hint}</span>}
         </div>
     )
 }
+
+// TODO: input with icon
+// TODO: support for password input

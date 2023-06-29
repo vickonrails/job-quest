@@ -8,7 +8,7 @@ interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
 
 const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     return (
-        <span className={clsx(
+        <span data-testid='spinner' className={clsx(
             classes.spinner,
             variant === 'secondary' && classes.secondary,
         )} {...rest} />
