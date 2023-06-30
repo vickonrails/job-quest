@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
-import { type Database } from 'lib/database.types'
+import { type Database } from 'apps/web/lib/database.types.ts'
 import jobs from './jobs.json' assert { type: "json" }
 import { reportError } from './reportError.ts';
 

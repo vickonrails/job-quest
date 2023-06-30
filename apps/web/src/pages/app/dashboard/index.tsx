@@ -1,11 +1,11 @@
-import { Layout } from '@components/layout'
-import React, { useCallback, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useCallback, useEffect } from 'react';
+import { Button } from '@components/button';
+import { Layout } from '@components/layout';
 import Spinner from '@components/spinner/Spinner';
 import { useSession, useUser } from '@hooks';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { Database } from 'lib/database.types';
-import { Button } from '@components/button';
+import { type Database } from 'lib/database.types';
+import { useRouter } from 'next/router';
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session

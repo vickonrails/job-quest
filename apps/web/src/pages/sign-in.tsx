@@ -1,15 +1,15 @@
 import React, { type FormEvent, useState } from 'react'
-import { Input } from '@components/input'
-import { Button } from '@components/button'
 
 import Head from 'next/head'
 import { type NextPage, type GetServerSideProps } from 'next'
-import { type Database } from 'lib/database.types'
 import { createServerSupabaseClient, type Session } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { type Database } from 'lib/database.types'
 import { AuthCard } from '@components/auth/authCard'
-import Banner from '@components/banner/Banner'
 import { Typography } from '@components/typography'
+import Banner from '@components/banner/Banner'
+import { Button } from '@components/button'
+import { Input } from '@components/input'
 
 interface SignInProps {
     session: Session
@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session) {
         return {
             redirect: {
-                destination: '/app',
+                destination: '/app/dashboard',
                 permanent: false
             }
         }

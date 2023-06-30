@@ -1,6 +1,6 @@
 import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { getSize, type Size } from '@components/utils'
+import { type Size, getSize } from '@components/utils'
 import Spinner from '@components/spinner/Spinner'
 
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {

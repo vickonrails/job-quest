@@ -3,18 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "docs",
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start",
-    "types:pregen": "npx supabase start",
-    "types:gen": "npx supabase gen types typescript --project-id",
-    "db:seed": "ts-node --esm ./src/utils/seed.ts",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.6.1",

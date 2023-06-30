@@ -1,10 +1,9 @@
-import Logo from '@components/logo/Logo';
 import React, { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { Link } from '@components/link';
-import { type LinkProps } from '@components/link';
 import { useRouter } from 'next/router';
 import { Folder, Grid, File, Clipboard, Bell, User, FileText } from 'react-feather'
+import { Link, type LinkProps } from '@components/link';
+import Logo from '@components/logo/Logo';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
 

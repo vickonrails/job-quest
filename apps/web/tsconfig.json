@@ -22,17 +22,25 @@
     "noUncheckedIndexedAccess": true,
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@hooks": [
+        "./src/hooks"
+      ],
+    }
   },
   "include": [
-    // "apps/web/.eslintrc.cjs",
-    // "apps/web/next-env.d.ts",
-    // "**/*.ts",
-    // "**/*.tsx",
-    // "**/*.cjs",
-    // "**/*.mjs",
-    // "apps/web/src/components/button",
-    // "apps/web/src/utils/seed.ts",
-    // "packages/web/tsconfig.json"
+    "apps/web/.eslintrc.cjs",
+    "apps/web/next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs",
+    "apps/web/src/components/button",
+    "apps/web/src/utils/seed.ts",
+    "packages/web/tsconfig.json"
   ],
   "exclude": [
     "node_modules"

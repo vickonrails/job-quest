@@ -1,6 +1,6 @@
 import { type Session, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { type Database } from "lib/database.types";
-import { Profile } from "lib/types";
+import { type Profile } from "lib/types";
 import { useEffect, useState } from "react";
 
 // TODO: I might need to rename this to useAuth and incorperate local storage to store the session or atleast the email address

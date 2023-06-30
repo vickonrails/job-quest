@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Layout, type LayoutProps } from './Layout';
 import { type Session } from '@supabase/supabase-js';
-import { Typography } from '@components/typography';
 import { type Profile } from 'lib/types';
+import { Typography } from '@components/typography';
 
 const meta: Meta<LayoutProps> = {
     title: 'Components/Layout',

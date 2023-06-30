@@ -1,14 +1,13 @@
-import { Layout } from '@components/layout'
-import { useSession, useUser } from '@hooks';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { Database } from 'lib/database.types';
+
+
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
-import { useJobs } from '@hooks';
-import { type Job } from 'lib/types';
-import Spinner from '@components/spinner/Spinner';
+import React, { useEffect } from 'react'
+import { useJobs, useSession, useUser } from '@hooks';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
+import Spinner from '@components/spinner/Spinner';
+import { type Job } from 'lib/types';
+import { Layout } from '@components/layout';
 
 const Tracker = () => {
     const router = useRouter();
@@ -31,7 +30,7 @@ const Tracker = () => {
             {profileLoading ? <Spinner /> : (
                 <>
                     <div className='flex justify-between mb-4'>
-                        <Typography variant='display-xs-md' as='h1'>{profile?.username}'s Board</Typography>
+                        <Typography variant='display-xs-md' as='h1'>{profile?.username} {`'s Board`}</Typography>
                         <Button size='sm'>New Entry</Button>
                     </div>
                     {loadingJobs ? <Spinner /> : <Jobs jobs={jobs} />}

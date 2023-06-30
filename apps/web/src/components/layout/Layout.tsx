@@ -3,7 +3,7 @@ import { Sidebar } from './Sidebar';
 
 import { type Session } from '@supabase/auth-helpers-react'
 import { Navbar } from './Navbar';
-import { type Profile } from 'lib/types';
+import { type Profile } from 'apps/web/lib/types';
 
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {
     session?: Session
