@@ -1,3 +1,5 @@
+import { add } from 'ui'
+
 /** type for size (input|buttons) */
 export type Size = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -6,6 +8,9 @@ export type Size = 'xs' | 'sm' | 'md' | 'lg';
  * @param size - desired size
  * @returns - tailwindcss class for the desired size
  */
+
+console.log(add(1, 2, 3));
+
 export const getSize = (size: Size) => {
     switch (size) {
         case 'xs':
