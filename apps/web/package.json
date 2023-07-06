@@ -35,8 +35,7 @@
       "@storybook/react": "^7.0.24",
       "@storybook/testing-library": "^0.0.14-next.2",
       "storybook": "^7.0.24",
-      "supabase": "^1.50.8",
-      "tailwindcss": "^3.3.0"
+      "supabase": "^1.50.8"
     },
     "ct3aMetadata": {
       "initVersion": "7.10.3"
