@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
-import { Button } from 'ui';
+import { Button, Spinner } from 'ui';
 import { Layout } from '@components/layout';
-import Spinner from '@components/spinner/Spinner';
 import { useSession, useUser } from '@hooks';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';

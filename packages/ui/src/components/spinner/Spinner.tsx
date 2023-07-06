@@ -1,4 +1,4 @@
-import React, { type FC, type HTMLAttributes } from 'react'
+import { type FC, type HTMLAttributes } from 'react'
 import classes from './spinner.module.css'
 import clsx from 'clsx'
 
@@ -16,4 +16,4 @@ const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     )
 }
 
-export default Spinner
+export { Spinner }

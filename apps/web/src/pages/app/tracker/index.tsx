@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useJobs, useSession, useUser } from '@hooks';
 import { Typography } from '@components/typography';
-import { Button } from 'ui';
-import Spinner from '@components/spinner/Spinner';
+import { Button, Spinner } from 'ui';
 import { type Job } from 'lib/types';
 import { Layout } from '@components/layout';
 

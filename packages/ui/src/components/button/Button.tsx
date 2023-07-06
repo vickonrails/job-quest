@@ -1,6 +1,7 @@
 import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 import { type Size, getSize } from '../utils'
+import { Spinner } from '../spinner'
 
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
     /** specifies if the button should fill all horizontal space */
@@ -31,8 +32,7 @@ export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', clas
             disabled={disabled}
             {...rest}>
             {loading ? (<div>
-                {/* <Spinner variant='secondary' /> */}
-                <Spinner />
+                <Spinner variant='secondary' />
             </div>) : children}
         </button>
     )
@@ -40,7 +40,3 @@ export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', clas
 
 // TODO: Add different button variants
 // TODO: Button with icons
-
-const Spinner = () => (
-    <>Spinner</>
-)
