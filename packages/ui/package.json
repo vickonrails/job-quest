@@ -9,10 +9,12 @@
   "main": "./dist/out/index.js",
   "types": "./dist/out/index.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build:ui": "tsc && vite build --watch",
-    "build:tailwind": "tailwindcss -o ./dist/styles.css --watch",
+    "dev": "concurrently \"npm run build:ui --watch\" \"npm run build:tailwind --watch\"",
+    "test": "echo \"no test specified\" && exit 0",
     "build": "concurrently \"npm run build:ui\" \"npm run build:tailwind\"",
+    
+    "build:ui": "tsc && vite build",
+    "build:tailwind": "tailwindcss -o ./dist/styles.css",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",

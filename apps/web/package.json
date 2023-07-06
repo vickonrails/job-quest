@@ -4,8 +4,10 @@
     "private": true,
     "type": "module",
     "scripts": {
-      "build": "next build",
       "dev": "next dev",
+      "test": "vitest",
+      "build": "next build",
+      
       "lint": "next lint",
       "start": "next start",
       "types:pregen": "npx supabase start",
@@ -13,7 +15,6 @@
       "db:seed": "ts-node --esm ./src/utils/seed.ts",
       "storybook": "storybook dev -p 6006",
       "build-storybook": "storybook build",
-      "test": "vitest",
       "test:coverage": "vitest --coverage"
     },
     "dependencies": {

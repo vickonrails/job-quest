@@ -1,3 +1,4 @@
+// I can make another package for just the configuration
 {
   "compilerOptions": {
     "target": "ESNext",
