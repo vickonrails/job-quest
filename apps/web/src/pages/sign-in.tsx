@@ -8,7 +8,7 @@ import { type Database } from 'lib/database.types'
 import { AuthCard } from '@components/auth/authCard'
 import { Typography } from '@components/typography'
 import Banner from '@components/banner/Banner'
-import { Button } from '@components/button'
+import { Button } from 'ui'
 import { Input } from '@components/input'
 
 interface SignInProps {

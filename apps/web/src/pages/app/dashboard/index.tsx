@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Button } from '@components/button';
+import { Button } from 'ui';
 import { Layout } from '@components/layout';
 import Spinner from '@components/spinner/Spinner';
 import { useSession, useUser } from '@hooks';

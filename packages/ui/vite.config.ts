@@ -10,8 +10,9 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       fileName: 'index',
-      name: 'ui'
+      name: 'ui',
     },
+    outDir: 'dist/out',
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {

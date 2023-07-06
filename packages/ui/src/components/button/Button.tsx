@@ -1,7 +1,6 @@
 import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { type Size, getSize } from '@components/utils'
-import Spinner from '@components/spinner/Spinner'
+import { type Size, getSize } from '../utils'
 
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
     /** specifies if the button should fill all horizontal space */
@@ -18,20 +17,22 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
  * Button component - handles clickable actions
  */
 export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', className, disabled, loading, ...rest }) => {
-    const isFullWidth = clsx(fullWidth && 'w-full');
+    const isFullWidth = clsx(fullWidth && 'tw-w-full');
     return (
         <button
-            disabled
             className={clsx(
-                'bg-primary hover:bg-primary-light transition-colors rounded-lg text-white py-2 px-3.5 font-medium',
+                'tw-bg-primary tw-hover:bg-primary-light tw-transition-colors tw-rounded-lg tw-text-white tw-py-2 tw-px-3.5 tw-font-medium',
                 isFullWidth,
                 size && getSize(size),
-                disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-                loading && 'pointer-events-none',
+                disabled ? 'tw-opacity-50 tw-cursor-not-allowed' : 'tw-cursor-pointer',
+                loading && 'tw-pointer-events-none',
                 className
-            )} {...rest}>
+            )}
+            disabled={disabled}
+            {...rest}>
             {loading ? (<div>
-                <Spinner variant='secondary' />
+                {/* <Spinner variant='secondary' /> */}
+                <Spinner />
             </div>) : children}
         </button>
     )
@@ -39,3 +40,7 @@ export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', clas
 
 // TODO: Add different button variants
 // TODO: Button with icons
+
+const Spinner = () => (
+    <>Spinner</>
+)
