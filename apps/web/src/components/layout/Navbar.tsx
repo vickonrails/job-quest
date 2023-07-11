@@ -1,6 +1,5 @@
 
-import { Avatar } from '@components/avatar';
-import { Input } from '@components/input';
+import { Avatar, Input } from 'ui';
 import { type Session } from '@supabase/supabase-js';
 import { type Profile } from 'lib/types';
 import { type FC, type HTMLAttributes } from 'react';

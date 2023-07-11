@@ -9,6 +9,10 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
 /** Loading component for application */
 const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     return (
+        <>Loading...</>
+    );
+
+    return (
         <span data-testid='spinner' className={clsx(
             classes.spinner,
             variant === 'secondary' && classes.secondary,

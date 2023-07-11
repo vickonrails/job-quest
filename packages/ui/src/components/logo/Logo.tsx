@@ -1,4 +1,4 @@
-import React, { type FC, type HTMLAttributes } from 'react'
+import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
 type LogoProps = HTMLAttributes<HTMLElement>;
@@ -10,8 +10,8 @@ const Logo: FC<LogoProps> = ({ className, ...rest }) => {
                 'text-primary text-xl font-medium',
                 className
             )
-        }>JobQuest</h1>
+        } {...rest}>JobQuest</h1>
     )
 }
 
-export default Logo
+export { Logo }

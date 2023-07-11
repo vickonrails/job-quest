@@ -6,10 +6,8 @@ import { createServerSupabaseClient, type Session } from '@supabase/auth-helpers
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
 import { AuthCard } from '@components/auth/authCard'
-import { Typography } from '@components/typography'
-import Banner from '@components/banner/Banner'
-import { Button } from 'ui'
-import { Input } from '@components/input'
+import { Typography } from 'ui'
+import { Button, Banner, Input } from 'ui'
 
 interface SignInProps {
     session: Session
@@ -30,13 +28,14 @@ const SignIn: NextPage<SignInProps> = () => {
         const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         if (!isValid || !email) {
             // set error state
+            setIsLoading(false);
             return;
         }
 
         //TODO: still need to fix problem with expired token
         supabaseClient.auth.signInWithOtp({
             email, options: {
-                emailRedirectTo: `${window.location.origin}/app`
+                emailRedirectTo: `${window.location.origin}/app/dashboard`
             }
         })
             .then(res => {

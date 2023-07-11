@@ -13,7 +13,7 @@ const Index = () => {
     const router = useRouter();
     const client = useSupabaseClient<Database>();
     const [session, sessionLoading] = useSession();
-    const [_, loadingProfile] = useUser(session);
+    const [, loadingProfile] = useUser(session);
 
     const handleLogout = useCallback(() => {
         client.auth.signOut().then(_ => {

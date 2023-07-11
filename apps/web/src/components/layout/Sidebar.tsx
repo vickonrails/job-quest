@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router';
 import { Folder, Grid, File, Clipboard, Bell, User, FileText } from 'react-feather'
 import { Link, type LinkProps } from '@components/link';
-import Logo from '@components/logo/Logo';
+import { Logo } from 'ui';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
 

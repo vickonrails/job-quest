@@ -1,5 +1,5 @@
 
-import Logo from "@components/logo/Logo"
+import { Logo } from "ui"
 import { type FC, type HTMLAttributes } from "react"
 
 type AuthCardProps = HTMLAttributes<HTMLElement>
