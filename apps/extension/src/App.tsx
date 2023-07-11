@@ -1,37 +1,88 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Button } from 'ui'
-import './App.css'
+import { Button, Input, Typography } from 'ui';
+import './styles/globals.css'
 
-import 'ui/dist/styles.css'
+import 'ui/dist/styles.css';
+import { FormEvent, useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [hasNotes, setHasNotes] = useState(false);
+
+  const [title, setTitle] = useState('Software Engineer')
+  const [company, setCompany] = useState('Goggle')
+  const [location, setLocation] = useState('Remote')
+  const [description, setDescription] = useState('This is a description. Not sure what to do about it')
+  const [note, setNote] = useState('')
+
+  const handleCreateJob = (ev: FormEvent) => {
+    ev.preventDefault();
+
+    console.log({
+      title,
+      company,
+      location,
+      description,
+      note
+    })
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className='max-w-xs p-4 bg-violet-50'>
+      <div className='flex align-middle justify-between mb-6' >
+        <Typography variant='body-lg-md' as='h1'>Create New Entry</Typography>
+        <button>x</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <form onSubmit={handleCreateJob}>
+        <Input
+          className='mb-7'
+          value={title}
+          fullWidth size='sm'
+          onChange={(ev) => setTitle(ev.target.value)}
+          label='Title'
+          placeholder='Fill in the title of the position here'
+        />
+        <Input
+          fullWidth
+          size='sm'
+          value={company}
+          onChange={(ev) => setCompany(ev.target.value)}
+          label='Company/Organization'
+          placeholder='Company Name'
+        />
+        <Input
+          fullWidth
+          value={location}
+          onChange={(ev) => setLocation(ev.target.value)}
+          size='sm'
+          label='Location'
+          placeholder='Remote?'
+        />
+        <Input
+          fullWidth
+          value={description}
+          onChange={(ev) => setDescription(ev.target.value)}
+          size='sm'
+          label='Description'
+          placeholder='Past application here'
+        />
+
+        {hasNotes ? (
+          <Input
+            fullWidth
+            size='sm'
+            label='Notes'
+            value={note}
+            onChange={(ev) => setNote(ev.target.value)} placeholder='Notes'
+          />
+        ) : (
+          <Button className='mb-4' size='sm' onClick={() => setHasNotes(true)}>
+            Add Note
+          </Button>
+        )}
+
+        <Button type='submit' className='mb-4' size='sm' fullWidth>Add to JobQuest</Button>
+        <Button size='sm' fullWidth>View all Applications</Button>
+      </form>
+    </main >
   )
 }
 
