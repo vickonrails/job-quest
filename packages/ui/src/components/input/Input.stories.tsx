@@ -20,11 +20,20 @@ export const Default: Story = {
     }
 };
 
+export const Multiline: Story = {
+    args: {
+        placeholder: 'Multiline Input',
+        multiline: true,
+        label: 'Multiline input',
+        hint: 'This is nothing but a maaad joke',
+    }
+}
+
 export const Disabled: Story = {
     args: {
         disabled: true,
         placeholder: 'Disabled Input',
-        label: 'Disabled Input',
+        label: 'Disabled Input'
     }
 }
 

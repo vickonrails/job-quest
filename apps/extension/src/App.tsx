@@ -63,6 +63,7 @@ function App() {
           size='sm'
           label='Description'
           placeholder='Past application here'
+          multiline
         />
 
         {hasNotes ? (
@@ -72,6 +73,7 @@ function App() {
             label='Notes'
             value={note}
             onChange={(ev) => setNote(ev.target.value)} placeholder='Notes'
+            multiline
           />
         ) : (
           <Button
