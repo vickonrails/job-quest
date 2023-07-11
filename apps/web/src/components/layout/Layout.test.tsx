@@ -2,7 +2,7 @@ import { render, cleanup } from '@testing-library/react'
 import { describe, expect, it, vi } from "vitest";
 import { Navbar, type NavbarProps } from "./Navbar";
 import { type Session } from "@supabase/supabase-js";
-import { type Profile } from "apps/web/lib/types";
+import { type Profile } from "../../../lib/types";
 import { Layout, type LayoutProps } from './Layout';
 
 const session = {

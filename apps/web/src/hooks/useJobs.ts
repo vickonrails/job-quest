@@ -1,6 +1,6 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "apps/web/lib/database.types";
-import { Job } from "apps/web/lib/types";
+import { type Database } from "../../lib/database.types";
+import { type Job } from "../../lib/types";
 import { useEffect, useState } from "react"
 
 export const useJobs = (): [boolean, Job[]] => {
