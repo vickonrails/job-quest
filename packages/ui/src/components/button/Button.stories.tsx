@@ -25,6 +25,17 @@ export const Loading: Story = {
     },
 };
 
+export const FillTypes = () => (
+    <div style={{
+        display: 'flex',
+        gap: 20
+    }}>
+        <Button fillType='filled'>Filled Button</Button>
+        <Button fillType='outlined'>Outlined Button</Button>
+        <Button fillType='text'>Text Button</Button>
+    </div>
+)
+
 export const Disabled: Story = {
     args: {
         children: 'Disabled Button',

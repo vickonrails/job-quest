@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { type Size, getSize } from '../utils'
 import { Spinner } from '../spinner'
 
+type FillType = 'filled' | 'outlined' | 'text';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     /** specifies if the button should fill all horizontal space */
     fullWidth?: boolean
@@ -12,17 +13,33 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     loading?: boolean
     /** specifies if button is disabled */
     disabled?: boolean
+    /** specifies button variant */
+    fillType?: FillType
+}
+
+const getFillType = (variant: FillType) => {
+    switch (variant) {
+        case 'filled':
+            return 'bg-primary transition-colors text-white hover:bg-primary-light'
+
+        case 'outlined':
+            return 'border border-grey-200 text-primary hover:border-primary-light active:border-primary-light focus:border-primary-light'
+
+        case 'text':
+            return 'tw-text-light-text hover:bg-purple-50 focus:bg-purple-100'
+    }
 }
 
 /**
  * Button component - handles clickable actions
  */
-export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', className, disabled, loading, ...rest }) => {
+export const Button: FC<ButtonProps> = ({ children, fillType = 'filled', fullWidth, size = 'md', className, disabled, loading, ...rest }) => {
     const isFullWidth = clsx(fullWidth && 'w-full');
     return (
         <button
             className={clsx(
-                'bg-primary hover:bg-primary-light transition-colors rounded-lg text-white py-2 px-3.5 font-medium',
+                'py-2 px-3.5 font-medium rounded-lg transitions',
+                getFillType(fillType),
                 isFullWidth,
                 size && getSize(size),
                 disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',

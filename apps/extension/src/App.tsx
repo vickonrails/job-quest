@@ -74,13 +74,20 @@ function App() {
             onChange={(ev) => setNote(ev.target.value)} placeholder='Notes'
           />
         ) : (
-          <Button className='mb-4' size='sm' onClick={() => setHasNotes(true)}>
+          <Button
+            className='mb-4'
+            size='sm'
+            fillType='text'
+            onClick={() => setHasNotes(true)}
+          >
             Add Note
           </Button>
         )}
 
-        <Button type='submit' className='mb-4' size='sm' fullWidth>Add to JobQuest</Button>
-        <Button size='sm' fullWidth>View all Applications</Button>
+        <Button type='submit' className='mb-4' size='sm' fullWidth>
+          Add to JobQuest
+        </Button>
+        <Button size='sm' fillType='text' fullWidth>View all Applications</Button>
       </form>
     </main >
   )
