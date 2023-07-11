@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -21,7 +21,7 @@ export interface Database {
           location: string | null
           position: string
           priority: number | null
-          status: string
+          status: number
           updated_at: string | null
         }
         Insert: {
@@ -35,7 +35,7 @@ export interface Database {
           location?: string | null
           position: string
           priority?: number | null
-          status: string
+          status: number
           updated_at?: string | null
         }
         Update: {
@@ -49,7 +49,7 @@ export interface Database {
           location?: string | null
           position?: string
           priority?: number | null
-          status?: string
+          status?: number
           updated_at?: string | null
         }
         Relationships: []
@@ -100,3 +100,4 @@ export interface Database {
     }
   }
 }
+Done in 3.37s.
