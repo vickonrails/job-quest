@@ -23,20 +23,20 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 /** Input component - for taking user's input */
 export const Input: FC<InputProps> = ({ label, name, hint, className, disabled, size = 'md', fullWidth, ...rest }) => {
     return (
-        <div className={clsx(fullWidth ? 'tw-w-full' : 'tw-w-60', 'tw-mb-2', className)}>
+        <div className={clsx(fullWidth ? 'w-full' : 'w-60', 'mb-2', className)}>
             <label>
-                <span className="tw-block tw-m-1.5 tw-text-sm tw-text-gray-600 tw-select-none">{label}</span>
+                <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
                 <input className={
                     clsx(
-                        'tw-border tw-block tw-rounded-lg tw-px-3.5 tw-w-full tw-mb-1 tw-active:border-primary tw-shadow-light',
+                        'border block rounded-lg px-3.5 w-full mb-1 active:border-primary shadow-light',
                         fullWidth && 'w-full',
                         size && getSize(size),
-                        disabled && 'tw-pointer-events-none'
+                        disabled && 'pointer-events-none'
                     )
                 } id={name} disabled={disabled} {...rest} />
             </label>
 
-            {hint && <span className="tw-text-sm tw-block tw-text-gray-400 tw-px-2" data-testid='hint'>{hint}</span>}
+            {hint && <span className="text-sm block text-gray-400 px-2" data-testid='hint'>{hint}</span>}
         </div>
     )
 }

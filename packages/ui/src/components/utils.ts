@@ -10,16 +10,16 @@ export type Size = 'xs' | 'sm' | 'md' | 'lg';
 export const getSize = (size: Size) => {
     switch (size) {
         case 'xs':
-            return 'tw-py-0.5 tw-text-sm'
+            return 'py-0.5 text-sm'
 
         case 'sm':
-            return 'tw-py-1.5 tw-text-sm'
+            return 'py-1.5 text-sm'
 
         case 'lg':
-            return 'tw-py-3.5'
+            return 'py-3.5'
 
         case 'md':
         default:
-            return 'tw-py-2.5'
+            return 'py-2.5'
     }
 }

@@ -13,17 +13,17 @@ const borderLookup: IBorderLookup = {
     /**
      * curved borders - 8px
      */
-    curved: 'tw-rounded-lg',
+    curved: 'rounded-lg',
 
     /**
      * full circle avatar
      */
-    round: 'tw-rounded-full',
+    round: 'rounded-full',
 
     /**
      * perfect square avatar
      */
-    square: 'tw-rounded-none'
+    square: 'rounded-none'
 }
 
 export const Avatar = ({ border = 'round', className, size = 'sm', alt, ...rest }: AvatarProps) => {

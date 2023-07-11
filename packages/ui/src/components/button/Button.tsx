@@ -18,15 +18,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Button component - handles clickable actions
  */
 export const Button: FC<ButtonProps> = ({ children, fullWidth, size = 'md', className, disabled, loading, ...rest }) => {
-    const isFullWidth = clsx(fullWidth && 'tw-w-full');
+    const isFullWidth = clsx(fullWidth && 'w-full');
     return (
         <button
             className={clsx(
-                'tw-bg-primary hover:tw-bg-primary-light tw-transition-colors tw-rounded-lg tw-text-white tw-py-2 tw-px-3.5 tw-font-medium',
+                'bg-primary hover:bg-primary-light transition-colors rounded-lg text-white py-2 px-3.5 font-medium',
                 isFullWidth,
                 size && getSize(size),
-                disabled ? 'tw-opacity-50 tw-cursor-not-allowed' : 'tw-cursor-pointer',
-                loading && 'tw-pointer-events-none',
+                disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                loading && 'pointer-events-none',
                 className
             )}
             disabled={disabled}

@@ -28,6 +28,5 @@ export default {
       }
     },
   },
-  prefix: 'tw-',
   plugins: [],
 } satisfies Config;
