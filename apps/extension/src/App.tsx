@@ -11,7 +11,7 @@ function App() {
   const [company, setCompany] = useState('Goggle')
   const [location, setLocation] = useState('Remote')
   const [description, setDescription] = useState('This is a description. Not sure what to do about it')
-  const [note, setNote] = useState<string>(3)
+  const [note, setNote] = useState('')
 
   const handleCreateJob = (ev: FormEvent) => {
     ev.preventDefault();
