@@ -1,8 +1,8 @@
-import { type InputHTMLAttributes, type FC } from "react"
+import { type InputHTMLAttributes, type FC } from 'react'
 import clsx from 'clsx'
-import { type Size, getSize } from "../utils"
+import { type Size, getSize } from '../utils'
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, "size"> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'size'> {
     /**
      * 
      */
@@ -50,7 +50,7 @@ export const Input: FC<InputProps> = ({ label, multiline, name, hint, className,
 
             </label>
 
-            {hint && <span className="text-sm block text-gray-400 px-2" data-testid='hint'>{hint}</span>}
+            {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
         </div>
     )
 }

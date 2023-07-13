@@ -39,9 +39,9 @@ export const Disabled: Story = {
 
 export const Sizes = () => (
     <>
-        <Input size='xs' label='extra small' placeholder='Nothing but a maaad joke' />
-        <Input size='sm' label='Small' placeholder='Nothing but a maaad joke' />
-        <Input size='md' label='Medium' placeholder='Nothing but a maaad joke' />
-        <Input size='lg' label='Large' placeholder='Nothing but a maaad joke' />
+        <Input size="xs" label="extra small" placeholder="Nothing but a maaad joke" />
+        <Input size="sm" label="Small" placeholder="Nothing but a maaad joke" />
+        <Input size="md" label="Medium" placeholder="Nothing but a maaad joke" />
+        <Input size="lg" label="Large" placeholder="Nothing but a maaad joke" />
     </>
 )

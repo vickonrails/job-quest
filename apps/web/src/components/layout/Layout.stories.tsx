@@ -16,7 +16,7 @@ type Story = StoryObj<LayoutProps>;
 
 const session = {
     user: {
-        email: "johnDoe@gmail.com"
+        email: 'johnDoe@gmail.com'
     }
 } as Session
 
@@ -26,7 +26,7 @@ const profile = {
 
 export const Default: Story = {
     args: {
-        children: <Typography as='h1' variant='display-xs-md'>Welcome Victor...</Typography>,
+        children: <Typography as="h1" variant="display-xs-md">Welcome Victor...</Typography>,
         session,
         profile
     },

@@ -19,7 +19,7 @@ const Index = () => {
         client.auth.signOut().then(_ => {
             return router.push('/sign-in');
         }).catch(err => {
-            console.log(err)
+            // console.log(err)
         });
     }, [client.auth, router])
 
@@ -27,14 +27,14 @@ const Index = () => {
         if (!session && !sessionLoading) {
             router.push('/sign-in').catch(err => {
                 // handle error
-                console.log(err);
+                // console.log(err);
             });
         }
     }, [session, router, sessionLoading]);
 
     return (
         <Layout session={session ?? undefined}>
-            <Button size='sm' onClick={handleLogout} className='mr-3'>Log out</Button>
+            <Button size="sm" onClick={handleLogout} className="mr-3">Log out</Button>
             {(sessionLoading || loadingProfile) ? <Spinner /> : (
                 <>
                     <p>Hi {session?.user.email}</p>

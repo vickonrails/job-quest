@@ -1,6 +1,6 @@
-import { type Session, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { type Database } from "lib/database.types";
-import { useEffect, useState } from "react";
+import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type Database } from 'lib/database.types';
+import { useEffect, useState } from 'react';
 
 export const useSession = (): [Session | null, boolean] => {
     const client = useSupabaseClient<Database>();

@@ -18,7 +18,7 @@ const Tracker = () => {
         if (!session && !sessionLoading) {
             router.push('/sign-in').catch(err => {
                 // handle error
-                console.log(err);
+                // console.log(err);
             });
         }
     }, [session, router, sessionLoading]);
@@ -28,9 +28,9 @@ const Tracker = () => {
         <Layout session={session ?? undefined} >
             {profileLoading ? <Spinner /> : (
                 <>
-                    <div className='flex justify-between mb-4'>
-                        <Typography variant='display-xs-md' as='h1'>{profile?.username} {`'s Board`}</Typography>
-                        <Button size='sm'>New Entry</Button>
+                    <div className="flex justify-between mb-4">
+                        <Typography variant="display-xs-md" as="h1">{profile?.username} {'\'s Board'}</Typography>
+                        <Button size="sm">New Entry</Button>
                     </div>
                     {loadingJobs ? <Spinner /> : <Jobs jobs={jobs} />}
                 </>
@@ -41,9 +41,9 @@ const Tracker = () => {
 
 const Jobs = ({ jobs }: { jobs: Job[] }) => {
     return (
-        <div className='bg-white'>{
+        <div className="bg-white">{
             jobs.map(job => (
-                <p className='m-2' key={job.id}>{job.position} - {job.company_name}</p>
+                <p className="m-2" key={job.id}>{job.position} - {job.company_name}</p>
             ))}
         </div>
     )

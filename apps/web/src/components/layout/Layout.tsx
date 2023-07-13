@@ -12,11 +12,11 @@ export interface LayoutProps extends HTMLAttributes<HTMLElement> {
 
 export const Layout: FC<LayoutProps> = ({ children, profile, session, ...rest }) => {
     return (
-        <div className='flex min-h-screen' {...rest}>
-            <Sidebar className='basis-64' />
-            <main className='bg-indigo-50 flex-1 p-6 pr-10'>
+        <div className="flex min-h-screen" {...rest}>
+            <Sidebar className="basis-64" />
+            <main className="bg-indigo-50 flex-1 p-6 pr-10">
                 <Navbar session={session} profile={profile} />
-                <div className='mt-10'>
+                <div className="mt-10">
                     {children}
                 </div>
             </main>

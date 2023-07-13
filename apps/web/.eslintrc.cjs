@@ -23,7 +23,10 @@ const config = {
     }],
     "@typescript-eslint/no-unused-vars": ["warn", {
       argsIgnorePattern: "^_"
-    }]
+    }],
+    "jsx-quotes": ["error", "prefer-double"],
+    "quotes": ["error", "single", { avoidEscape: true }],
+    "no-console": "error",
   }
 };
 module.exports = config;

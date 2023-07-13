@@ -6,6 +6,7 @@
             "persistent": true
         },
         "test": {},
+        "lint": {},
         "build": {
             "dependsOn": ["^build"]
         }

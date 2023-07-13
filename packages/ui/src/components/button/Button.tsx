@@ -49,7 +49,7 @@ export const Button: FC<ButtonProps> = ({ children, fillType = 'filled', fullWid
             disabled={disabled}
             {...rest}>
             {loading ? (<div>
-                <Spinner variant='secondary' />
+                <Spinner variant="secondary" />
             </div>) : children}
         </button>
     )

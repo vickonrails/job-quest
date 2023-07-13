@@ -9,50 +9,50 @@ type SidebarProps = HTMLAttributes<HTMLElement>;
 
 export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
-        <aside data-testid='sidebar' className={
+        <aside data-testid="sidebar" className={
             clsx(
                 'p-5',
                 className
             )
         } {...rest}>
-            <Logo className='mb-10' />
+            <Logo className="mb-10" />
 
             <nav>
-                <NavGroup className='mb-6'>
+                <NavGroup className="mb-6">
                     <NavLink href="/app/dashboard">
-                        <Grid className='mr-2' />
+                        <Grid className="mr-2" />
                         <span>Dashboard</span>
                     </NavLink>
 
                     <NavLink href="/app/tracker">
-                        <Folder className='mr-2' />
+                        <Folder className="mr-2" />
                         <span>Application Tracker</span>
                     </NavLink>
 
                     <NavLink href="/app/resume-builder">
-                        <File className='mr-2' />
+                        <File className="mr-2" />
                         <span>Resume Builder</span>
                     </NavLink>
                 </NavGroup>
 
-                <NavGroup title='labels'>
+                <NavGroup title="labels">
                     <NavLink href="/app/resume-builder">
-                        <FileText className='mr-2' />
+                        <FileText className="mr-2" />
                         <span>Notes</span>
                     </NavLink>
 
                     <NavLink href="/app/resume-builder">
-                        <Bell className='mr-2' />
+                        <Bell className="mr-2" />
                         <span>Reminder</span>
                     </NavLink>
 
                     <NavLink href="/app/resume-builder">
-                        <Clipboard className='mr-2' />
+                        <Clipboard className="mr-2" />
                         <span>Documents</span>
                     </NavLink>
 
                     <NavLink href="/app/resume-builder">
-                        <User className='mr-2' />
+                        <User className="mr-2" />
                         <span>Contacts</span>
                     </NavLink>
                 </NavGroup>
@@ -84,7 +84,7 @@ interface NavGroupProps extends HTMLAttributes<HTMLElement> {
 const NavGroup = ({ title, children, ...rest }: NavGroupProps) => {
     return (
         <div {...rest}>
-            <h4 className='mb-4 uppercase text-xs font-bold px-3 text-gray-500'>{title}</h4>
+            <h4 className="mb-4 uppercase text-xs font-bold px-3 text-gray-500">{title}</h4>
             {children}
         </div>
     )

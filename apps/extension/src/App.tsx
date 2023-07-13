@@ -11,85 +11,79 @@ function App() {
   const [company, setCompany] = useState('Goggle')
   const [location, setLocation] = useState('Remote')
   const [description, setDescription] = useState('This is a description. Not sure what to do about it')
-  const [note, setNote] = useState('')
+  const [note, setNote] = useState<string>(3)
 
   const handleCreateJob = (ev: FormEvent) => {
     ev.preventDefault();
 
-    console.log({
-      title,
-      company,
-      location,
-      description,
-      note
-    })
+    // TODO: Create a new job entry
   }
 
   return (
-    <main className='max-w-xs p-4 bg-violet-50'>
-      <div className='flex align-middle justify-between mb-6' >
-        <Typography variant='body-lg-md' as='h1'>Create New Entry</Typography>
+    <main className="max-w-xs p-4 bg-violet-50">
+      <div className="flex align-middle justify-between mb-6" >
+        <Typography variant="body-lg-md" as="h1">Create New Entry</Typography>
         <button>x</button>
       </div>
       <form onSubmit={handleCreateJob}>
         <Input
-          className='mb-7'
+          className="mb-7"
           value={title}
-          fullWidth size='sm'
+          fullWidth size="sm"
           onChange={(ev) => setTitle(ev.target.value)}
-          label='Title'
-          placeholder='Fill in the title of the position here'
+          label="Title"
+          placeholder="Fill in the title of the position here"
         />
         <Input
           fullWidth
-          size='sm'
+          size="sm"
           value={company}
           onChange={(ev) => setCompany(ev.target.value)}
-          label='Company/Organization'
-          placeholder='Company Name'
+          label="Company/Organization"
+          placeholder="Company Name"
         />
         <Input
           fullWidth
           value={location}
           onChange={(ev) => setLocation(ev.target.value)}
-          size='sm'
-          label='Location'
-          placeholder='Remote?'
+          size="sm"
+          label="Location"
+          placeholder="Remote?"
         />
         <Input
           fullWidth
           value={description}
           onChange={(ev) => setDescription(ev.target.value)}
-          size='sm'
-          label='Description'
-          placeholder='Past application here'
+          size="sm"
+          label="Description"
+          placeholder="Past application here"
           multiline
         />
 
         {hasNotes ? (
           <Input
             fullWidth
-            size='sm'
-            label='Notes'
+            size="sm"
+            label="Notes"
             value={note}
-            onChange={(ev) => setNote(ev.target.value)} placeholder='Notes'
+            onChange={(ev) => setNote(ev.target.value)} placeholder="Notes"
             multiline
           />
         ) : (
           <Button
-            className='mb-4'
-            size='sm'
-            fillType='text'
+            className="mb-4"
+            size="sm"
+            fillType="text"
             onClick={() => setHasNotes(true)}
           >
             Add Note
           </Button>
         )}
 
-        <Button type='submit' className='mb-4' size='sm' fullWidth>
+        <Button type="submit" className="mb-4" size="sm" fullWidth>
           Add to JobQuest
         </Button>
-        <Button size='sm' fillType='text' fullWidth>View all Applications</Button>
+        <Button size="sm" fillType="text" fullWidth>View all Applications</Button>
       </form>
     </main >
   )

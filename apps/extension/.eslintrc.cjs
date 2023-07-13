@@ -10,5 +10,8 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': 'warn',
+    'jsx-quotes': ['error', 'prefer-double'],
+    'quotes': ['error', 'single', { avoidEscape: true }],
+    'no-console': 'error',
   },
 }

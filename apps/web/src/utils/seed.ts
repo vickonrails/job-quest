@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
 import { type Database } from '../../lib/database.types.ts'
-import jobs from './jobs.json' assert { type: "json" }
+import jobs from './jobs.json' assert { type: 'json' }
 import { reportError } from './reportError.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -27,7 +27,7 @@ const seedJobs = async (client: SupabaseClient<Database>) => {
     });
 
     await Promise.all(promises).then(_ => {
-        console.log(`Seeded ${_.length} jobs`);
+        // console.log(`Seeded ${_.length} jobs`);
     }).catch(err => {
         throw err;
     });

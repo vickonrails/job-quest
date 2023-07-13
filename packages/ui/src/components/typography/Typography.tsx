@@ -1,15 +1,15 @@
-import { type FC, type HTMLAttributes } from "react"
+import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
-type TypeVariant = "display-xl-bold" | "display-xl-md" | "display-xl" | "display-lg-bold" |
-    "display-lg-md" | "display-lg" | "display-md-bold" | "display-md-md" | "display-md" | "display-sm-bold" |
-    "display-sm-md" | "display-sm" | "display-xs-bold" | "display-xs-md" | "display-xs" | "body-xl-bold" |
-    "body-xl-md" | "body-xl" | "body-lg-bold" | "body-lg-md" | "body-lg" | "body-md-bold" | "body-md-md" |
-    "body-md" | "body-sm-bold" | "body-sm-md" | "body-sm" | "body-xl-bold" | "body-xl-md" | "body-xl"
+type TypeVariant = 'display-xl-bold' | 'display-xl-md' | 'display-xl' | 'display-lg-bold' |
+    'display-lg-md' | 'display-lg' | 'display-md-bold' | 'display-md-md' | 'display-md' | 'display-sm-bold' |
+    'display-sm-md' | 'display-sm' | 'display-xs-bold' | 'display-xs-md' | 'display-xs' | 'body-xl-bold' |
+    'body-xl-md' | 'body-xl' | 'body-lg-bold' | 'body-lg-md' | 'body-lg' | 'body-md-bold' | 'body-md-md' |
+    'body-md' | 'body-sm-bold' | 'body-sm-md' | 'body-sm' | 'body-xl-bold' | 'body-xl-md' | 'body-xl'
 
 interface TypographyProps extends HTMLAttributes<HTMLElement> {
     variant: TypeVariant
-    as?: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+    as?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
 const getTypeProperties = (variant: TypeVariant) => {

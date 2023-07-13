@@ -1,7 +1,7 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { type Database } from "../../lib/database.types";
-import { type Job } from "../../lib/types";
-import { useEffect, useState } from "react"
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type Database } from '../../lib/database.types';
+import { type Job } from '../../lib/types';
+import { useEffect, useState } from 'react'
 
 export const useJobs = (): [boolean, Job[]] => {
     const client = useSupabaseClient<Database>();

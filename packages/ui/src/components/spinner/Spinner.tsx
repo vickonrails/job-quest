@@ -13,7 +13,7 @@ const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     );
 
     return (
-        <span data-testid='spinner' className={clsx(
+        <span data-testid="spinner" className={clsx(
             classes.spinner,
             variant === 'secondary' && classes.secondary,
         )} {...rest} />
