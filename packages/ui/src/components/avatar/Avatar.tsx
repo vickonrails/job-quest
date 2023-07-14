@@ -26,7 +26,7 @@ const borderLookup: IBorderLookup = {
     square: 'rounded-none'
 }
 
-export const Avatar = ({ border = 'round', className, size = 'sm', alt, ...rest }: AvatarProps) => {
+export const Avatar = ({ border = 'round', className, /** size = 'sm', */ alt, ...rest }: AvatarProps) => {
 
     // TODO: use appropriate figure component
     return (

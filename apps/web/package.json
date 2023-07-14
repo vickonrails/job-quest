@@ -1,45 +1,43 @@
 {
-    "name": "web",
-    "version": "0.1.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-      "dev": "next dev",
-      "test": "vitest",
-      "build": "next build",
-      
-      "lint": "next lint",
-      "start": "next start",
-      "types:pregen": "npx supabase start",
-      "types:gen": "npx supabase gen types typescript --project-id",
-      "db:seed": "ts-node --esm ./src/utils/seed.ts",
-      "storybook": "storybook dev -p 6006",
-      "build-storybook": "storybook build",
-      "test:coverage": "vitest --coverage"
-    },
-    "dependencies": {
-      "@supabase/auth-helpers-nextjs": "^0.6.1",
-      "@supabase/auth-helpers-react": "^0.3.1",
-      "@supabase/supabase-js": "^2.20.0",
-      "eslint-plugin-storybook": "^0.6.12",
-      "dotenv": "^16.0.3",
-      "next": "^13.2.4",
-      "zod": "^3.21.4",
-      "ui": "*"
-    },
-    "devDependencies": {
-      "@storybook/addon-essentials": "^7.0.24",
-      "@storybook/addon-interactions": "^7.0.24",
-      "@storybook/addon-links": "^7.0.24",
-      "@storybook/blocks": "^7.0.24",
-      "@storybook/nextjs": "^7.0.24",
-      "@storybook/react": "^7.0.24",
-      "@storybook/testing-library": "^0.0.14-next.2",
-      "storybook": "^7.0.24",
-      "supabase": "^1.50.8"
-    },
-    "ct3aMetadata": {
-      "initVersion": "7.10.3"
-    }
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "test": "vitest",
+    "build": "next build",
+    "lint": "next lint",
+    "start": "next start",
+    "types:pregen": "npx supabase start",
+    "types:gen": "npx supabase gen types typescript --project-id",
+    "db:seed": "ts-node --esm ./src/utils/seed.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test:coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.6.1",
+    "@supabase/auth-helpers-react": "^0.3.1",
+    "@supabase/supabase-js": "^2.26.0",
+    "dotenv": "^16.0.3",
+    "eslint-plugin-storybook": "^0.6.12",
+    "next": "^13.2.4",
+    "ui": "*",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.24",
+    "@storybook/addon-interactions": "^7.0.24",
+    "@storybook/addon-links": "^7.0.24",
+    "@storybook/blocks": "^7.0.24",
+    "@storybook/nextjs": "^7.0.24",
+    "@storybook/react": "^7.0.24",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "storybook": "^7.0.24",
+    "supabase": "^1.50.8"
+  },
+  "ct3aMetadata": {
+    "initVersion": "7.10.3"
   }
-  
+}

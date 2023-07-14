@@ -19,6 +19,9 @@ const getTypeProperties = (variant: TypeVariant) => {
 
         case 'body-sm':
             return 'font-regular text-sm text-gray-500'
+
+        case 'body-lg-md':
+            return 'font-medium text-2xl text-gray-800'
     }
 }
 
