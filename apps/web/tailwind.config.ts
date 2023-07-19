@@ -1,9 +1,9 @@
-import { type Config } from "tailwindcss";
+import { type Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme'
 import colors from 'tailwindcss/colors'
 
 export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -15,8 +15,11 @@ export default {
       },
       colors: {
         'light-text': '#728292',
+        'base-col': '#161A1D',
         primary: colors.indigo[700],
-        'primary-light': colors.indigo[600]
+        'primary-light': colors.indigo[600],
+        'table-row-accent': '#F5F6FA',
+        'strokes': '#F5F6FA'
       },
       fontSize: {
         '6xl': '4rem',

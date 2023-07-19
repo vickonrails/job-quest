@@ -7,6 +7,9 @@ import { Typography } from 'ui';
 import { Button, Spinner } from 'ui';
 import { type Job } from 'lib/types';
 import { Layout } from '@components/layout';
+import JobsTable from '@components/table/JobsTable';
+
+// header with column type &  title
 
 const Tracker = () => {
     const router = useRouter();
@@ -32,7 +35,7 @@ const Tracker = () => {
                         <Typography variant="display-xs-md" as="h1">{profile?.username} {'\'s Board'}</Typography>
                         <Button size="sm">New Entry</Button>
                     </div>
-                    {loadingJobs ? <Spinner /> : <Jobs jobs={jobs} />}
+                    {loadingJobs ? <Spinner /> : <JobsTable jobs={jobs} />}
                 </>
             )}
         </Layout>
