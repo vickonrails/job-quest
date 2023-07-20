@@ -3,3 +3,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .chip {
+        @apply bg-gray-100 px-2 py-2 mb-2 rounded-lg font-bold text-gray-500 text-xs mr-2 text-center;
+    }
+    .chip.blue {
+        background: #E9F4FF;
+        color: #5C85E8;
+    }
+    .chip.purple {
+        background: #F2E8FC;
+        color: #7D33CC;
+    }
+    .chip.green {
+        background: #EFFAEB;
+        color: #6BB34C;
+    }
+    .chip.gold {
+        background: #FBFADF;
+        color: #C8C004;
+    }
+    .chip.orange {
+        background: #F6ECE4;
+        color: #EB8E4A;
+    }
+}
