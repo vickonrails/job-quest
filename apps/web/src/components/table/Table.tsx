@@ -1,9 +1,11 @@
 import React, { type JSX, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 import { Typography } from 'ui';
+import { Edit, Trash2 } from 'react-feather'
 import { Chip } from '@components/chips';
 import { type ChipVariants } from '@components/chips/Chip';
 import { Rating } from '@components/rating/Rating';
+import { useRouter } from 'next/router';
 
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig {
     data: T[]
@@ -21,29 +23,49 @@ export interface TableConfig {
     }[]
 }
 
-type Obj = { [key: string]: string | number | null | undefined }
+type Obj = { id: string, [key: string]: string | number | null | undefined }
 
 // TODO: Virtualized lists
 // TODO: Format dates properly
 
 export const Table = <T extends Obj,>({ CellRenderer = TableCellRender<T>, columns, data, ...rest }: TableProps<T>) => {
+    const router = useRouter();
+
+    const navigateToDetails = (id: string) => {
+        router.push(`/app/jobs/${id}`).then(() => {
+            // 
+        }).catch(err => {
+            // 
+        })
+    }
+
     const tableWidth = columns.reduce((acc, curr) => acc + curr.width, 0)
     return (
         <table className=" border-collapse" style={{ width: tableWidth }}{...rest}>
             <TableHeader columns={columns} />
             <tbody>
                 {data.map((row, index) => (
-                    <tr key={index} className={
-                        clsx(
-                            (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
-                            'align-middle'
-                        )}>
-                        {/* <input type="checkbox" /> */}
-                        {columns.map((col, idx) =>
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-                            <CellRenderer value={col?.value(row)} key={idx} type={col.columnType} />
-                        )}
-                    </tr>
+                    <>
+                        <tr key={index} className={
+                            clsx(
+                                (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
+                                'align-middle'
+                            )}>
+                            <td className="flex p-4 pr-7 text-light-text">
+                                <button className="mr-4" onClick={_ => navigateToDetails(row.id)}>
+                                    <Edit size={16} />
+                                </button>
+                                <button>
+                                    <Trash2 size={16} />
+                                </button>
+                            </td>
+                            {/* <input type="checkbox" /> */}
+                            {columns.map((col, idx) =>
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+                                <CellRenderer value={col?.value(row)} key={idx} type={col.columnType} />
+                            )}
+                        </tr>
+                    </>
                 ))}
             </tbody>
         </table>
@@ -156,18 +178,18 @@ export const TableHeader = ({ columns }: TableHeaderProps) => {
     return (
         <thead className="bg-white rounded-t-xl">
             <tr>
-                {/* <th className="border-b-2 rounded-tl-xl">
-                    <input type="checkbox" />
-                </th> */}
+                <th className="border-b-2">
+                    <Typography variant="body-sm" className="text-light-text font-normal">Actions</Typography>
+                </th>
                 {columns.map((column, idx) => (
                     <th key={column.title} className={
                         clsx(
-                            'text-left text-light-text py-4 pl-4 bg-white border-solid border-b-2 font-normal',
-                            idx === 0 && 'rounded-tl-xl',
-                            idx === columns.length - 1 && 'rounded-tr-xl'
+                            'text-left  py-4 pl-4 bg-white border-solid border-b-2',
+                            // idx === 0 && 'rounded-tl-xl',
+                            // idx === columns.length - 1 && 'rounded-tr-xl'
                         )
                     } style={{ width: column.width }}>
-                        <Typography variant="body-sm">{column.title}</Typography>
+                        <Typography variant="body-sm" className="text-light-text font-normal">{column.title}</Typography>
                     </th>
                 ))}
             </tr>

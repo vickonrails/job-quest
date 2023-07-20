@@ -35,7 +35,7 @@ const Tracker = () => {
                         <Typography variant="display-xs-md" as="h1">{profile?.username} {'\'s Board'}</Typography>
                         <Button size="sm">New Entry</Button>
                     </div>
-                    <div className="overflow-auto">
+                    <div className="overflow-auto rounded-xl">
                         {loadingJobs ? <Spinner /> : <JobsTable jobs={jobs} />}
                     </div>
                 </>
