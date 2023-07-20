@@ -16,20 +16,20 @@ export interface TableConfig {
         title: string;
         columnType: TableColumnType
         key: string
-        value?: any
+        value: any,
+        width: number
     }[]
 }
 
 type Obj = { [key: string]: string | number | null | undefined }
 
-// TODO: width of columns
-// TODO: horizontal scroll for table
 // TODO: Virtualized lists
 // TODO: Format dates properly
 
 export const Table = <T extends Obj,>({ CellRenderer = TableCellRender<T>, columns, data, ...rest }: TableProps<T>) => {
+    const tableWidth = columns.reduce((acc, curr) => acc + curr.width, 0)
     return (
-        <table className="w-full border-collapse" {...rest}>
+        <table className=" border-collapse" style={{ width: tableWidth }}{...rest}>
             <TableHeader columns={columns} />
             <tbody>
                 {data.map((row, index) => (
@@ -83,6 +83,7 @@ export type CellRendererProps = {
 
 
 export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps) => {
+    const className = clsx('pl-4')
     switch (type) {
         case 'date':
             const { date } = value as DateCellType
@@ -90,7 +91,7 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps)
             // TODO: improve the date to show actual 3rd Aug, 2023
             const formattedDate = new Date(date).toISOString().split('T')[0]
             return (
-                <td className="pl-4" {...rest}>
+                <td className={className} {...rest}>
                     <Typography variant="body-sm">
                         {formattedDate}
                     </Typography>
@@ -100,7 +101,7 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps)
         case 'logoWithText':
             const { src, text: logoText } = value as LogoWithTextCellType
             return (
-                <td className="pl-4" {...rest}>
+                <td className={className} {...rest}>
                     <div className="flex items-center">
                         {src && <img src={src ?? ''} className="h-6 rounded-md mr-2" alt={logoText} />}
                         <Typography variant="body-sm">
@@ -120,7 +121,7 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps)
             }
 
             return (
-                <td className="pl-4">
+                <td className={className}>
                     <div className="flex align-middle">{
                         labels?.map(label => {
                             const variant = getChipColors(label) as ChipVariants;
@@ -133,7 +134,7 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps)
         case 'rating':
             const { rating } = value as RatingCellType
             return (
-                <td className="pl-4">
+                <td className={className}>
                     <Rating value={rating} />
                 </td>
             )
@@ -142,8 +143,8 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps)
         default:
             const { text } = value as TextCellType
             return (
-                <td className="text-left" {...rest}>
-                    <Typography variant="body-sm" className="text-base-col py-4 pl-4">
+                <td className={className} {...rest}>
+                    <Typography variant="body-sm" className="text-base-col py-4">
                         {text}
                     </Typography>
                 </td>
@@ -165,7 +166,7 @@ export const TableHeader = ({ columns }: TableHeaderProps) => {
                             idx === 0 && 'rounded-tl-xl',
                             idx === columns.length - 1 && 'rounded-tr-xl'
                         )
-                    }>
+                    } style={{ width: column.width }}>
                         <Typography variant="body-sm">{column.title}</Typography>
                     </th>
                 ))}

@@ -17,6 +17,11 @@ const connect = () => {
     );
 }
 
+// TODO: modify seed value to put labels as array
+// TODO: fix profile not created on sign up (I can't put that as a trigger on the DB anymore)
+// TODO: Priority by default is mid or medium
+// TODO: seed the rating column
+
 const seedJobs = async (client: SupabaseClient<Database>) => {
     const promises = jobs.map(async job => {
         const { data, error } = await client.from('jobs').insert({ ...jobs });

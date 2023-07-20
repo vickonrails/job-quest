@@ -11,7 +11,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
         <aside data-testid="sidebar" className={
             clsx(
-                'p-5',
+                'p-5 flex-shrink-0',
                 className
             )
         } {...rest}>

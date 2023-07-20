@@ -28,43 +28,50 @@ const tableConfig: TableConfig = {
             title: 'Job Position',
             columnType: 'text',
             key: 'position',
-            value: (job: Job) => ({ text: job.position })
+            value: (job: Job) => ({ text: job.position }),
+            width: 250
         },
         {
             title: 'Company',
             columnType: 'logoWithText',
             key: 'company_name',
-            value: (job: Job) => ({ text: job.company_name, src: job.company_site && `https://logo.clearbit.com/${job.company_site}` })
+            value: (job: Job) => ({ text: job.company_name, src: job.company_site && `https://logo.clearbit.com/${job.company_site}` }),
+            width: 200
         },
         {
             title: 'Location',
             columnType: 'text',
             key: 'location',
-            value: (job: Job) => ({ text: job.location })
+            value: (job: Job) => ({ text: job.location }),
+            width: 200
         },
         {
             title: 'Priority',
             columnType: 'rating',
             key: 'priority',
-            value: (job: Job) => ({ rating: job.priority })
+            value: (job: Job) => ({ rating: job.priority }),
+            width: 200
         },
         {
             title: 'Status',
             columnType: 'text',
             key: 'status',
-            value: (job: Job) => ({ text: Status_Lookup[job.status] })
+            value: (job: Job) => ({ text: Status_Lookup[job.status] }),
+            width: 150
         },
         {
             title: 'Date Added',
             columnType: 'date',
             key: 'created_at',
-            value: (job: Job) => ({ date: job.created_at })
+            value: (job: Job) => ({ date: job.created_at }),
+            width: 150
         },
         {
             title: 'Labels',
             columnType: 'chips',
             key: 'labels',
-            value: (job: Job) => ({ labels: job.labels })
+            value: (job: Job) => ({ labels: job.labels }),
+            width: 200
         },
     ]
 }
