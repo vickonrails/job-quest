@@ -1,1 +1,2 @@
-// TODO: do something here 
+// eslint-disable-next-line no-console
+console.log('Content File')

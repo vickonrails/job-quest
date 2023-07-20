@@ -15,7 +15,11 @@ export default defineConfig({
       targets: [
         { src: resolve(__dirname, './src/manifest.json'), dest: './' },
         { src: resolve(__dirname, './src/content.ts'), dest: './', transform: transformFunc, rename: (filename) => `${filename}.js` },
+        { src: resolve(__dirname, './src/background.ts'), dest: './', transform: transformFunc, rename: (filename) => `${filename}.js` },
       ],
     })
   ],
+  build: {
+    sourcemap: true
+  }
 })

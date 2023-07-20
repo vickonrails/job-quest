@@ -3,7 +3,9 @@ import { client } from './supabase'
 import './styles/globals.css'
 
 import 'ui/dist/styles.css';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
+import { Auth } from './components/auth';
+import { Cancel } from './components/cancel';
 
 interface Job {
   position: string,
@@ -13,7 +15,23 @@ interface Job {
   location?: string
 }
 
+const useExtensionStorage = () => {
+  const [credentials, setCredentials] = useState();
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const { authCredentials } = await chrome.storage.local.get(['authCredentials']);
+      setCredentials(authCredentials);
+    }
+
+    fetchDetails();
+  }, []);
+
+  return [credentials];
+}
+
 function App() {
+  const [credentials] = useExtensionStorage();
   const [hasNotes, setHasNotes] = useState(false);
 
   const [position, setPosition] = useState('')
@@ -23,6 +41,10 @@ function App() {
   const [note, setNote] = useState('')
 
   const [addingJob, setAddingJob] = useState(false)
+
+  useEffect(() => {
+    // 
+  }, [credentials])
 
   const handleCreateJob = async (ev: FormEvent) => {
     setAddingJob(true)
@@ -36,12 +58,12 @@ function App() {
     }
 
     try {
-      const { data, error } = await client.from('jobs').insert(job);
+      const { error } = await client.from('jobs').insert(job);
       if (error) {
         throw error;
       }
-      alert(JSON.stringify(data));
       setAddingJob(false)
+      window.close()
     } catch (err) {
       setAddingJob(false)
       alert(`${JSON.stringify(err)} error occurred`);
@@ -50,17 +72,24 @@ function App() {
     // TODO: Create a new job entry
   }
 
+  if (!credentials) {
+    return <Auth />
+  }
+
   return (
     <main className="max-w-xs p-4 w-80 bg-violet-50">
       <div className="flex align-middle justify-between mb-6" >
         <Typography variant="body-sm" as="h1">Create New Entry</Typography>
-        <button>x</button>
+        <button onClick={() => window.close()}>
+          <Cancel />
+        </button>
       </div>
       <form onSubmit={handleCreateJob}>
         <Input
           className="mb-7"
           value={position}
-          fullWidth size="sm"
+          fullWidth
+          size="sm"
           onChange={(ev) => setPosition(ev.target.value)}
           label="Position"
           placeholder="Fill in the position of the position here"

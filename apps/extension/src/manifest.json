@@ -7,10 +7,7 @@
     "action": {
         "default_popup": "index.html"
     },
-    "content_scripts": [
-        {
-            "js": ["content.js"],
-            "matches": ["https://linkedin.com/jobs/*"]
-        }
+    "permissions": [
+        "storage"
     ]
 }
