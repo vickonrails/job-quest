@@ -1,10 +1,13 @@
-import React, { type JSX, ReactNode, type HTMLAttributes, Component } from 'react'
+import React, { type JSX, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 import { Typography } from 'ui';
+import { Chip } from '@components/chips';
+import { type ChipVariants } from '@components/chips/Chip';
+import { Rating } from '@components/rating/Rating';
 
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig {
     data: T[]
-    CellRenderer?: (props: CellRendererProps<T>) => JSX.Element
+    CellRenderer?: (props: CellRendererProps) => JSX.Element
 }
 
 type TableColumnType = 'text' | 'date' | 'chips' | 'rating' | 'logoWithText';
@@ -37,6 +40,7 @@ export const Table = <T extends Obj,>({ CellRenderer = TableCellRender<T>, colum
                         )}>
                         {/* <input type="checkbox" /> */}
                         {columns.map((col, idx) =>
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
                             <CellRenderer value={col?.value(row)} key={idx} type={col.columnType} />
                         )}
                     </tr>
@@ -50,28 +54,43 @@ interface TableHeaderProps {
     columns: TableConfig['columns']
 }
 
-type CompanyCellProps = {
-    company_site: string,
-    company_name: string
+type DateCellType = {
+    date: string
 }
 
-export type CellRendererProps<T> = {
+type TextCellType = {
+    text: string
+}
+
+type LogoWithTextCellType = {
+    text: string
+    src: string
+}
+
+type LabelCellType = {
+    labels: string[]
+}
+
+type RatingCellType = {
+    rating: 1 | 2 | 3 | 4 | 5
+}
+
+export type CellRendererProps = {
     type: TableColumnType
     // TODO: add more detailed types for value
-    value: { [key: string]: string | number | null }
+    value: any
 } & HTMLAttributes<Omit<HTMLTableCellElement, 'children'>>
 
 
-
-export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<T>) => {
-
+export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps) => {
     switch (type) {
         case 'date':
+            const { date } = value as DateCellType
             // TODO: catch error thrown when another value type is passed
             // TODO: improve the date to show actual 3rd Aug, 2023
-            const formattedDate = new Date(value.date as string).toISOString().split('T')[0]
+            const formattedDate = new Date(date).toISOString().split('T')[0]
             return (
-                <td {...rest}>
+                <td className="pl-4" {...rest}>
                     <Typography variant="body-sm">
                         {formattedDate}
                     </Typography>
@@ -79,24 +98,53 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
             );
 
         case 'logoWithText':
+            const { src, text: logoText } = value as LogoWithTextCellType
             return (
-                <td {...rest}>
+                <td className="pl-4" {...rest}>
                     <div className="flex items-center">
-                        <img src={value.src} className="h-6 rounded-md mr-2" />
+                        {src && <img src={src ?? ''} className="h-6 rounded-md mr-2" alt={logoText} />}
                         <Typography variant="body-sm">
-                            {value.text}
+                            {logoText}
                         </Typography>
+                    </div>
+                </td >
+            )
+
+        case 'chips':
+            const { labels = [] } = value as LabelCellType
+            const variants = ['blue', 'purple', 'green', 'gold', 'orange']
+
+            const getChipColors = (text: string) => {
+                const index = djb2Hash(text, variants.length)
+                return variants[index]
+            }
+
+            return (
+                <td className="pl-4">
+                    <div className="flex align-middle">{
+                        labels?.map(label => {
+                            const variant = getChipColors(label) as ChipVariants;
+                            return (<Chip key={label} variant={variant} label={label} />)
+                        })}
                     </div>
                 </td>
             )
 
+        case 'rating':
+            const { rating } = value as RatingCellType
+            return (
+                <td className="pl-4">
+                    <Rating value={rating} />
+                </td>
+            )
 
         case 'text':
         default:
+            const { text } = value as TextCellType
             return (
                 <td className="text-left" {...rest}>
                     <Typography variant="body-sm" className="text-base-col py-4 pl-4">
-                        {value.text}
+                        {text}
                     </Typography>
                 </td>
             );
@@ -124,4 +172,12 @@ export const TableHeader = ({ columns }: TableHeaderProps) => {
             </tr>
         </thead>
     )
+}
+
+function djb2Hash(str: string, arrayLength: number) {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash * 33) ^ str.charCodeAt(i);
+    }
+    return Math.abs(hash) % arrayLength;
 }

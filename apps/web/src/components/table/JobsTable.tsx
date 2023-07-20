@@ -1,7 +1,26 @@
 import React from 'react'
-import { CellRendererProps, Table, TableCellRender, type TableConfig } from './Table'
+import { Table, type TableConfig } from './Table'
 import { type Job } from 'lib/types'
-import { Typography } from 'ui'
+
+enum Status {
+    BOOKMARKED,
+    APPLYING,
+    APPLIED,
+    INTERVIEWING,
+    REJECTED,
+    NEGOTIATING,
+    HIRED
+}
+
+const Status_Lookup = [
+    'Bookmarked',
+    'Applying',
+    'Applied',
+    'Interviewing',
+    'Rejected',
+    'Negotiating',
+    'Hired',
+]
 
 const tableConfig: TableConfig = {
     columns: [
@@ -27,13 +46,13 @@ const tableConfig: TableConfig = {
             title: 'Priority',
             columnType: 'rating',
             key: 'priority',
-            value: (job: Job) => ({ value: job.position })
+            value: (job: Job) => ({ rating: job.priority })
         },
         {
             title: 'Status',
             columnType: 'text',
             key: 'status',
-            value: (job: Job) => ({ text: job.status })
+            value: (job: Job) => ({ text: Status_Lookup[job.status] })
         },
         {
             title: 'Date Added',
@@ -45,7 +64,7 @@ const tableConfig: TableConfig = {
             title: 'Labels',
             columnType: 'chips',
             key: 'labels',
-            value: (job: Job) => ({ value: job.position })
+            value: (job: Job) => ({ labels: job.labels })
         },
     ]
 }
@@ -60,8 +79,3 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
 }
 
 export default JobsTable
-
-{/* {tableConfig.columns.map((col, idx) => (
-                <TableCellRender<Job> key={idx} type={col.columnType} value={row} />
-            ))}
-        </Table> */}

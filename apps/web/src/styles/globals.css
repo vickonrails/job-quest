@@ -28,4 +28,14 @@
         background: #F6ECE4;
         color: #EB8E4A;
     }
+
+    /**/
+    .rating {
+        stroke: #F2C94C;
+        margin-right: 2px;
+    }
+    .rating.active {
+        fill: #F2C94C;
+        stroke: none;
+    }
 }
