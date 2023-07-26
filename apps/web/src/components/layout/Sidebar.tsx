@@ -7,6 +7,8 @@ import { Logo } from 'ui';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
 
+// TODO: reconfigure this whole link system to use just /jobs/jobs-id. Rename Application Tracker to just Jobs.
+
 export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
         <aside data-testid="sidebar" className={

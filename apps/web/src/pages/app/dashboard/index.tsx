@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from 'react';
-import { Button, Spinner } from 'ui';
+import { Button } from 'ui';
 import { Layout } from '@components/layout';
 import { useSession, useUser } from '@hooks';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { useRouter } from 'next/router';
+import { FullPageSpinner } from '@components/spinner';
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
@@ -35,7 +36,7 @@ const Index = () => {
     return (
         <Layout session={session ?? undefined}>
             <Button size="sm" onClick={handleLogout} className="mr-3">Log out</Button>
-            {(sessionLoading || loadingProfile) ? <Spinner /> : (
+            {(sessionLoading || loadingProfile) ? <FullPageSpinner /> : (
                 <>
                     <p>Hi {session?.user.email}</p>
                 </>

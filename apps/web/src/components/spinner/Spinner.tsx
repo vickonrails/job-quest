@@ -9,10 +9,6 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
 /** Loading component for application */
 const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     return (
-        <>Loading...</>
-    );
-
-    return (
         <span data-testid="spinner" className={clsx(
             classes.spinner,
             variant === 'secondary' && classes.secondary,
@@ -20,4 +16,14 @@ const Spinner: FC<SpinnerProps> = ({ variant = 'primary', ...rest }) => {
     )
 }
 
-export { Spinner }
+const FullPageSpinner = () => {
+    return (
+        <div className="w-full flex h-full items-center flex-col">
+            <div>
+                <Spinner />
+            </div>
+        </div>
+    )
+}
+
+export { Spinner, FullPageSpinner }

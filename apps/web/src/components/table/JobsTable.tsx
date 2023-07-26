@@ -12,7 +12,7 @@ enum Status {
     HIRED
 }
 
-const Status_Lookup = [
+export const Status_Lookup = [
     'Bookmarked',
     'Applying',
     'Applied',
@@ -77,6 +77,7 @@ const tableConfig: TableConfig = {
 }
 
 const JobsTable = ({ jobs }: { jobs: Job[] }) => {
+
     return (
         <Table
             columns={tableConfig.columns}

@@ -7,6 +7,21 @@ export type Size = 'xs' | 'sm' | 'md' | 'lg';
  * @returns - tailwindcss class for the desired size
  */
 
+const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'July',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+]
+
 export const getSize = (size: Size) => {
     switch (size) {
         case 'xs':
@@ -22,4 +37,12 @@ export const getSize = (size: Size) => {
         default:
             return 'py-2.5'
     }
+}
+
+
+export const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = months[date.getMonth()] as string;
+
+    return `${date.getDate()} ${month}, ${date.getFullYear()}`;
 }

@@ -36,9 +36,7 @@ export const Input: FC<InputProps> = ({ label, multiline, name, hint, className,
             <label>
                 <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
                 {multiline ? (
-                    <textarea className={classes} {...rest}>
-                        {rest.value}
-                    </textarea>
+                    <textarea className={classes} {...rest} value={rest.value} />
                 ) : (
                     <input
                         className={classes}

@@ -19,7 +19,16 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ['avatars.githubusercontent.com']
-  }
+    domains: [
+      'avatars.githubusercontent.com',
+      'logo.clearbit.com'
+    ]
+  },
+  // images: {
+  //   remotePatterns: [
+  //     { protocol: 'https', hostname: 'avatars.githubusercontent.com', pathname: '/' },
+  //     { protocol: 'https', hostname: 'logo.clearbit.com', pathname: 'microsoft.com' },
+  //   ]
+  // }
 };
 export default config;

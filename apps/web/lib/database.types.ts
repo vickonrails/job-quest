@@ -16,7 +16,7 @@ export interface Database {
           created_at: string | null
           description: string | null
           id: string
-          labels: string | null
+          labels: string[] | null
           link: string | null
           location: string | null
           position: string
@@ -30,7 +30,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           id?: string
-          labels?: string | null
+          labels?: string[] | null
           link?: string | null
           location?: string | null
           position: string
@@ -44,7 +44,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           id?: string
-          labels?: string | null
+          labels?: string[] | null
           link?: string | null
           location?: string | null
           position?: string

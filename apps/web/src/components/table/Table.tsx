@@ -32,7 +32,7 @@ export const Table = <T extends Obj,>({ CellRenderer = TableCellRender<T>, colum
     const router = useRouter();
 
     const navigateToDetails = (id: string) => {
-        router.push(`/app/jobs/${id}`).then(() => {
+        router.push(`/app/tracker/jobs/${id}`).then(() => {
             // 
         }).catch(err => {
             // 

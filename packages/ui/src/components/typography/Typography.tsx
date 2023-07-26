@@ -5,7 +5,7 @@ type TypeVariant = 'display-xl-bold' | 'display-xl-md' | 'display-xl' | 'display
     'display-lg-md' | 'display-lg' | 'display-md-bold' | 'display-md-md' | 'display-md' | 'display-sm-bold' |
     'display-sm-md' | 'display-sm' | 'display-xs-bold' | 'display-xs-md' | 'display-xs' | 'body-xl-bold' |
     'body-xl-md' | 'body-xl' | 'body-lg-bold' | 'body-lg-md' | 'body-lg' | 'body-md-bold' | 'body-md-md' |
-    'body-md' | 'body-sm-bold' | 'body-sm-md' | 'body-sm' | 'body-xl-bold' | 'body-xl-md' | 'body-xl'
+    'body-md' | 'body-sm-bold' | 'body-sm-md' | 'body-sm' | 'body-xl-bold' | 'body-xl-md' | 'body-xl' | 'body-xs' | 'body-xs-md' | 'body-xs-bold'
 
 interface TypographyProps extends HTMLAttributes<HTMLElement> {
     variant: TypeVariant
@@ -16,6 +16,17 @@ const getTypeProperties = (variant: TypeVariant) => {
     switch (variant) {
         case 'display-xs-md':
             return 'font-medium text-2xl text-gray-800';
+        case 'display-xs':
+            return 'font-regular text-2xl text-gray-800';
+        case 'display-xs-bold':
+            return 'font-bold text-2xl text-gray-800';
+
+        case 'body-md':
+            return 'text-base font-regular';
+        case 'body-md-bold':
+            return 'text-base font-bold';
+        case 'body-md-md':
+            return 'text-base font-medium';
 
         case 'body-sm':
             return 'font-regular text-sm text-gray-500'
