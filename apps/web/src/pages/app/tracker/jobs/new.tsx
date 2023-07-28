@@ -3,13 +3,15 @@ import { useSession } from '@hooks';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { type JobInsertDTO } from 'lib/types';
+import { useRouter } from 'next/router';
 import React, { type FormEvent, useState } from 'react'
+import { ChevronLeft } from 'react-feather';
 import { Button, Input } from 'ui';
-
 
 const NewJob = () => {
     const client = useSupabaseClient<Database>();
     const [session] = useSession();
+    const router = useRouter()
 
     const createJob = async (job: JobInsertDTO) => {
         const { data, error } = await client.from('jobs').insert(job);
@@ -53,7 +55,11 @@ const NewJob = () => {
     }
 
     return (
-        <Layout session={session ?? undefined} >
+        <Layout session={session ?? undefined}>
+            <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
+                <ChevronLeft size={20} />
+                Back
+            </button>
             <form onSubmit={onCreate} className="bg-white flex flex-col gap-2 p-4 max-w-md">
                 <Input value={title} fullWidth placeholder="Title" label="Title" onChange={ev => setTitle(ev.target.value)} />
                 <Input value={companyName} fullWidth placeholder="Company Name" label="Company Name" onChange={ev => setCompanyName(ev.target.value)} />

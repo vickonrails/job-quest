@@ -1,16 +1,5 @@
-import React from 'react'
-import { Table, type TableConfig } from './Table'
-import { type Job } from 'lib/types'
-
-enum Status {
-    BOOKMARKED,
-    APPLYING,
-    APPLIED,
-    INTERVIEWING,
-    REJECTED,
-    NEGOTIATING,
-    HIRED
-}
+import { type Job } from 'lib/types';
+import { type TableConfig } from '../Table';
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -22,68 +11,56 @@ export const Status_Lookup = [
     'Hired',
 ]
 
-const tableConfig: TableConfig = {
+export const tableConfig: TableConfig<Job> = {
     columns: [
         {
             title: 'Job Position',
             columnType: 'text',
             key: 'position',
-            value: (job: Job) => ({ text: job.position }),
+            value: (job) => ({ text: job.position }),
             width: 250
         },
         {
             title: 'Company',
             columnType: 'logoWithText',
             key: 'company_name',
-            value: (job: Job) => ({ text: job.company_name, src: job.company_site && `https://logo.clearbit.com/${job.company_site}` }),
+            value: (job) => ({ text: job.company_name, src: job.company_site && `https://logo.clearbit.com/${job.company_site}` }),
             width: 200
         },
         {
             title: 'Location',
             columnType: 'text',
             key: 'location',
-            value: (job: Job) => ({ text: job.location }),
+            value: (job) => ({ text: job.location }),
             width: 200
         },
         {
             title: 'Priority',
             columnType: 'rating',
             key: 'priority',
-            value: (job: Job) => ({ rating: job.priority }),
+            value: (job) => ({ rating: job.priority }),
             width: 200
         },
         {
             title: 'Status',
             columnType: 'text',
             key: 'status',
-            value: (job: Job) => ({ text: Status_Lookup[job.status] }),
+            value: (job) => ({ text: Status_Lookup[job.status] }),
             width: 150
         },
         {
             title: 'Date Added',
             columnType: 'date',
             key: 'created_at',
-            value: (job: Job) => ({ date: job.created_at }),
+            value: (job) => ({ date: job.created_at }),
             width: 150
         },
         {
             title: 'Labels',
             columnType: 'chips',
             key: 'labels',
-            value: (job: Job) => ({ labels: job.labels }),
+            value: (job) => ({ labels: job.labels }),
             width: 200
         },
     ]
 }
-
-const JobsTable = ({ jobs }: { jobs: Job[] }) => {
-
-    return (
-        <Table
-            columns={tableConfig.columns}
-            data={jobs}
-        />
-    )
-}
-
-export default JobsTable

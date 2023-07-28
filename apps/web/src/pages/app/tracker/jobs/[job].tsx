@@ -10,9 +10,10 @@ import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
 import { Typography } from 'ui';
 import { Rating } from '@components/rating/Rating';
-import { Status_Lookup } from '@components/table/JobsTable';
+
 import { Chip } from '@components/chips';
 import { formatDate } from '@components/utils';
+import { Status_Lookup } from '@components/table/job/JobsTableConfig';
 
 const JobDetailsPage = () => {
     const router = useRouter();
