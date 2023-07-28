@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
 import { type Database } from '../../lib/database.types.ts'
-import jobs from './jobs.json' assert { type: 'json' }
+import jobs from './jobs.ts'
 import { reportError } from './reportError.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -24,7 +24,7 @@ const connect = () => {
 
 const seedJobs = async (client: SupabaseClient<Database>) => {
     const promises = jobs.map(async job => {
-        const { data, error } = await client.from('jobs').insert({ ...jobs });
+        const { data, error } = await client.from('jobs').insert({ ...job });
         if (error) {
             throw new Error(`Failed to seed job ${job.position}`, { cause: error.message });
         }
