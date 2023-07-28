@@ -3,10 +3,29 @@ import { type Database } from '../../lib/database.types';
 import { type Job } from '../../lib/types';
 import { useEffect, useState } from 'react'
 
-export const useJobs = (): [boolean, Job[]] => {
+type UseJobsRtrn = {
+    loading: boolean,
+    jobs: Job[],
+    refreshing: boolean,
+    refresh: () => Promise<void>
+};
+
+export const useJobs = (): UseJobsRtrn => {
     const client = useSupabaseClient<Database>();
     const [jobs, setJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const refresh = async () => {
+        setRefreshing(true);
+        const { data, error } = await client.from('jobs').select();
+        setRefreshing(false);
+
+        if (error) {
+            throw error;
+        }
+        setJobs(data || [])
+    }
 
     useEffect(() => {
         const fetchJobs = async () => {
@@ -24,5 +43,5 @@ export const useJobs = (): [boolean, Job[]] => {
         })
     }, [loading, client]);
 
-    return [loading, jobs];
+    return { loading, jobs, refresh, refreshing };
 }

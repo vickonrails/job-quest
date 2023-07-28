@@ -6,7 +6,8 @@ import { TableHeader } from './TableHeader';
 
 type TableActions = {
     onEdit: (id: string) => void
-    onDelete: (id: string) => void
+    onDelete: (id: string) => Promise<void>
+    refresh: () => Promise<void>
 }
 
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T> {
@@ -16,6 +17,8 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T>
     CellRenderer?: (props: CellRendererProps<T>) => JSX.Element
     /** actions to perform on table rows */
     actions?: TableActions
+
+    disabled?: boolean
 }
 
 export interface TableConfig<T> {
@@ -33,14 +36,27 @@ type BaseEntity = { id: string }
 // TODO: Virtualized lists
 // TODO: Format dates properly
 
-export const Table = <T extends BaseEntity,>({ CellRenderer = TableCellRender<T>, columns, data, actions, ...rest }: TableProps<T>) => {
-    const { onDelete, onEdit } = actions ?? {}
-    const handleDeleteClick = (id: string) => onDelete && onDelete(id)
+export const Table = <T extends BaseEntity,>({ CellRenderer = TableCellRender<T>, columns, data, actions, disabled, ...rest }: TableProps<T>) => {
+    const { onDelete, onEdit, refresh } = actions ?? {}
+    const handleDeleteClick = async (id: string) => {
+        try {
+            await onDelete?.(id)
+            await refresh?.();
+        } catch (err) {
+            // 
+        }
+    }
+
     const handleEditClick = (id: string) => onEdit && onEdit(id)
 
     const tableWidth = columns.reduce((acc, curr) => acc + curr.width, 0)
     return (
-        <table className=" border-collapse" style={{ width: tableWidth }}{...rest}>
+        <table className={
+            clsx(
+                'border-collapse transition-opacity',
+                disabled ? 'opacity-75 pointer-events-none' : 'opacity-100'
+            )
+        } style={{ width: tableWidth }}{...rest}>
             <TableHeader columns={columns} />
             <tbody>
                 {data.map((row, index) => (

@@ -27,6 +27,11 @@ const config = {
     "jsx-quotes": ["error", "prefer-double"],
     "quotes": ["error", "single", { avoidEscape: true }],
     "no-console": "error",
+    "@typescript-eslint/no-misused-promises": [2, {
+      "checksVoidReturn": {
+        "attributes": false
+      }
+    }]
   }
 };
 module.exports = config;

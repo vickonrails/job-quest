@@ -19,18 +19,14 @@ import { useRouter } from 'next/router'
 // }
 
 const JobsTable = () => {
-    const [loadingJobs, jobs] = useJobs();
+    const { loading, jobs, refreshing, refresh } = useJobs();
     const client = useSupabaseClient<Database>();
     const { columns } = tableConfig
     const router = useRouter();
 
-    const onDelete = (jobId: string) => {
-        client.from('jobs').delete().eq('id', jobId).then(() => {
-            alert('deleted')
-            // trigger a refetch or something
-        }, () => {
-            // 
-        })
+    const onDelete = async (jobId: string) => {
+        const { error } = await client.from('jobs').delete().eq('id', jobId);
+        if (error) { throw error }
     }
 
     const onEdit = (id: string) => {
@@ -43,15 +39,18 @@ const JobsTable = () => {
 
     const actions = {
         onDelete,
-        onEdit
+        onEdit,
+        refresh
     }
 
-    if (loadingJobs) { return <FullPageSpinner /> }
+    if (loading) { return <FullPageSpinner /> }
+
     return (
         <Table
             columns={columns}
             data={jobs}
             actions={actions}
+            disabled={refreshing}
         />
     )
 }
