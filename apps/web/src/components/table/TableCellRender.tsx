@@ -17,6 +17,8 @@ export type CellRendererProps<T> = {
     value: CellValueType<T>
 } & HTMLAttributes<Omit<HTMLTableCellElement, 'children'>>
 
+export type CellValueTypes<T> = DateCellType<T> | TextCellType<T> | LogoWithTextCellType<T> | LabelCellType<T> | RatingCellType<T>
+
 type DateCellType<T> = CellValueType<T> & {
     date: string
 }
