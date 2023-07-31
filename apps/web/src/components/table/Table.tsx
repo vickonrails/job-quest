@@ -1,8 +1,14 @@
 import React, { type JSX, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { Edit, Trash2 } from 'react-feather';
-import { type CellRendererProps, TableCellRender, type TableColumnType, type TableCellValue } from './TableCellRender';
+import { Edit, Trash2, MoreVertical } from 'react-feather';
+import { type CellRendererProps, TableCellRender, type TableColumnType, type TableCellValue, CellValueTypes } from './TableCellRender';
 import { TableHeader } from './TableHeader';
+
+import { useReactTable, flexRender, type ColumnDef, getCoreRowModel, type Row, getSortedRowModel } from '@tanstack/react-table'
+import { useVirtual } from '@tanstack/react-virtual'
+import { Typography } from 'ui';
+import { useWindowHeight } from 'src/hooks/useWindowHeight';
+
 
 type TableActions = {
     onEdit: (id: string) => void
@@ -22,13 +28,14 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T>
 }
 
 export interface TableConfig<T> {
-    columns: {
-        title: string;
-        columnType: TableColumnType
-        key: string
-        value: TableCellValue<T>
-        width: number
-    }[]
+    // columns: {
+    //     title: string;
+    //     columnType: TableColumnType
+    //     key: string
+    //     value: TableCellValue<T>
+    //     width: number
+    // }[]
+    columns: ColumnDef<T>[]
 }
 
 type BaseEntity = { id: string }
@@ -37,6 +44,26 @@ type BaseEntity = { id: string }
 // TODO: Format dates properly
 
 export const Table = <T extends BaseEntity,>({ CellRenderer = TableCellRender<T>, columns, data, actions, disabled, ...rest }: TableProps<T>) => {
+    const windowHeight = useWindowHeight()
+    const table = useReactTable<T>({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        debugTable: true
+    })
+
+    const tableContainerRef = React.useRef<HTMLDivElement>(null)
+
+    const { rows } = table.getRowModel();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+    const { virtualItems: virtualRows } = useVirtual<HTMLDivElement>({
+        parentRef: tableContainerRef,
+        size: rows.length,
+        overscan: 10
+    })
+
+
     const { onDelete, onEdit, refresh } = actions ?? {}
     const handleDeleteClick = async (id: string) => {
         try {
@@ -47,40 +74,43 @@ export const Table = <T extends BaseEntity,>({ CellRenderer = TableCellRender<T>
         }
     }
 
-    const handleEditClick = (id: string) => onEdit && onEdit(id)
-
-    const tableWidth = columns.reduce((acc, curr) => acc + curr.width, 0)
     return (
-        <table className={
-            clsx(
-                'border-collapse transition-opacity',
-                disabled ? 'opacity-75 pointer-events-none' : 'opacity-100'
-            )
-        } style={{ width: tableWidth }}{...rest}>
-            <TableHeader columns={columns} />
-            <tbody>
-                {data.map((row, index) => (
-                    <>
-                        <tr key={index} className={
-                            clsx(
-                                (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
-                                'align-middle'
-                            )}>
-                            <td className="flex p-4 pr-7 text-light-text">
-                                <button className="mr-4" onClick={_ => handleEditClick(row.id)}>
-                                    <Edit size={16} />
-                                </button>
-                                <button onClick={_ => handleDeleteClick(row.id)}>
-                                    <Trash2 size={16} />
-                                </button>
-                            </td>
-                            {columns.map((col, idx) =>
-                                <CellRenderer value={col?.value(row)} key={idx} type={col.columnType} />
-                            )}
-                        </tr>
-                    </>
-                ))}
-            </tbody>
-        </table>
+        <div style={{ maxHeight: windowHeight - 190, overflow: 'auto' }}>
+            <div ref={tableContainerRef} {...rest}>
+                <table>
+                    <TableHeader table={table} />
+                    <tbody>
+                        {virtualRows.map(({ index }) => {
+                            const row = rows[index] as Row<T>;
+                            const visibleCells = row?.getVisibleCells();
+
+                            return (
+                                <tr key={row?.id}
+                                    className={
+                                        clsx(
+                                            (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
+                                            'align-middle hover:cursor-pointer'
+                                        )
+                                    } onClick={() => onEdit?.(row.original.id)}>
+                                    <td className="p-4">
+                                        <button>
+                                            <MoreVertical size={16} />
+                                        </button>
+                                    </td>
+                                    {visibleCells.map(cell => {
+                                        const { type, value } = cell.getValue<{ type: TableColumnType, value: CellValueTypes<T> }>()
+                                        return (
+                                            <td key={cell.id}>
+                                                <TableCellRender type={type} value={value} />
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }

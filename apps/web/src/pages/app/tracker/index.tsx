@@ -38,7 +38,7 @@ const Tracker = () => {
                         <Typography variant="display-xs-md" as="h1">{profile?.username} {'\'s Board'}</Typography>
                         <Button size="sm" onClick={navigateToNew}>New Entry</Button>
                     </div>
-                    <div className="overflow-auto rounded-xl">
+                    <div className="rounded-xl">
                         <JobsTable />
                     </div>
                 </>

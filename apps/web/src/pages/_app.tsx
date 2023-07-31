@@ -7,7 +7,6 @@ import { useState } from 'react'
 import '../styles/globals.css'
 import 'ui/dist/styles.css'
 
-
 function MyApp({
   Component,
   pageProps,

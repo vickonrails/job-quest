@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Table } from '../Table'
-import { tableConfig } from './JobsTableConfig'
+import { columns } from './JobsTableConfig'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
 import { type Database } from 'lib/database.types'
@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 const JobsTable = () => {
     const { loading, jobs, refreshing, refresh } = useJobs();
     const client = useSupabaseClient<Database>();
-    const { columns } = tableConfig
+
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
