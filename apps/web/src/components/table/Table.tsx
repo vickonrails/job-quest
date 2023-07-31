@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { Edit, Trash2, MoreVertical } from 'react-feather';
 import { type CellRendererProps, TableCellRender, type TableColumnType, type TableCellValue, CellValueTypes } from './TableCellRender';
 import { TableHeader } from './TableHeader';
+import { MenuBar, MenuItem, Separator } from '@components/menubar'
 
 import { useReactTable, flexRender, type ColumnDef, getCoreRowModel, type Row, getSortedRowModel } from '@tanstack/react-table'
 import { useVirtual } from '@tanstack/react-virtual'
@@ -28,13 +29,6 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T>
 }
 
 export interface TableConfig<T> {
-    // columns: {
-    //     title: string;
-    //     columnType: TableColumnType
-    //     key: string
-    //     value: TableCellValue<T>
-    //     width: number
-    // }[]
     columns: ColumnDef<T>[]
 }
 
@@ -91,11 +85,24 @@ export const Table = <T extends BaseEntity,>({ CellRenderer = TableCellRender<T>
                                             (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
                                             'align-middle hover:cursor-pointer'
                                         )
-                                    } onClick={() => onEdit?.(row.original.id)}>
+                                    }
+                                    onClick={() => onEdit?.(row.original.id)}
+                                >
                                     <td className="p-4">
-                                        <button>
-                                            <MoreVertical size={16} />
-                                        </button>
+                                        <MenuBar trigger={<button><MoreVertical size={16} /></button>}>
+                                            <MenuItem
+                                                icon={<Edit size={16} />}
+                                            >
+                                                Edit
+                                            </MenuItem>
+                                            <Separator />
+                                            <MenuItem
+                                                icon={<Trash2 size={16} />}
+                                                onClick={_ => { alert('Hi') }}
+                                            >
+                                                Delete
+                                            </MenuItem>
+                                        </MenuBar>
                                     </td>
                                     {visibleCells.map(cell => {
                                         const { type, value } = cell.getValue<{ type: TableColumnType, value: CellValueTypes<T> }>()

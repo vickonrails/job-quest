@@ -28,6 +28,9 @@ export default {
         '3xl': '2.1rem',
         '2xl': '1.5rem',
         'xl': '1.25rem'
+      },
+      minWidth: {
+        '150': '150px'
       }
     },
   },
