@@ -7,7 +7,7 @@ interface MenuBarProp extends RadixMenuBar.MenubarProps {
 
 // TODO: fix x index
 const MenuBar: FC<MenuBarProp> = ({ trigger, children, ...rest }) => (
-    <RadixMenuBar.Root className="text-base-col">
+    <RadixMenuBar.Root className="text-base-col" {...rest}>
         <RadixMenuBar.Menu>
             <RadixMenuBar.Trigger>
                 {trigger}
@@ -24,6 +24,7 @@ const MenuBar: FC<MenuBarProp> = ({ trigger, children, ...rest }) => (
 type MenuItemProps = RadixMenuBar.MenuItemProps & {
     icon?: React.ReactNode
 }
+
 const MenuItem: FC<MenuItemProps> = ({ icon, children, ...rest }) => {
     return (
         <RadixMenuBar.Item

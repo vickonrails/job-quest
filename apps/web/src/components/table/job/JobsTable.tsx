@@ -6,6 +6,7 @@ import { FullPageSpinner } from '@components/spinner'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
+import { AlertDialog } from '@components/alert-dialog'
 
 // TODO: For reference
 // enum Status {
@@ -23,6 +24,8 @@ const JobsTable = () => {
     const client = useSupabaseClient<Database>();
 
     const router = useRouter();
+
+
 
     const onDelete = async (jobId: string) => {
         const { error } = await client.from('jobs').delete().eq('id', jobId);

@@ -19,7 +19,7 @@ export default {
         primary: colors.indigo[700],
         'primary-light': colors.indigo[600],
         'table-row-accent': '#F5F6FA',
-        'strokes': '#F5F6FA'
+        strokes: '#F5F6FA'
       },
       fontSize: {
         '6xl': '4rem',
