@@ -44,7 +44,7 @@ export const columns: ColumnDef<Job>[] = [
         size: 150
     },
     {
-        accessorFn: (job) => ({ type: 'labels', value: { labels: job.labels } }),
+        accessorFn: (job) => ({ type: 'chips', value: { labels: job.labels } }),
         header: 'Labels',
         size: 200
     },
