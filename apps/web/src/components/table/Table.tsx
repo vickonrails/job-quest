@@ -5,7 +5,7 @@ import { TableCellRender, type TableColumnType, type CellValueTypes } from './Ta
 import { TableHeader } from './TableHeader';
 import { MenuBar, MenuItem, Separator } from '@components/menubar'
 
-import { useReactTable, type ColumnDef, getCoreRowModel, type Row, getSortedRowModel, Cell } from '@tanstack/react-table'
+import { useReactTable, type ColumnDef, getCoreRowModel, type Row, getSortedRowModel } from '@tanstack/react-table'
 import { useVirtual } from '@tanstack/react-virtual'
 import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
@@ -90,12 +90,47 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                             const visibleCells = row?.getVisibleCells();
 
                             return (
-                                <TableRow
-                                    key={row.id}
-                                    visibleCells={visibleCells}
-                                    row={row}
-                                    onEdit={onEdit}
-                                />
+                                <tr key={row?.id}
+                                    className={
+                                        clsx(
+                                            (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
+                                            'align-middle hover:cursor-pointer'
+                                        )
+                                    }
+                                >
+                                    <td className="p-4">
+                                        <MenuBar
+                                            triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
+                                            trigger={<MoreVertical size={16} />}
+                                        >
+                                            <MenuItem
+                                                icon={<Edit size={16} />}
+                                                onClick={_ => onEdit?.(row.original.id)}
+                                            >
+                                                Edit
+                                            </MenuItem>
+                                            <Separator />
+                                            <MenuItem
+                                                className="text-red-400 hover:bg-red-50"
+                                                icon={<Trash2 size={16} />}
+                                                onClick={() => openDeleteDialog(row.original)}
+                                            >
+                                                Delete
+                                            </MenuItem>
+                                        </MenuBar>
+                                    </td>
+                                    {visibleCells.map(cell => {
+                                        const { type, value } = cell.getValue<{ type: TableColumnType, value: CellValueTypes<T> }>()
+                                        // TODO: might not be that performant to have this event handlers on the cell themselves,
+                                        // but it's the only way to implement the menubar functionality
+                                        // Will refactor later
+                                        return (
+                                            <td key={cell.id} onClick={() => onEdit?.(row.original.id)}>
+                                                <TableCellRender type={type} value={value} />
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
                             )
                         })}
                     </tbody>
@@ -111,69 +146,5 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                 )}
             </div>
         </div>
-    )
-}
-
-interface TableRowProps<T> extends HTMLAttributes<HTMLTableRowElement> {
-    row: Row<T>
-    onEdit?: (id: string) => void
-    visibleCells: Cell<T, unknown>[]
-}
-
-
-// className={
-//     clsx(
-//         (((index % 2) === 0) ? 'bg-table-row-accent' : 'bg-white'),
-//         'align-middle hover:cursor-pointer'
-//     )
-// }
-
-const TableRow = <T extends BaseEntity,>({ row, visibleCells, onEdit, ...rest }: TableRowProps<T>) => {
-    const rowRef = React.useRef<HTMLTableRowElement>(null)
-
-    useEffect(() => {
-        const handleOnEditClick = () => {
-            onEdit?.(row?.original?.id)
-        }
-
-        const tableRow = rowRef.current;
-        tableRow?.addEventListener('click', handleOnEditClick)
-        return () => {
-            tableRow?.removeEventListener('click', handleOnEditClick)
-        }
-    }, [row, onEdit])
-
-    return (
-        <tr
-            ref={rowRef}
-            key={row?.id}
-            {...rest}
-        >
-            <td className="p-4">
-                <MenuBar className="p-1" trigger={<MoreVertical size={16} />}>
-                    <MenuItem
-                        icon={<Edit size={16} />}
-                        onClick={() => onEdit?.(row.original.id)}
-                    >
-                        Edit
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem
-                        icon={<Trash2 size={16} />}
-                    // onClick={() => openDeleteDialog(row.original)}
-                    >
-                        Delete
-                    </MenuItem>
-                </MenuBar>
-            </td>
-            {visibleCells?.map(cell => {
-                const { type, value } = cell.getValue<{ type: TableColumnType, value: CellValueTypes<T> }>()
-                return (
-                    <td key={cell.id} onClick={() => onEdit?.(row.original.id)}>
-                        <TableCellRender type={type} value={value} />
-                    </td>
-                )
-            })}
-        </tr>
     )
 }
