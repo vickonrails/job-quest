@@ -33,7 +33,7 @@ const JobsTable = () => {
     }
 
     const onEdit = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}`).then(() => {
+        router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
             // 
         }).catch(err => {
             // 

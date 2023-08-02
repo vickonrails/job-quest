@@ -8,14 +8,17 @@ import { type Job } from 'lib/types';
 import { FullPageSpinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
-import { Typography } from 'ui';
+import { Button, Typography } from 'ui';
 import { Rating } from '@components/rating/Rating';
 
 import { Chip } from '@components/chips';
-import { formatDate } from '@components/utils';
+import { djb2Hash, formatDate } from '@components/utils';
 import { Status_Lookup } from '@components/table/job/JobsTableConfig';
+import { type ChipVariants } from '@components/chips/Chip';
+import { useWindowHeight } from 'src/hooks/useWindowHeight';
 
 const JobDetailsPage = () => {
+    const windowHeight = useWindowHeight()
     const router = useRouter();
     const jobId = router.query.job as string;
     const client = useSupabaseClient<Database>();
@@ -44,22 +47,29 @@ const JobDetailsPage = () => {
 
     return (
         <Layout session={session ?? undefined}>
-            <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
-                <ChevronLeft size={20} />
-                Back
-            </button>
-            {loading ?
-                <FullPageSpinner /> :
-                // @ts-ignore
-                <JobDetails job={jobDetails} />
-
-            }
+            <div>
+                <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
+                    <ChevronLeft size={20} />
+                    Back
+                </button>
+                {loading ?
+                    <FullPageSpinner /> :
+                    // @ts-ignore
+                    <JobDetails job={jobDetails} />
+                }
+            </div>
         </Layout>
     )
 }
 
 
 const JobDetails = ({ job }: { job: Job }) => {
+    const router = useRouter()
+
+    const handleEditClick = () => {
+        return router.push(`/app/tracker/jobs/${job.id}/edit`)
+    }
+
     return (
         <div className="flex bg-white">
             <div className="flex-2 grow-0 border-r p-6 basis-2/3">
@@ -76,7 +86,10 @@ const JobDetails = ({ job }: { job: Job }) => {
                             </div>
                         )}
                         <div className="flex-1">
-                            <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.company_name}</Typography>
+                            <div className="flex items-center">
+                                <Typography variant="display-xs-md" className="mb-1 mr-3 text-base-col">{job.company_name}</Typography>
+                                <Button size="xs" onClick={handleEditClick} fillType="outlined" className="inline-block py-1">Edit</Button>
+                            </div>
                             <ul className="flex gap-6 text-light-text">
                                 <li><Typography variant="body-md">{job.company_name}</Typography></li>
                                 <li >{job.location}</li>
@@ -109,10 +122,17 @@ const JobDetails = ({ job }: { job: Job }) => {
 }
 
 const JobLabels = ({ labels }: { labels: string[] }) => {
+    const variants = ['blue', 'purple', 'green', 'gold', 'orange']
+
+    const getChipColors = (text: string) => {
+        const index = djb2Hash(text, variants.length)
+        return variants[index]
+    }
+
     return (
         <div className="flex">
             {labels.map((label, index) => (
-                <Chip key={index} label={label} />
+                <Chip key={index} label={label} variant={getChipColors(label) as ChipVariants} />
             ))}
         </div>
     )

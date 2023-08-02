@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes, useState, useEffect, FC } from 'react'
+import React, { type HTMLAttributes, useState } from 'react'
 import clsx from 'clsx'
 import { Edit, Trash2, MoreVertical } from 'react-feather';
 import { TableCellRender, type TableColumnType, type CellValueTypes } from './TableCellRender';
@@ -9,6 +9,7 @@ import { useReactTable, type ColumnDef, getCoreRowModel, type Row, getSortedRowM
 import { useVirtual } from '@tanstack/react-virtual'
 import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
+import { useRouter } from 'next/router';
 
 type TableActions = {
     onEdit: (id: string) => void
@@ -36,6 +37,7 @@ type BaseEntity = { id: string }
 
 export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }: TableProps<T>) => {
     const windowHeight = useWindowHeight()
+    const router = useRouter();
     const { onDelete, onEdit, refresh } = actions ?? {}
     // TODO: move the delete dialog utility to a separate hook
     const [selectedEntity, setSelectedEntity] = useState<T | null>(null)
@@ -48,6 +50,11 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
         setSelectedEntity(entity);
     }, [])
 
+    const handleDeleteCancel = React.useCallback(() => {
+        setShowDeleteDialog(false)
+        setSelectedEntity(null)
+    }, [])
+
     const handleRowDelete = (id: string) => {
         setLoading(true)
         onDelete?.(id).then(async () => {
@@ -57,6 +64,14 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
             // 
         }).finally(() => {
             setLoading(false)
+        })
+    }
+
+    const onDetailsClick = (id: string) => {
+        router.push(`/app/tracker/jobs/${id}`).then(() => {
+            // 
+        }).catch(err => {
+            // 
         })
     }
 
@@ -125,7 +140,7 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                                         // but it's the only way to implement the menubar functionality
                                         // Will refactor later
                                         return (
-                                            <td key={cell.id} onClick={() => onEdit?.(row.original.id)}>
+                                            <td key={cell.id} onClick={() => onDetailsClick?.(row.original.id)}>
                                                 <TableCellRender type={type} value={value} />
                                             </td>
                                         )
@@ -141,6 +156,7 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                         title="Delete Confirmation"
                         description="Are you sure you want to delete this job?"
                         onOk={() => handleRowDelete(selectedEntity?.id ?? '')}
+                        onCancel={handleDeleteCancel}
                         isProcessing={loading}
                     />
                 )}
