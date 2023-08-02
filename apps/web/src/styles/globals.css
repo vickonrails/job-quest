@@ -46,6 +46,6 @@
     }
 
     .modal-content {
-        @apply bg-white top-10 left-10 w-full p-4 max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed;
+        @apply bg-white w-full max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed;
     } 
 }

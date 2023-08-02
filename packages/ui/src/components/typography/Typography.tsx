@@ -21,6 +21,9 @@ const getTypeProperties = (variant: TypeVariant) => {
         case 'display-xs-bold':
             return 'font-bold text-2xl text-gray-800';
 
+        case 'display-sm-md':
+            return 'font-medium text-base text-gray-800';
+
         case 'body-md':
             return 'text-base font-regular';
         case 'body-md-bold':
