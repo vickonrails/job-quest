@@ -11,10 +11,11 @@ import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
 import { useRouter } from 'next/router';
 
-type TableActions = {
-    onEdit: (id: string) => void
+export type TableActions = {
+    onEditClick: (id: string) => void
     onDelete: (id: string) => Promise<void>
     refresh: () => Promise<void>
+    onRowClick: (id: string) => void
 }
 
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T> {
@@ -38,12 +39,13 @@ type BaseEntity = { id: string }
 export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }: TableProps<T>) => {
     const windowHeight = useWindowHeight()
     const router = useRouter();
-    const { onDelete, onEdit, refresh } = actions ?? {}
+    const { onDelete, onEditClick, refresh, onRowClick } = actions ?? {}
     // TODO: move the delete dialog utility to a separate hook
     const [selectedEntity, setSelectedEntity] = useState<T | null>(null)
     const [loading, setLoading] = useState(false)
 
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [showEditDialog, setShowEditDialog] = useState(false)
 
     const openDeleteDialog = React.useCallback((entity: T) => {
         setShowDeleteDialog(true)
@@ -52,6 +54,16 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
 
     const handleDeleteCancel = React.useCallback(() => {
         setShowDeleteDialog(false)
+        setSelectedEntity(null)
+    }, [])
+
+    const handleEditClick = React.useCallback((entity: T) => {
+        setShowEditDialog(true)
+        setSelectedEntity(entity)
+    }, [])
+
+    const handleEditCancel = React.useCallback(() => {
+        setShowEditDialog(false);
         setSelectedEntity(null)
     }, [])
 
@@ -64,14 +76,6 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
             // 
         }).finally(() => {
             setLoading(false)
-        })
-    }
-
-    const onDetailsClick = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}`).then(() => {
-            // 
-        }).catch(err => {
-            // 
         })
     }
 
@@ -120,7 +124,8 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                                         >
                                             <MenuItem
                                                 icon={<Edit size={16} />}
-                                                onClick={_ => onEdit?.(row.original.id)}
+                                                // onClick={_ => onEditClick?.(row.original.id)}
+                                                onClick={_ => handleEditClick(row?.original)}
                                             >
                                                 Edit
                                             </MenuItem>
@@ -140,7 +145,7 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                                         // but it's the only way to implement the menubar functionality
                                         // Will refactor later
                                         return (
-                                            <td key={cell.id} onClick={() => onDetailsClick?.(row.original.id)}>
+                                            <td key={cell.id} onClick={() => onRowClick?.(row.original.id)}>
                                                 <TableCellRender type={type} value={value} />
                                             </td>
                                         )
@@ -158,6 +163,15 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                         onOk={() => handleRowDelete(selectedEntity?.id ?? '')}
                         onCancel={handleDeleteCancel}
                         isProcessing={loading}
+                    />
+                )}
+
+                {showEditDialog && (
+                    <AlertDialog
+                        open={showEditDialog}
+                        title="Edit Job"
+                        description={JSON.stringify(selectedEntity)}
+                        onCancel={handleEditCancel}
                     />
                 )}
             </div>

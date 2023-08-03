@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table } from '../Table'
+import { Table, TableActions } from '../Table'
 import { columns } from './JobsTableConfig'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
@@ -25,25 +25,28 @@ const JobsTable = () => {
 
     const router = useRouter();
 
-
-
     const onDelete = async (jobId: string) => {
         const { error } = await client.from('jobs').delete().eq('id', jobId);
         if (error) { throw error }
     }
 
-    const onEdit = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
+    const onEditClick = (id: string) => {
+        // 
+    }
+
+    const onRowClick = (id: string) => {
+        router.push(`/app/tracker/jobs/${id}`).then(() => {
             // 
         }).catch(err => {
             // 
         })
     }
 
-    const actions = {
+    const actions: TableActions = {
         onDelete,
-        onEdit,
-        refresh
+        onEditClick,
+        refresh,
+        onRowClick
     }
 
     if (loading) { return <FullPageSpinner /> }
