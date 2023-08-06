@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { Table, TableActions } from '../Table'
+import { type EditJobFormProps, Table, type TableActions } from '../Table'
 import { columns } from './JobsTableConfig'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
-import { AlertDialog } from '@components/alert-dialog'
+import { type Job } from 'lib/types'
+import { Button, Input } from 'ui'
+import { Dialog } from '@components/dialog'
 
 // TODO: For reference
 // enum Status {
@@ -57,7 +59,33 @@ const JobsTable = () => {
             data={jobs}
             actions={actions}
             disabled={refreshing}
+            EditForm={EditJobForm}
         />
+    )
+}
+
+const EditJobForm = (props: EditJobFormProps<Job>) => {
+    const [position, setTitle] = useState('')
+    const [companyName, setCompanyName] = useState('')
+    const [companySite, setCompanySite] = useState('')
+    const [priority, setPriority] = useState(0)
+    const [location, setLocation] = useState('')
+    const [labels, setLabels] = useState('')
+    const [url, setURL] = useState('')
+    const [submitting, setSubmitting] = useState(false)
+
+    return (
+        <form>
+            <Input value={position} fullWidth placeholder="Title" label="Title" onChange={ev => setTitle(ev.target.value)} />
+            <Input value={companyName} fullWidth placeholder="Company Name" label="Company Name" onChange={ev => setCompanyName(ev.target.value)} />
+            <Input value={companySite} fullWidth placeholder="Company site" label="Company site" onChange={ev => setCompanySite(ev.target.value)} />
+            <Input type="number" min={1} max={5} fullWidth placeholder="Job Rating" label="Job Rating" value={priority} onChange={ev => setPriority(Number.parseInt(ev.target.value))} />
+            <Input value={location} fullWidth placeholder="Location" label="Location" onChange={ev => setLocation(ev.target.value)} />
+            <Input value={labels} multiline fullWidth hint="Comma separated labels" placeholder="Labels" label="Labels" onChange={ev => setLabels(ev.target.value)} />
+            <Input value={url} fullWidth type="url" placeholder="Link to Job" label="Link" onChange={ev => setURL(ev.target.value)} />
+            {/* {errorMessage && <>{errorMessage}</>} */}
+            <Button loading={submitting}>Create</Button>
+        </form>
     )
 }
 

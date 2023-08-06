@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes, useState } from 'react'
+import React, { type HTMLAttributes, type JSX, useState, ReactNode, ReactElement } from 'react'
 import clsx from 'clsx'
 import { Edit, Trash2, MoreVertical } from 'react-feather';
 import { TableCellRender, type TableColumnType, type CellValueTypes } from './TableCellRender';
@@ -10,6 +10,9 @@ import { useVirtual } from '@tanstack/react-virtual'
 import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
 import { useRouter } from 'next/router';
+import { Dialog } from '@components/dialog';
+import { Button, Input } from 'ui';
+import { Job } from 'lib/types';
 
 export type TableActions = {
     onEditClick: (id: string) => void
@@ -25,6 +28,8 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement>, TableConfig<T>
     actions?: TableActions
 
     disabled?: boolean
+
+    EditForm?: (props: EditJobFormProps<T>) => JSX.Element
 }
 
 export interface TableConfig<T> {
@@ -36,7 +41,7 @@ type BaseEntity = { id: string }
 // TODO: Virtualized lists
 // TODO: Format dates properly
 
-export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }: TableProps<T>) => {
+export const Table = <T extends BaseEntity,>({ columns, data, EditForm, actions, ...rest }: TableProps<T>) => {
     const windowHeight = useWindowHeight()
     const router = useRouter();
     const { onDelete, onEditClick, refresh, onRowClick } = actions ?? {}
@@ -58,9 +63,10 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
     }, [])
 
     const handleEditClick = React.useCallback((entity: T) => {
-        setShowEditDialog(true)
-        setSelectedEntity(entity)
-    }, [])
+        // setShowEditDialog(true)
+        // setSelectedEntity(entity)
+        return router.push(`tracker/jobs/${entity.id}/edit`)
+    }, [router])
 
     const handleEditCancel = React.useCallback(() => {
         setShowEditDialog(false);
@@ -166,15 +172,29 @@ export const Table = <T extends BaseEntity,>({ columns, data, actions, ...rest }
                     />
                 )}
 
-                {showEditDialog && (
-                    <AlertDialog
+                {/* {showEditDialog && (
+                    <Dialog
                         open={showEditDialog}
                         title="Edit Job"
-                        description={JSON.stringify(selectedEntity)}
-                        onCancel={handleEditCancel}
-                    />
+                        onOpenChange={handleEditCancel}
+                    >
+                        <CreateEditJobForm<T> entity={selectedEntity ?? undefined} />
+                    </Dialog>
+                )} */}
+
+                {showEditDialog && (
+                    <Dialog
+                        open={showEditDialog}
+                        title="Edit Job"
+                        onOpenChange={handleEditCancel}
+                    >
+                        {EditForm && <EditForm entity={selectedEntity ?? undefined} />}
+                        {/* {EditForm?.({ entity: selectedEntity ?? undefined })} */}
+                    </Dialog>
                 )}
             </div>
         </div>
     )
 }
+
+export type EditJobFormProps<T> = HTMLAttributes<HTMLFormElement> & { entity?: T }

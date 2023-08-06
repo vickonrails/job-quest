@@ -70,8 +70,10 @@ const JobDetails = ({ job }: { job: Job }) => {
     const [selectedEntity, setSelectedEntity] = useState<Job | null>()
 
     const handleEditClick = () => {
-        setShowEditDialog(true)
-        setSelectedEntity(job)
+        // setShowEditDialog(true)
+        // setSelectedEntity(job)
+
+        return router.push(`${job.id}/edit`)
     }
 
     const handleEditCancel = () => {
