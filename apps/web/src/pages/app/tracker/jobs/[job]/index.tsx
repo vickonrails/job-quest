@@ -13,10 +13,10 @@ import { Rating } from '@components/rating/Rating';
 
 import { Chip } from '@components/chips';
 import { djb2Hash, formatDate } from '@components/utils';
-import { Status_Lookup } from '@components/table/job/JobsTableConfig';
 import { type ChipVariants } from '@components/chips/Chip';
 import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
+import { Status_Lookup } from '@components/table/job/JobsTable';
 
 const JobDetailsPage = () => {
     const windowHeight = useWindowHeight()

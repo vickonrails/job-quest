@@ -1,9 +1,6 @@
 import clsx from 'clsx';
 import { Typography } from 'ui';
-import { Chip } from '@components/chips';
 import { Rating } from '@components/rating/Rating';
-import { djb2Hash } from '@components/utils';
-import { type ChipVariants } from '@components/chips/Chip';
 import Image from 'next/image';
 import { type HTMLAttributes } from 'react';
 
@@ -11,10 +8,10 @@ export type TableColumnType = 'text' | 'date' | 'chips' | 'rating' | 'logoWithTe
 
 export type TableCellValue<T> = (entity: T) => { [key: string]: string | number | string[] | null | undefined }
 
-type CellValueType<T> = ReturnType<TableCellValue<T>>
+export type CellValueType<T> = ReturnType<TableCellValue<T>>
 export type CellRendererProps<T> = {
     type: TableColumnType
-    value: CellValueType<T>
+    value: CellValueType<T> | string
 } & HTMLAttributes<Omit<HTMLTableCellElement, 'children'>>
 
 export type CellValueTypes<T> = DateCellType<T> | TextCellType<T> | LogoWithTextCellType<T> | LabelCellType<T> | RatingCellType<T>
@@ -67,26 +64,6 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
                         </Typography>
                     </div>
                 </td >
-            )
-
-        case 'chips':
-            const { labels = [] } = value as LabelCellType<T>
-            const variants = ['blue', 'purple', 'green', 'gold', 'orange']
-
-            const getChipColors = (text: string) => {
-                const index = djb2Hash(text, variants.length)
-                return variants[index]
-            }
-
-            return (
-                <td className={className}>
-                    <div className="flex align-middle">{
-                        labels?.map(label => {
-                            const variant = getChipColors(label) as ChipVariants;
-                            return (<Chip key={label} variant={variant} label={label} />)
-                        })}
-                    </div>
-                </td>
             )
 
         case 'rating':
