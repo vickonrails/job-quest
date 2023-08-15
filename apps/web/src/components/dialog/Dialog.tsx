@@ -11,7 +11,7 @@ export const Dialog = ({ children, title, ...rest }: DialogProps) => {
         <Root {...rest}>
             <Portal>
                 <Overlay className="fixed bg-black opacity-20 inset-0" />
-                <Content className="modal-content rounded-md box-content h-[90%] flex flex-col">
+                <Content className="bg-white w-full max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed rounded-md box-content h-[90%] flex flex-col">
                     <Typography variant="display-sm-md" className="px-4 py-3">{title}</Typography>
                     <hr />
 

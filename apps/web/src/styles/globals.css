@@ -33,6 +33,9 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
+
+    --shadow-crispy: 16px 16px 70px rgba(81, 67, 188, 0.1), -8px -8px 70px rgba(81, 67, 188, 0.1);
+    --shadow-light: 0px 1px 2px rgba(16, 24, 40, 0.05);
   }
  
   .dark {
@@ -76,7 +79,4 @@
   body {
     @apply bg-background text-foreground;
   }
-  .modal-content {
-    @apply bg-white w-full max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed;
-}
 }

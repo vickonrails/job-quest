@@ -11,11 +11,12 @@ interface AlertDialogProps extends DialogProps {
 }
 
 export const AlertDialog: FC<AlertDialogProps> = ({ open, description, title, onOk, onCancel, isProcessing, ...rest }) => {
+
     return (
         <Root open={open} {...rest}>
             <Portal>
                 <Overlay className="fixed bg-black opacity-20 inset-0" />
-                <Content className="modal-content rounded-md">
+                <Content className="bg-white w-full max-h-36 max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed rounded-md box-content h-[90%] flex flex-col">
                     <Typography variant="display-sm-md" className="px-4 py-3">{title}</Typography>
                     <hr />
                     <div className="p-4 text-light-text">

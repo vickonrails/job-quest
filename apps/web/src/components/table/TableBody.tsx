@@ -4,19 +4,24 @@ import { type BaseEntity, type Column, type TableActions } from './Table';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { Edit, MoreVertical, Trash2 } from 'react-feather';
 import { TableCellRender } from './TableCellRender';
+import { Sheet, type SheetProps } from '..';
+import { useEditSheet } from 'src/hooks/useEditModal';
 
 /** 
  * Table body component
  */
 export function TableBody<T extends BaseEntity>({ items, columns, actions }: { items: T[], columns: Column<T>, actions: TableActions }) {
-    const { onDelete, refresh, onEditClick, onRowClick } = actions
+    const { onDelete, refresh, onRowClick } = actions
+    // default onDelete, onRowClick, onEditClick
     const {
         showDeleteDialog,
-        isOpen,
+        isOpen: deleteModalOpen,
         onCancel,
         handleDelete,
         loading: isDeleting
     } = useRowDelete<T>({ onDelete, refresh })
+
+    const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet<T>({ refresh })
 
     return (
         <>
@@ -31,7 +36,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
                             >
                                 <MenuItem
                                     icon={<Edit size={16} />}
-                                    onClick={_ => onEditClick?.(item.id)}
+                                    onClick={_ => showEditSheet?.(item)}
                                 >
                                     Edit
                                 </MenuItem>
@@ -58,13 +63,33 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
             </tbody>
 
             <AlertDialog
-                open={isOpen}
+                open={deleteModalOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to delete this job?"
                 onOk={handleDelete}
+                // TODO: figure out why this isn't working
+                onOpenChange={setIsOpen}
                 onCancel={onCancel}
                 isProcessing={isDeleting}
             />
+
+            <JobEditSheet
+                entity={selectedEntity}
+                open={editSheetOpen}
+                onOpenChange={setIsOpen}
+            />
         </>
+    )
+}
+
+interface JobEditSheetProps<T> extends SheetProps {
+    entity: T
+}
+
+function JobEditSheet<T>(props: JobEditSheetProps<T>) {
+    return (
+        <Sheet {...props}>
+            {JSON.stringify(props.entity)}
+        </Sheet>
     )
 }

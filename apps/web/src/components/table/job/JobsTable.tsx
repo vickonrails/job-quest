@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { type EditJobFormProps, Table, type TableActions, type Column } from '../Table'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
+import { Sheet } from '@components/sheet'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
@@ -29,6 +30,7 @@ const columns: Column<Job> = [
 const JobsTable = () => {
     const { loading, jobs, refreshing, refresh } = useJobs();
     const client = useSupabaseClient<Database>();
+    // const [detailOpen, setDetailOpen] = useState(false)
 
     const router = useRouter();
 
@@ -38,11 +40,12 @@ const JobsTable = () => {
     }
 
     const onEditClick = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
-            // 
-        }).catch(err => {
-            // 
-        })
+        // setDetailOpen(true)
+        // router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
+        //     // 
+        // }).catch(err => {
+        //     // 
+        // })
     }
 
     const onRowClick = (id: string) => {
@@ -55,7 +58,7 @@ const JobsTable = () => {
 
     const actions: TableActions = {
         onDelete,
-        onEditClick,
+        // onEditClick,
         refresh,
         onRowClick
     }
@@ -63,13 +66,16 @@ const JobsTable = () => {
     if (loading) { return <FullPageSpinner /> }
 
     return (
-        <Table<Job>
-            columns={columns}
-            data={jobs}
-            actions={actions}
-            disabled={refreshing}
-            EditForm={EditJobForm}
-        />
+        <>
+            <Table<Job>
+                columns={columns}
+                data={jobs}
+                actions={actions}
+                disabled={refreshing}
+                EditForm={EditJobForm}
+            />
+            {/* <Sheet open={detailOpen} onOpenChange={setDetailOpen} /> */}
+        </>
     )
 }
 
