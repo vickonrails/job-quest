@@ -38,7 +38,7 @@ const JobsTable = () => {
     }
 
     const onEditClick = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}`).then(() => {
+        router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
             // 
         }).catch(err => {
             // 

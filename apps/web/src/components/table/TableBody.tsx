@@ -22,7 +22,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
         <>
             <tbody>
                 {items.map((item, index) => (
-                    <tr className="bg-white" key={index} onClick={_ => onRowClick?.(item.id)}>
+                    <tr className="bg-white hover:cursor-pointer" key={index} onClick={_ => onRowClick?.(item.id)}>
                         <td className="pl-4">
                             <MenuBar
                                 triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}

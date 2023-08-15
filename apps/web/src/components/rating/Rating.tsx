@@ -31,7 +31,7 @@ const Star = ({ state, size }: { state: 0 | 1, size: RatingSize }) => {
     return (
         <FeatherStar
             size={SIZE_LOOKUP[size]}
-            className={clsx('rating', state && 'active')}
+            className={clsx('stroke-[#F2C94C] mr-1', state && 'fill-[#F2C94C] stroke-none')}
         />
     )
 }

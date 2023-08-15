@@ -20,7 +20,7 @@ const MenuBar: FC<MenuBarProp> = ({ trigger, triggerProps, children, ...rest }) 
                     {trigger}
                 </RadixMenuBar.Trigger>
                 <RadixMenuBar.Portal>
-                    <RadixMenuBar.Content className="bg-white rounded-md p-2 min-w-150 shadow-sm border-solid border border-gray-100 mt-1 text-light-text">
+                    <RadixMenuBar.Content className="bg-white rounded-md p-2 min-w-[15px] shadow-sm border-solid border border-gray-100 mt-1 text-light-text">
                         {children}
                     </RadixMenuBar.Content>
                 </RadixMenuBar.Portal>
