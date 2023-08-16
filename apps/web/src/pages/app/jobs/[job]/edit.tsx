@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { JobForm } from '../../jobs/new'
+import { JobForm } from '../new'
 import { Layout } from '@components/layout'
 import { useSession } from '@hooks';
 import { ChevronLeft } from 'react-feather';

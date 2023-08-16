@@ -49,7 +49,7 @@ const JobsTable = () => {
     }
 
     const onRowClick = (id: string) => {
-        router.push(`/app/tracker/jobs/${id}`).then(() => {
+        router.push(`/app/jobs/${id}`).then(() => {
             // 
         }).catch(err => {
             // 

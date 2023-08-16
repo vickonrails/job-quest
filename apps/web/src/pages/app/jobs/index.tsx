@@ -9,6 +9,8 @@ import JobsTable from '@components/table/job/JobsTable';
 import { FullPageSpinner } from '@components/spinner';
 import { reportError } from 'src/utils/reportError';
 
+// I'm currently rendering on the client. How can we improve this
+
 const Tracker = () => {
     const router = useRouter();
     const [session, sessionLoading] = useSession();
