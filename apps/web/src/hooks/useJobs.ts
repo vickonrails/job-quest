@@ -10,6 +10,9 @@ type UseJobsRtrn = {
     refresh: () => Promise<void>
 };
 
+// TODO: add request parameters 
+// so I can implement search, pagination & limit, etc
+// also research possible ways to add react query in here too
 export const useJobs = (): UseJobsRtrn => {
     const client = useSupabaseClient<Database>();
     const [jobs, setJobs] = useState<Job[]>([]);

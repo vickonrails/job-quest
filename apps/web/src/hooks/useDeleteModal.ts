@@ -2,7 +2,7 @@ import { type BaseEntity } from '@components/table'
 import { useCallback, useState } from 'react'
 
 interface RowDeleteHookProps {
-    onDelete: (id: string) => Promise<void>
+    onDelete?: (id: string) => Promise<void>
     refresh?: () => Promise<void>
 }
 

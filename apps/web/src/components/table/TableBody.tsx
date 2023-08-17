@@ -6,6 +6,7 @@ import { Edit, MoreVertical, Trash2 } from 'react-feather';
 import { TableCellRender } from './TableCellRender';
 import { Sheet, type SheetProps } from '..';
 import { useEditSheet } from 'src/hooks/useEditModal';
+import clsx from 'clsx';
 
 /** 
  * Table body component
@@ -27,7 +28,14 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
         <>
             <tbody>
                 {items.map((item, index) => (
-                    <tr className="bg-white hover:cursor-pointer" key={index} onClick={_ => onRowClick?.(item.id)}>
+                    <tr
+                        className={clsx(
+                            (((index % 2) === 0) ? 'bg-gray-50' : 'bg-white'),
+                            'align-middle hover:cursor-pointer'
+                        )}
+                        key={index}
+                        onClick={_ => onRowClick?.(item.id)}
+                    >
                         <td className="pl-4">
                             <MenuBar
                                 triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}

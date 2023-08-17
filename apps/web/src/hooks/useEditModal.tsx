@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 
 interface RowEditHookProps<T> {
-    refresh: () => Promise<void>
+    refresh?: () => Promise<void>
     // onEdit: (item: T) => Promise<void>
 }
 

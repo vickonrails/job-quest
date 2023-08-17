@@ -7,9 +7,9 @@ import { type TableColumnType } from './TableCellRender';
 
 export type TableActions = {
     onEditClick?: (id: string) => void
-    onDelete: (id: string) => Promise<void>
-    refresh: () => Promise<void>
-    onRowClick: (id: string) => void
+    onDelete?: (id: string) => Promise<void>
+    refresh?: () => Promise<void>
+    onRowClick?: (id: string) => void
 }
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
     /** data to render */

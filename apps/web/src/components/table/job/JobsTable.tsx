@@ -19,7 +19,7 @@ export const Status_Lookup = [
     'Hired',
 ]
 
-const columns: Column<Job> = [
+export const columns: Column<Job> = [
     { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ src: `https://logo.clearbit.com/${item.company_site}`, text: item.company_name }) },
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
     { header: 'Status', type: 'text', renderValue: (item) => ({ text: Status_Lookup[item.status] ?? '' }) },
