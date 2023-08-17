@@ -1,21 +1,48 @@
 {
   "name": "extension",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "displayName": "Extension",
+  "version": "0.0.1",
+  "description": "A basic Plasmo extension.",
+  "author": "Plasmo Corp. <foss@plasmo.com>",
   "scripts": {
-    "dev": "vite",
-    "test": "echo \"no test specified\" && exit 0",
-    "build": "tsc && vite build --watch",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "ui": "*"
-  },
-  "devDependencies": {
-    "@types/chrome": "^0.0.241",
-    "vite-plugin-static-copy": "^0.16.0"
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.26.0"
+    "@supabase/supabase-js": "2.32.0",
+    "plasmo": "0.82.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@plasmohq/storage": "1.7.2",
+    "@plasmohq/messaging": "0.5.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.1.0",
+    "@types/chrome": "0.0.243",
+    "@types/node": "20.5.0",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "prettier": "3.0.2",
+    "typescript": "5.1.6"
+  },
+  "manifest": {
+    "key": "$CRX_KEY",
+    "host_permissions": [
+      "https://*/*"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "options.html"
+        ],
+        "matches": [
+          "<all_urls>"
+        ],
+        "extension_ids": [
+          "$CRX_ID"
+        ]
+      }
+    ]
   }
 }
