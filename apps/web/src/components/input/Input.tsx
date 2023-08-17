@@ -1,6 +1,6 @@
 import { type InputHTMLAttributes, type FC } from 'react'
 import clsx from 'clsx'
-import { type Size, getSize } from '../utils'
+import { type Size, getSize } from '@components/utils'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'size'> {
     /**

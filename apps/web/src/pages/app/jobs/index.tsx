@@ -3,11 +3,12 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useSession, useUser } from '@hooks';
-import { Typography, Button } from 'ui';
 import { Layout } from '@components/layout';
 import JobsTable from '@components/table/job/JobsTable';
 import { FullPageSpinner } from '@components/spinner';
 import { reportError } from 'src/utils/reportError';
+import { Button } from '@components/button';
+import { Typography } from '@components/typography';
 
 // I'm currently rendering on the client. How can we improve this
 

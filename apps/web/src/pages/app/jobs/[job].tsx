@@ -8,7 +8,6 @@ import { type Job } from 'lib/types';
 import { FullPageSpinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
-import { Button, Typography } from 'ui';
 import { Rating } from '@components/rating/Rating';
 
 import { Chip } from '@components/chips';
@@ -17,6 +16,8 @@ import { type ChipVariants } from '@components/chips/Chip';
 import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
 import { Status_Lookup } from '@components/table/job/JobsTable';
+import { Typography } from '@components/typography';
+import { Button } from '@components/button';
 
 const JobDetailsPage = () => {
     const windowHeight = useWindowHeight()

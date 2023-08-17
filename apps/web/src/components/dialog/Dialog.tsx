@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react'
 import { Root, Portal, Content, Overlay, type DialogProps as RdxDialogProps } from '@radix-ui/react-dialog'
-import { Typography } from 'ui'
+import { Typography } from '@components/typography'
 
 type DialogProps = {
     title: ReactNode | string

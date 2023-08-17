@@ -1,4 +1,4 @@
-import { Typography } from 'ui'
+import { Typography } from '@components/typography'
 import { type Column } from './Table'
 
 export function TableHeader<T>({ columns }: { columns: Column<T> }) {

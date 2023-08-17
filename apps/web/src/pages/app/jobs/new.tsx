@@ -6,8 +6,9 @@ import { type JobUpdateDTO, type Job, type JobInsertDTO } from 'lib/types';
 import { useRouter } from 'next/router';
 import React, { type FormEvent, useState, type HTMLAttributes, type FC } from 'react'
 import { ChevronLeft } from 'react-feather';
-import { Button, Input } from 'ui';
 import clsx from 'clsx'
+import { Input } from '@components/input';
+import { Button } from '@components/button';
 
 const NewJob = () => {
     const client = useSupabaseClient<Database>();

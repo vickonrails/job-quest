@@ -1,6 +1,0 @@
-export * from './button'
-export * from './avatar'
-export * from './input'
-export * from './banner'
-export * from './logo'
-export * from './typography'

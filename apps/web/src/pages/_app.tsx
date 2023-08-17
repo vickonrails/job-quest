@@ -5,7 +5,6 @@ import { type AppProps } from 'next/app'
 import { useState } from 'react'
 
 import '../styles/globals.css'
-import 'ui/dist/styles.css'
 
 function MyApp({
   Component,

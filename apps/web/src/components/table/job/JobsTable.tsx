@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import { type EditJobFormProps, Table, type TableActions, type Column } from '../Table'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
-import { Sheet } from '@components/sheet'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
-import { Button, Input } from 'ui'
 
 export const Status_Lookup = [
     'Bookmarked',

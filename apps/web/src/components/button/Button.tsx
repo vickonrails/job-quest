@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, type FC } from 'react'
+import { type ButtonHTMLAttributes, type FC } from 'react'
 import clsx from 'clsx'
-import { type Size, getSize } from '../utils'
+import { type Size, getSize } from '@components/utils';
 
 type FillType = 'filled' | 'outlined' | 'text';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

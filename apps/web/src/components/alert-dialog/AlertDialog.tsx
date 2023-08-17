@@ -1,6 +1,8 @@
 import React, { type ReactNode, type FC } from 'react'
 import { Root, Portal, Overlay, Content, type DialogProps, Description } from '@radix-ui/react-alert-dialog'
-import { Typography, Button } from 'ui'
+import { Typography } from '@components/typography'
+import { Button } from '@components/button'
+
 
 interface AlertDialogProps extends DialogProps {
     title: string | ReactNode

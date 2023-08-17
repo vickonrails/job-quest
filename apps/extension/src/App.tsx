@@ -1,8 +1,6 @@
-import { Button, Input, Typography } from 'ui';
 import { client } from './supabase'
 import './styles/globals.css'
 
-import 'ui/dist/styles.css';
 import { FormEvent, useEffect, useState } from 'react';
 import { Auth } from './components/auth';
 import { Cancel } from './components/cancel';
@@ -79,71 +77,54 @@ function App() {
   return (
     <main className="max-w-xs p-4 w-80 bg-violet-50">
       <div className="flex align-middle justify-between mb-6" >
-        <Typography variant="body-sm" as="h1">Create New Entry</Typography>
+        <p>Create New Entry</p>
         <button onClick={() => window.close()}>
           <Cancel />
         </button>
       </div>
       <form onSubmit={handleCreateJob}>
-        <Input
+        <input
           className="mb-7"
           value={position}
-          fullWidth
-          size="sm"
           onChange={(ev) => setPosition(ev.target.value)}
-          label="Position"
           placeholder="Fill in the position of the position here"
         />
-        <Input
-          fullWidth
-          size="sm"
+        <input
           value={company_name}
           onChange={(ev) => setCompanyName(ev.target.value)}
-          label="Company/Organization"
           placeholder="Company Name"
         />
-        <Input
-          fullWidth
+        <input
           value={location}
           onChange={(ev) => setLocation(ev.target.value)}
-          size="sm"
-          label="Location"
           placeholder="Remote?"
         />
-        <Input
-          fullWidth
+        <input
           value={description}
           onChange={(ev) => setDescription(ev.target.value)}
-          size="sm"
-          label="Description"
           placeholder="Past application here"
-          multiline
+
         />
 
         {hasNotes ? (
-          <Input
-            fullWidth
-            size="sm"
-            label="Notes"
+          <input
             value={note}
-            onChange={(ev) => setNote(ev.target.value)} placeholder="Notes"
-            multiline
+            onChange={(ev) => setNote(ev.target.value)}
+            placeholder="Notes"
           />
         ) : (
-          <Button
+          <button
             className="mb-4"
-            size="sm"
-            fillType="text"
             onClick={() => setHasNotes(true)}
           >
             Add Note
-          </Button>
+          </button>
         )}
 
-        <Button type="submit" loading={addingJob} className="mb-4" size="sm" fullWidth>
+        <button className="mb-4">
           Add to JobQuest
-        </Button>
-        <Button size="sm" fillType="text" fullWidth>View all Applications</Button>
+        </button>
+        <button>View all Applications</button>
       </form>
     </main >
   )
