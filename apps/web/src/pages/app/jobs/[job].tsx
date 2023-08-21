@@ -13,39 +13,20 @@ import { Rating } from '@components/rating/Rating';
 import { Chip } from '@components/chips';
 import { djb2Hash, formatDate } from '@components/utils';
 import { type ChipVariants } from '@components/chips/Chip';
-import { useWindowHeight } from 'src/hooks/useWindowHeight';
 import { AlertDialog } from '@components/alert-dialog';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
+import { useJob } from 'src/hooks/useJobs';
 
 const JobDetailsPage = () => {
-    const windowHeight = useWindowHeight()
     const router = useRouter();
-    const jobId = router.query.job as string;
     const client = useSupabaseClient<Database>();
+    const jobId = router.query.job as string;
+    const { data, isLoading } = useJob(client, jobId)
 
-    const [session, sessionLoading] = useSession();
-    const [jobDetails, setJobDetails] = useState<Job>()
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        if (!jobId) return;
-        setLoading(true)
-        const fetchJob = async (id: string) => {
-            return await client.from('jobs').select().eq('id', id);
-        }
-
-        fetchJob(jobId).then(res => {
-            setLoading(false)
-            const data = res.data
-            // @ts-ignore
-            setJobDetails(data[0]);
-        }).catch(err => {
-            setLoading(false)
-            // 
-        });
-    }, [jobId, client])
+    // TODO: we might need to remove this session
+    const [session] = useSession();
 
     return (
         <Layout session={session ?? undefined}>
@@ -54,10 +35,9 @@ const JobDetailsPage = () => {
                     <ChevronLeft size={20} />
                     Back
                 </button>
-                {loading ?
+                {(isLoading) ?
                     <FullPageSpinner /> :
-                    // @ts-ignore
-                    <JobDetails job={jobDetails} />
+                    <JobDetails job={data?.[0]} />
                 }
             </div>
         </Layout>
@@ -65,16 +45,15 @@ const JobDetailsPage = () => {
 }
 
 
-const JobDetails = ({ job }: { job: Job }) => {
+const JobDetails = ({ job }: { job?: Job }) => {
     const router = useRouter()
     const [showEditDialog, setShowEditDialog] = useState(false)
     const [selectedEntity, setSelectedEntity] = useState<Job | null>()
 
-    const handleEditClick = () => {
-        // setShowEditDialog(true)
-        // setSelectedEntity(job)
+    if (!job) return;
 
-        return router.push(`${job.id}/edit`)
+    const handleEditClick = () => {
+        // TODO: Open side edit modal
     }
 
     const handleEditCancel = () => {

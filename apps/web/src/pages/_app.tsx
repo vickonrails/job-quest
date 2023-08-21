@@ -5,6 +5,15 @@ import { type AppProps } from 'next/app'
 import { useState } from 'react'
 
 import '../styles/globals.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0
+    }
+  }
+})
 
 function MyApp({
   Component,
@@ -19,7 +28,9 @@ function MyApp({
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </SessionContextProvider>
   )
 }

@@ -70,7 +70,7 @@ export const columns: Column<Job> = [
 
 function RecentlyAdded() {
     // TODO: I should be able to pass in params to the useJobs hook
-    const { jobs, refreshing } = useJobs();
+    // const { jobs, refreshing } = useJobs();
     const router = useRouter();
 
     const onRowClick = (id: string) => {
@@ -86,12 +86,13 @@ function RecentlyAdded() {
     }
 
     return (
-        <Table<Job>
-            columns={columns}
-            data={jobs.splice(0, 5)}
-            actions={actions}
-            disabled={refreshing}
-        />
+        <p>Hii</p>
+        // <Table<Job>
+        //     columns={columns}
+        //     data={jobs.splice(0, 5)}
+        //     actions={actions}
+        //     disabled={refreshing}
+        // />
     )
 }
 

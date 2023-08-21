@@ -2,6 +2,9 @@ import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { useEffect, useState } from 'react';
 
+async function useAuth() {
+
+}
 export const useSession = (): [Session | null, boolean] => {
     const client = useSupabaseClient<Database>();
     const [session, setSession] = useState<Session | null>(null);
