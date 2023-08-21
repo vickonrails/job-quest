@@ -100,27 +100,29 @@ const JobDetails = ({ job }: { job: Job }) => {
                             )}
                             <div className="flex-1">
                                 <div className="flex items-center">
-                                    <Typography variant="display-xs-md" className="mb-1 mr-3 text-base-col">{job.company_name}</Typography>
+                                    <Typography variant="display-xs-md" className="mb-1 mr-3 text-base-col">{job.position}</Typography>
                                     <Button size="xs" onClick={handleEditClick} fillType="outlined" className="inline-block py-1">Edit</Button>
                                 </div>
-                                <ul className="flex gap-6 text-light-text">
-                                    <li><Typography variant="body-md">{job.company_name}</Typography></li>
-                                    <li >{job.location}</li>
+                                <ul className="flex gap-6 text-light-text list-disc">
+                                    <li className="list-none"><Typography variant="body-md">{job.company_name}</Typography></li>
+                                    {job.location && <li>{job.location}</li>}
                                     <li>{Status_Lookup[job.status]}</li>
                                 </ul>
                             </div>
-                            <Rating size="md" value={job.priority ?? 1} />
+                            <Rating size="md" value={job.priority ?? 0} />
                         </div>
                         <div className="flex flex-col gap-1">
                             <Typography variant="body-sm"><a target="_blank" rel="noreferrer noopener" className="underline" href={job.link ?? ''}>{job.link}</a></Typography>
                             {job.created_at && <Typography variant="body-sm">Saved on {formatDate(job.created_at)}</Typography>}
-                            <Typography variant="body-md">{job.position}</Typography>
+                            {/* <Typography variant="body-md">{job.position}</Typography> */}
                         </div>
                     </header>
 
                     <main className="mb-6">
-                        <Typography variant="display-xs" className="mb-2">Description</Typography>
-                        <Typography variant="body-md" className="text-base-col">{job.description}</Typography>
+                        {/* <Typography variant="display-xs" className="mb-2">Description</Typography> */}
+                        <section className="border border-gray-100 p-3">
+                            <div className="text-base-col" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
+                        </section>
                     </main>
 
                     <footer>

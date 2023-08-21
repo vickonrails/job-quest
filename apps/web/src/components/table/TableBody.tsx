@@ -7,6 +7,12 @@ import { TableCellRender } from './TableCellRender';
 import { Sheet, type SheetProps } from '..';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import clsx from 'clsx';
+import { type Job } from 'lib/types';
+import { Input } from '@components/input';
+import { Status_Lookup } from './job/JobsTable';
+import { Select } from '@components/select';
+import { SelectOption } from '@components/select/select';
+import { Button } from '@components/button';
 
 /** 
  * Table body component
@@ -63,7 +69,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
                             const value = column.renderValue?.(item)
                             const type = column.type
                             return (
-                                <TableCellRender key={idx} type={type} value={value ?? ''} />
+                                <TableCellRender key={idx} type={type} value={value ?? ''} className="max-w-[150px] overflow-hidden whitespace-nowrap overflow-ellipsis" />
                             )
                         })}
                     </tr>
@@ -81,11 +87,14 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
                 isProcessing={isDeleting}
             />
 
-            <JobEditSheet
-                entity={selectedEntity}
-                open={editSheetOpen}
-                onOpenChange={setIsOpen}
-            />
+            {editSheetOpen && (
+                <JobEditSheet
+                    entity={selectedEntity}
+                    open={editSheetOpen}
+                    title="Edit Job"
+                    onOpenChange={setIsOpen}
+                />
+            )}
         </>
     )
 }
@@ -95,9 +104,22 @@ interface JobEditSheetProps<T> extends SheetProps {
 }
 
 function JobEditSheet<T>(props: JobEditSheetProps<T>) {
+    // TODO: abstract this away
+    const entity = props.entity as Job;
+    const statusOptions = Status_Lookup.map(x => ({ value: x, label: x }))
+
     return (
         <Sheet {...props}>
-            {JSON.stringify(props.entity)}
+            <div className="flex flex-col gap-3">
+                <Input value={entity.position} fullWidth />
+                <Select
+                    trigger="Select a status"
+                    options={statusOptions}
+                    value={Status_Lookup[entity.status]}
+                />
+                <Input value={entity.company_site ?? ''} fullWidth />
+                <Button>Update</Button>
+            </div>
         </Sheet>
     )
 }

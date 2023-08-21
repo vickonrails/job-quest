@@ -130,12 +130,15 @@ const SheetDescription = React.forwardRef<
 ))
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
-export type SheetProps = SheetPrimitive.DialogProps
+export type SheetProps = SheetPrimitive.DialogProps & {
+  title?: string
+}
 
-export function Sheet({ open, children, ...rest }: SheetProps) {
+export function Sheet({ open, children, title, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
       <SheetContent>
+        {title && <SheetTitle className="mb-5">{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>

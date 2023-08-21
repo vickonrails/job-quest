@@ -37,8 +37,8 @@ type RatingCellType<T> = CellValueType<T> & {
     rating: 1 | 2 | 3 | 4 | 5
 }
 
-export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<T>) => {
-    const className = clsx('pl-4')
+export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRendererProps<T>) => {
+    const classNames = clsx('pl-4', className)
     switch (type) {
         case 'date':
             const { date } = value as DateCellType<T>
@@ -46,8 +46,8 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
             // TODO: improve the date to show actual 3rd Aug, 2023
             const formattedDate = new Date(date).toISOString().split('T')[0]
             return (
-                <td className={className} {...rest}>
-                    <Typography variant="body-sm">
+                <td className={classNames} {...rest}>
+                    <Typography variant="body-sm" className="overflow-ellipsis overflow-hidden">
                         {formattedDate}
                     </Typography>
                 </td>
@@ -56,9 +56,9 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
         case 'logoWithText':
             const { src, text: logoText } = value as LogoWithTextCellType<T>
             return (
-                <td className={className} {...rest}>
+                <td className={classNames} {...rest}>
                     <div className="flex items-center">
-                        {src && <Image src={src ?? ''} className="rounded-md mr-2" alt="" width={24} height={24} />}
+                        {!!src && <Image src={src ?? ''} className="rounded-md mr-2" alt="" width={24} height={24} />}
                         <Typography variant="body-sm">
                             {logoText}
                         </Typography>
@@ -69,7 +69,7 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
         case 'rating':
             const { rating } = value as RatingCellType<T>
             return (
-                <td className={className}>
+                <td className={classNames}>
                     <Rating value={rating} />
                 </td>
             )
@@ -78,8 +78,8 @@ export const TableCellRender = <T,>({ type, value, ...rest }: CellRendererProps<
         default:
             const { text } = value as TextCellType<T>
             return (
-                <td className={className} {...rest}>
-                    <Typography variant="body-sm" className="text-base-col py-4">
+                <td className={classNames} {...rest}>
+                    <Typography variant="body-sm" className="text-base-col py-4 overflow-ellipsis overflow-hidden">
                         {text}
                     </Typography>
                 </td>

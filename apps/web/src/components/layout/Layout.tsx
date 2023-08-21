@@ -16,7 +16,7 @@ export const Layout: FC<LayoutProps> = ({ children, className, containerClasses,
     return (
         <div className={clsx('flex h-full', className)} {...rest}>
             <Sidebar className="basis-64" />
-            <main className="bg-indigo-50 flex-1 p-6 flex flex-col">
+            <main className="bg-indigo-50 flex-1 p-6 flex flex-col overflow-auto">
                 <Navbar session={session} profile={profile} />
                 {/* TODO: make this element fill the vertical space */}
                 {/*TODO: fix issue that makes layout overflow out of main on mac */}

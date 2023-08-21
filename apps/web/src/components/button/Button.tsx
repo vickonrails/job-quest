@@ -37,7 +37,7 @@ export const Button: FC<ButtonProps> = ({ children, fillType = 'filled', fullWid
     return (
         <button
             className={clsx(
-                'py-2 px-3.5 font-medium rounded-lg transitions',
+                'font-medium rounded-lg transitions',
                 getFillType(fillType),
                 isFullWidth,
                 size && getSize(size),

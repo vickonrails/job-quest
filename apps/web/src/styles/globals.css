@@ -76,6 +76,15 @@
   html, body, #__next {
     @apply h-full 
   }
+  #__description {
+    @apply text-foreground;
+  }
+  #__description h2 {
+    @apply text-xl font-bold text-gray-700 mb-3;
+  }
+  #__description p {
+    @apply mb-2 text-gray-800;
+  }
   body {
     @apply bg-background text-foreground;
   }

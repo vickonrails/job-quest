@@ -19,6 +19,7 @@ const SIZE_LOOKUP = {
 
 const Rating = ({ value, size = 'sm' }: RatingProps) => {
     if (value > 5) value = 5;
+    if (value === 0) value = 1
 
     return (
         <div className="flex">
