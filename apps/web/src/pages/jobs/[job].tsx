@@ -1,8 +1,6 @@
-import { useSession, useUser } from '@hooks';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { type Job } from 'lib/types';
 import { FullPageSpinner } from '@components/spinner';
@@ -18,26 +16,24 @@ import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
 import { useJob } from 'src/hooks/useJobs';
+import { type GetServerSideProps } from 'next';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const JobDetailsPage = () => {
     const router = useRouter();
-    const client = useSupabaseClient<Database>();
     const jobId = router.query.job as string;
-    const { data, isLoading } = useJob(client, jobId)
-
-    // TODO: we might need to remove this session
-    const [session] = useSession();
+    const { data, isLoading } = useJob(jobId)
 
     return (
-        <Layout session={session ?? undefined}>
+        <Layout>
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />
                     Back
                 </button>
-                {(isLoading) ?
+                {isLoading ?
                     <FullPageSpinner /> :
-                    <JobDetails job={data?.[0]} />
+                    <JobDetails job={data} />
                 }
             </div>
         </Layout>
@@ -46,7 +42,6 @@ const JobDetailsPage = () => {
 
 
 const JobDetails = ({ job }: { job?: Job }) => {
-    const router = useRouter()
     const [showEditDialog, setShowEditDialog] = useState(false)
     const [selectedEntity, setSelectedEntity] = useState<Job | null>()
 
@@ -139,6 +134,27 @@ const JobLabels = ({ labels }: { labels: string[] }) => {
             ))}
         </div>
     )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const supabase = createServerSupabaseClient<Database>(context);
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/sign-in',
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+            session
+        }
+    }
 }
 
 export default JobDetailsPage

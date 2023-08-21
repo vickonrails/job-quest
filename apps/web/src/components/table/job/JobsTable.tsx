@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { type EditJobFormProps, Table, type TableActions, type Column } from '../Table'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
@@ -6,7 +6,7 @@ import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
-import { PostgrestSingleResponse } from '@supabase/supabase-js'
+import { useAuth } from 'src/hooks/useAuth'
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -28,8 +28,7 @@ export const columns: Column<Job> = [
 
 const JobsTable = () => {
     const client = useSupabaseClient<Database>();
-    const { data, isLoading, isRefetching } = useJobs(client);
-
+    const { data, isLoading } = useJobs();
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
@@ -47,7 +46,7 @@ const JobsTable = () => {
     }
 
     const onRowClick = (id: string) => {
-        router.push(`/app/jobs/${id}`).then(() => {
+        router.push(`/jobs/${id}`).then(() => {
             // 
         }).catch(err => {
             // 
@@ -61,7 +60,7 @@ const JobsTable = () => {
         // refresh: refetch
     }
 
-    if (isLoading || isRefetching) { return <FullPageSpinner /> }
+    if (isLoading) { return <FullPageSpinner /> }
 
     return (
         <Table<Job>

@@ -1,4 +1,4 @@
-import React, { type FC, type HTMLAttributes } from 'react'
+import React, { type FC, type HTMLAttributes, useMemo } from 'react'
 import clsx from 'clsx'
 import { useRouter } from 'next/router';
 import { Folder, Grid, File, Clipboard, Bell, User, FileText } from 'react-feather'
@@ -21,39 +21,39 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
 
             <nav>
                 <NavGroup className="mb-6">
-                    <NavLink href="/app/dashboard">
+                    <NavLink href="/">
                         <Grid className="mr-2" />
                         <span>Dashboard</span>
                     </NavLink>
 
-                    <NavLink href="/app/jobs">
+                    <NavLink href="/jobs">
                         <Folder className="mr-2" />
                         <span>Tracker</span>
                     </NavLink>
 
-                    <NavLink href="/app/resume-builder">
+                    <NavLink href="resume-builder">
                         <File className="mr-2" />
                         <span>Resume Builder</span>
                     </NavLink>
                 </NavGroup>
 
                 <NavGroup title="labels">
-                    <NavLink href="/app/resume-builder">
+                    <NavLink href="resume-builder">
                         <FileText className="mr-2" />
                         <span>Notes</span>
                     </NavLink>
 
-                    <NavLink href="/app/resume-builder">
+                    <NavLink href="resume-builder">
                         <Bell className="mr-2" />
                         <span>Reminder</span>
                     </NavLink>
 
-                    <NavLink href="/app/resume-builder">
+                    <NavLink href="resume-builder">
                         <Clipboard className="mr-2" />
                         <span>Documents</span>
                     </NavLink>
 
-                    <NavLink href="/app/resume-builder">
+                    <NavLink href="resume-builder">
                         <User className="mr-2" />
                         <span>Contacts</span>
                     </NavLink>
@@ -63,15 +63,24 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     )
 }
 
+function isActive(path: string, href: string) {
+    if (href === '/') {
+        return path === href
+    } else {
+        // apply second rule
+        return path.startsWith(href)
+    }
+}
+
 const NavLink = ({ href, ...props }: LinkProps) => {
     const { pathname } = useRouter();
-    const isActive = pathname.startsWith(href.toString());
+    const isActiveNav = useMemo(() => isActive(pathname, href.toString()), [href, pathname]);
 
     return (
         <Link
             className={clsx(
                 'flex items-center py-2 px-3 rounded-lg text-sm',
-                isActive ? 'bg-indigo-100 text-primary-light font-medium' : 'text-gray-500'
+                isActiveNav ? 'bg-indigo-100 text-primary-light font-medium' : 'text-gray-500'
             )}
             href={href}
             {...props}

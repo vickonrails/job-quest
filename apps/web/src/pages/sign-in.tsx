@@ -19,7 +19,7 @@ const SignIn: NextPage<SignInProps> = () => {
     const supabaseClient = useSupabaseClient<Database>();
     const [email, setEmail] = useState('')
     const [emailSent, setEmailSent] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
     // TODO: add tests for this
     const handleSignIn = (ev: FormEvent<HTMLFormElement>) => {
@@ -37,7 +37,7 @@ const SignIn: NextPage<SignInProps> = () => {
         //TODO: still need to fix problem with expired token
         supabaseClient.auth.signInWithOtp({
             email, options: {
-                emailRedirectTo: `${window.location.origin}/app/dashboard`
+                emailRedirectTo: `${window.location.origin}/dashboard`
             }
         })
             .then(res => {
@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session) {
         return {
             redirect: {
-                destination: '/app/dashboard',
+                destination: '/dashboard',
                 permanent: false
             }
         }

@@ -1,32 +1,16 @@
-import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type SupabaseClient, type User } from '@supabase/supabase-js';
+import { useQuery } from '@tanstack/react-query';
 import { type Database } from 'lib/database.types';
-import { type Profile } from 'lib/types';
-import { useEffect, useState } from 'react';
 
-// TODO: I might need to rename this to useAuth and incorperate local storage to store the session or atleast the email address
-export const useUser = (session: Session | null): [Profile | null, boolean] => {
-    const [profile, setProfile] = useState<Profile | null>(null);
-    const [loading, setLoading] = useState(true);
+async function fetchProfile(client: SupabaseClient<Database>, user?: User) {
+    if (!user) throw new Error('User is not logged in');
+    const { data, error } = await client.from('profiles').select('*').eq('id', user?.id).single();
+    if (error) throw error;
+    return data;
+}
+
+export function useProfile(user: User) {
     const client = useSupabaseClient<Database>();
-
-    useEffect(() => {
-        const setUser = async (id: string) => {
-            const { data, error } = await client.from('profiles').select().eq('id', id);
-            if (error) {
-                throw new Error(error.message);
-            }
-            if (data) {
-                setProfile(data[0] ?? null);
-            }
-        }
-        if (session) {
-            setUser(session?.user.id).then(_ => {
-                setLoading(false);
-            }).catch(err => {
-                setLoading(false);
-            });
-        }
-    }, [session, client]);
-
-    return [profile, loading];
+    return useQuery(['profile', user], () => fetchProfile(client, user))
 }
