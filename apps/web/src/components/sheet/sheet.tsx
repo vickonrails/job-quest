@@ -137,7 +137,7 @@ export type SheetProps = SheetPrimitive.DialogProps & {
 export function Sheet({ open, children, title, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
-      <SheetContent>
+      <SheetContent className="overflow-auto">
         {title && <SheetTitle className="mb-5">{title}</SheetTitle>}
         {children}
       </SheetContent>

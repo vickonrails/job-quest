@@ -18,7 +18,7 @@ import { useJob } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEditSheet } from 'src/hooks/useEditModal';
-import { JobEditSheet } from '@components/table/TableBody';
+import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 
 const JobDetailsPage = () => {
     const router = useRouter();
@@ -46,10 +46,6 @@ const JobDetails = ({ job }: { job?: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
 
     if (!job) return;
-
-    const handleEditClick = () => {
-
-    }
 
     return (
         <>

@@ -20,8 +20,6 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
     disabled?: boolean
 
     columns: Column<T>
-
-    EditForm?: (props: EditJobFormProps<T>) => JSX.Element
 }
 
 export type BaseEntity = { id: string }

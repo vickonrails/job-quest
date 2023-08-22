@@ -1,12 +1,11 @@
 import React from 'react'
-import { type EditJobFormProps, Table, type TableActions, type Column } from '../Table'
+import { Table, type TableActions, type Column } from '../Table'
 import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
-import { useAuth } from 'src/hooks/useAuth'
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -36,15 +35,6 @@ const JobsTable = () => {
         if (error) { throw error }
     }
 
-    const onEditClick = (id: string) => {
-        // setDetailOpen(true)
-        // router.push(`/app/tracker/jobs/${id}/edit`).then(() => {
-        //     // 
-        // }).catch(err => {
-        //     // 
-        // })
-    }
-
     const onRowClick = (id: string) => {
         router.push(`/jobs/${id}`).then(() => {
             // 
@@ -67,16 +57,7 @@ const JobsTable = () => {
             columns={columns}
             data={data ?? []}
             actions={actions}
-            EditForm={EditJobForm}
         />
-    )
-}
-
-
-// TODO: Take this off
-const EditJobForm = (props: EditJobFormProps<Job>) => {
-    return (
-        <h1>TODO</h1>
     )
 }
 
