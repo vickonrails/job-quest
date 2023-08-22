@@ -11,10 +11,12 @@ import { type Job } from 'lib/types';
 import { Input } from '@components/input';
 import { Status_Lookup } from './job/JobsTable';
 import { Select } from '@components/select';
-import { SelectOption } from '@components/select/select';
 import { Button } from '@components/button';
-import { Formik, Form } from 'formik'
+import { Formik } from 'formik'
 import { Rating } from '@components/rating/Rating';
+import { useMutation } from '@tanstack/react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type Database } from 'lib/database.types';
 
 /** 
  * Table body component
@@ -105,15 +107,27 @@ interface JobEditSheetProps<T> extends SheetProps {
     entity: T
 }
 
+
+
 // TODO: unify the shadcn ui & personal input components
-function JobEditSheet<T>(props: JobEditSheetProps<T>) {
+export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     // TODO: abstract this away
+    const client = useSupabaseClient<Database>();
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
 
-    const onSubmit = (data: Job) => {
-        // add a mutation
+    const updateMutation = useMutation({
+        mutationFn: async (data: Job) => {
+            return await client.from('jobs').update(data).eq('id', entity.id)
+        }
+    })
+
+    const onSubmit = async (job: Job) => {
+        const { error } = await updateMutation.mutateAsync(job);
+        if (error) throw error;
+        alert('updated')
     }
+
     const initialValues = { ...entity }
 
     return (
@@ -163,7 +177,7 @@ function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                                 fullWidth
                                 hint="For providing the company logo by the side"
                             />
-                            <Button type="submit">Update</Button>
+                            <Button type="submit" loading={updateMutation.isLoading}>Update</Button>
                             <Button type="button" fillType="text" size="sm" onClick={() => resetForm(initialValues)}>Clear Changes</Button>
                         </form>
                     )}

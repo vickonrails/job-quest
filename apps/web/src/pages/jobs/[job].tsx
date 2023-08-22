@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
 import { type Database } from 'lib/database.types';
@@ -11,13 +11,14 @@ import { Rating } from '@components/rating/Rating';
 import { Chip } from '@components/chips';
 import { djb2Hash, formatDate } from '@components/utils';
 import { type ChipVariants } from '@components/chips/Chip';
-import { AlertDialog } from '@components/alert-dialog';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
 import { useJob } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useEditSheet } from 'src/hooks/useEditModal';
+import { JobEditSheet } from '@components/table/TableBody';
 
 const JobDetailsPage = () => {
     const router = useRouter();
@@ -42,18 +43,12 @@ const JobDetailsPage = () => {
 
 
 const JobDetails = ({ job }: { job?: Job }) => {
-    const [showEditDialog, setShowEditDialog] = useState(false)
-    const [selectedEntity, setSelectedEntity] = useState<Job | null>()
+    const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
 
     if (!job) return;
 
     const handleEditClick = () => {
-        // TODO: Open side edit modal
-    }
 
-    const handleEditCancel = () => {
-        setShowEditDialog(false)
-        setSelectedEntity(null)
     }
 
     return (
@@ -75,7 +70,7 @@ const JobDetails = ({ job }: { job?: Job }) => {
                             <div className="flex-1">
                                 <div className="flex items-center">
                                     <Typography variant="display-xs-md" className="mb-1 mr-3 text-base-col">{job.position}</Typography>
-                                    <Button size="xs" onClick={handleEditClick} fillType="outlined" className="inline-block py-1">Edit</Button>
+                                    <Button size="xs" onClick={_ => showEditSheet(job)} fillType="outlined" className="inline-block py-1">Edit</Button>
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">
                                     <li className="list-none"><Typography variant="body-md">{job.company_name}</Typography></li>
@@ -107,12 +102,12 @@ const JobDetails = ({ job }: { job?: Job }) => {
                     Other tabs
                 </div>
             </div>
-            {showEditDialog && (
-                <AlertDialog
-                    open={showEditDialog}
+            {editSheetOpen && (
+                <JobEditSheet
+                    entity={selectedEntity}
+                    open={editSheetOpen}
                     title="Edit Job"
-                    description={JSON.stringify(selectedEntity)}
-                    onCancel={handleEditCancel}
+                    onOpenChange={setIsOpen}
                 />
             )}
         </>

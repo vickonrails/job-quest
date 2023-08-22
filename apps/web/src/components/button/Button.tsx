@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, type FC } from 'react'
 import clsx from 'clsx'
 import { type Size, getSize } from '@components/utils';
+import { Spinner } from '@components/spinner';
 
 type FillType = 'filled' | 'outlined' | 'text';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -47,9 +48,7 @@ export const Button: FC<ButtonProps> = ({ children, fillType = 'filled', fullWid
             )}
             disabled={disabled}
             {...rest}>
-            {loading ? (<div>
-                <p data-testid="spinner">Loading...</p>
-            </div>) : children}
+            {loading ? <Spinner /> : children}
         </button>
     )
 }
