@@ -46,7 +46,6 @@ export const Input: FC<InputProps> = ({ label, multiline, name, hint, className,
                     />
                 )}
             </label>
-
             {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
         </div>
     )

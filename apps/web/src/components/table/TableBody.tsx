@@ -13,6 +13,8 @@ import { Status_Lookup } from './job/JobsTable';
 import { Select } from '@components/select';
 import { SelectOption } from '@components/select/select';
 import { Button } from '@components/button';
+import { Formik, Form } from 'formik'
+import { Rating } from '@components/rating/Rating';
 
 /** 
  * Table body component
@@ -103,22 +105,69 @@ interface JobEditSheetProps<T> extends SheetProps {
     entity: T
 }
 
+// TODO: unify the shadcn ui & personal input components
 function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     // TODO: abstract this away
     const entity = props.entity as Job;
-    const statusOptions = Status_Lookup.map(x => ({ value: x, label: x }))
+    const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
+
+    const onSubmit = (data: Job) => {
+        // add a mutation
+    }
+    const initialValues = { ...entity }
 
     return (
         <Sheet {...props}>
             <div className="flex flex-col gap-3">
-                <Input value={entity.position} fullWidth />
-                <Select
-                    trigger="Select a status"
-                    options={statusOptions}
-                    value={Status_Lookup[entity.status]}
-                />
-                <Input value={entity.company_site ?? ''} fullWidth />
-                <Button>Update</Button>
+                <Formik
+                    initialValues={initialValues}
+                    onSubmit={onSubmit}
+                >
+                    {({ values, handleSubmit, handleChange, setFieldValue, resetForm }) => (
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                            <Input
+                                placeholder="Job title"
+                                value={values.position}
+                                name="position"
+                                fullWidth
+                                label="Position"
+                                onChange={handleChange}
+                            />
+                            <div className="mb-4">
+                                <div className="mb-3 text-sm">Rating</div>
+                                <Rating value={values.priority ?? 0} />
+                            </div>
+                            <Select
+                                name="status"
+                                label="Select"
+                                trigger="Select a status"
+                                // TODO: figure out why just handleChange doesn't seem to work here
+                                onValueChange={val => setFieldValue('status', Number(val))}
+                                options={statusOptions}
+                                value={String(values.status)}
+                            />
+                            <Input
+                                placeholder="Company name"
+                                label="Company name"
+                                name="company_name"
+                                onChange={handleChange}
+                                value={values.company_name}
+                                fullWidth
+                            />
+                            <Input
+                                placeholder="Company site"
+                                label="Company site"
+                                name="company_site"
+                                onChange={handleChange}
+                                value={values.company_site ?? ''}
+                                fullWidth
+                                hint="For providing the company logo by the side"
+                            />
+                            <Button type="submit">Update</Button>
+                            <Button type="button" fillType="text" size="sm" onClick={() => resetForm(initialValues)}>Clear Changes</Button>
+                        </form>
+                    )}
+                </Formik>
             </div>
         </Sheet>
     )

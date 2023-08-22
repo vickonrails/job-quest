@@ -8,7 +8,6 @@ export interface SelectOption {
   value: string | number
   label: string | number
 }
-// const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -117,32 +116,29 @@ interface SelectProps extends SelectPrimitive.SelectProps {
   label?: string
 }
 
-export function Select({ options, trigger, value, label, ...props }: SelectProps) {
+export function Select({ options, trigger, label, ...props }: SelectProps) {
+  const selectedOption = React.useMemo(
+    () => options?.find((option) => option.value === props.value),
+    [options, props.value]
+  )
+
   return (
-    <SelectPrimitive.Root defaultValue={value} {...props}>
-      <SelectTrigger>
-        {value ?? trigger ?? label ?? 'Select an option'}
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {options?.map((option) => (
-            <SelectItem key={option?.value} value={String(option.value)}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
+    <SelectPrimitive.Root {...props}>
+      <label className="mb-2">
+        <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
+        <SelectTrigger>
+          <SelectValue placeholder={selectedOption?.label ?? trigger ?? 'Select an option'} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {options?.map((option) => (
+              <SelectItem key={option.value} value={String(option.value)}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </label>
     </SelectPrimitive.Root>
   )
 }
-
-// export {
-//   Select,
-//   SelectGroup,
-//   SelectValue,
-//   SelectTrigger,
-//   SelectContent,
-//   SelectLabel,
-//   SelectItem,
-//   SelectSeparator,
-// }

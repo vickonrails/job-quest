@@ -17,6 +17,7 @@ const SIZE_LOOKUP = {
     lg: 32
 }
 
+// TODO: make a rating component that can be used in forms
 const Rating = ({ value, size = 'sm' }: RatingProps) => {
     if (value > 5) value = 5;
     if (value === 0) value = 1
