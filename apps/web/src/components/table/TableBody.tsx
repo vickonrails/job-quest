@@ -8,10 +8,16 @@ import { useEditSheet } from 'src/hooks/useEditModal';
 import clsx from 'clsx';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 
+interface TableBody<T> {
+    items: T[]
+    columns: Column<T>
+    actions: TableActions;
+    hideActions?: boolean
+}
 /** 
  * Table body component
  */
-export function TableBody<T extends BaseEntity>({ items, columns, actions }: { items: T[], columns: Column<T>, actions: TableActions }) {
+export function TableBody<T extends BaseEntity>({ items, columns, actions, hideActions }: TableBody<T>) {
     const { onDelete, refresh, onRowClick } = actions
     // default onDelete, onRowClick, onEditClick
     const {
@@ -36,28 +42,30 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions }: { i
                         key={index}
                         onClick={_ => onRowClick?.(item.id)}
                     >
-                        <td className="pl-4">
-                            <MenuBar
-                                triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
-                                trigger={<MoreVertical size={16} />}
-                                onClick={e => e.stopPropagation()}
-                            >
-                                <MenuItem
-                                    icon={<Edit size={16} />}
-                                    onClick={_ => showEditSheet?.(item)}
+                        {!hideActions && (
+                            <td className="pl-4">
+                                <MenuBar
+                                    triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
+                                    trigger={<MoreVertical size={16} />}
+                                    onClick={e => e.stopPropagation()}
                                 >
-                                    Edit
-                                </MenuItem>
-                                <Separator />
-                                <MenuItem
-                                    className="text-red-400 hover:bg-red-50"
-                                    icon={<Trash2 size={16} />}
-                                    onClick={_ => showDeleteDialog(item)}
-                                >
-                                    Delete
-                                </MenuItem>
-                            </MenuBar>
-                        </td>
+                                    <MenuItem
+                                        icon={<Edit size={16} />}
+                                        onClick={_ => showEditSheet?.(item)}
+                                    >
+                                        Edit
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem
+                                        className="text-red-400 hover:bg-red-50"
+                                        icon={<Trash2 size={16} />}
+                                        onClick={_ => showDeleteDialog(item)}
+                                    >
+                                        Delete
+                                    </MenuItem>
+                                </MenuBar>
+                            </td>
+                        )}
 
                         {columns.map((column, idx) => {
                             const value = column.renderValue?.(item)

@@ -12,6 +12,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { useJobs } from '@hooks';
 import { FullPageSpinner } from '@components/spinner';
+import Link from 'next/link';
 
 
 // I have to solve the problem of expired tokens and already used tokens
@@ -54,15 +55,15 @@ const Index = () => {
 
 // TODO: move into another file
 export const columns: Column<Job> = [
-    { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ src: item.company_site ? `https://logo.clearbit.com/${item.company_site}` : '', text: item.company_name }) },
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
+    { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ src: item.company_site ? `https://logo.clearbit.com/${item.company_site}` : '', text: item.company_name }) },
     { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: item.priority ?? 0 }) },
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
 function RecentlyAdded() {
     // TODO: I should be able to pass in params to the useJobs hook
-    const { data: jobs, isLoading } = useJobs();
+    const { data: jobs, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } });
     const router = useRouter();
 
     const onRowClick = (id: string) => {
@@ -76,14 +77,23 @@ function RecentlyAdded() {
     const actions: TableActions = {
         onRowClick
     }
+
     if (isLoading) return <FullPageSpinner />
 
     return (
-        <Table<Job>
-            columns={columns}
-            data={jobs ?? []}
-            actions={actions}
-        />
+        <div className="bg-white rounded-lg">
+            <div className="flex justify-between items-center p-4">
+                <h1 className="text-lg font-medium">Recent Applications</h1>
+                <Link href="/jobs" className="text-sm">View All</Link>
+            </div>
+            <Table<Job>
+                disabled={isRefetching}
+                columns={columns}
+                data={jobs ?? []}
+                actions={actions}
+                hideActions
+            />
+        </div>
     )
 }
 

@@ -16,6 +16,7 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
     data: T[]
     /** actions to perform on table rows */
     actions: TableActions
+    hideActions?: boolean
 
     disabled?: boolean
 
@@ -39,13 +40,13 @@ export type Column<T> = ColumnDef<T>[]
 /**
  * Table Component
  */
-export function Table<T extends BaseEntity,>({ columns, data, actions, ...rest }: TableProps<T>) {
+export function Table<T extends BaseEntity,>({ columns, data, actions, hideActions, ...rest }: TableProps<T>) {
     const windowHeight = useWindowHeight()
     return (
         <div style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }} {...rest}>
             <table className="w-full">
-                <TableHeader<T> columns={columns} />
-                <TableBody<T> items={data} columns={columns} actions={actions} />
+                <TableHeader<T> columns={columns} hideActions={hideActions} />
+                <TableBody<T> items={data} columns={columns} actions={actions} hideActions={hideActions} />
             </table>
         </div>
     )
