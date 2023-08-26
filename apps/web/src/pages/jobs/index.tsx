@@ -15,7 +15,7 @@ import { useProfile } from 'src/hooks/useProfile';
 const Tracker = ({ session }: { session: Session }) => {
     const { data: profile, isLoading } = useProfile(session.user)
     return (
-        <Layout>
+        <Layout session={session}>
             {isLoading ? <FullPageSpinner /> : (
                 <>
                     <div className="flex justify-between mb-4">

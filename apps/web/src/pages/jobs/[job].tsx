@@ -16,17 +16,17 @@ import { Typography } from '@components/typography';
 import { Button } from '@components/button';
 import { useJob } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 
-const JobDetailsPage = () => {
+const JobDetailsPage = ({ session }: { session: Session }) => {
     const router = useRouter();
     const jobId = router.query.job as string;
     const { data, isLoading } = useJob(jobId)
 
     return (
-        <Layout>
+        <Layout session={session}>
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />

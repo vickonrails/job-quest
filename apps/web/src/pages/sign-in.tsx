@@ -37,7 +37,7 @@ const SignIn: NextPage<SignInProps> = () => {
         //TODO: still need to fix problem with expired token
         supabaseClient.auth.signInWithOtp({
             email, options: {
-                emailRedirectTo: `${window.location.origin}/dashboard`
+                emailRedirectTo: `${window.location.origin}`
             }
         })
             .then(res => {
@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session) {
         return {
             redirect: {
-                destination: '/dashboard',
+                destination: '/',
                 permanent: false
             }
         }

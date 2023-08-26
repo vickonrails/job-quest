@@ -10,7 +10,7 @@ async function fetchProfile(client: SupabaseClient<Database>, user?: User) {
     return data;
 }
 
-export function useProfile(user: User) {
+export function useProfile(user?: User) {
     const client = useSupabaseClient<Database>();
     return useQuery(['profile', user], () => fetchProfile(client, user))
 }

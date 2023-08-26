@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Layout } from '@components/layout';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { useRouter } from 'next/router';
 import { SummaryCard } from '@components/dashboard';
@@ -13,12 +13,13 @@ import { type GetServerSideProps } from 'next';
 import { useJobs } from '@hooks';
 import { FullPageSpinner } from '@components/spinner';
 import Link from 'next/link';
+import { Button } from '@components/button';
 
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
 
-const Index = () => {
+const Index = ({ session }: { session: Session }) => {
     const router = useRouter();
     const client = useSupabaseClient<Database>();
 
@@ -34,10 +35,10 @@ const Index = () => {
     }, [client.auth, router])
 
     return (
-        <Layout className="flex" containerClasses="flex flex-col gap-4">
-            {/* <div>
+        <Layout className="flex" containerClasses="flex flex-col gap-4" session={session} >
+            <div>
                 <Button size="sm" onClick={handleLogout} className="mr-3">Log out</Button>
-            </div> */}
+            </div>
             <section className="flex w-full flex-1 gap-4 mt-8">
                 <section className="flex-1">
                     <WelcomeBanner className="mb-4" />
@@ -101,6 +102,7 @@ function RecentlyAdded() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createServerSupabaseClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id)
 
     if (!session) {
         return {
@@ -113,7 +115,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            session
+            session,
+            profile
         }
     }
 }

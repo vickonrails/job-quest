@@ -1,13 +1,17 @@
 import clsx from 'clsx';
 import { type HTMLAttributes } from 'react';
+import { useAuth } from 'src/hooks/useAuth';
+import { useProfile } from 'src/hooks/useProfile';
 
 export function WelcomeBanner({ className, ...rest }: HTMLAttributes<HTMLElement>) {
+    const { data: session } = useAuth();
+    const { data: profile } = useProfile(session?.user)
     return (
         <section
             className={clsx('w-full rounded-xl bg-primary min-h-[120px] p-4 text-white relative overflow-hidden', className)}
             {...rest}
         >
-            <h2 className="w-full text-2xl font-medium mb-2">Welcome Victor</h2>
+            <h2 className="w-full text-2xl font-medium mb-2">Welcome {profile?.full_name}</h2>
             <p className="text-sm max-w-md text-gray-200">“It may be necessary to encounter defeats, so you can know who you are, what you can rise from, how you can still come out of it.” —Maya Angelou</p>
             <Artefacts />
         </section>
