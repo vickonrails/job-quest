@@ -4,12 +4,20 @@ import type { FC } from "react"
 import type { PlasmoCSConfig } from "plasmo"
 import { sendToBackground } from "@plasmohq/messaging"
 
+import cssText from "data-text:./styles/global.css"
+
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
 }
 
 export const config: PlasmoCSConfig = {
     matches: ["https://www.linkedin.com/jobs/*"]
+}
+
+export function getStyle() {
+    const style = document.createElement('style');
+    style.textContent = cssText;
+    return style;
 }
 
 function getJobContent() {
@@ -47,19 +55,9 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     }
 
     return (
-        <div onClick={handleAddToQuest} style={{ marginLeft: 12 }}>
+        <div onClick={handleAddToQuest} style={{ marginLeft: 8 }}>
             {/* TODO: some kind of script to check if the job is already added to job quest */}
-            <button style={{
-                border: '1px solid #0a66c2',
-                borderRadius: 38,
-                fontSize: 16,
-                padding: '8px 16px',
-                height: '100%',
-                fontWeight: 'medium',
-                background: 'inherit',
-                color: '#0a66c2',
-                cursor: 'pointer'
-            }}>
+            <button className="text-2xl font-medium cursor-pointer rounded-full text-linkedIn px-5 py-[10px] shadow-btn-border hover:shadow-btn-hover hover:bg-linkedIn-hover">
                 {/* TODO: just use the JQ logo here */}
                 Add to Job
             </button>
