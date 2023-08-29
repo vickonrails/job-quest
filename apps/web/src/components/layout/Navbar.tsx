@@ -1,15 +1,15 @@
 import { Avatar } from '@components/avatar';
 import { Input } from '@components/input';
+import { type Session } from '@supabase/supabase-js';
 import { type Profile } from 'lib/types';
 import { type FC, type HTMLAttributes } from 'react';
-import { useAuth } from 'src/hooks/useAuth';
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
-    profile?: Profile
+    profile: Profile
+    session: Session
 }
 
-const Navbar: FC<NavbarProps> = ({ profile, ...props }) => {
-    const { data: user } = useAuth()
+const Navbar: FC<NavbarProps> = ({ profile, session, ...props }) => {
     return (
         <nav data-testid="navbar" className="flex justify-between" {...props}>
             <Input placeholder="Search" size="sm" />
@@ -18,7 +18,7 @@ const Navbar: FC<NavbarProps> = ({ profile, ...props }) => {
                     <Avatar border="round" className="mr-3" src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="Victor Ofoegbu" />
                     <div className="truncate">
                         <p className="truncate">{profile?.username}</p>
-                        <p className="truncate text-gray-400 text-sm">{user?.user.email}</p>
+                        <p className="truncate text-gray-400 text-sm">{session.user.email}</p>
                     </div>
                 </div>
             </section>

@@ -10,16 +10,19 @@ import { Banner } from '@components/banner'
 import { Button } from '@components/button'
 import { Input } from '@components/input'
 import { Typography } from '@components/typography'
+import { useToast } from '@components/toast/use-toast'
 
 interface SignInProps {
     session: Session
 }
 
+// TODO: handle sign in error or expired token
 const SignIn: NextPage<SignInProps> = () => {
     const supabaseClient = useSupabaseClient<Database>();
     const [email, setEmail] = useState('')
     const [emailSent, setEmailSent] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast()
 
     // TODO: add tests for this
     const handleSignIn = (ev: FormEvent<HTMLFormElement>) => {
@@ -41,13 +44,20 @@ const SignIn: NextPage<SignInProps> = () => {
             }
         })
             .then(res => {
-                // console.log(res)
                 setIsLoading(false);
                 setEmailSent(true);
+                toast({
+                    title: 'Email Sent',
+                    description: 'Check your email for the magic link',
+                    duration: 5000
+                })
             })
             .catch(err => {
                 setIsLoading(false);
-                // console.log(err);
+                toast({
+                    title: 'An error occurred',
+                    description: 'An error occurred when trying to send the magic link. Please try again later.',
+                })
             });
     }
 

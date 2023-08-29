@@ -1,12 +1,11 @@
-import React, { useEffect, type FC, type HTMLAttributes, useState, type FormEvent } from 'react'
+import React, { type FC, type HTMLAttributes, useState, type FormEvent } from 'react'
 import { Sidebar } from './Sidebar';
 
 import { Navbar } from './Navbar';
-import { type ProfileInsertDTO } from '../../../lib/types';
+import { type Profile, type ProfileInsertDTO } from '../../../lib/types';
 import clsx from 'clsx';
 import { Dialog } from '@components/dialog';
 import { type User, type Session } from '@supabase/supabase-js';
-import { useProfile } from 'src/hooks/useProfile';
 import { type DialogProps } from '@components/dialog/Dialog';
 import { Input } from '@components/input';
 import { Typography } from '@components/typography';
@@ -16,31 +15,27 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {
-    session?: Session;
+    session: Session;
+    profile: Profile;
     containerClasses?: string
 }
 
-export const Layout: FC<LayoutProps> = ({ children, className, session, containerClasses, ...rest }) => {
+export const Layout: FC<LayoutProps> = ({ children, className, session, profile, containerClasses, ...rest }) => {
     const [showOnboarding, setShowOnboarding] = useState(false)
-    const { isLoading, data: profile } = useProfile(session?.user)
-
-    useEffect(() => {
-        const isFirstLogin = !isLoading && !profile;
-        setShowOnboarding(isFirstLogin);
-    }, [profile, isLoading])
+    const firstLogin = !profile && session;
 
     return (
         <div className={clsx('flex h-full', className)} {...rest}>
             <Sidebar className="basis-64" />
             <main className="bg-indigo-50 flex-1 p-6 flex flex-col overflow-auto">
-                <Navbar profile={profile} />
+                <Navbar profile={profile} session={session} />
                 {/* TODO: make this element fill the vertical space */}
                 {/*TODO: fix issue that makes layout overflow out of main on mac */}
                 <div className={clsx('flex-1', containerClasses)}>
                     {children}
                 </div>
             </main>
-            {(showOnboarding && session) && (
+            {firstLogin && (
                 <OnboardingDialog
                     open={showOnboarding}
                     user={session?.user}

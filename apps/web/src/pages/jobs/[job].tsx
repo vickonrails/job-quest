@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
 import { type Database } from 'lib/database.types';
-import { type Job } from 'lib/types';
+import { type Profile, type Job } from 'lib/types';
 import { FullPageSpinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
@@ -20,13 +20,13 @@ import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 
-const JobDetailsPage = ({ session }: { session: Session }) => {
+const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
     const jobId = router.query.job as string;
     const { data, isLoading } = useJob(jobId)
 
     return (
-        <Layout session={session}>
+        <Layout session={session} profile={profile}>
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />
@@ -131,6 +131,7 @@ const JobLabels = ({ labels }: { labels: string[] }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createServerSupabaseClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
 
     if (!session) {
         return {
@@ -143,7 +144,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            session
+            session,
+            profile
         }
     }
 }

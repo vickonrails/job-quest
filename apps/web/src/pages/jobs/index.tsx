@@ -3,29 +3,23 @@
 import React from 'react'
 import { Layout } from '@components/layout';
 import JobsTable from '@components/table/job/JobsTable';
-import { FullPageSpinner } from '@components/spinner';
 import { Typography } from '@components/typography';
 import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { type Database } from 'lib/database.types';
-import { useProfile } from 'src/hooks/useProfile';
+import { type Profile } from 'lib/types';
 
 // I'm currently rendering on the client. How can we improve this
 
-const Tracker = ({ session }: { session: Session }) => {
-    const { data: profile, isLoading } = useProfile(session.user)
+const Tracker = ({ session, profile }: { session: Session, profile: Profile }) => {
     return (
-        <Layout session={session}>
-            {isLoading ? <FullPageSpinner /> : (
-                <>
-                    <div className="flex justify-between mb-4">
-                        <Typography variant="display-xs-md" as="h1">{profile?.full_name}{'\'s Board'}</Typography>
-                    </div>
-                    <div className="rounded-xl">
-                        <JobsTable />
-                    </div>
-                </>
-            )}
+        <Layout session={session} profile={profile}>
+            <div className="flex justify-between my-4">
+                <Typography variant="display-xs-md" as="h1">All Jobs</Typography>
+            </div>
+            <div className="rounded-xl">
+                <JobsTable />
+            </div>
         </Layout>
     )
 }
@@ -35,6 +29,7 @@ const Tracker = ({ session }: { session: Session }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createServerSupabaseClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
 
     if (!session) {
         return {
@@ -47,7 +42,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            session
+            session,
+            profile
         }
     }
 }

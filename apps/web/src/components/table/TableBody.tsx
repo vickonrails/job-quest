@@ -36,8 +36,8 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                 {items.map((item, index) => (
                     <tr
                         className={clsx(
-                            (((index % 2) === 0) ? 'bg-gray-50' : 'bg-white'),
-                            'align-middle hover:cursor-pointer'
+                            (((index % 2) === 0) ? 'bg-gray-100' : 'bg-white'),
+                            'align-middle hover:cursor-pointer hover:bg-gray-50'
                         )}
                         key={index}
                         onClick={_ => onRowClick?.(item.id)}

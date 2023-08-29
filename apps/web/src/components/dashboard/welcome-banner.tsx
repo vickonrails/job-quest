@@ -1,11 +1,12 @@
 import clsx from 'clsx';
+import { type Profile } from 'lib/types';
 import { type HTMLAttributes } from 'react';
-import { useAuth } from 'src/hooks/useAuth';
-import { useProfile } from 'src/hooks/useProfile';
 
-export function WelcomeBanner({ className, ...rest }: HTMLAttributes<HTMLElement>) {
-    const { data: session } = useAuth();
-    const { data: profile } = useProfile(session?.user)
+interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
+    profile: Profile
+}
+
+export function WelcomeBanner({ className, profile, ...rest }: WelcomeBannerProps) {
     return (
         <section
             className={clsx('w-full rounded-xl bg-primary min-h-[120px] p-4 text-white relative overflow-hidden', className)}
@@ -17,7 +18,6 @@ export function WelcomeBanner({ className, ...rest }: HTMLAttributes<HTMLElement
         </section>
     )
 }
-
 
 export function Artefacts() {
     return (

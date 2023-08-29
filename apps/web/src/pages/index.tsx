@@ -7,11 +7,11 @@ import { SummaryCard } from '@components/dashboard';
 import { WelcomeBanner } from '@components/dashboard/welcome-banner';
 import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
 import { Table, type Column, type TableActions } from '@components/table';
-import { type Job } from 'lib/types';
+import { type Profile, type Job } from 'lib/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { useJobs } from '@hooks';
-import { FullPageSpinner } from '@components/spinner';
+import { Spinner } from '@components/spinner';
 import Link from 'next/link';
 import { Button } from '@components/button';
 
@@ -19,7 +19,7 @@ import { Button } from '@components/button';
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
 
-const Index = ({ session }: { session: Session }) => {
+const Index = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
     const client = useSupabaseClient<Database>();
 
@@ -35,13 +35,18 @@ const Index = ({ session }: { session: Session }) => {
     }, [client.auth, router])
 
     return (
-        <Layout className="flex" containerClasses="flex flex-col gap-4" session={session} >
+        <Layout
+            className="flex"
+            containerClasses="flex flex-col gap-4"
+            session={session}
+            profile={profile}
+        >
             <div>
                 <Button size="sm" onClick={handleLogout} className="mr-3">Log out</Button>
             </div>
-            <section className="flex w-full flex-1 gap-4 mt-8">
+            <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">
-                    <WelcomeBanner className="mb-4" />
+                    <WelcomeBanner className="mb-4" profile={profile} />
                     <div className="flex w-full gap-4 mb-4">
                         <SummaryCard title="10" description="Bookmarked applications" />
                         <SummaryCard title="20" description="High priority applications" />
@@ -64,7 +69,7 @@ export const columns: Column<Job> = [
 
 function RecentlyAdded() {
     // TODO: I should be able to pass in params to the useJobs hook
-    const { data: jobs, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } });
+    const { data: jobs, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } }, 'recently-added');
     const router = useRouter();
 
     const onRowClick = (id: string) => {
@@ -79,7 +84,7 @@ function RecentlyAdded() {
         onRowClick
     }
 
-    if (isLoading) return <FullPageSpinner />
+    if (isLoading) return <Spinner />
 
     return (
         <div className="bg-white rounded-lg">
@@ -102,7 +107,7 @@ function RecentlyAdded() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createServerSupabaseClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id)
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
 
     if (!session) {
         return {
