@@ -6,6 +6,7 @@ import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
+import { Filter, Layout, Grid } from 'react-feather'
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -51,11 +52,44 @@ const JobsTable = () => {
     if (isLoading) { return <FullPageSpinner /> }
 
     return (
-        <Table<Job>
-            columns={columns}
-            data={data ?? []}
-            actions={actions}
-        />
+        <section>
+            <section className="flex justify-between mb-4">
+                <button className="flex gap-1 items-center">
+                    <div className="border-2 rounded-md p-1 border-gray-500">
+                        <Filter size={18} />
+                    </div>
+
+                    <span className="text-gray-600">Filter</span>
+                </button>
+
+                <div className="flex gap-5 items-center">
+                    <div className="flex gap-3 items-center">
+                        <span>
+                            Sort:
+                        </span>
+                        <select>
+                            <option>Priority</option>
+                            <option>Date</option>
+                            <option>Status</option>
+                        </select>
+                    </div>
+
+                    <div className="flex gap-2 text-gray-500">
+                        <button>
+                            <Layout />
+                        </button>
+                        <button>
+                            <Grid />
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <Table<Job>
+                columns={columns}
+                data={data ?? []}
+                actions={actions}
+            />
+        </section >
     )
 }
 

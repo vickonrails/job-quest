@@ -35,12 +35,13 @@ async function getJobs(client: SupabaseClient<Database>, options?: Options) {
 // TODO: add request parameters 
 // so I can implement search, pagination & limit, etc
 // also research possible ways to add react query in here too
-export function useJobs(options?: Options): UseQueryResult<Job[]> {
+export function useJobs(options?: Options, key?: string): UseQueryResult<Job[]> {
     const client = useSupabaseClient<Database>();
-    return useQuery(
-        ['jobs'],
+    const res = useQuery(
+        ['jobs', key],
         () => getJobs(client, options)
     )
+    return res;
 }
 
 async function getJob(client: SupabaseClient<Database>, id: string) {
