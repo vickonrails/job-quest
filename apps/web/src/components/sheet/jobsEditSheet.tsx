@@ -9,6 +9,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types'
 import { Sheet, type SheetProps } from './sheet';
 import { Status_Lookup } from '@components/table/job/JobsTable';
+import { useToast } from '@components/toast/use-toast';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -23,6 +24,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const client = useSupabaseClient<Database>();
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
+    const { toast } = useToast()
 
     const updateMutation = useMutation({
         mutationFn: async (data: Job) => {
@@ -31,9 +33,22 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     })
 
     const onSubmit = async (job: Job) => {
-        const { error } = await updateMutation.mutateAsync(job);
-        if (error) throw error;
-        alert('updated')
+        try {
+            const { error } = await updateMutation.mutateAsync(job);
+            if (error) {
+                throw error
+            }
+            toast({
+                title: 'Job updated',
+                duration: 3000
+            })
+        } catch (err) {
+            toast({
+                variant: 'destructive',
+                title: 'Error updating job',
+                duration: 3000
+            })
+        }
     }
 
     const initialValues = { ...entity }
