@@ -3,50 +3,54 @@ import { type Database } from '../../lib/database.types';
 import { type Job } from '../../lib/types';
 import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
+type SortDirection = 'asc' | 'desc'
+
 interface Options {
     params?: {
         search?: string;
         limit?: number
-        orderBy?: { field: string, direction: 'asc' | 'desc' }
+        orderBy?: { field: string, direction: SortDirection }
         offset?: number
     }
 }
 
 async function getJobs(client: SupabaseClient<Database>, options?: Options) {
     const { params } = options ?? {}
-    let query = client.from('jobs').select();
+    let query = client.from('jobs').select('*', { count: 'exact' });
 
     if (params?.search) {
         query = query.ilike('position', `%${params.search}%`)
-    }
-
-    if (!params?.offset && params?.limit) {
-        query = query.limit(params.limit)
     }
 
     if (params?.orderBy) {
         query = query.order(params.orderBy.field, { ascending: params.orderBy.direction === 'asc' })
     }
 
-    if (params?.limit && params.offset) {
-        query = query.range(params?.offset, params.limit)
+    if (params?.limit) {
+        query = query.range(params?.offset ?? 0, params.limit + (params.offset ?? 0))
     }
 
-    const { data, error } = await query;
+    const { count, data: jobs, error } = await query;
+
     if (error) throw error;
-    return data;
+    return { count, jobs };
+}
+
+type JobsResponse = {
+    jobs: Job[],
+    count: number
 }
 
 // TODO: add request parameters 
 // so I can implement search, pagination & limit, etc
 // also research possible ways to add react query in here too
-export function useJobs(options?: Options, key?: string): UseQueryResult<Job[]> {
+// TODO: write this hook to handle all querying info - search, pagination, ordering, etc
+export function useJobs(options?: Options, key?: string): UseQueryResult<JobsResponse> {
     const client = useSupabaseClient<Database>();
-    const res = useQuery(
-        ['jobs'],
+    return useQuery(
+        ['jobs', key, options?.params],
         () => getJobs(client, options)
     )
-    return res;
 }
 
 async function getJob(client: SupabaseClient<Database>, id: string) {
