@@ -52,6 +52,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                                     <MenuItem
                                         icon={<Edit size={16} />}
                                         onClick={_ => showEditSheet?.(item)}
+                                        la
                                     >
                                         Edit
                                     </MenuItem>
