@@ -27,6 +27,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const { toast } = useToast()
 
     const updateMutation = useMutation({
+        mutationKey: ['jobs'],
         mutationFn: async (data: Job) => {
             return await client.from('jobs').update(data).eq('id', entity.id)
         }

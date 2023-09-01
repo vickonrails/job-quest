@@ -13,27 +13,12 @@ import { type GetServerSideProps } from 'next';
 import { useJobs } from '@hooks';
 import { Spinner } from '@components/spinner';
 import Link from 'next/link';
-import { Button } from '@components/button';
 
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
 
 const Index = ({ session, profile }: { session: Session, profile: Profile }) => {
-    const router = useRouter();
-    const client = useSupabaseClient<Database>();
-
-    const handleLogout = useCallback(() => {
-        client.auth.signOut().then(async _ => {
-            // await queryClient.invalidateQueries({
-            //     queryKey: ['auth']
-            // })
-            return router.push('/sign-in');
-        }).catch(err => {
-            // console.log(err)
-        });
-    }, [client.auth, router])
-
     return (
         <Layout
             className="flex"
@@ -41,9 +26,6 @@ const Index = ({ session, profile }: { session: Session, profile: Profile }) => 
             session={session}
             profile={profile}
         >
-            <div>
-                <Button size="sm" onClick={handleLogout} className="mr-3">Log out</Button>
-            </div>
             <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">
                     <WelcomeBanner className="mb-4" profile={profile} />

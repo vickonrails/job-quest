@@ -3,6 +3,7 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown } from 'lucide-react'
 
 import { cn } from 'src/utils'
+import clsx from 'clsx'
 
 export interface SelectOption {
   value: string | number
@@ -20,7 +21,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      'flex w-full items-center justify-between rounded-md border border-input bg-background px-3 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
       className
     )}
     {...props}
@@ -114,9 +115,16 @@ interface SelectProps extends SelectPrimitive.SelectProps {
   options?: SelectOption[]
   trigger?: string
   label?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export function Select({ options, trigger, label, ...props }: SelectProps) {
+const SIZE_MAP = {
+  sm: 'py-1',
+  md: 'py-2',
+  lg: 'py-3',
+}
+
+export function Select({ options, trigger, label, size = 'md', ...props }: SelectProps) {
   const selectedOption = React.useMemo(
     () => options?.find((option) => option.value === props.value),
     [options, props.value]
@@ -126,7 +134,7 @@ export function Select({ options, trigger, label, ...props }: SelectProps) {
     <SelectPrimitive.Root {...props}>
       <label className="mb-2">
         <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
-        <SelectTrigger>
+        <SelectTrigger className={SIZE_MAP[size]}>
           <SelectValue placeholder={selectedOption?.label ?? trigger ?? 'Select an option'} />
         </SelectTrigger>
         <SelectContent>

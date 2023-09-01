@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes } from 'react'
+import { type ImgHTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 
 type IAvatarBorder = 'curved' | 'round' | 'square'

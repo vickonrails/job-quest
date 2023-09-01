@@ -3,7 +3,7 @@ import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
 import { type Database } from 'lib/database.types';
 import { type Profile, type Job } from 'lib/types';
-import { FullPageSpinner } from '@components/spinner';
+import { FullPageSpinner, Spinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
 import { Rating } from '@components/rating/Rating';
@@ -23,7 +23,7 @@ import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
     const jobId = router.query.job as string;
-    const { data, isLoading } = useJob(jobId)
+    const { data, isLoading, isRefetching } = useJob(jobId)
 
     return (
         <Layout session={session} profile={profile}>
@@ -34,7 +34,7 @@ const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profi
                 </button>
                 {isLoading ?
                     <FullPageSpinner /> :
-                    <JobDetails job={data} />
+                    <JobDetails job={data} isRefetching={isRefetching} />
                 }
             </div>
         </Layout>
@@ -42,7 +42,7 @@ const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profi
 }
 
 
-const JobDetails = ({ job }: { job?: Job }) => {
+const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
 
     if (!job) return;
@@ -64,9 +64,10 @@ const JobDetails = ({ job }: { job?: Job }) => {
                                 </div>
                             )}
                             <div className="flex-1">
-                                <div className="flex items-center">
-                                    <Typography variant="display-xs-md" className="mb-1 mr-3 text-base-col">{job.position}</Typography>
+                                <div className="flex items-center gap-3">
+                                    <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
                                     <Button size="xs" onClick={_ => showEditSheet(job)} fillType="outlined" className="inline-block py-1">Edit</Button>
+                                    {isRefetching && <Spinner />}
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">
                                     <li className="list-none"><Typography variant="body-md">{job.company_name}</Typography></li>

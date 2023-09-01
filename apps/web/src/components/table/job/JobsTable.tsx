@@ -6,7 +6,8 @@ import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
-import { Filter, Layout, Grid } from 'react-feather'
+import { Filter, Layout, Grid, ChevronLeft, ChevronRight } from 'react-feather'
+import { Select, type SelectOption } from '@components/select/select'
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -26,9 +27,16 @@ export const columns: Column<Job> = [
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
+const SIZE = 20
+const SORT_OPTIONS: SelectOption[] = [
+    { label: 'Priority', value: 'priority' },
+    { label: 'Date', value: 'created_at' },
+    { label: 'Status', value: 'status' }
+]
+
 const JobsTable = () => {
     const client = useSupabaseClient<Database>();
-    const { data, isLoading } = useJobs();
+    const { data, isLoading } = useJobs({ params: { offset: 0, limit: SIZE } });
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
@@ -67,11 +75,7 @@ const JobsTable = () => {
                         <span>
                             Sort:
                         </span>
-                        <select>
-                            <option>Priority</option>
-                            <option>Date</option>
-                            <option>Status</option>
-                        </select>
+                        <Select size="sm" options={SORT_OPTIONS} />
                     </div>
 
                     <div className="flex gap-2 text-gray-500">
@@ -89,7 +93,41 @@ const JobsTable = () => {
                 data={data ?? []}
                 actions={actions}
             />
+            <Pagination />
         </section >
+    )
+}
+
+const PAGINATION_OPTIONS: SelectOption[] = [
+    {
+        value: 5,
+        label: '5 rows'
+    },
+    {
+        value: 10,
+        label: '10 rows'
+    },
+    {
+        value: 50,
+        label: '50 rows'
+    },
+    {
+        value: 100,
+        label: '100 rows'
+    },
+]
+
+function Pagination() {
+    return (
+        <div className="flex items-center gap-1">
+            <div className="flex gap-2">
+                <button><ChevronLeft /></button>
+                <Select size="sm" options={PAGINATION_OPTIONS} trigger="5" defaultValue="5" />
+                <button><ChevronRight /></button>
+            </div>
+
+            <p className="text-sm">{SIZE} records</p>
+        </div>
     )
 }
 

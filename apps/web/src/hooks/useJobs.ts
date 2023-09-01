@@ -8,6 +8,7 @@ interface Options {
         search?: string;
         limit?: number
         orderBy?: { field: string, direction: 'asc' | 'desc' }
+        offset?: number
     }
 }
 
@@ -19,12 +20,16 @@ async function getJobs(client: SupabaseClient<Database>, options?: Options) {
         query = query.ilike('position', `%${params.search}%`)
     }
 
-    if (params?.limit) {
+    if (!params?.offset && params?.limit) {
         query = query.limit(params.limit)
     }
 
     if (params?.orderBy) {
         query = query.order(params.orderBy.field, { ascending: params.orderBy.direction === 'asc' })
+    }
+
+    if (params?.limit && params.offset) {
+        query = query.range(params?.offset, params.limit)
     }
 
     const { data, error } = await query;
@@ -38,7 +43,7 @@ async function getJobs(client: SupabaseClient<Database>, options?: Options) {
 export function useJobs(options?: Options, key?: string): UseQueryResult<Job[]> {
     const client = useSupabaseClient<Database>();
     const res = useQuery(
-        ['jobs', key],
+        ['jobs'],
         () => getJobs(client, options)
     )
     return res;

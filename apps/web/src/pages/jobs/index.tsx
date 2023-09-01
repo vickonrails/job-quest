@@ -1,9 +1,6 @@
-
-
 import React from 'react'
 import { Layout } from '@components/layout';
 import JobsTable from '@components/table/job/JobsTable';
-import { Typography } from '@components/typography';
 import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { type Database } from 'lib/database.types';
@@ -14,12 +11,7 @@ import { type Profile } from 'lib/types';
 const Tracker = ({ session, profile }: { session: Session, profile: Profile }) => {
     return (
         <Layout session={session} profile={profile}>
-            <div className="flex justify-between my-4">
-                <Typography variant="display-xs-md" as="h1">All Jobs</Typography>
-            </div>
-            <div className="rounded-xl">
-                <JobsTable />
-            </div>
+            <JobsTable />
         </Layout>
     )
 }
