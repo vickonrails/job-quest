@@ -50,7 +50,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
             })
             if (success) alert(`Added to Job Quest`);
         } catch (err) {
-            alert(`An error occurred ${err.message}`)
+            alert(`An error occurred ${err.message}`);
         }
     }
 
