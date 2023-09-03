@@ -27,7 +27,7 @@ async function getJobs(client: SupabaseClient<Database>, options?: Options) {
     }
 
     if (params?.limit) {
-        query = query.range(params?.offset ?? 0, params.limit + (params.offset ?? 0))
+        query = query.range(params?.offset ?? 0, (params.limit - 1) + (params.offset ?? 0))
     }
 
     const { count, data: jobs, error } = await query;

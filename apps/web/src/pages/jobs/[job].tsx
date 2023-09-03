@@ -96,7 +96,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                     </footer>
                 </div>
                 <div className="flex-1 shrink-0 grow-0 basis-1/3 p-6">
-                    Other tabs
+                    <h2>Notes</h2>
                 </div>
             </div>
             {editSheetOpen && (

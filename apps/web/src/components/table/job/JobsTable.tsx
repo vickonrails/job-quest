@@ -31,18 +31,20 @@ export const columns: Column<Job> = [
 const SIZE_LIMIT = 10
 
 const SORT_OPTIONS: SelectOption[] = [
-    { label: 'Date Added', value: 'created_at' },
-    { label: 'Priority', value: 'priority' },
-    { label: 'Status', value: 'status' }
+    { label: 'Newest', value: 'created_at' },
+    { label: 'Highest Priority', value: 'priority' },
+    { label: 'Highest Status', value: 'status' }
 ]
 
+// TODO: I want the filtering to work in a very simple way - Just provide sorting buttons on the head of the table columns. Once clicked, it'll sort descending, clicking again will sort ascending and clicking again will remove the sort.
+// Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
 const JobsTable = () => {
     const client = useSupabaseClient<Database>();
     const [sizeLimit, setSizeLimit] = useState(SIZE_LIMIT)
+    // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
     const [sort, setSort] = useState(SORT_OPTIONS[0])
-    const [sortDirection, setSortDirection] = useState('asc')
-    const { data, isLoading, isRefetching } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: sortDirection } } });
+    const { data, isLoading, isRefetching } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
@@ -72,7 +74,6 @@ const JobsTable = () => {
                     </div>
 
                     <span className="text-gray-600">Filter</span>
-                    <span>Filtering by {sort?.label}</span>
                     {isRefetching && <Spinner />}
                 </button>
 
@@ -141,7 +142,7 @@ interface PaginationProps {
 
 function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: PaginationProps) {
     const isLastPage = ((offset + 1) + limit >= (totalCount ?? 0))
-    const isFirstPage = ((offset + 1) - limit === 0);
+    const isFirstPage = offset === 0;
     const totalPages = Math.ceil((totalCount ?? 0) / limit)
     const currentPage = Math.ceil((offset + 1) / limit)
 
@@ -151,7 +152,11 @@ function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: P
     }
 
     const prev = () => {
-        if (isFirstPage) return
+        if (isFirstPage) return;
+        if (offset - limit < 0) {
+            setOffset(0)
+            return;
+        }
         setOffset?.(offset - limit)
     }
 
