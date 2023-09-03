@@ -62,7 +62,7 @@ const JobsTable = () => {
 
     const actions: TableActions = {
         onDelete,
-        onRowClick,
+        onRowClick
     }
 
     return (

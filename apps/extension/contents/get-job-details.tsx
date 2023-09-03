@@ -6,8 +6,6 @@ import { sendToBackground } from "@plasmohq/messaging"
 
 import cssText from "data-text:./styles/global.css"
 import { useState } from "react"
-import { Sheet, SheetContent, SheetTrigger } from "~components/Sheet"
-import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "~components/alert-dialog"
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
@@ -61,19 +59,13 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     return (
         <div style={{ marginLeft: 8 }}>
             {/* TODO: some kind of script to check if the job is already added to job quest */}
-
-            <Sheet>
-                <SheetTrigger>
-                    <button onClick={_ => setOpen(true)} className="text-2xl font-medium cursor-pointer rounded-full text-linkedIn px-5 py-[10px] shadow-btn-border hover:shadow-btn-hover hover:bg-linkedIn-hover">
-                        {/* TODO: just use the JQ logo here */}
-                        Add to Job
-                    </button>
-                </SheetTrigger>
-
-                <SheetContent>
-                    Hell World
-                </SheetContent>
-            </Sheet>
+            <button
+                onClick={handleAddToQuest}
+                className="text-2xl font-medium cursor-pointer rounded-full text-linkedIn px-5 py-[10px] shadow-btn-border hover:shadow-btn-hover hover:bg-linkedIn-hover"
+            >
+                {/* TODO: just use the JQ logo here */}
+                Add to Job
+            </button>
         </div>
     )
 }
