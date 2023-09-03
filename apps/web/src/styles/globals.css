@@ -37,7 +37,7 @@
     --shadow-crispy: 16px 16px 70px rgba(81, 67, 188, 0.1), -8px -8px 70px rgba(81, 67, 188, 0.1);
     --shadow-light: 0px 1px 2px rgba(16, 24, 40, 0.05);
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -69,6 +69,33 @@
   }
 }
  
+@layer components {
+  .chip {
+    background: var(--chip-background);
+    color: var(--chip-color);
+  }
+  .chip.green {
+    --chip-background: #EFFAEB;
+    --chip-color: #6BB34C;
+  }
+  .chip.purple {
+    --chip-background: #F2E8FC;
+    --chip-color: #7D33CC;
+  }
+  .chip.blue {
+    --chip-background: #E9F4FF;
+    --chip-color: #5C85E8;
+  }
+  .chip.gold {
+    --chip-background: #FBFADF;
+    --chip-color: #C8C004;
+  }
+  .chip.orange {
+    --chip-background: #F6ECE4;
+    --chip-color: #EB8E4A;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -87,5 +114,8 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .chip_blue {
+    @apply bg-chip-blue text-blue-700;
   }
 }

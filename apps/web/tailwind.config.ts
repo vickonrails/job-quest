@@ -2,7 +2,6 @@
 
 import defaultTheme from 'tailwindcss/defaultTheme'
 module.exports = {
-  darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',

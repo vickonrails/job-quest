@@ -232,7 +232,7 @@ const JobLabels = ({ labels }: { labels: string[] }) => {
     return (
         <div className="flex">
             {labels.map((label, index) => (
-                <Chip key={index} label={label} variant={'blue' as ChipVariants} />
+                <Chip key={index} label={label} variant={getChipColors(label) as ChipVariants} />
             ))}
         </div>
     )
