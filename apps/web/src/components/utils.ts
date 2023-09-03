@@ -25,7 +25,7 @@ const months = [
 export function getSize(size: Size) {
     switch (size) {
         case 'xs':
-            return 'text-sm p-3'
+            return 'text-sm p-3 py-2'
 
         case 'sm':
             return 'py-1.5 text-sm px-2.5'
