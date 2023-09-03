@@ -51,7 +51,7 @@ export const columns: Column<Job> = [
 
 function RecentlyAdded() {
     // TODO: I should be able to pass in params to the useJobs hook
-    const { data, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } }, 'recently-added');
+    const { data, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } });
     const router = useRouter();
 
     const onRowClick = (id: string) => {

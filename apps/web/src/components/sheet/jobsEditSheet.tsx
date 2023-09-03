@@ -4,7 +4,7 @@ import { Select } from '@components/select';
 import { Button } from '@components/button';
 import { Formik } from 'formik'
 import { Rating } from '@components/rating/Rating';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types'
 import { Sheet, type SheetProps } from './sheet';
@@ -20,6 +20,7 @@ interface JobEditSheetProps<T> extends SheetProps {
  */
 // TODO: unify the shadcn ui & personal input components
 export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
+    const queryClient = useQueryClient();
     // TODO: abstract this away
     const client = useSupabaseClient<Database>();
     const entity = props.entity as Job;
@@ -27,10 +28,11 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const { toast } = useToast()
 
     const updateMutation = useMutation({
-        mutationKey: ['jobs'],
         mutationFn: async (data: Job) => {
             return await client.from('jobs').update(data).eq('id', entity.id)
-        }
+        },
+        // TODO: we're currently invalidating the cache now, but we can use setQueryData to just replace the job in the cache
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] })
     })
 
     const onSubmit = async (job: Job) => {

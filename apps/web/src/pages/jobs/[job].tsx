@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { type HTMLAttributes, useState } from 'react'
 import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
 import { type Database } from 'lib/database.types';
-import { type Profile, type Job } from 'lib/types';
+import { type Profile, type Job, type NoteInsertDTO } from 'lib/types';
 import { FullPageSpinner, Spinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
@@ -14,16 +14,21 @@ import { type ChipVariants } from '@components/chips/Chip';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
 import { Button } from '@components/button';
-import { useJob } from 'src/hooks/useJobs';
+import { useJobs } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
 import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
+import { Textarea } from '@components/textarea';
+import { useNotes } from 'src/hooks/useNotes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useToast } from '@components/toast/use-toast';
 
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
     const jobId = router.query.job as string;
-    const { data, isLoading, isRefetching } = useJob(jobId)
+    const { data, isLoading, isRefetching } = useJobs({}, jobId)
 
     return (
         <Layout session={session} profile={profile}>
@@ -34,7 +39,7 @@ const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profi
                 </button>
                 {isLoading ?
                     <FullPageSpinner /> :
-                    <JobDetails job={data} isRefetching={isRefetching} />
+                    <JobDetails job={data?.jobs[0]} isRefetching={isRefetching} />
                 }
             </div>
         </Layout>
@@ -95,8 +100,11 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                         <JobLabels labels={job.labels ?? []} />
                     </footer>
                 </div>
-                <div className="flex-1 shrink-0 grow-0 basis-1/3 p-6">
+                <div className="flex-1 shrink-0 grow-0 basis-1/3 p-6 flex flex-col gap-3">
                     <h2>Notes</h2>
+                    <NoteForm job={job} />
+                    <hr />
+                    <NotesList />
                 </div>
             </div>
             {editSheetOpen && (
@@ -111,6 +119,64 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
     )
 }
 
+function NoteForm({ job }: { job: Job }) {
+    const [note, setNote] = useState('')
+    const { toast } = useToast()
+    const client = useSupabaseClient<Database>();
+    const queryClient = useQueryClient()
+
+    const { mutateAsync, isLoading: isAddingNotes, isSuccess, isError, error, status } = useMutation({
+        mutationFn: async (data: NoteInsertDTO) => {
+            const { error } = await client.from('notes').insert(data)
+            if (error) throw error;
+        },
+        // TODO: might want to use query.setQueryData here too
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] })
+    })
+
+    const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
+        ev.preventDefault();
+        if (!note) return;
+        try {
+            await mutateAsync({
+                text: note,
+                jobid: job.id,
+                status: job.status
+            })
+            setNote('');
+            toast({
+                variant: 'default',
+                title: 'Note added',
+            })
+        } catch (err) {
+            alert('Error')
+            // do I still need to do all the error things? Or does the react-query library do that for me?
+        }
+    }
+
+    return (
+        <form onSubmit={handleCreateNote} className="flex flex-col gap-4">
+            <Textarea value={note} required onChange={val => setNote(val.target.value)} />
+            <Button loading={isAddingNotes}>Add notes</Button>
+        </form>
+    )
+}
+
+function NotesList(props: HTMLAttributes<HTMLElement>) {
+    const { data: notes, isLoading } = useNotes({})
+    if (isLoading) return <Spinner />
+
+    return (
+        <section {...props} className="flex flex-col gap-4">
+            {notes?.map(note => (
+                <article key={note.id}>
+                    <p>{note.text}</p>
+                </article>
+            ))}
+        </section>
+    )
+}
+
 const JobLabels = ({ labels }: { labels: string[] }) => {
     const variants = ['blue', 'purple', 'green', 'gold', 'orange']
 
@@ -122,7 +188,7 @@ const JobLabels = ({ labels }: { labels: string[] }) => {
     return (
         <div className="flex">
             {labels.map((label, index) => (
-                <Chip key={index} label={label} variant={getChipColors(label) as ChipVariants} />
+                <Chip key={index} label={label} variant={'blue' as ChipVariants} />
             ))}
         </div>
     )

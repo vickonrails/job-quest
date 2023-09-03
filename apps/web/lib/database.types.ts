@@ -54,27 +54,58 @@ export interface Database {
         }
         Relationships: []
       }
+      notes: {
+        Row: {
+          created_at: string | null
+          id: string
+          jobid: string
+          status: number
+          text: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          jobid: string
+          status: number
+          text: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          jobid?: string
+          status?: number
+          text?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'notes_jobid_fkey'
+            columns: ['jobid']
+            referencedRelation: 'jobs'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           full_name: string | null
           id: string
           updated_at: string | null
-          username: string | null
         }
         Insert: {
           avatar_url?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
-          username?: string | null
         }
         Update: {
           avatar_url?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
-          username?: string | null
         }
         Relationships: [
           {
