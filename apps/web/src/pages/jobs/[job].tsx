@@ -2,12 +2,11 @@ import React, { type HTMLAttributes, useState } from 'react'
 import { Layout } from '@components/layout';
 import { useRouter } from 'next/router';
 import { type Database } from 'lib/database.types';
-import { type Profile, type Job, type NoteInsertDTO } from 'lib/types';
+import { type Profile, type Job, type NoteInsertDTO, type Note } from 'lib/types';
 import { FullPageSpinner, Spinner } from '@components/spinner';
-import { ChevronLeft } from 'react-feather'
+import { ChevronLeft, Trash } from 'react-feather'
 import Image from 'next/image';
 import { Rating } from '@components/rating/Rating';
-
 import { Chip } from '@components/chips';
 import { djb2Hash, formatDate } from '@components/utils';
 import { type ChipVariants } from '@components/chips/Chip';
@@ -24,6 +23,9 @@ import { useNotes } from 'src/hooks/useNotes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useToast } from '@components/toast/use-toast';
+import { useRowDelete } from 'src/hooks/useDeleteModal';
+import { AlertDialog } from '@components/alert-dialog';
+import { cn } from 'src/utils';
 
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
@@ -103,8 +105,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                 <div className="flex-1 shrink-0 grow-0 basis-1/3 p-6 flex flex-col gap-3">
                     <h2>Notes</h2>
                     <NoteForm job={job} />
-                    <hr />
-                    <NotesList />
+                    <NotesList job={job} />
                 </div>
             </div>
             {editSheetOpen && (
@@ -125,18 +126,21 @@ function NoteForm({ job }: { job: Job }) {
     const client = useSupabaseClient<Database>();
     const queryClient = useQueryClient()
 
-    const { mutateAsync, isLoading: isAddingNotes, isSuccess, isError, error, status } = useMutation({
+    // TODO: error handling
+    const { mutateAsync, isLoading: isAddingNotes } = useMutation({
         mutationFn: async (data: NoteInsertDTO) => {
             const { error } = await client.from('notes').insert(data)
             if (error) throw error;
         },
         // TODO: might want to use query.setQueryData here too
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes', job.id] })
     })
+
+    const canSubmit = note.trim();
 
     const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        if (!note) return;
+        if (!canSubmit) return;
         try {
             await mutateAsync({
                 text: note,
@@ -157,23 +161,63 @@ function NoteForm({ job }: { job: Job }) {
     return (
         <form onSubmit={handleCreateNote} className="flex flex-col gap-4">
             <Textarea value={note} required onChange={val => setNote(val.target.value)} />
-            <Button loading={isAddingNotes}>Add notes</Button>
+            <Button loading={isAddingNotes} disabled={!canSubmit}>Add notes</Button>
         </form>
     )
 }
 
-function NotesList(props: HTMLAttributes<HTMLElement>) {
-    const { data: notes, isLoading } = useNotes({})
+interface NoteListProps extends HTMLAttributes<HTMLElement> {
+    job: Job
+}
+
+function NotesList({ job, ...rest }: NoteListProps) {
+    const client = useSupabaseClient<Database>();
+    const { data: notes, isLoading, refetch } = useNotes({ jobId: job.id })
+    const {
+        showDeleteDialog,
+        isOpen: deleteModalOpen,
+        onCancel,
+        handleDelete,
+        setIsOpen,
+        loading: isDeleting
+    } = useRowDelete<Note>({
+        onDelete: async (id: string) => {
+            const { error } = await client.from('notes').delete().eq('id', id)
+            if (error) throw error;
+        },
+        refresh: async () => { await refetch() }
+    })
+
     if (isLoading) return <Spinner />
 
     return (
-        <section {...props} className="flex flex-col gap-4">
-            {notes?.map(note => (
-                <article key={note.id}>
-                    <p>{note.text}</p>
-                </article>
-            ))}
-        </section>
+        <>
+            {/* {notes?.length && <hr className="border-0 border-b" />} */}
+            <section {...rest} className={cn('flex flex-col', notes?.length && 'border rounded-md')}>
+                {notes?.map((note, idx) => (
+                    <article key={note.id} className={cn('p-3 cursor-pointer hover:bg-gray-100 group relative', idx + 1 !== notes.length && 'border-b')}>
+                        <p className="leading-tight text-sm mb-2 max-w-[17em]">{note.text}</p>
+                        <div className="flex justify-between">
+                            {note.created_at && <p className="text-sm text-gray-400">{formatDate(note.created_at)}</p>}
+                            <p className="text-sm text-gray-400">{Status_Lookup[note.status]}</p>
+                        </div>
+                        <button onClick={_ => showDeleteDialog(note)} className="hidden group-hover:block absolute top-3 right-3">
+                            <Trash size={16} className="text-gray-700" />
+                        </button>
+                    </article>
+                ))}
+
+                <AlertDialog
+                    open={deleteModalOpen}
+                    title="Delete Confirmation"
+                    description="Are you sure you want to delete this note?"
+                    onOk={handleDelete}
+                    onOpenChange={setIsOpen}
+                    onCancel={onCancel}
+                    isProcessing={isDeleting}
+                />
+            </section>
+        </>
     )
 }
 

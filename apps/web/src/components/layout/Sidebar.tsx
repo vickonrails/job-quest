@@ -38,7 +38,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                 </NavGroup>
 
                 <NavGroup title="labels">
-                    <NavLink href="resume-builder">
+                    <NavLink href="/notes">
                         <FileText className="mr-2" />
                         <span>Notes</span>
                     </NavLink>

@@ -25,6 +25,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
         isOpen: deleteModalOpen,
         onCancel,
         handleDelete,
+        setIsOpen: setIsDeleteModalOpen,
         loading: isDeleting
     } = useRowDelete<T>({ onDelete, refresh })
 
@@ -85,7 +86,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                 description="Are you sure you want to delete this job?"
                 onOk={handleDelete}
                 // TODO: figure out why this isn't working
-                onOpenChange={setIsOpen}
+                onOpenChange={setIsDeleteModalOpen}
                 onCancel={onCancel}
                 isProcessing={isDeleting}
             />
