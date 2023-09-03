@@ -1,8 +1,8 @@
+import { cn } from '@utils/cn'
+import hashColors from '@utils/hash-colors'
 import React, { type HTMLAttributes } from 'react'
-import { cn } from 'src/utils'
 
 export type ChipVariants = 'blue' | 'purple' | 'green' | 'gold' | 'orange'
-
 interface ChipProps extends HTMLAttributes<Omit<HTMLElement, 'children'>> {
     label: string
     variant?: ChipVariants
@@ -20,4 +20,14 @@ const Chip = ({ label, variant = 'green', className, ...rest }: ChipProps) => {
     )
 }
 
-export { Chip }
+const ChipsGroup = ({ labels }: { labels: string[] }) => {
+    return (
+        <div className="flex">
+            {labels.map((label, index) => (
+                <Chip key={index} label={label} variant={hashColors(label) as ChipVariants} />
+            ))}
+        </div>
+    )
+}
+
+export { Chip, ChipsGroup }

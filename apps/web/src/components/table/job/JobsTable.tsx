@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
 import { Filter, Layout, Grid, ChevronLeft, ChevronRight } from 'react-feather'
 import { Select, type SelectOption } from '@components/select/select'
-import { cn } from 'src/utils'
+import { cn } from '@utils/cn'
 
 export const Status_Lookup = [
     'Bookmarked',

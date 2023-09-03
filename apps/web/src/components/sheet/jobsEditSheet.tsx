@@ -83,6 +83,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                                 />
                             </div>
 
+                            {/* TODO: figure out why there is no highlight on the select options */}
                             <Select
                                 name="status"
                                 label="Select"
