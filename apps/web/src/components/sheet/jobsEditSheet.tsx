@@ -42,14 +42,13 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                 throw error
             }
             toast({
-                title: 'Job updated',
-                duration: 3000
+                variant: 'success',
+                title: 'Job updated'
             })
         } catch (err) {
             toast({
                 variant: 'destructive',
                 title: 'Error updating job',
-                duration: 3000
             })
         }
     }
