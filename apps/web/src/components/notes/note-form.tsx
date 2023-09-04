@@ -36,7 +36,7 @@ function NoteForm({ job }: { job: Job }) {
             })
             setNote('');
             toast({
-                variant: 'default',
+                variant: 'success',
                 title: 'Note added',
             })
         } catch (err) {

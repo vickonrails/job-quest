@@ -22,12 +22,12 @@ export function useRowDelete<T extends BaseEntity>(initialProps: RowDeleteHookPr
 
         setLoading(true)
         initialProps.onDelete?.(entity?.id).then(async () => {
-            setIsOpen(false)
             await initialProps.refresh?.()
             toast({
                 variant: 'success',
-                title: 'Job deleted'
+                title: 'deleted'
             })
+            setIsOpen(false)
         }).catch(err => {
             toast({
                 variant: 'destructive',

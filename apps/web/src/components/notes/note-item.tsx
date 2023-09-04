@@ -9,6 +9,7 @@ import { Button } from '@components/button'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
+import { useToast } from '@components/toast/use-toast'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */
@@ -57,7 +58,13 @@ function NoteText({ note, showDeleteDialog }: { note: Note, showDeleteDialog: (n
                 {note.created_at && <p className="text-sm text-gray-400">{formatDate(note.created_at)}</p>}
                 <p className="text-sm text-gray-400">{Status_Lookup[note.status]}</p>
             </div>
-            <button onClick={() => showDeleteDialog(note)} className="hidden group-hover:block absolute top-3 right-3">
+            <button
+                onClick={(ev) => {
+                    ev.stopPropagation();
+                    showDeleteDialog(note)
+                }}
+                className="hidden group-hover:block absolute top-3 right-3"
+            >
                 <Trash size={16} className="text-gray-700" />
             </button>
         </>
@@ -70,6 +77,7 @@ function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
     const [text, setText] = useState(note.text);
     const queryClient = useQueryClient();
     const client = useSupabaseClient<Database>();
+    const { toast } = useToast()
 
     // TODO: extract this into a separate hook
     const { mutateAsync, isLoading } = useMutation({
@@ -89,6 +97,10 @@ function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
             await mutateAsync({
                 ...note,
                 text
+            })
+            toast({
+                variant: 'success',
+                title: 'Note updated',
             })
             onCancel();
         } catch {
