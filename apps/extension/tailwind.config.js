@@ -4,6 +4,7 @@ module.exports = {
   darkMode: ["class"],
   content: [
     './contents/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
   ],
   theme: {
     container: {

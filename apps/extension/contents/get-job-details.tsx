@@ -6,6 +6,7 @@ import { sendToBackground } from "@plasmohq/messaging"
 
 import cssText from "data-text:./styles/global.css"
 import { useState } from "react"
+import { Sheet, SheetTrigger, type SheetProps } from "~components/ui/sheet"
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
@@ -32,7 +33,6 @@ function getJobContent() {
     const description = document.querySelector('.jobs-box__html-content').innerHTML
 
     return {
-        container,
         position,
         company_name,
         location,
@@ -43,6 +43,19 @@ function getJobContent() {
 
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     const [isOpen, setOpen] = useState(false)
+    const [selectedJob, setSelectedJob] = useState({})
+
+    const handleAddClick = () => {
+        const jobDetails = getJobContent();
+        setOpen(true)
+        setSelectedJob(jobDetails)
+    }
+
+    const closeSheet = () => {
+        setOpen(false)
+        // setSelectedJob(null)
+    }
+
     const handleAddToQuest = async () => {
         try {
             const jobDetails = getJobContent();
@@ -60,13 +73,25 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
         <div style={{ marginLeft: 8 }}>
             {/* TODO: some kind of script to check if the job is already added to job quest */}
             <button
-                onClick={handleAddToQuest}
+                onClick={handleAddClick}
                 className="text-2xl font-medium cursor-pointer rounded-full text-linkedIn px-5 py-[10px] shadow-btn-border hover:shadow-btn-hover hover:bg-linkedIn-hover"
             >
-                {/* TODO: just use the JQ logo here */}
-                Add to Job
+                Add to JobQuest
             </button>
+            <JobInfoSheet job={selectedJob} open={isOpen} onOpenChange={closeSheet} />
         </div>
+    )
+}
+
+interface JobInfoSheetProps extends SheetProps {
+    job: any
+}
+
+function JobInfoSheet({ job, ...rest }: JobInfoSheetProps) {
+    return (
+        <Sheet {...rest}>
+            {job.position}
+        </Sheet>
     )
 }
 
