@@ -108,15 +108,6 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                                 value={values.location ?? ''}
                                 fullWidth
                             />
-                            <Input
-                                placeholder="Company site"
-                                label="Company site"
-                                name="company_site"
-                                onChange={handleChange}
-                                value={values.company_site ?? ''}
-                                fullWidth
-                                hint="For providing the company logo by the side"
-                            />
                             <Button type="submit" loading={updateMutation.isLoading}>Update</Button>
                             <Button type="button" fillType="outlined" size="sm" onClick={() => resetForm(initialValues)}>Clear Changes</Button>
                         </form>

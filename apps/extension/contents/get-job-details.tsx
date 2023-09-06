@@ -5,15 +5,16 @@ import type { PlasmoCSConfig } from "plasmo"
 import { sendToBackground } from "@plasmohq/messaging"
 
 import cssText from "data-text:./styles/global.css"
-import { useState } from "react"
-import { Sheet, SheetTrigger, type SheetProps } from "~components/ui/sheet"
+import { useCallback, useState } from "react"
+import { Sheet, SheetTrigger, type SheetProps } from "~components/sheets/sheet"
+import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
 }
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://www.linkedin.com/jobs/*"]
+    matches: ["https://www.linkedin.com/jobs/*"],
 }
 
 export function getStyle() {
@@ -22,7 +23,7 @@ export function getStyle() {
     return style;
 }
 
-function getJobContent() {
+function getJobContent(): Job {
     const isFullPage = window.location.href.includes('jobs/view');
     const container = document.querySelector('.jobs-unified-top-card');
     const position = container.querySelector(`${isFullPage ? 'h1' : 'h2'}`).textContent.trim()
@@ -33,6 +34,7 @@ function getJobContent() {
     const description = document.querySelector('.jobs-box__html-content').innerHTML
 
     return {
+        id: '',
         position,
         company_name,
         location,
@@ -41,9 +43,19 @@ function getJobContent() {
     }
 }
 
+export interface Job {
+    id: string
+    position: string
+    company_name: string
+    company_site?: string
+    location: string
+    link: string
+    description: string
+}
+
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     const [isOpen, setOpen] = useState(false)
-    const [selectedJob, setSelectedJob] = useState({})
+    const [selectedJob, setSelectedJob] = useState<null | Job>()
 
     const handleAddClick = () => {
         const jobDetails = getJobContent();
@@ -56,7 +68,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
         // setSelectedJob(null)
     }
 
-    const handleAddToQuest = async () => {
+    const handleAddToQuest = async (job: Job) => {
         try {
             const jobDetails = getJobContent();
             const { success } = await sendToBackground({
@@ -70,7 +82,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     }
 
     return (
-        <div style={{ marginLeft: 8 }}>
+        <div style={{ marginLeft: 8, fontSize: '1.6rem' }} className="okay">
             {/* TODO: some kind of script to check if the job is already added to job quest */}
             <button
                 onClick={handleAddClick}
@@ -78,21 +90,18 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
             >
                 Add to JobQuest
             </button>
-            <JobInfoSheet job={selectedJob} open={isOpen} onOpenChange={closeSheet} />
+            {selectedJob && (
+                <JobInfoSheet
+                    entity={selectedJob}
+                    open={isOpen}
+                    onOpenChange={closeSheet}
+                    onSubmit={handleAddToQuest}
+                />
+            )}
         </div>
     )
 }
 
-interface JobInfoSheetProps extends SheetProps {
-    job: any
-}
 
-function JobInfoSheet({ job, ...rest }: JobInfoSheetProps) {
-    return (
-        <Sheet {...rest}>
-            {job.position}
-        </Sheet>
-    )
-}
 
 export default AnchorTypePrinter

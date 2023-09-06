@@ -3,7 +3,7 @@
 @tailwind utilities;
  
 @layer base {
-  :root {
+  .okay {
     --linkedIn: #0a66c2;
     --linkedIn-hover: rgba(112,181,249,0.2);
     --background: 0 0% 100%;
@@ -69,10 +69,10 @@
 }
  
 @layer base {
-  * {
+  /* * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground font-sans;
-  }
+  } */
 }
