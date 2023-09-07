@@ -10,8 +10,8 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Sheet, type SheetProps } from './sheet';
 import type { Job } from '~contents/get-job-details';
 import { Select } from '../ui/select'
-import { Input } from '~components/ui/input';
-import { Button } from '~components/ui/button';
+// import { Button } from '~components/ui/button';
+import { Button, Input, Rating } from 'ui'
 // import { Status_Lookup } from '@components/table/job/JobsTable';
 // import { useToast } from '@components/toast/use-toast';
 
@@ -56,7 +56,7 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                     initialValues={initialValues}
                     onSubmit={onSubmit}
                 >
-                    {({ values, handleSubmit, handleChange, isSubmitting }) => (
+                    {({ values, handleSubmit, handleChange, isSubmitting, setFieldValue }) => (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <Input
                                 placeholder="Job title"
@@ -65,14 +65,14 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                                 onChange={handleChange}
                             />
 
-                            {/* <div className="mb-4">
+                            <div className="mb-4">
                                 <div className="mb-3">Rating</div>
                                 <Rating
                                     onClick={(val) => setFieldValue('priority', val)}
                                     size="md"
                                     value={values.priority ?? 0}
                                 />
-                            </div> */}
+                            </div>
 
                             {/* TODO: figure out why there is no highlight on the select options */}
                             {/* <Select
@@ -107,8 +107,8 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                                 onChange={handleChange}
                                 value={values.company_site ?? ''}
                             />
-                            <Button type="submit" variant='default'>
-                                {isSubmitting ? 'Updating...' : 'Update'}
+                            <Button variant='default' loading={isSubmitting}>
+                                Update
                             </Button>
                         </form>
                     )}

@@ -9,6 +9,8 @@ import { useCallback, useState } from "react"
 import { Sheet, SheetTrigger, type SheetProps } from "~components/sheets/sheet"
 import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 
+import uiCSS from 'data-text:ui/dist/style.css'
+
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
 }
@@ -19,7 +21,7 @@ export const config: PlasmoCSConfig = {
 
 export function getStyle() {
     const style = document.createElement('style');
-    style.textContent = cssText;
+    style.textContent = cssText + uiCSS;
     return style;
 }
 
@@ -51,6 +53,7 @@ export interface Job {
     location: string
     link: string
     description: string
+    priority?: number
 }
 
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {

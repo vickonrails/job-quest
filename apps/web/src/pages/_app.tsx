@@ -5,6 +5,8 @@ import { type AppProps } from 'next/app'
 import { useState } from 'react'
 
 import '../styles/globals.css'
+import 'ui/dist/styles.css'
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastProvider } from '@radix-ui/react-toast'
 import { Toaster } from '@components/toast'

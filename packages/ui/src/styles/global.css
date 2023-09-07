@@ -103,7 +103,7 @@
 }
 
 @layer base {
-  /* * {
+  * {
     @apply border-border;
   }
   html, body, #__next {
@@ -123,5 +123,5 @@
   }
   .chip_blue {
     @apply bg-chip-blue text-blue-700;
-  } */
+  }
 }
