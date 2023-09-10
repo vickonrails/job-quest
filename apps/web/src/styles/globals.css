@@ -103,11 +103,11 @@
 }
 
 @layer base {
-  /* * {
+  * {
     @apply border-border;
   }
   html, body, #__next {
-    @apply h-full 
+    @apply h-full;
   }
   #__description {
     @apply text-foreground;
@@ -123,5 +123,5 @@
   }
   .chip_blue {
     @apply bg-chip-blue text-blue-700;
-  } */
+  }
 }
