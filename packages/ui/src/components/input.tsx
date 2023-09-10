@@ -45,7 +45,7 @@ export function getSize(size: Size) {
 
 // TODO: use the cva variant library here
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, fullWidth, size, label, disabled, hint, ...rest }, ref) => {
+  ({ className, type, fullWidth, size = 'md', label, disabled, hint, ...rest }, ref) => {
     return (
       <>
         <label>

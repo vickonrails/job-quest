@@ -35,7 +35,7 @@ const Index = ({ session, profile }: { session: Session, profile: Profile }) => 
                     </div>
                     <RecentlyAdded />
                 </section>
-                <DashboardSidebar className="basis-1/3" />
+                <DashboardSidebar className="basis-1/4" />
             </section>
         </Layout >
     )
@@ -70,9 +70,9 @@ function RecentlyAdded() {
 
     return (
         <div className="bg-white rounded-lg">
-            <div className="flex justify-between items-center p-4">
-                <h1 className="text-lg font-medium">Recent Applications</h1>
-                <Link href="/jobs" className="text-sm">View All</Link>
+            <div className="flex justify-between items-center mb-3">
+                <h1 className="text-md font-medium">Recent Applications</h1>
+                <Link href="/jobs" className="text-sm text-blue-500 mr-3 hover:underline hover:text-blue-400">View All</Link>
             </div>
             <Table<Job>
                 disabled={isRefetching}

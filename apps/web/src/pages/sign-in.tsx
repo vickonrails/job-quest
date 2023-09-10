@@ -47,6 +47,7 @@ const SignIn: NextPage<SignInProps> = () => {
                 setEmailSent(true);
                 toast({
                     title: 'Email Sent',
+                    variant: 'success',
                     description: 'Check your email for the magic link',
                     duration: 5000
                 })
