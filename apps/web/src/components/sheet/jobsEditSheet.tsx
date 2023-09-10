@@ -1,7 +1,5 @@
 import { type Job } from 'lib/types';
-import { Input } from '@components/input';
 import { Select } from '@components/select';
-import { Button } from '@components/button';
 import { Formik } from 'formik'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -9,7 +7,7 @@ import { type Database } from 'lib/database.types'
 import { Sheet, type SheetProps } from './sheet';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { useToast } from '@components/toast/use-toast';
-import { Button as UIButton, Rating } from 'ui'
+import { Button, Input, Rating } from 'ui'
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -109,8 +107,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                                 fullWidth
                             />
                             <Button type="submit" loading={updateMutation.isLoading}>Update</Button>
-                            {/* <Button type="button" fillType="outlined" size="sm" onClick={() => resetForm(initialValues)}>Clear Changes</Button> */}
-                            <UIButton type="button" onClick={() => resetForm(initialValues)}>Clear Changes</UIButton>
+                            <Button type="button" variant="ghost" onClick={() => resetForm(initialValues)}>Clear Changes</Button>
                         </form>
                     )}
                 </Formik>

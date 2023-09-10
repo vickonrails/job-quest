@@ -53,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {loading ? 'Loading...' : children}
+        {loading ? '...' : children}
       </Comp>
     )
   }

@@ -1,8 +1,7 @@
 import React, { type ReactNode, type FC } from 'react'
 import { Root, Portal, Overlay, Content, type DialogProps, Description } from '@radix-ui/react-alert-dialog'
 import { Typography } from '@components/typography'
-import { Button } from '@components/button'
-
+import { Button } from 'ui'
 
 interface AlertDialogProps extends DialogProps {
     title: string | ReactNode
@@ -24,8 +23,8 @@ export const AlertDialog: FC<AlertDialogProps> = ({ open, description, title, on
                     <div className="p-4 text-light-text">
                         <Description>{description}</Description>
                         <div className="flex justify-end gap-2">
-                            <Button fillType="outlined" size="sm" onClick={onCancel}>Cancel</Button>
-                            <Button onClick={onOk} loading={isProcessing} size="sm">Ok</Button>
+                            <Button variant="outline" onClick={onCancel}>Cancel</Button>
+                            <Button variant="destructive" onClick={onOk} loading={isProcessing}>Delete</Button>
                         </div>
                     </div>
                 </Content>

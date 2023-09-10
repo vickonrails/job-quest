@@ -7,12 +7,11 @@ import clsx from 'clsx';
 import { Dialog } from '@components/dialog';
 import { type User, type Session } from '@supabase/supabase-js';
 import { type DialogProps } from '@components/dialog/Dialog';
-import { Input } from '@components/input';
 import { Typography } from '@components/typography';
-import { Button } from '@components/button';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
+import { Button, Input } from 'ui'
 
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {
     session: Session;
@@ -79,7 +78,7 @@ function OnboardingDialog({ open, user, onOpenChange }: OnboardingDialogProps) {
                 <Input
                     placeholder="What's your name?"
                     value={fullname}
-                    onChange={ev => setFullname(ev.target.value)}
+                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setFullname(ev.target.value)}
                     label="Fullname (Firstname first)"
                     fullWidth
                 />

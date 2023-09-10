@@ -6,12 +6,10 @@ import { type Profile, type Job } from 'lib/types';
 import { FullPageSpinner, Spinner } from '@components/spinner';
 import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
-import { Rating } from '@components/rating/Rating';
 import { formatDate } from '@components/utils';
 import { ChipsGroup } from '@components/chips/Chip';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
-import { Button } from '@components/button';
 import { useJobs } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
 import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
@@ -19,6 +17,7 @@ import { useEditSheet } from 'src/hooks/useEditModal';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import NotesList from '@components/notes/note-list';
 import NoteForm from '@components/notes/note-form';
+import { Button, Rating } from 'ui';
 
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();
@@ -66,7 +65,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                             <div className="flex-1">
                                 <div className="flex items-center gap-3">
                                     <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
-                                    <Button size="xs" onClick={_ => showEditSheet(job)} fillType="outlined" className="inline-block py-1">Edit</Button>
+                                    <Button size="sm" variant="outline" onClick={_ => showEditSheet(job)} fillType="outlined" className="inline-block py-1">Edit</Button>
                                     {isRefetching && <Spinner />}
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">

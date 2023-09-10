@@ -1,16 +1,15 @@
 import { Status_Lookup } from '@components/table/job/JobsTable'
-import { formatDate } from '@components/utils'
-import { type Note, type NoteUpdateDTO } from 'lib/types'
-import React, { useState, type HTMLAttributes, use, useCallback } from 'react'
-import { Trash } from 'react-feather'
-import { cn } from '@utils/cn'
 import { Textarea } from '@components/textarea'
-import { Button } from '@components/button'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { type Database } from 'lib/database.types'
 import { useToast } from '@components/toast/use-toast'
-
+import { formatDate } from '@components/utils'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { cn } from '@utils/cn'
+import { type Database } from 'lib/database.types'
+import { type Note, type NoteUpdateDTO } from 'lib/types'
+import React, { useCallback, useState, type HTMLAttributes } from 'react'
+import { Trash } from 'react-feather'
+import { Button } from 'ui'
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */
     note: Note
@@ -59,7 +58,7 @@ function NoteText({ note, showDeleteDialog }: { note: Note, showDeleteDialog: (n
                 <p className="text-sm text-gray-400">{Status_Lookup[note.status]}</p>
             </div>
             <button
-                onClick={(ev) => {
+                onClick={(ev: React.MouseEvent<HTMLButtonElement>) => {
                     ev.stopPropagation();
                     showDeleteDialog(note)
                 }}
@@ -113,8 +112,8 @@ function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
             <Textarea value={text} onChange={ev => setText(ev.target.value)} className="mb-2" autoFocus />
 
             <div className="flex justify-end gap-2">
-                <Button size="xs" fillType="text" type="button" onClick={onCancel}>Cancel</Button>
-                <Button size="xs" loading={isLoading}>Update</Button>
+                <Button variant="outline" fillType="text" type="button" onClick={onCancel}>Cancel</Button>
+                <Button variant="destructive" loading={isLoading}>Update</Button>
             </div>
         </form>
     )

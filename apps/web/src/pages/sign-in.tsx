@@ -7,10 +7,9 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
 import { AuthCard } from '@components/auth/authCard'
 import { Banner } from '@components/banner'
-import { Button } from '@components/button'
-import { Input } from '@components/input'
 import { Typography } from '@components/typography'
 import { useToast } from '@components/toast/use-toast'
+import { Button, Input } from 'ui'
 
 interface SignInProps {
     session: Session

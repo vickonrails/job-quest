@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { Rating } from '@components/rating/Rating';
 import Image from 'next/image';
 import { type HTMLAttributes } from 'react';
 import { Typography } from '@components/typography';
+import { Rating } from 'ui';
 
 export type TableColumnType = 'text' | 'date' | 'chips' | 'rating' | 'logoWithText';
 
