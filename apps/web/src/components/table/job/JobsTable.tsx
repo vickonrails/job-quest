@@ -7,8 +7,8 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
 import { Filter, Layout, Grid, ChevronLeft, ChevronRight } from 'react-feather'
-import { Select, type SelectOption } from '@components/select/select'
 import { cn } from '@utils/cn'
+import { Select, type SelectOption } from 'ui'
 
 export const Status_Lookup = [
     'Bookmarked',
@@ -28,7 +28,7 @@ export const columns: Column<Job> = [
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
-const SIZE_LIMIT = 10
+const SIZE_LIMIT = 50
 
 const SORT_OPTIONS: SelectOption[] = [
     { label: 'Newest', value: 'created_at' },
@@ -43,7 +43,7 @@ const JobsTable = () => {
     const [sizeLimit, setSizeLimit] = useState(SIZE_LIMIT)
     // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
-    const [sort, setSort] = useState(SORT_OPTIONS[0])
+    const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0] as SelectOption)
     const { data, isLoading, isRefetching } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
     const router = useRouter();
 
@@ -67,15 +67,16 @@ const JobsTable = () => {
 
     return (
         <section>
-            <section className="flex justify-between mb-4">
-                <button className="flex gap-1 items-center">
+            <section className="flex justify-between items-center mb-4">
+                {/* <button className="flex gap-1 items-center">
                     <div className="border-2 rounded-md p-1 border-gray-500">
                         <Filter size={18} />
                     </div>
 
                     <span className="text-gray-600">Filter</span>
                     {isRefetching && <Spinner />}
-                </button>
+                </button> */}
+                <h3 className="text-lg font-medium">All Jobs</h3>
 
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
@@ -85,14 +86,14 @@ const JobsTable = () => {
                         <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val))} />
                     </div>
 
-                    <div className="flex gap-2 text-gray-500">
+                    {/* <div className="flex gap-2 text-gray-500">
                         <button>
                             <Layout />
                         </button>
                         <button>
                             <Grid />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </section>
             {isLoading ? <FullPageSpinner /> : (
@@ -117,17 +118,17 @@ const JobsTable = () => {
 }
 
 const PAGINATION_OPTIONS: SelectOption[] = [
-    {
-        value: 5,
-        label: '5 rows'
-    },
-    {
-        value: 10,
-        label: '10 rows'
-    },
+    // {
+    //     value: 5,
+    //     label: '5 rows'
+    // },
     {
         value: 50,
         label: '50 rows'
+    },
+    {
+        value: 100,
+        label: '100 rows'
     }
 ]
 
@@ -161,10 +162,10 @@ function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: P
     }
 
     return (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mt-4">
             <div className="flex gap-2">
                 <button onClick={prev} disabled={isFirstPage} className={cn(isFirstPage && 'cursor-not-allowed text-gray-300')}><ChevronLeft /></button>
-                <Select size="sm" options={PAGINATION_OPTIONS} trigger="5" defaultValue={String(limit)} onValueChange={val => setLimit?.(Number.parseInt(val))} />
+                <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setLimit?.(Number.parseInt(val))} />
                 <button onClick={next} disabled={isLastPage}><ChevronRight className={cn(isLastPage && 'cursor-not-allowed text-gray-300')} /></button>
             </div>
 

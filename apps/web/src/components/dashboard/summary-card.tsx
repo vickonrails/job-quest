@@ -7,7 +7,7 @@ interface SummaryCardProps extends HTMLAttributes<HTMLElement> {
 
 export function SummaryCard({ title, description, ...rest }: SummaryCardProps) {
     return (
-        <article className="bg-white w-full rounded-lg p-4 relative overflow-hidden" {...rest}>
+        <article className="bg-white w-full rounded-lg p-4 relative overflow-hidden border" {...rest}>
             <h2 className="text-2xl mb-2 font-medium">{title}</h2>
             <p className="text-gray-500">{description}</p>
             <Artefact />

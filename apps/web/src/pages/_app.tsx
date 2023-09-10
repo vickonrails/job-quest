@@ -10,6 +10,7 @@ import 'ui/dist/styles.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastProvider } from '@radix-ui/react-toast'
 import { Toaster } from '@components/toast'
+import { TooltipProvider } from '@components/tooltip'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,8 +35,10 @@ function MyApp({
     >
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
-          <Component {...pageProps} />
-          <Toaster />
+          <TooltipProvider>
+            <Component {...pageProps} />
+            <Toaster />
+          </TooltipProvider>
         </ToastProvider>
       </QueryClientProvider>
     </SessionContextProvider>

@@ -44,7 +44,7 @@ export function Table<T extends BaseEntity,>({ columns, data, actions, hideActio
     const windowHeight = useWindowHeight()
     return (
         <div style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }} {...rest}>
-            <table className="w-full">
+            <table className="w-full rounded-lg">
                 <TableHeader<T> columns={columns} hideActions={hideActions} />
                 <TableBody<T> items={data} columns={columns} actions={actions} hideActions={hideActions} />
             </table>

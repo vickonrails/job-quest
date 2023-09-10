@@ -1,5 +1,4 @@
 import { type Job } from 'lib/types';
-import { Select } from '@components/select';
 import { Formik } from 'formik'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -7,7 +6,7 @@ import { type Database } from 'lib/database.types'
 import { Sheet, type SheetProps } from './sheet';
 import { Status_Lookup } from '@components/table/job/JobsTable';
 import { useToast } from '@components/toast/use-toast';
-import { Button, Input, Rating } from 'ui'
+import { Button, Input, Rating, Select } from 'ui'
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -86,7 +85,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                                 label="Select"
                                 trigger="Select a status"
                                 // TODO: figure out why just handleChange doesn't seem to work here
-                                onValueChange={val => setFieldValue('status', Number(val))}
+                                onValueChange={(val: string) => setFieldValue('status', Number(val))}
                                 options={statusOptions}
                                 value={String(values.status)}
                             />

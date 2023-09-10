@@ -48,8 +48,8 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
 
     return (
         <>
-            <div className="flex bg-white">
-                <div className="flex-2 grow-0 border-r p-6 basis-2/3">
+            <div className="flex bg-white gap-4">
+                <div className="flex-2 grow-0 basis-2/3">
                     <header className="mb-6">
                         <div className="flex items-center mb-2">
                             {job?.company_site && (
@@ -69,7 +69,9 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                                     {isRefetching && <Spinner />}
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">
-                                    <li className="list-none"><Typography variant="body-md">{job.company_name}</Typography></li>
+                                    <li className="list-none max-w-[200px]">
+                                        <Typography variant="body-md">{job.company_name}</Typography>
+                                    </li>
                                     {job.location && <li>{job.location}</li>}
                                     <li>{Status_Lookup[job.status]}</li>
                                 </ul>
@@ -92,7 +94,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                         <ChipsGroup labels={job.labels ?? []} />
                     </footer>
                 </div>
-                <div className="flex-1 shrink-0 grow-0 basis-1/3 p-6 flex flex-col gap-3">
+                <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3">
                     <h2>Notes</h2>
                     <NoteForm job={job} />
                     <NotesList job={job} />

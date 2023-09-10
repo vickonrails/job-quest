@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { Folder, Grid, File, Clipboard, Bell, User, FileText } from 'react-feather'
 import { Link, type LinkProps } from '@components/link';
 import { Logo } from '@components/logo';
+import { cn } from '@utils/cn';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@components/tooltip';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
 
@@ -13,7 +15,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
         <aside data-testid="sidebar" className={
             clsx(
-                'p-5 flex-shrink-0 sticky max-h-screen top-0',
+                'p-5 flex-shrink-0 sticky max-h-screen top-0 bg-background border-r',
                 className
             )
         } {...rest}>
@@ -31,7 +33,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <span>Tracker</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder">
+                    <NavLink href="resume-builder" disabled>
                         <File className="mr-2" />
                         <span>Resume Builder</span>
                     </NavLink>
@@ -43,17 +45,17 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <span>Notes</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder">
+                    <NavLink href="resume-builder" disabled>
                         <Bell className="mr-2" />
                         <span>Reminder</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder">
+                    <NavLink href="resume-builder" disabled>
                         <Clipboard className="mr-2" />
                         <span>Documents</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder">
+                    <NavLink href="resume-builder" disabled>
                         <User className="mr-2" />
                         <span>Contacts</span>
                     </NavLink>
@@ -76,15 +78,34 @@ const NavLink = ({ href, ...props }: LinkProps) => {
     const { pathname } = useRouter();
     const isActiveNav = useMemo(() => isActive(pathname, href.toString()), [href, pathname]);
 
-    return (
+    const handleClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        if (props.disabled) ev.preventDefault();
+    }
+
+    const link = (
         <Link
-            className={clsx(
+            onClick={handleClick}
+            className={cn(
                 'flex items-center py-2 px-3 rounded-lg text-sm',
-                isActiveNav ? 'bg-indigo-100 text-primary-light font-medium' : 'text-gray-500'
+                isActiveNav ? 'bg-indigo-100 text-primary-light font-medium' : 'text-gray-500',
+                props.disabled && 'cursor-not-allowed text-gray-400'
             )}
-            href={href}
+            href={props.disabled ? '' : href}
             {...props}
         />
+    )
+
+    if (!props.disabled) return link;
+
+    return (
+        <Tooltip delayDuration={300}>
+            <TooltipTrigger>
+                {link}
+            </TooltipTrigger>
+            <TooltipContent side="right">
+                Coming soon
+            </TooltipContent>
+        </Tooltip>
     )
 }
 

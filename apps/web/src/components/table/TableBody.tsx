@@ -44,7 +44,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                         onClick={_ => onRowClick?.(item.id)}
                     >
                         {!hideActions && (
-                            <td className="pl-4">
+                            <td className="pl-4 border">
                                 <MenuBar
                                     triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
                                     trigger={<MoreVertical size={16} />}
@@ -53,7 +53,6 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                                     <MenuItem
                                         icon={<Edit size={16} />}
                                         onClick={_ => showEditSheet?.(item)}
-                                        la
                                     >
                                         Edit
                                     </MenuItem>
@@ -73,7 +72,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                             const value = column.renderValue?.(item)
                             const type = column.type
                             return (
-                                <TableCellRender key={idx} type={type} value={value ?? ''} className="max-w-[150px] overflow-hidden whitespace-nowrap overflow-ellipsis" />
+                                <TableCellRender key={idx} type={type} value={value ?? ''} className="max-w-[150px] overflow-hidden whitespace-nowrap overflow-ellipsis border" />
                             )
                         })}
                     </tr>

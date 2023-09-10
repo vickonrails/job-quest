@@ -1,9 +1,9 @@
-import clsx from 'clsx';
+import { cn } from '@utils/cn';
 import { type HTMLAttributes } from 'react';
 
 export function DashboardSidebar({ className, ...props }: HTMLAttributes<HTMLElement>) {
     return (
-        <aside className={clsx('bg-white rounded-xl p-4', className)} {...props}>
+        <aside className={cn('bg-white rounded-xl p-4 border', className)} {...props}>
             <h2 className="text-lg font-medium mb-12">Upcoming reminders</h2>
             <section className="flex flex-col">
                 <div className="mx-auto mb-5">

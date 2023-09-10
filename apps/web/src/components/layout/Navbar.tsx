@@ -28,10 +28,10 @@ const Navbar: FC<NavbarProps> = ({ profile, session, ...props }) => {
     }, [client.auth, router])
 
     return (
-        <nav data-testid="navbar" className="flex justify-between" {...props}>
+        <nav data-testid="navbar" className="flex justify-between mb-4" {...props}>
             <Input placeholder="Search" size="sm" />
-            <section className="flex">
-                <Button variant="ghost" className="mr-4 text-sm" onClick={handleLogout}>Log Out</Button>
+            <section className="flex items-center">
+                <Button variant="outline" size="sm" className="mr-4 text-sm" onClick={handleLogout}>Log Out</Button>
                 <div className="flex items-center overflow-hidden w-48">
                     <Avatar border="round" className="mr-3" src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="Victor Ofoegbu" />
                     <div className="truncate">

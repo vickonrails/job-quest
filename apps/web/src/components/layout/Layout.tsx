@@ -24,9 +24,9 @@ export const Layout: FC<LayoutProps> = ({ children, className, session, profile,
     const firstLogin = !profile && session;
 
     return (
-        <div className={clsx('flex h-full', className)} {...rest}>
+        <div className={clsx('flex h-full max-w-screen-2xl m-auto', className)} {...rest}>
             <Sidebar className="basis-64" />
-            <main className="bg-indigo-50 flex-1 p-6 flex flex-col overflow-auto">
+            <main className="flex-1 p-6 flex flex-col">
                 <Navbar profile={profile} session={session} />
                 {/* TODO: make this element fill the vertical space */}
                 {/*TODO: fix issue that makes layout overflow out of main on mac */}
