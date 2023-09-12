@@ -1,4 +1,3 @@
-import { Status_Lookup } from '@components/table/job/JobsTable'
 import { Textarea } from '@components/textarea'
 import { useToast } from '@components/toast/use-toast'
 import { formatDate } from '@components/utils'
@@ -9,7 +8,8 @@ import { type Database } from 'lib/database.types'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
 import { Trash } from 'react-feather'
-import { Button } from 'ui'
+import { Button, Status_Lookup } from 'ui'
+
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */
     note: Note

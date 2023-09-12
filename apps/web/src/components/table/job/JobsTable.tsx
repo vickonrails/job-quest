@@ -1,24 +1,14 @@
 import React, { useState } from 'react'
 import { Table, type TableActions, type Column } from '../Table'
 import { useJobs } from '@hooks'
-import { FullPageSpinner, Spinner } from '@components/spinner'
+import { FullPageSpinner } from '@components/spinner'
 import { type Database } from 'lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { type Job } from 'lib/types'
-import { Filter, Layout, Grid, ChevronLeft, ChevronRight } from 'react-feather'
+import { ChevronLeft, ChevronRight } from 'react-feather'
 import { cn } from '@utils/cn'
-import { Select, type SelectOption } from 'ui'
-
-export const Status_Lookup = [
-    'Bookmarked',
-    'Applying',
-    'Applied',
-    'Interviewing',
-    'Rejected',
-    'Negotiating',
-    'Hired',
-]
+import { Select, type SelectOption, Status_Lookup } from 'ui'
 
 export const columns: Column<Job> = [
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
@@ -44,7 +34,7 @@ const JobsTable = () => {
     // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
     const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0] as SelectOption)
-    const { data, isLoading, isRefetching } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
+    const { data, isLoading } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
@@ -68,16 +58,7 @@ const JobsTable = () => {
     return (
         <section>
             <section className="flex justify-between items-center mb-4">
-                {/* <button className="flex gap-1 items-center">
-                    <div className="border-2 rounded-md p-1 border-gray-500">
-                        <Filter size={18} />
-                    </div>
-
-                    <span className="text-gray-600">Filter</span>
-                    {isRefetching && <Spinner />}
-                </button> */}
                 <h3 className="text-lg font-medium">All Jobs</h3>
-
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
                         <span>
@@ -85,15 +66,6 @@ const JobsTable = () => {
                         </span>
                         <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val))} />
                     </div>
-
-                    {/* <div className="flex gap-2 text-gray-500">
-                        <button>
-                            <Layout />
-                        </button>
-                        <button>
-                            <Grid />
-                        </button>
-                    </div> */}
                 </div>
             </section>
             {isLoading ? <FullPageSpinner /> : (
@@ -118,10 +90,6 @@ const JobsTable = () => {
 }
 
 const PAGINATION_OPTIONS: SelectOption[] = [
-    // {
-    //     value: 5,
-    //     label: '5 rows'
-    // },
     {
         value: 50,
         label: '50 rows'
@@ -141,6 +109,7 @@ interface PaginationProps {
     setOffset: (offset: number) => void
 }
 
+// TODO: move to another file
 function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: PaginationProps) {
     const isLastPage = ((offset + 1) + limit >= (totalCount ?? 0))
     const isFirstPage = offset === 0;

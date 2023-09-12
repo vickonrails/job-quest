@@ -8,7 +8,6 @@ import { ChevronLeft } from 'react-feather'
 import Image from 'next/image';
 import { formatDate } from '@components/utils';
 import { ChipsGroup } from '@components/chips/Chip';
-import { Status_Lookup } from '@components/table/job/JobsTable';
 import { Typography } from '@components/typography';
 import { useJobs } from 'src/hooks/useJobs';
 import { type GetServerSideProps } from 'next';
@@ -17,7 +16,7 @@ import { useEditSheet } from 'src/hooks/useEditModal';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import NotesList from '@components/notes/note-list';
 import NoteForm from '@components/notes/note-form';
-import { Button, Rating } from 'ui';
+import { Button, Rating, Status_Lookup } from 'ui';
 
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
     const router = useRouter();

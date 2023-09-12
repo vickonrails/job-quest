@@ -64,8 +64,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             {...rest}
           />
+          {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
         </label>
-        {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
       </>
     )
   }
