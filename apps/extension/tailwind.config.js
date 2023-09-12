@@ -1,30 +1,36 @@
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config = {
-  darkMode: ["class"],
   content: [
     './contents/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
   ],
   theme: {
-    spacing: {
-      1.5: '0.6rem',
-      2: '0.8rem',
-      2.5: '1rem',
-      3.5: '1.4rem',
-      4: '1.6rem',
-      5: '2rem',
-      6: '2.4rem',
-      10: '4rem'
-    },
-    fontSize: {
-      sm: ["1.4rem", "2rem"],
-      base: ["1.6rem", "2.4rem"],
-      lg: ["2rem", "1.8rem"]
-    },
     extend: {
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
+      },
+      spacing: {
+        1.5: '0.6rem',
+        2: '0.8rem',
+        2.5: '1rem',
+        3.5: '1.4rem',
+        4: '1.6rem',
+        5: '2rem',
+        6: '2.4rem',
+        10: '4rem'
+      },
+      fontSize: {
+        sm: ["1.4rem", "2rem"],
+        base: ["1.6rem", "2rem"],
+        lg: ["2rem", "1.8rem"]
+      },
+      maxWidth: {
+        sm: '38.4rem',
+      },
+      boxShadow: {
+        outline: "inset 0 0 0 1px var(--linkedIn)",
+        "outline-hover": "inset 0 0 0 2px var(--linkedIn)"
       },
       colors: {
         border: "hsl(var(--border))",
@@ -90,7 +96,7 @@ const config = {
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
           "accordion-up": "accordion-up 0.2s ease-out",
-        }
+        },
       },
     }
   }

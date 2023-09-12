@@ -1,22 +1,13 @@
-import { Formik } from 'formik'
-import { Sheet, type SheetProps } from './sheet';
+import { Formik } from 'formik';
+import { useState } from 'react';
+import { Button, Input, Rating, Status_Lookup } from 'ui';
 import type { Job } from '~contents/get-job-details';
-import { Button, Input, Rating } from 'ui'
+import { Sheet, type SheetProps } from './sheet';
 
 interface JobInfoSheetProps<T> extends SheetProps {
     entity: T
-    onSubmit: (job: Job) => void
+    onSubmit: (job: T) => Promise<void>
 }
-
-export const Status_Lookup = [
-    'Bookmarked',
-    'Applying',
-    'Applied',
-    'Interviewing',
-    'Rejected',
-    'Negotiating',
-    'Hired',
-]
 
 /**
  * Sheets component for editing job items
@@ -24,11 +15,16 @@ export const Status_Lookup = [
 // TODO: unify the shadcn ui & personal input components
 export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
     const entity = props.entity;
+    const [isSubmitting, setSubmitting] = useState(false)
+    // TODO: handle error properly
     const onSubmit = async (job: Job) => {
+        setSubmitting(true)
         try {
-            props.onSubmit(job)
+            await props.onSubmit(job)
         } catch (err) {
             // TODO: handle error
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -41,8 +37,9 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                     initialValues={initialValues}
                     onSubmit={onSubmit}
                 >
-                    {({ values, handleSubmit, handleChange, isSubmitting, setFieldValue }) => (
+                    {({ values, handleSubmit, handleChange, setFieldValue }) => (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                            <p className='px-3.5 py-2.5 hidden' />
                             <Input
                                 placeholder="Job title"
                                 value={values.position}
@@ -52,7 +49,7 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                             />
 
                             <div className="mb-4">
-                                <div className="mb-3 mb-1.5">Rating</div>
+                                <div className="mb-1.5">Rating</div>
                                 <Rating
                                     onClick={(val) => setFieldValue('priority', val)}
                                     size="md"
@@ -80,9 +77,10 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                                 label='Company Site'
                                 onChange={handleChange}
                                 value={values.company_site ?? ''}
+                                hint='Helps for rendering company logo'
                             />
                             <Button variant='default' loading={isSubmitting}>
-                                Update
+                                Add to Job Quest
                             </Button>
                             <Button type='button' variant='ghost' onClick={_ => props.onOpenChange(false)}>
                                 Close

@@ -1,15 +1,12 @@
 import type { PlasmoCSUIProps } from "plasmo"
 import type { FC } from "react"
-
-import type { PlasmoCSConfig } from "plasmo"
 import { sendToBackground } from "@plasmohq/messaging"
-
-import cssText from "data-text:./styles/global.css"
-import { useCallback, useState } from "react"
-import { Sheet, SheetTrigger, type SheetProps } from "~components/sheets/sheet"
+import type { PlasmoCSConfig } from "plasmo"
+import { useState } from "react"
 import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 
-import uiCSS from 'data-text:ui/dist/style.css'
+import cssText from "data-text:./styles/global.css"
+import uiCSS from 'data-text:ui/dist/styles.css'
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
@@ -21,8 +18,17 @@ export const config: PlasmoCSConfig = {
 
 export function getStyle() {
     const style = document.createElement('style');
-    style.textContent = cssText + uiCSS;
+    style.textContent = uiCSS + cssText;
     return style;
+}
+
+/**
+ * fetch the ID of the job from the URL
+ */
+function getJobId() {
+    const strPattern = /\b\d{10}\b/g;
+    const url = window.location.href;
+    return url.match(strPattern)[0];
 }
 
 function getJobContent(): Job {
@@ -34,6 +40,7 @@ function getJobContent(): Job {
     const company_name = locationContainer.querySelector('a').textContent.trim();
     const link = window.location.href.split('?')[0];
     const description = document.querySelector('.jobs-box__html-content').innerHTML
+    const jobId = getJobId();
 
     return {
         id: '',
@@ -54,6 +61,7 @@ export interface Job {
     link: string
     description: string
     priority?: number
+    status?: number
 }
 
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
@@ -68,33 +76,38 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
 
     const closeSheet = () => {
         setOpen(false)
-        // setSelectedJob(null)
+        setSelectedJob(null)
     }
 
     const handleAddToQuest = async (job: Job) => {
         try {
-            const jobDetails = getJobContent();
             const { success } = await sendToBackground({
                 name: 'add-job',
-                body: jobDetails
+                body: job
             })
+            // TODO: add toast here
             if (success) alert(`Added to Job Quest`);
         } catch (err) {
             alert(`An error occurred ${err.message}`);
         }
     }
 
+    // TODO: 
+    // use the jobId to query the db for the job
+    // if it exists then show that it's added to job quest already
+    // else show the JB button
+
     return (
-        <div style={{ marginLeft: 8, fontSize: '1.6rem' }} className="okay">
-            {/* TODO: some kind of script to check if the job is already added to job quest */}
+        <div className="ml-2 plasmoContainer">
             <button
                 onClick={handleAddClick}
-                className="text-2xl font-medium cursor-pointer rounded-full text-linkedIn px-5 py-[10px] shadow-btn-border hover:shadow-btn-hover hover:bg-linkedIn-hover"
+                className="text-base font-medium cursor-pointer rounded-full border-linkedIn text-linkedIn px-5 py-[10px] shadow-outline hover:shadow-outline-hover hover:bg-linkedIn-hover"
             >
-                Add to JobQuest
+                JB
             </button>
             {selectedJob && (
                 <JobInfoSheet
+                    title="Add Job"
                     entity={selectedJob}
                     open={isOpen}
                     onOpenChange={closeSheet}

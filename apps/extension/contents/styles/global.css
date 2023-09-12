@@ -3,7 +3,7 @@
 @tailwind utilities;
  
 @layer base {
-  .plasmo-container {
+  .plasmoContainer {
     --linkedIn: #0a66c2;
     --linkedIn-hover: rgba(112,181,249,0.2);
     --background: 0 0% 100%;
@@ -34,6 +34,6 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
  
-    --radius: 0.5rem;
+    --radius: 0.8rem;
   }
 }
