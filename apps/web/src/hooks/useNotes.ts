@@ -6,7 +6,7 @@ import { type Note } from 'lib/types';
 async function getNotes(client: SupabaseClient<Database>, jobId?: string) {
     // TODO: Add the ability to sort the notes by created_at
     let query = client.from('notes').select().order('created_at', { ascending: false });
-    if (jobId) query = query.eq('jobid', jobId)
+    if (jobId) query = query.eq('job_id', jobId)
     const { data, error } = await query;
     if (error) throw error;
     return data

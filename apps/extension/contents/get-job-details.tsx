@@ -40,10 +40,8 @@ function getJobContent(): Job {
     const company_name = locationContainer.querySelector('a').textContent.trim();
     const link = window.location.href.split('?')[0];
     const description = document.querySelector('.jobs-box__html-content').innerHTML
-    const jobId = getJobId();
 
     return {
-        id: '',
         position,
         company_name,
         location,
@@ -53,7 +51,7 @@ function getJobContent(): Job {
 }
 
 export interface Job {
-    id: string
+    id?: string
     position: string
     company_name: string
     company_site?: string
@@ -61,6 +59,8 @@ export interface Job {
     link: string
     description: string
     priority?: number
+    source_id?: string
+    source?: string
     status?: number
 }
 
@@ -83,10 +83,9 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
         try {
             const { success } = await sendToBackground({
                 name: 'add-job',
-                body: job
+                body: { ...job, source: 'linkedin', source_id: getJobId() }
             })
-            // TODO: add toast here
-            if (success) alert(`Added to Job Quest`);
+            if (!success) throw new Error('Failed to add job');
         } catch (err) {
             alert(`An error occurred ${err.message}`);
         }

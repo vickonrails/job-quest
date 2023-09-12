@@ -64,7 +64,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                             <div className="flex-1">
                                 <div className="flex items-center gap-3">
                                     <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
-                                    <Button size="sm" variant="outline" onClick={_ => showEditSheet(job)} fillType="outlined" className="inline-block py-1">Edit</Button>
+                                    <Button size="sm" variant="outline" onClick={_ => showEditSheet(job)} className="inline-block py-1">Edit</Button>
                                     {isRefetching && <Spinner />}
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">

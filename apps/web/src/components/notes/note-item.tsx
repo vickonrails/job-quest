@@ -112,7 +112,7 @@ function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
             <Textarea value={text} onChange={ev => setText(ev.target.value)} className="mb-2" autoFocus />
 
             <div className="flex justify-end gap-2">
-                <Button variant="outline" fillType="text" type="button" onClick={onCancel}>Cancel</Button>
+                <Button variant="outline" type="button" onClick={onCancel}>Cancel</Button>
                 <Button variant="destructive" loading={isLoading}>Update</Button>
             </div>
         </form>

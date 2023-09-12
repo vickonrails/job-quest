@@ -21,6 +21,8 @@ export interface Database {
           location: string | null
           position: string
           priority: number | null
+          source: string | null
+          source_id: string | null
           status: number
           updated_at: string | null
         }
@@ -35,6 +37,8 @@ export interface Database {
           location?: string | null
           position: string
           priority?: number | null
+          source?: string | null
+          source_id?: string | null
           status: number
           updated_at?: string | null
         }
@@ -49,6 +53,8 @@ export interface Database {
           location?: string | null
           position?: string
           priority?: number | null
+          source?: string | null
+          source_id?: string | null
           status?: number
           updated_at?: string | null
         }
@@ -58,7 +64,7 @@ export interface Database {
         Row: {
           created_at: string | null
           id: string
-          jobid: string
+          job_id: string
           status: number
           text: string
           updated_at: string | null
@@ -66,7 +72,7 @@ export interface Database {
         Insert: {
           created_at?: string | null
           id?: string
-          jobid: string
+          job_id: string
           status: number
           text: string
           updated_at?: string | null
@@ -74,19 +80,12 @@ export interface Database {
         Update: {
           created_at?: string | null
           id?: string
-          jobid?: string
+          job_id?: string
           status?: number
           text?: string
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'notes_jobid_fkey'
-            columns: ['jobid']
-            referencedRelation: 'jobs'
-            referencedColumns: ['id']
-          }
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
