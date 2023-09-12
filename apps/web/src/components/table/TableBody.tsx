@@ -1,12 +1,12 @@
 import { AlertDialog } from '@components/alert-dialog';
-import { useRowDelete } from 'src/hooks/useDeleteModal';
-import { type BaseEntity, type Column, type TableActions } from './Table';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { Edit, MoreVertical, Trash2 } from 'react-feather';
-import { TableCellRender } from './TableCellRender';
-import { useEditSheet } from 'src/hooks/useEditModal';
-import clsx from 'clsx';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
+import { Edit, MoreVertical, Trash2 } from 'react-feather';
+import { useRowDelete } from 'src/hooks/useDeleteModal';
+import { useEditSheet } from 'src/hooks/useEditModal';
+import { type BaseEntity, type Column, type TableActions } from './Table';
+import { TableCellRender } from './TableCellRender';
+import { cn } from '@utils/cn';
 
 interface TableBody<T> {
     items: T[]
@@ -36,7 +36,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
             <tbody>
                 {items.map((item, index) => (
                     <tr
-                        className={clsx(
+                        className={cn(
                             (((index % 2) === 0) ? 'bg-gray-100' : 'bg-white'),
                             'align-middle hover:cursor-pointer hover:bg-gray-50'
                         )}
@@ -44,7 +44,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                         onClick={_ => onRowClick?.(item.id)}
                     >
                         {!hideActions && (
-                            <td className="pl-4 border">
+                            <td className="pl-4">
                                 <MenuBar
                                     triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
                                     trigger={<MoreVertical size={16} />}

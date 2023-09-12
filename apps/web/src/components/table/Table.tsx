@@ -43,7 +43,11 @@ export type Column<T> = ColumnDef<T>[]
 export function Table<T extends BaseEntity,>({ columns, data, actions, hideActions, ...rest }: TableProps<T>) {
     const windowHeight = useWindowHeight()
     return (
-        <div style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }} {...rest}>
+        <div
+            style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }}
+            className="border"
+            {...rest}
+        >
             <table className="w-full rounded-lg">
                 <TableHeader<T> columns={columns} hideActions={hideActions} />
                 <TableBody<T> items={data} columns={columns} actions={actions} hideActions={hideActions} />
