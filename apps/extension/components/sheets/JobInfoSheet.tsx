@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import { useState } from 'react';
-import { Button, Input, Rating, Status_Lookup } from 'ui';
+import { Button, Input, Rating, Banner } from 'ui';
 import type { Job } from '~contents/get-job-details';
 import { Sheet, type SheetProps } from './sheet';
 
@@ -15,12 +15,16 @@ interface JobInfoSheetProps<T> extends SheetProps {
 // TODO: unify the shadcn ui & personal input components
 export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
     const entity = props.entity;
+    // TODO: write a hook to control fetching and reporting fetch state
     const [isSubmitting, setSubmitting] = useState(false)
+    const [added, setAdded] = useState(false)
+
     // TODO: handle error properly
     const onSubmit = async (job: Job) => {
         setSubmitting(true)
         try {
             await props.onSubmit(job)
+            setAdded(true)
         } catch (err) {
             // TODO: handle error
         } finally {
@@ -39,6 +43,13 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                 >
                     {({ values, handleSubmit, handleChange, setFieldValue }) => (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+                            {/* TODO: render either error or success depending on the state of the submit */}
+                            {added && (
+                                <Banner
+                                    variant='success'
+                                    message='Job added to job quest'
+                                />
+                            )}
                             <p className='px-3.5 py-2.5 hidden' />
                             <Input
                                 placeholder="Job title"
@@ -79,7 +90,11 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                                 value={values.company_site ?? ''}
                                 hint='Helps for rendering company logo'
                             />
-                            <Button variant='default' loading={isSubmitting}>
+                            <Button
+                                variant='default'
+                                loading={isSubmitting}
+                                disabled={added}
+                            >
                                 Add to Job Quest
                             </Button>
                             <Button type='button' variant='ghost' onClick={_ => props.onOpenChange(false)}>
