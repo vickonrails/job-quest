@@ -1,9 +1,9 @@
 import { type PlasmoMessaging } from "@plasmohq/messaging"
-import { supabase } from "~core/supabase"
+import { supabase as client } from "~core/supabase"
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-  const { company_name, position, description, link } = req.body
-  const { data, error } = await supabase.from("jobs").insert({ company_name, position, status: 1, description, link })
+  const { company_name, position, description, link, priority } = req.body
+  const { data, error } = await client.from("jobs").insert({ company_name, position, status: 0, description, link, priority })
   if (error) {
     res.send({
       success: false,
