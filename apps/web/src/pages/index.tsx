@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
 import { Layout } from '@components/layout';
-import { type Session, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type Session } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { useRouter } from 'next/router';
 import { SummaryCard } from '@components/dashboard';
@@ -10,15 +9,13 @@ import { Table, type Column, type TableActions } from '@components/table';
 import { type Profile, type Job } from 'lib/types';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
-import { useJobs } from '@hooks';
-import { Spinner } from '@components/spinner';
 import Link from 'next/link';
 
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
 
-const Index = ({ session, profile }: { session: Session, profile: Profile }) => {
+const Index = ({ session, profile, jobs }: { session: Session, profile: Profile, jobs: Job[] }) => {
     return (
         <Layout
             className="flex"
@@ -33,7 +30,7 @@ const Index = ({ session, profile }: { session: Session, profile: Profile }) => 
                         <SummaryCard title="10" description="Bookmarked applications" />
                         <SummaryCard title="20" description="High priority applications" />
                     </div>
-                    <RecentlyAdded />
+                    <RecentlyAdded jobs={jobs} />
                 </section>
                 <DashboardSidebar className="basis-1/4" />
             </section>
@@ -49,9 +46,7 @@ export const columns: Column<Job> = [
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
-function RecentlyAdded() {
-    // TODO: I should be able to pass in params to the useJobs hook
-    const { data, isLoading, isRefetching } = useJobs({ params: { limit: 5, orderBy: { field: 'created_at', direction: 'desc' } } });
+function RecentlyAdded({ jobs }: { jobs: Job[] }) {
     const router = useRouter();
 
     const onRowClick = (id: string) => {
@@ -66,8 +61,6 @@ function RecentlyAdded() {
         onRowClick
     }
 
-    if (isLoading) return <Spinner />
-
     return (
         <div className="bg-white rounded-lg">
             <div className="flex justify-between items-center mb-3">
@@ -75,9 +68,8 @@ function RecentlyAdded() {
                 <Link href="/jobs" className="text-sm text-blue-500 mr-3 hover:underline hover:text-blue-400">View All</Link>
             </div>
             <Table<Job>
-                disabled={isRefetching}
                 columns={columns}
-                data={data?.jobs ?? []}
+                data={jobs ?? []}
                 actions={actions}
                 hideActions
             />
@@ -89,9 +81,10 @@ function RecentlyAdded() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createServerSupabaseClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-
+    const { data: { user } } = await supabase.auth.getUser(session?.access_token ?? '');
     if (!session) {
+        // clear existing cookies if the user is not in the table
+        if (!user) await supabase.auth.signOut();
         return {
             redirect: {
                 destination: '/sign-in',
@@ -100,10 +93,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: jobs } = await supabase.from('jobs').select().order('created_at', { ascending: false }).limit(5)
+
     return {
         props: {
             session,
-            profile
+            profile,
+            jobs
         }
     }
 }
