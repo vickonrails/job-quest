@@ -1,53 +1,83 @@
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { Button, Input, Rating, Banner } from 'ui';
-import type { Job } from '~contents/get-job-details';
 import { Sheet, type SheetProps } from './sheet';
+import type { Job } from '~types';
 
 interface JobInfoSheetProps<T> extends SheetProps {
     entity: T
     onSubmit: (job: T) => Promise<void>
 }
 
-/**
- * Sheets component for editing job items
- */
-// TODO: unify the shadcn ui & personal input components
-export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
-    const entity = props.entity;
-    // TODO: write a hook to control fetching and reporting fetch state
-    const [isSubmitting, setSubmitting] = useState(false)
-    const [added, setAdded] = useState(false)
+interface useFormProps<T> {
+    onSubmit: (entity: T) => Promise<void>
+    entity: T
+}
 
-    // TODO: handle error properly
-    const onSubmit = async (job: Job) => {
+enum FormStatus {
+    IDLE = 'idle',
+    SUBMITTING = 'submitting',
+    SUCCESS = 'success',
+    ERROR = 'error',
+}
+
+const useForm = <T extends {}>({ onSubmit, entity }: useFormProps<T>) => {
+    const [isSubmitting, setSubmitting] = useState(false)
+    const [initialValues] = useState(entity)
+    const [status, setStatus] = useState(FormStatus.IDLE)
+
+    const handleSubmit = async (entity: T) => {
+        setStatus(FormStatus.SUBMITTING)
         setSubmitting(true)
         try {
-            await props.onSubmit(job)
-            setAdded(true)
-        } catch (err) {
-            // TODO: handle error
+            // might need to throw error here
+            await onSubmit(entity);
+            setStatus(FormStatus.SUCCESS)
+        } catch {
+            setStatus(FormStatus.ERROR)
+            // handle error
         } finally {
             setSubmitting(false)
         }
     }
 
-    const initialValues = { ...entity }
+    return {
+        isSubmitting,
+        handleSubmit,
+        initialValues,
+        status
+    }
+}
+/**
+ * Sheets component for editing job items
+ */
+export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
+    const { initialValues, isSubmitting, handleSubmit, status } = useForm({
+        onSubmit: props.onSubmit,
+        entity: props.entity
+    })
 
     return (
         <Sheet {...props}>
             <div className="flex flex-col gap-3">
                 <Formik
                     initialValues={initialValues}
-                    onSubmit={onSubmit}
+                    onSubmit={handleSubmit}
                 >
                     {({ values, handleSubmit, handleChange, setFieldValue }) => (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                             {/* TODO: render either error or success depending on the state of the submit */}
-                            {added && (
+                            {status === FormStatus.SUCCESS && (
                                 <Banner
                                     variant='success'
-                                    message='Job added to job quest'
+                                    message='Job added to JobQuest'
+                                />
+                            )}
+
+                            {status === FormStatus.ERROR && (
+                                <Banner
+                                    variant='error'
+                                    message='Could not add job to JobQuest'
                                 />
                             )}
                             <p className='px-3.5 py-2.5 hidden' />
@@ -93,7 +123,7 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                             <Button
                                 variant='default'
                                 loading={isSubmitting}
-                                disabled={added}
+                                disabled={status === FormStatus.SUCCESS || status === FormStatus.ERROR}
                             >
                                 Add to Job Quest
                             </Button>
