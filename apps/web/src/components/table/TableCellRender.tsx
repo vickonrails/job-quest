@@ -79,7 +79,7 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const { text } = value as TextCellType<T>
             return (
                 <td className={classNames} {...rest}>
-                    <Typography variant="body-sm" className="text-base-col py-4 overflow-ellipsis overflow-hidden">
+                    <Typography variant="body-sm" className="text-base-col py-3 overflow-ellipsis overflow-hidden">
                         {text}
                     </Typography>
                 </td>

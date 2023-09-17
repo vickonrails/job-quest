@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const useWindowHeight = () => {
     const [height, setHeight] = useState<number>(0)
@@ -8,7 +8,7 @@ export const useWindowHeight = () => {
         setHeight(window.innerHeight ?? 0)
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (typeof window === 'undefined') return
         handleResize();
 
