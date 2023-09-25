@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { Table, type TableActions, type Column } from '../Table'
-import { useJobs } from '@hooks'
 import { FullPageSpinner } from '@components/spinner'
-import { type Database } from 'lib/database.types'
+import { useJobs } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useRouter } from 'next/router'
-import { type Job } from 'lib/types'
-import { ChevronLeft, ChevronRight } from 'react-feather'
 import { cn } from '@utils/cn'
-import { Select, type SelectOption, Status_Lookup } from 'ui'
+import { type Database } from 'lib/database.types'
+import { type Job } from 'lib/types'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'react-feather'
+import { Select, Status_Lookup, type SelectOption } from 'ui'
+import { Table, type Column, type TableActions } from '../Table'
 
 export const columns: Column<Job> = [
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },

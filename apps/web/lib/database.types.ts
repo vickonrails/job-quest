@@ -25,6 +25,7 @@ export interface Database {
           source_id: string | null
           status: number
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           company_name: string
@@ -41,6 +42,7 @@ export interface Database {
           source_id?: string | null
           status: number
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           company_name?: string
@@ -57,8 +59,16 @@ export interface Database {
           source_id?: string | null
           status?: number
           updated_at?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'jobs_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       notes: {
         Row: {
@@ -68,6 +78,7 @@ export interface Database {
           status: number
           text: string
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
@@ -76,6 +87,7 @@ export interface Database {
           status: number
           text: string
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
@@ -84,8 +96,22 @@ export interface Database {
           status?: number
           text?: string
           updated_at?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'notes_job_id_fkey'
+            columns: ['job_id']
+            referencedRelation: 'jobs'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'notes_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       profiles: {
         Row: {
