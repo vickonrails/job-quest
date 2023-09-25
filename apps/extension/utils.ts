@@ -13,7 +13,7 @@ export function getJobContent(): Job {
     const isFullPage = window.location.href.includes('jobs/view');
     const container = document.querySelector('.jobs-unified-top-card');
     const position = container.querySelector(`${isFullPage ? 'h1' : 'h2'}`).textContent.trim()
-    const locationContainer = container.querySelector('.jobs-unified-top-card__primary-description > div');
+    const locationContainer = container.querySelector('.job-details-jobs-unified-top-card__primary-description > div');
     const location = locationContainer.childNodes[3].textContent.trim();
     const company_name = locationContainer.querySelector('a').textContent.trim();
     const link = window.location.href.split('?')[0];

@@ -11,6 +11,7 @@ export type TableActions = {
     refresh?: () => Promise<void>
     onRowClick?: (id: string) => void
 }
+// TODO: handle table empty state with no data
 interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
     /** data to render */
     data: T[]

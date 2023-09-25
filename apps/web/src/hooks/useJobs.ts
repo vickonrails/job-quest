@@ -15,9 +15,13 @@ interface Options {
     jobId?: string
 }
 
-async function getJobs(client: SupabaseClient<Database>, options?: Options) {
+async function getJobs(client: SupabaseClient<Database>, options: Options) {
+    const { data: { user } } = await client.auth.getUser();
+
+    if (!user) throw new Error('User not found');
+
     const { params, jobId } = options ?? {}
-    let query = client.from('jobs').select('*', { count: 'exact' });
+    let query = client.from('jobs').select('*', { count: 'exact' }).eq('user_id', user?.id);
 
     if (params?.search) {
         query = query.ilike('position', `%${params.search}%`)
@@ -52,6 +56,7 @@ type JobsResponse = {
 // TODO: write this hook to handle all querying info - search, pagination, ordering, etc
 export function useJobs(options?: Options, jobId?: string): UseQueryResult<JobsResponse> {
     const client = useSupabaseClient<Database>();
+
     return useQuery(
         ['jobs', jobId, options?.params],
         () => getJobs(client, { ...options, jobId })
