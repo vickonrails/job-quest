@@ -41,6 +41,9 @@
     "host_permissions": [
       "https://*/*"
     ],
+    "permissions": [
+      "activeTab"
+    ],
     "web_accessible_resources": [
       {
         "resources": [

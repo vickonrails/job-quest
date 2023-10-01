@@ -1,5 +1,5 @@
 export { }
 
-// chrome.action.onClicked.addListener(() => {
-//   chrome.runtime.openOptionsPage()
-// })
+chrome.runtime.onInstalled.addListener((details) => {
+    chrome.runtime.openOptionsPage();
+})

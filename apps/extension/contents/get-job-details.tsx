@@ -3,7 +3,7 @@ import type { PlasmoCSConfig, PlasmoCSUIProps } from "plasmo"
 import { useState, type FC } from "react"
 import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 
-import cssText from "data-text:./styles/global.css"
+import cssText from "data-text:../styles/global.css"
 import uiCSS from 'data-text:ui/dist/styles.css'
 import { useJob } from "~hooks/useJob"
 import type { Job } from "~types"
@@ -54,7 +54,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     }
 
     return (
-        <div className="ml-2 plasmoContainer">
+        <div className="ml-2 page shadow">
             <LinkedInButton
                 onClick={handleAddClick}
                 isLoading={isLoading}

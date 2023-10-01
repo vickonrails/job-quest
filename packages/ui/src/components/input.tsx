@@ -35,11 +35,11 @@ export function getSize(size: Size) {
       return 'py-1.5 text-sm px-2.5'
 
     case 'lg':
-      return 'py-3.5 px-4'
+      return 'py-3.5 px-4 text-base'
 
     case 'md':
     default:
-      return 'py-2.5 px-3.5'
+      return 'py-2 px-3 text-base'
   }
 }
 

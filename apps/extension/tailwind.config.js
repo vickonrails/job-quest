@@ -4,6 +4,7 @@ const config = {
   content: [
     './contents/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
+    './options.tsx'
   ],
   theme: {
     extend: {
@@ -11,19 +12,22 @@ const config = {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
       },
       spacing: {
-        1.5: '0.6rem',
-        2: '0.8rem',
-        2.5: '1rem',
-        3.5: '1.4rem',
-        4: '1.6rem',
-        5: '2rem',
-        6: '2.4rem',
-        10: '4rem'
+        1.5: 'var(--spacing-1_5)',
+        2: 'var(--spacing-2)',
+        2.5: 'var(--spacing-2_5)',
+        3.5: 'var(--spacing-3_5)',
+        4: 'var(--spacing-4)',
+        5: 'var(--spacing-5)',
+        6: 'var(--spacing-6)',
+        10: 'var(--spacing-10)'
       },
       fontSize: {
-        sm: ["1.4rem", "2rem"],
-        base: ["1.6rem", "2rem"],
-        lg: ["2rem", "1.8rem"]
+        // sm: ["var(--text-sm)", "2rem"],
+        // base: ["var(--text-base)", "2rem"],
+        // lg: ["var(--text-lg)", "1.8rem"]
+        sm: "var(--text-sm)",
+        base: "var(--text-base)",
+        lg: "var(--text-lg)",
       },
       maxWidth: {
         sm: '38.4rem',
