@@ -4,6 +4,7 @@ const config = {
   content: [
     './contents/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
+    './tabs/**/*.{ts,tsx}',
     './options.tsx'
   ],
   theme: {

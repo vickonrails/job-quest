@@ -5,11 +5,10 @@ import { type NextPage, type GetServerSideProps } from 'next'
 import { createServerSupabaseClient, type Session } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
-import { AuthCard } from '@components/auth/authCard'
 import { Banner } from '@components/banner'
 import { Typography } from '@components/typography'
 import { useToast } from '@components/toast/use-toast'
-import { Button, Input } from 'ui'
+import { Button, Input, AuthCard } from 'ui'
 
 interface SignInProps {
     session: Session
@@ -38,9 +37,7 @@ const SignIn: NextPage<SignInProps> = () => {
 
         //TODO: still need to fix problem with expired token
         supabaseClient.auth.signInWithOtp({
-            email, options: {
-                emailRedirectTo: `${window.location.origin}`
-            }
+            email
         })
             .then(res => {
                 setIsLoading(false);

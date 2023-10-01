@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent } from 'react'
 import { supabase as client } from "~core/supabase"
-import { Button, Input } from 'ui'
+import { Button, Input, AuthCard, Banner } from 'ui'
 
 import 'ui/dist/styles.css'
 import './styles/global.css'
@@ -13,8 +13,7 @@ const Options = () => {
     const handleSignIn = (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
         if (emailSent) { return; }
-        setIsLoading(true);
-        return;
+        const callback = `${window.location.origin}/tabs/callback.html`;
         // // regex to validate email
         const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         if (!isValid || !email) {
@@ -23,11 +22,11 @@ const Options = () => {
             return;
         }
 
+        setIsLoading(true);
+
         //TODO: still need to fix problem with expired token
-        client.auth.signInWithOtp({
-            email, options: {
-                emailRedirectTo: `${window.location.origin}`
-            }
+        client.auth.signInWithOAuth({
+            provider: 'github'
         })
             .then(res => {
                 setIsLoading(false);
@@ -49,25 +48,24 @@ const Options = () => {
     }
 
     return (
-        <div className='page options grid h-full'>
-            <form onSubmit={handleSignIn} className='border p-5 max-w-xl mt-32 m-auto w-full flex'>
-                <div className='max-w-xs mx-auto'>
-                    <h1 className='text-2xl text-center font-medium mb-3'>Sign In to Job Quest</h1>
-                    <p className='text-sm text-neutral-500 mb-10'>Enter you email and we’ll send you a magic link. Click the link to authenticate.</p>
-
-                    <Input
-                        value={email}
-                        className='mb-4'
-                        size='lg'
-                        type='email'
-                        onChange={ev => setEmail(ev.target.value)}
-                        label='Email Address'
-                        placeholder='Enter your email address'
-                    />
-                    <Button size='lg' loading={isLoading}>Send Magic Link</Button>
+        <AuthCard className='page'>
+            <div className="mx-auto md:w-2/3">
+                <div className="mb-8">
+                    <h1 className="text-center mb-3 text-2xl font-medium">Welcome to JobQuest!</h1>
+                    <p className='text-sm text-neutral-500'>Enter you email and we’ll send you a magic link. Click the link to authenticate.</p>
                 </div>
-            </form>
-        </div>
+                {emailSent && (
+                    <Banner
+                        variant="success"
+                        message={`Login link has been sent to email with address ${email}`}
+                    />
+                )}
+                <form onSubmit={handleSignIn}>
+                    <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-4" label="Email" name="email" fullWidth />
+                    <Button disabled={emailSent || isLoading} loading={isLoading} size="lg" className="mb-4">Send Magic Link</Button>
+                </form>
+            </div>
+        </AuthCard>
     )
 }
 
