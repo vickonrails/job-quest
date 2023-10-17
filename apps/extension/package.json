@@ -42,7 +42,7 @@
       "https://*/*"
     ],
     "permissions": [
-      "activeTab"
+      "tabs"
     ],
     "web_accessible_resources": [
       {

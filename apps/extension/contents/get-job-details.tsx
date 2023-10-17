@@ -9,6 +9,7 @@ import { useJob } from "~hooks/useJob"
 import type { Job } from "~types"
 import { getJobContent, getJobId } from "~utils"
 import { LinkedInButton } from "~components/linkedin-button"
+import { useStorage } from "@plasmohq/storage/hook"
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
@@ -28,6 +29,8 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     const [isOpen, setOpen] = useState(false)
     const [selectedJob, setSelectedJob] = useState<null | Job>()
     const { isLoading, job, refresh } = useJob(getJobId())
+
+    const [auth] = useStorage('auth');
 
     const handleAddClick = () => {
         const jobDetails = getJobContent();
@@ -60,6 +63,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
                 isLoading={isLoading}
                 added={Boolean(job)}
             />
+
             {selectedJob && (
                 <JobInfoSheet
                     title="Add Job"

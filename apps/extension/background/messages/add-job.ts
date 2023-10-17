@@ -1,4 +1,5 @@
 import { type PlasmoMessaging } from "@plasmohq/messaging"
+import { Storage } from '@plasmohq/storage'
 import { supabase as client } from "~core/supabase"
 
 // TODO: is it possible to export the types from supabase into the ui package so it can be reused here?
