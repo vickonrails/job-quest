@@ -1,5 +1,5 @@
 import { Layout } from '@components/layout';
-import { type Session } from '@supabase/auth-helpers-react';
+import { SessionContext, type Session } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { useRouter } from 'next/router';
 import { SummaryCard } from '@components/dashboard';
@@ -7,10 +7,9 @@ import { WelcomeBanner } from '@components/dashboard/welcome-banner';
 import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
 import { Table, type Column, type TableActions } from '@components/table';
 import { type Profile, type Job } from 'lib/types';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import Link from 'next/link';
-
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
@@ -34,7 +33,7 @@ const Index = ({ session, profile, jobs }: { session: Session, profile: Profile,
                 </section>
                 <DashboardSidebar className="basis-1/4" />
             </section>
-        </Layout >
+        </Layout>
     )
 }
 
@@ -79,21 +78,20 @@ function RecentlyAdded({ jobs }: { jobs: Job[] }) {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
-    const { data: { user } } = await supabase.auth.getUser(session?.access_token ?? '');
+    const supabase = createPagesServerClient<Database>(context);
+    const { data: { session } } = await supabase.auth.getSession()
+
     if (!session) {
-        // clear existing cookies if the user is not in the table
-        if (!user) await supabase.auth.signOut();
+        await supabase.auth.signOut();
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth/signin',
                 permanent: false
             }
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
     const { data: jobs } = await supabase.from('jobs').select().order('created_at', { ascending: false }).limit(5)
 
     return {

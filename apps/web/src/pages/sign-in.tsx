@@ -2,7 +2,7 @@ import React, { type FormEvent, useState } from 'react'
 
 import Head from 'next/head'
 import { type NextPage, type GetServerSideProps } from 'next'
-import { createServerSupabaseClient, type Session } from '@supabase/auth-helpers-nextjs'
+import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
 import { Banner } from '@components/banner'
@@ -58,6 +58,13 @@ const SignIn: NextPage<SignInProps> = () => {
             });
     }
 
+    const handleGoogleAuth = async () => {
+        await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: 'http://localhost:3000/api/auth/callback' }
+        })
+    }
+
     // TODO: add tests for this rendering
     return (
         <>
@@ -80,6 +87,8 @@ const SignIn: NextPage<SignInProps> = () => {
                         <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-4" label="Email" name="email" fullWidth />
                         <Button disabled={emailSent || isLoading} loading={isLoading} size="lg" fullWidth className="mb-4">Send Magic Link</Button>
                     </form>
+
+                    <Button onClick={handleGoogleAuth}>Google Login</Button>
                 </div>
             </AuthCard>
         </>
@@ -87,7 +96,7 @@ const SignIn: NextPage<SignInProps> = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
+    const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session) {

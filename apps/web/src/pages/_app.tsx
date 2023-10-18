@@ -1,16 +1,16 @@
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, type Session } from '@supabase/auth-helpers-react'
-import { type Database } from '../../lib/database.types'
 import { type AppProps } from 'next/app'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { type Database } from '../../lib/database.types'
 
-import '../styles/globals.css'
 import 'ui/dist/styles.css'
+import '../styles/globals.css'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ToastProvider } from '@radix-ui/react-toast'
 import { Toaster } from '@components/toast'
 import { TooltipProvider } from '@components/tooltip'
+import { ToastProvider } from '@radix-ui/react-toast'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,7 +26,7 @@ function MyApp({
 }: AppProps<{
   initialSession: Session
 }>) {
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>())
+  const [supabaseClient] = useState(() => createPagesBrowserClient<Database>())
 
   return (
     <SessionContextProvider
