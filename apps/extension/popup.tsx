@@ -1,51 +1,46 @@
-import type { User } from "@supabase/supabase-js"
 import { supabase as client } from '~core/supabase'
 
-import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { sendToBackground } from "@plasmohq/messaging"
 
 function IndexOptions() {
     const [auth, setAuth] = useStorage('auth')
-    const [user, setUser] = useState()
 
     useEffect(() => {
-        const { data: authListener } = client.auth.onAuthStateChange((evt, session) => {
-            if (evt === 'SIGNED_OUT') {
+        const { data: listener } = client.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_OUT') {
                 setAuth(null);
             }
-        });
+        })
 
         return () => {
-            authListener.subscription.unsubscribe();
+            listener.subscription.unsubscribe();
         }
     }, [])
 
-    useEffect(() => {
-        if (auth) {
-            client.auth.getUser(auth.access_token).then(({ data }) => {
-                console.log(data);
-            })
-        }
-    }, [])
+    const handleLogin = async () => {
+        const result = await sendToBackground({
+            name: 'handle-auth'
+        })
 
-    if (!auth) {
-        return (
-            <div>
-                <button>Sign In</button>
-                <p>You have to authenticate to use the app</p>
-            </div>
-        )
+        setAuth(result)
     }
 
-    const handleLogOut = () => {
+    const handleLogout = async () => {
         client.auth.signOut();
     }
 
     return (
         <main>
-            <button onClick={handleLogOut}>Log Out</button>
-            Hi there {JSON.stringify(auth)}
+            {auth ? (
+                <div>
+                    <p>Welcome {JSON.stringify(auth)}</p>
+                    <button onClick={handleLogout}>Log out</button>
+                </div>
+            ) : (
+                <button onClick={handleLogin}>Sign In</button>
+            )}
         </main>
     )
 }

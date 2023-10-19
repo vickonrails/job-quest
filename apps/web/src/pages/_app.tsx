@@ -1,7 +1,7 @@
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, type Session } from '@supabase/auth-helpers-react'
 import { type AppProps } from 'next/app'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { type Database } from '../../lib/database.types'
 
 import 'ui/dist/styles.css'

@@ -50,7 +50,7 @@
     --text-lg: 1.13rem;
   }
 
-  .page.shadow {
+  .page.shadowContainer {
     --radius: 0.8rem;
 
     --spacing-1_5: 0.6rem;

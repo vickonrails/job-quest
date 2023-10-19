@@ -5,11 +5,10 @@ import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 
 import cssText from "data-text:../styles/global.css"
 import uiCSS from 'data-text:ui/dist/styles.css'
+import { LinkedInButton } from "~components/linkedin-button"
 import { useJob } from "~hooks/useJob"
 import type { Job } from "~types"
 import { getJobContent, getJobId } from "~utils"
-import { LinkedInButton } from "~components/linkedin-button"
-import { useStorage } from "@plasmohq/storage/hook"
 
 export const getInlineAnchor = () => {
     return document.querySelector(".job-view-layout .jobs-save-button")
@@ -29,8 +28,6 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     const [isOpen, setOpen] = useState(false)
     const [selectedJob, setSelectedJob] = useState<null | Job>()
     const { isLoading, job, refresh } = useJob(getJobId())
-
-    const [auth] = useStorage('auth');
 
     const handleAddClick = () => {
         const jobDetails = getJobContent();
@@ -57,7 +54,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     }
 
     return (
-        <div className="ml-2 page shadow">
+        <div className="ml-2 page shadowContainer">
             <LinkedInButton
                 onClick={handleAddClick}
                 isLoading={isLoading}

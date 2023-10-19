@@ -42,7 +42,8 @@
       "https://*/*"
     ],
     "permissions": [
-      "tabs"
+      "tabs",
+      "identity"
     ],
     "web_accessible_resources": [
       {

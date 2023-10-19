@@ -85,7 +85,7 @@ const SignIn: NextPage<SignInProps> = () => {
                     )}
                     <form onSubmit={handleSignIn}>
                         <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-4" label="Email" name="email" fullWidth />
-                        <Button disabled={emailSent || isLoading} loading={isLoading} size="lg" fullWidth className="mb-4">Send Magic Link</Button>
+                        <Button disabled={emailSent || isLoading} loading={isLoading} size="lg" className="mb-4">Send Magic Link</Button>
                     </form>
 
                     <Button onClick={handleGoogleAuth}>Google Login</Button>

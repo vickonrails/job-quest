@@ -1,5 +1,5 @@
 export { }
 
 chrome.runtime.onInstalled.addListener((_) => {
-    chrome.tabs.create({ url: "http://localhost:3000/auth" });
+    // todo: try to launch an options page with the login flow
 })

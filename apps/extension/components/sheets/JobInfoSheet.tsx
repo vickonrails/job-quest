@@ -1,9 +1,10 @@
+import { sendToBackground } from '@plasmohq/messaging';
+import { useStorage } from '@plasmohq/storage/hook';
 import { Formik } from 'formik';
 import { useState } from 'react';
-import { Button, Input, Rating, Banner } from 'ui';
-import { Sheet, type SheetProps } from './sheet';
+import { Banner, Button, Input, Rating } from 'ui';
 import type { Job } from '~types';
-import { useStorage } from '@plasmohq/storage/hook';
+import { Sheet, type SheetProps } from './sheet';
 
 interface JobInfoSheetProps<T> extends SheetProps {
     entity: T
@@ -53,12 +54,18 @@ const useForm = <T extends {}>({ onSubmit, entity }: useFormProps<T>) => {
  * Sheets component for editing job items
  */
 export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
+    const [auth, setAuth] = useStorage('auth')
     const { initialValues, isSubmitting, handleSubmit, status } = useForm({
         onSubmit: props.onSubmit,
         entity: props.entity
     })
 
-    const [auth] = useStorage('auth')
+    const handleSignIn = async () => {
+        const result = await sendToBackground({
+            name: 'handle-auth'
+        })
+        setAuth(result);
+    }
 
     return (
         <Sheet {...props}>
@@ -139,8 +146,8 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                     </Formik>
                 ) : (
                     <div>
-                        <p>Please sign in to get some data</p>
-                        <a href='http://localhost:3000/auth' target='_blank'>Authenticate her</a>
+                        <p>Sign in to add job</p>
+                        <button onClick={handleSignIn}>Sign In</button>
                     </div>
                 )}
             </div>
