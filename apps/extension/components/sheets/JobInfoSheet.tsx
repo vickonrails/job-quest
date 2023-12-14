@@ -67,6 +67,8 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
         setAuth(result);
     }
 
+    if (auth === undefined) return;
+
     return (
         <Sheet {...props}>
             <div className="flex flex-col gap-3">
@@ -91,7 +93,7 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                                         message='Could not add job to JobQuest'
                                     />
                                 )}
-                                <p className='px-3.5 py-2.5 hidden' />
+                                <p className='px-3.5 px-3 my-1.5 py-2.5 hidden h-10' />
                                 <Input
                                     placeholder="Job title"
                                     value={values.position}
@@ -145,9 +147,10 @@ export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
                         )}
                     </Formik>
                 ) : (
-                    <div>
-                        <p>Sign in to add job</p>
-                        <button onClick={handleSignIn}>Sign In</button>
+                    <div className='mx-auto flex flex-col gap-3'>
+                        {/* <h1 className='text-3xl text-center font-bold'>Authenticate to Continue</h1> */}
+                        <p className='text-muted-foreground'>Click on the button to authenticate with your Google Account.</p>
+                        <Button onClick={handleSignIn}>Authenticate</Button>
                     </div>
                 )}
             </div>

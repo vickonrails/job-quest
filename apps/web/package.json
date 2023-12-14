@@ -11,7 +11,7 @@
     "start": "next start",
     "types:pregen": "npx supabase start",
     "types:gen": "npx supabase gen types typescript --project-id",
-    "db:seed": "ts-node --esm ./src/utils/seed.ts",
+    "db:seed": "bun run ./src/utils/seed.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:coverage": "vitest --coverage"

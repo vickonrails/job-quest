@@ -72,9 +72,9 @@ const SignIn: NextPage<SignInProps> = () => {
                 <title>Sign In</title>
             </Head>
             <AuthCard>
-                <div className="mx-auto md:w-2/3">
+                <div className="p-5">
                     <div className="mb-8">
-                        <Typography as="h1" variant="display-xs-md" className="text-center mb-3">Welcome to JobQuest!</Typography>
+                        <Typography as="h1" variant="display-xs-md" className="mb-3 font-bold">Welcome to JobQuest!</Typography>
                         <Typography variant="body-sm">Enter you email and we’ll send you a magic link. Click the link to authenticate.</Typography>
                     </div>
                     {emailSent && (
@@ -84,11 +84,11 @@ const SignIn: NextPage<SignInProps> = () => {
                         />
                     )}
                     <form onSubmit={handleSignIn}>
-                        <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-4" label="Email" name="email" fullWidth />
-                        <Button disabled={emailSent || isLoading} loading={isLoading} size="lg" className="mb-4">Send Magic Link</Button>
+                        <Input autoFocus placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-2" label="Email" name="email" fullWidth />
+                        <Button disabled={emailSent || isLoading} loading={isLoading} className="mb-3 w-full">Send Magic Link</Button>
                     </form>
 
-                    <Button onClick={handleGoogleAuth}>Google Login</Button>
+                    <Button onClick={handleGoogleAuth} size="sm" variant="outline" className="w-full">Google Login</Button>
                 </div>
             </AuthCard>
         </>

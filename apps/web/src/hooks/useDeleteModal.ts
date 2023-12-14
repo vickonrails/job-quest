@@ -7,10 +7,6 @@ interface RowDeleteHookProps {
     refresh?: () => Promise<void>
 }
 
-/** 
- * hook to delete a row in a table
- * TODO: can be modified to fit in deleting any entity at all
- */
 export function useRowDelete<T extends BaseEntity>(initialProps: RowDeleteHookProps) {
     const { toast } = useToast()
     const [isOpen, setIsOpen] = useState(false)

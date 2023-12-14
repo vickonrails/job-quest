@@ -56,6 +56,7 @@
     --spacing-1_5: 0.6rem;
     --spacing-2: 0.8rem;
     --spacing-2_5: 1rem;
+    --spacing-3: 1.2rem;
     --spacing-3_5: 1.4rem;
     --spacing-4: 1.6rem;
     --spacing-5: 2rem;
@@ -65,10 +66,5 @@
     --text-sm: 1.4rem;
     --text-base: 1.6rem;
     --text-lg: 2rem;
-  }
-
-  .page.options {
-    
-    
   }
 }

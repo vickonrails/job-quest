@@ -19,7 +19,7 @@ type AuthResponse = {
 }
 
 const handler: PlasmoMessaging.MessageHandler<any, HandlerResponse> = async (req, res) => {
-    const redirectUri = chrome.identity.getRedirectURL('supabase-auth')
+    const redirectUri = chrome.identity.getRedirectURL('callback')
     const options = {
         provider: 'google',
         redirect_to: redirectUri
@@ -31,7 +31,9 @@ const handler: PlasmoMessaging.MessageHandler<any, HandlerResponse> = async (req
             chrome.identity.launchWebAuthFlow({
                 url,
                 interactive: true
-            }, (callbackUrl) => { resolve(callbackUrl) })
+            }, (callbackUrl) => {
+                resolve(callbackUrl)
+            })
         }) as string;
 
         if (!authorizeResult) {
@@ -41,6 +43,7 @@ const handler: PlasmoMessaging.MessageHandler<any, HandlerResponse> = async (req
         const { refresh_token, access_token } = qs.parse(authorizeResult?.split("#")[1]) as AuthResponse;
         const { data: { session } } = await client.auth.setSession({ access_token, refresh_token })
         const { data: { user } } = await client.auth.getUser();
+
         res.send({
             data: {
                 session,

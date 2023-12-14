@@ -46,7 +46,7 @@ export function Table<T extends BaseEntity,>({ columns, data, actions, hideActio
     return (
         <div
             style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }}
-            className="border"
+            className="border-t border-b"
             {...rest}
         >
             <table className="w-full rounded-lg">

@@ -44,7 +44,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                         onClick={_ => onRowClick?.(item.id)}
                     >
                         {!hideActions && (
-                            <td className="pl-4">
+                            <td className="pl-4 border-b border-l">
                                 <MenuBar
                                     triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
                                     trigger={<MoreVertical size={16} />}

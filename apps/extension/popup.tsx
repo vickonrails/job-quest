@@ -32,10 +32,10 @@ function IndexOptions() {
     }
 
     return (
-        <main>
+        <main style={{ width: 300 }}>
             {auth ? (
                 <div>
-                    <p>Welcome {JSON.stringify(auth)}</p>
+                    <p>Welcome {auth.data.session.user.user_metadata.full_name}</p>
                     <button onClick={handleLogout}>Log out</button>
                 </div>
             ) : (

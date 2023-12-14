@@ -4,9 +4,9 @@ import { type Column } from './Table'
 export function TableHeader<T>({ columns, hideActions }: { columns: Column<T>, hideActions?: boolean }) {
     return (
         <thead className="rounded-sm bg-white sticky top-0 shadow-sm" >
-            <tr className="border-b">
+            <tr>
                 {!hideActions && (
-                    <th className="px-4 py-3 text-left rounded-tl-lg bg-white border">
+                    <th className="px-4 py-3 text-left rounded-tl-lg bg-white border-b border-x">
                         <Typography variant="body-sm" className="text-light-text font-normal">Actions</Typography>
                     </th>
                 )}

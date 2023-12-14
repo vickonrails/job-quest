@@ -16,6 +16,7 @@ const config = {
         1.5: 'var(--spacing-1_5)',
         2: 'var(--spacing-2)',
         2.5: 'var(--spacing-2_5)',
+        3: 'var(--spacing-3)',
         3.5: 'var(--spacing-3_5)',
         4: 'var(--spacing-4)',
         5: 'var(--spacing-5)',
