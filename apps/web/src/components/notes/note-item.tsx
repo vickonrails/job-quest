@@ -84,7 +84,7 @@ function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
             const { error } = await client.from('notes').update(data).eq('id', note.id)
             if (error) throw error
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes', note.jobid] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes', note.id] })
     })
 
     const canSubmit = text.trim();

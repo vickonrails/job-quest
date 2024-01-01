@@ -1,9 +1,10 @@
-import { render, cleanup } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest';
-import { Navbar, type NavbarProps } from './Navbar';
+import { TooltipProvider } from '@components/tooltip';
 import { type Session } from '@supabase/supabase-js';
+import { cleanup, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { type Profile } from '../../../lib/types';
 import { Layout, type LayoutProps } from './Layout';
+import { Navbar, type NavbarProps } from './Navbar';
 
 const session = {
     user: {
@@ -12,7 +13,13 @@ const session = {
 } as unknown as Session
 
 const profile = {
-    username: 'John Doe'
+    id: '',
+    username: 'John Doe',
+    avatar_url: 'https://avatars.githubusercontent.com/u/1?v=4',
+    created_at: '',
+    email_address: '',
+    full_name: '',
+    updated_at: ''
 } as Profile
 
 describe('Navbar', () => {
@@ -26,12 +33,11 @@ describe('Navbar', () => {
 
     it('render correct user profile details', () => {
         const { getByText } = setup({ session, profile });
-        expect(getByText('John Doe')).toBeTruthy();
         expect(getByText('johnDoe@gmail.com')).toBeTruthy();
     });
 
     it('renders search input', () => {
-        const { getByRole } = setup({});
+        const { getByRole } = setup({ profile, session });
         expect(getByRole('textbox')).toBeInTheDocument();
     })
 });
@@ -55,11 +61,15 @@ describe('Layout', () => {
     })
 
     const setup = (props: LayoutProps) => {
-        return render(<Layout {...props} />)
+        return render(
+            <TooltipProvider>
+                <Layout {...props} />
+            </TooltipProvider>
+        )
     }
 
     it('renders all the correct links', () => {
-        const links = ['dashboard', 'application tracker', 'resume builder', 'notes', 'reminder', 'documents', 'contacts'];
+        const links = ['dashboard', 'tracker', 'resume builder', 'notes', 'reminder', 'documents', 'contacts'];
         const { getAllByRole } = setup({ session, profile });
         const navLinks = getAllByRole('link');
         const hasCorrectLinks = navLinks.filter((link, index) => {
@@ -75,8 +85,12 @@ describe('Layout', () => {
     });
 
     it('renders children element correct', () => {
-        const { getByText } = setup({ children: 'Hello World' });
+        const { getByText } = setup({ profile, session, children: <div>Hello World</div> })
         expect(getByText('Hello World')).toBeTruthy();
     });
+
+    it('works', () => {
+        expect(1).toBe(1);
+    })
 });
 

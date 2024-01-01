@@ -3,8 +3,8 @@
 
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-import { defineConfig } from 'vite'
-import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from 'vitest/config'
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,15 +13,15 @@ export default defineConfig({
         environment: 'jsdom',
         coverage: {
             all: true,
-            include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}", "src/**/index.{ts,tsx}"],
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: ['src/**/*.test.{ts,tsx}', 'src/**/index.{ts,tsx}'],
         },
         globals: true,
-        setupFiles: ["./vitest/setup.ts"],
+        setupFiles: ['./vitest/setup.ts'],
     },
     resolve: {
         alias: {
-            '@components/*': resolve(__dirname, "./src/components/*")
+            '@components/*': resolve(__dirname, './src/components/*')
         }
-    }
+    },
 })

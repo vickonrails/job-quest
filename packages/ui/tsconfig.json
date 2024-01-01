@@ -20,20 +20,20 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "utils": [
+        "./src/utils"
+      ]
+    },
   },
   "include": [
     "src"
   ],
-  "baseUrl": ".",
-  "paths": {
-    "@/*": [
-      "./src/*"
-    ],
-    "utils": [
-      "./src/utils"
-    ]
-  },
   "references": [
     {
       "path": "./tsconfig.node.json"

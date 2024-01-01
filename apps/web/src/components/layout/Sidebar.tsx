@@ -1,11 +1,11 @@
-import React, { type FC, type HTMLAttributes, useMemo } from 'react'
-import clsx from 'clsx'
-import { useRouter } from 'next/router';
-import { Folder, Grid, File, Clipboard, Bell, User, FileText } from 'react-feather'
 import { Link, type LinkProps } from '@components/link';
-import { Logo } from 'ui';
-import { cn } from '@utils/cn';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@components/tooltip';
+import { cn } from '@utils/cn';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import React, { useMemo, type FC, type HTMLAttributes } from 'react';
+import { Bell, Clipboard, File, FileText, Folder, Grid, User } from 'react-feather';
+import { Logo } from 'ui';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
 
@@ -33,7 +33,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <span>Tracker</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder" disabled>
+                    <NavLink href="/resume-builder" disabled>
                         <File className="mr-2" />
                         <span>Resume Builder</span>
                     </NavLink>
@@ -45,17 +45,17 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <span>Notes</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder" disabled>
+                    <NavLink href="/reminder" disabled>
                         <Bell className="mr-2" />
                         <span>Reminder</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder" disabled>
+                    <NavLink href="/documents" disabled>
                         <Clipboard className="mr-2" />
                         <span>Documents</span>
                     </NavLink>
 
-                    <NavLink href="resume-builder" disabled>
+                    <NavLink href="/contacts" disabled>
                         <User className="mr-2" />
                         <span>Contacts</span>
                     </NavLink>
