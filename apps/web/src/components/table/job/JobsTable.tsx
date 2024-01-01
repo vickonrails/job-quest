@@ -33,7 +33,7 @@ const JobsTable = () => {
     const [sizeLimit, setSizeLimit] = useState(SIZE_LIMIT)
     // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
-    const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0] as SelectOption)
+    const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
     const { data, isLoading } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
     const router = useRouter();
 
@@ -64,7 +64,7 @@ const JobsTable = () => {
                         <span>
                             Sort:
                         </span>
-                        <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val))} />
+                        <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val)!)} />
                     </div>
                 </div>
             </section>

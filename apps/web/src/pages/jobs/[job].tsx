@@ -1,21 +1,20 @@
-import React from 'react'
-import { Layout } from '@components/layout';
-import { useRouter } from 'next/router';
-import { type Database } from 'lib/database.types';
-import { type Profile, type Job } from 'lib/types';
-import { FullPageSpinner, Spinner } from '@components/spinner';
-import { ChevronLeft } from 'react-feather'
-import Image from 'next/image';
-import { formatDate } from '@components/utils';
 import { ChipsGroup } from '@components/chips/Chip';
-import { Typography } from '@components/typography';
-import { useJobs } from 'src/hooks/useJobs';
-import { type GetServerSideProps } from 'next';
-import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useEditSheet } from 'src/hooks/useEditModal';
-import { JobEditSheet } from '@components/sheet/jobsEditSheet';
-import NotesList from '@components/notes/note-list';
+import { Layout } from '@components/layout';
 import NoteForm from '@components/notes/note-form';
+import NotesList from '@components/notes/note-list';
+import { JobEditSheet } from '@components/sheet/jobsEditSheet';
+import { FullPageSpinner, Spinner } from '@components/spinner';
+import { Typography } from '@components/typography';
+import { formatDate } from '@components/utils';
+import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
+import { type Database } from 'lib/database.types';
+import { type Job, type Profile } from 'lib/types';
+import { type GetServerSideProps } from 'next';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { ChevronLeft } from 'react-feather';
+import { useEditSheet } from 'src/hooks/useEditModal';
+import { useJobs } from 'src/hooks/useJobs';
 import { Button, Rating, Status_Lookup } from 'ui';
 
 const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
@@ -106,9 +105,8 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
+    const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
 
     if (!session) {
         return {
@@ -118,6 +116,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             }
         }
     }
+
+    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
 
     return {
         props: {

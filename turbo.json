@@ -5,10 +5,12 @@
             "cache": false,
             "persistent": true
         },
-        "test": {},
+        "test": {
+            "dependsOn": ["lint"]
+        },
         "lint": {},
         "build": {
-            "dependsOn": ["lint", "test"]
+            "dependsOn": ["test"]
         }
     }
 }
