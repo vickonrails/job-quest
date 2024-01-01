@@ -1,7 +1,8 @@
+import { Typography } from '@components/typography';
+import { formatDate } from '@components/utils';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { type HTMLAttributes } from 'react';
-import { Typography } from '@components/typography';
 import { Rating } from 'ui';
 
 export type TableColumnType = 'text' | 'date' | 'chips' | 'rating' | 'logoWithText';
@@ -44,7 +45,10 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const { date } = value as DateCellType<T>
             // TODO: catch error thrown when another value type is passed
             // TODO: improve the date to show actual 3rd Aug, 2023
-            const formattedDate = new Date(date).toISOString().split('T')[0]
+            const splitDate = new Date(date).toISOString().split('T')[0]
+            if (!splitDate) return;
+
+            const formattedDate = formatDate(splitDate)
             return (
                 <td className={classNames} {...rest}>
                     <Typography variant="body-sm" className="overflow-ellipsis overflow-hidden">

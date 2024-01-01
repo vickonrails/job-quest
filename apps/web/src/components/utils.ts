@@ -39,13 +39,11 @@ export function getSize(size: Size) {
     }
 }
 
-
 export function formatDate(dateString: string) {
     const date = new Date(dateString);
     const month = months[date.getMonth()] as string;
     return `${date.getDate()} ${month}, ${date.getFullYear()}`;
 }
-
 
 export function djb2Hash(str: string, arrayLength: number) {
     let hash = 5381;
