@@ -12,8 +12,6 @@
     "types:pregen": "npx supabase start",
     "types:gen": "npx supabase gen types typescript --project-id",
     "db:seed": "bun run ./src/utils/seed.ts",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
@@ -32,7 +30,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dotenv": "^16.0.3",
-    "eslint-plugin-storybook": "^0.6.12",
     "formik": "^2.4.3",
     "lucide-react": "^0.268.0",
     "next": "^13.2.4",
@@ -44,15 +41,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.24",
-    "@storybook/addon-interactions": "^7.0.24",
-    "@storybook/addon-links": "^7.0.24",
-    "@storybook/blocks": "^7.0.24",
-    "@storybook/nextjs": "^7.0.24",
-    "@storybook/react": "^7.0.24",
-    "@storybook/testing-library": "^0.0.14-next.2",
-    "@tanstack/eslint-plugin-query": "^4.32.5",
-    "storybook": "^7.0.24"
+    "@tanstack/eslint-plugin-query": "^4.32.5"
   },
   "ct3aMetadata": {
     "initVersion": "7.10.3"
