@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "../utils"
+import { cn, getSize } from "../utils";
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -23,24 +23,6 @@ export interface InputProps
   size?: Size
 
   multiline?: boolean
-}
-
-// TODO: move to appropriate file
-export function getSize(size: Size) {
-  switch (size) {
-    case 'xs':
-      return 'text-sm p-3 py-2'
-
-    case 'sm':
-      return 'py-1.5 text-sm px-2.5'
-
-    case 'lg':
-      return 'py-3.5 px-4 text-base'
-
-    case 'md':
-    default:
-      return 'py-2 px-3 text-base'
-  }
 }
 
 // TODO: use the cva variant library here
@@ -72,4 +54,5 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 Input.displayName = "Input"
 
-export { Input }
+export { Input };
+
