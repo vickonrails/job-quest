@@ -83,12 +83,6 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                         </div>
                     </header>
 
-                    <main className="mb-6">
-                        <section className="border border-gray-100 p-3">
-                            <div className="text-base-col" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
-                        </section>
-                    </main>
-
                     <footer>
                         <ChipsGroup labels={job.labels ?? []} />
                     </footer>
