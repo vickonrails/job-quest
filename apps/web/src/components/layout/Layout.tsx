@@ -23,7 +23,7 @@ export const Layout: FC<LayoutProps> = ({ children, className, session, profile:
 
     return (
         <div className={cn('flex h-full max-w-screen-2xl m-auto', className)} {...rest}>
-            <Sidebar className="basis-64" />
+            <Sidebar className="basis-60" />
             <main className="flex-1 p-6 flex flex-col">
                 <Navbar profile={profile} session={session} />
                 <div className={cn('flex-1', containerClasses)}>

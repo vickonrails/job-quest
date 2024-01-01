@@ -1,17 +1,20 @@
-import React from 'react'
+import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
-import JobsTable from '@components/table/job/JobsTable';
-import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { type GetServerSideProps } from 'next';
+import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
+import { transformJobs, type KanbanColumn } from '@utils/transform-to-column';
 import { type Database } from 'lib/database.types';
-import { type Profile } from 'lib/types';
+import { type Job, type Profile } from 'lib/types';
+import { type GetServerSideProps } from 'next';
 
 // I'm currently rendering on the client. How can we improve this
 
-const Tracker = ({ session, profile }: { session: Session, profile: Profile }) => {
+const Tracker = ({ session, profile, jobs, jobColumns }: {
+    session: Session, profile: Profile, jobs: Job[], jobColumns: KanbanColumn[]
+}) => {
     return (
         <Layout session={session} profile={profile}>
-            <JobsTable />
+            {/* <JobsTable /> */}
+            <JobsKanban jobColumns={jobColumns} />
         </Layout>
     )
 }
@@ -19,8 +22,9 @@ const Tracker = ({ session, profile }: { session: Session, profile: Profile }) =
 // TODO: consider what approach to use for the dashboard either server-side or client-side rendering
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
+    const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
+    const view = context.query.view;
 
     if (!session) {
         return {
@@ -32,11 +36,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: jobs } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
 
+    if (view === 'table') {
+        return {
+            props: {
+                session,
+                profile,
+                jobs
+            }
+        }
+    }
+
+    const jobColumns = transformJobs(jobs || [])
     return {
         props: {
             session,
-            profile
+            profile,
+            jobColumns
         }
     }
 }
