@@ -31,7 +31,7 @@ export function transformJobs(jobs: Job[]) {
         {
             id: uuid(),
             title: 'Negotiating',
-            columnStatus: ApplicationStatus.Interviewing,
+            columnStatus: ApplicationStatus.Negotiating,
             jobs: []
         },
         // {

@@ -36,19 +36,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    const { data: jobs } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
+    const { data } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
 
+    const jobs = data?.map(job => ({ ...job, order: Math.random() * 1 }))
+
+    // console.log(jobs)
     if (view === 'table') {
         return {
             props: {
                 session,
                 profile,
-                jobs
+                // jobs
             }
         }
     }
 
     const jobColumns = transformJobs(jobs || [])
+
+    console.log(jobColumns)
     return {
         props: {
             session,
