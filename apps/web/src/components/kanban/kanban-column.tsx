@@ -6,9 +6,9 @@ import KanbanCard from './kanban-card';
 export default function KanbanColumnCmp({ column }: { column: KanbanColumn }) {
     return (
         <div className="flex-1">
-            <header className="flex justify-between items-center mb-3">
-                <h2 className="text-sm font-medium p-1  inline-block">{column.title}</h2>
-                <p className="text-sm bg-gray-100 p-1 py-0 rounded-sm">{column.jobs.length}</p>
+            <header className="flex justify-between items-center py-2 sticky top-0 bg-white">
+                <h2 className="text-sm font-medium p-1 px-3 bg-gray-100 inline-block">{column.title}</h2>
+                <p className="text-xs bg-gray-100 p-1 py-0 rounded-sm">{column.jobs.length}</p>
             </header>
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (

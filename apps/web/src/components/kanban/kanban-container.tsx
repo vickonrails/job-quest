@@ -95,7 +95,7 @@ export default function JobsKanban({ jobColumns }: { jobColumns: KanbanColumn[] 
             } else {
                 const beforeItem = destinationJobs[destination.index - 1];
                 const afterItem = destinationJobs[destination.index];
-                if (!beforeItem?.order_column || !afterItem?.order_column) return;
+                if (!beforeItem?.order_column || afterItem?.order_column == null) return;
                 const movingItemOrder = (afterItem?.order_column + beforeItem?.order_column) / 2;
                 movingItem.order_column = movingItemOrder;
             }
