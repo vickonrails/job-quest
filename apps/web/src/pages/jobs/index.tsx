@@ -1,7 +1,7 @@
 import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
-import { transformJobs, type KanbanColumn } from '@utils/transform-to-column';
+import { transformJobs, type KanbanColumn, ApplicationStatus } from '@utils/transform-to-column';
 import { type Database } from 'lib/database.types';
 import { type Job, type Profile } from 'lib/types';
 import { type GetServerSideProps } from 'next';
@@ -36,9 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    const { data } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
-
-    const jobs = data?.map(job => ({ ...job, order: Math.random() * 1 }))
+    const { data: jobs } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
 
     // console.log(jobs)
     if (view === 'table') {
@@ -46,14 +44,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             props: {
                 session,
                 profile,
-                // jobs
+                jobs
             }
         }
     }
 
     const jobColumns = transformJobs(jobs || [])
 
-    console.log(jobColumns)
     return {
         props: {
             session,

@@ -1,6 +1,6 @@
 import { DragDropContext, type OnDragEndResponder } from '@hello-pangea/dnd';
 import KanbanCol from './kanban-column';
-import { type KanbanColumn } from '@utils/transform-to-column';
+import { sortByOrder, type KanbanColumn, ApplicationStatus } from '@utils/transform-to-column';
 import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from '@lib/database.types';
@@ -12,7 +12,7 @@ function useKanbanColumns(jobs: KanbanColumn[]) {
 
     const updateColumnItem = async (job: Job) => {
         try {
-            await client.from('jobs').upsert(job);
+            await client.from('jobs').update(job).eq('id', job.id);
         } catch (error) {
             // TODO: handle error
         }
@@ -20,6 +20,8 @@ function useKanbanColumns(jobs: KanbanColumn[]) {
 
     return { columns, setColumns, updateColumnItem }
 }
+
+const ORDER_DISTANCE = 0.5;
 
 export default function JobsKanban({ jobColumns }: { jobColumns: KanbanColumn[] }) {
     const { columns, updateColumnItem, setColumns } = useKanbanColumns(jobColumns);
@@ -29,83 +31,99 @@ export default function JobsKanban({ jobColumns }: { jobColumns: KanbanColumn[] 
         const { destination, source } = result;
 
         if (!destination) return;
-
         if (
             destination.droppableId === source.droppableId &&
             destination.index === source.index
         ) return;
 
-        // start and end columns
         const start = columns.find(col => col.id === source.droppableId);
         const finish = columns.find(col => col.id === destination.droppableId);
 
         if (!start || !finish) return;
-
-        // moving within the same column
-        // just update the order or position by taking the average of the two nearest jobs
         if (start === finish) {
             const clonedJobs = Array.from(start.jobs);
-            const [removedJob] = clonedJobs.splice(source.index, 1);
-            if (!removedJob) return;
+            const downwards = destination.index < source.index;
+            const movingItem = clonedJobs[source.index];
+            if (!movingItem || !movingItem.order_column) return;
 
-            clonedJobs.splice(destination.index, 0, removedJob);
+            if (destination.index === 0) {
+                movingItem.order_column = clonedJobs[0].order_column - ORDER_DISTANCE;
+            } else if (destination.index === clonedJobs.length - 1) {
+                movingItem.order_column = clonedJobs[clonedJobs.length - 1].order_column + ORDER_DISTANCE;
+            } else {
+                const beforeItem = clonedJobs[downwards ? destination.index - 1 : destination.index];
+                const afterItem = clonedJobs[downwards ? destination.index : destination.index + 1];
+                if (!beforeItem?.order_column || !afterItem?.order_column) return;
 
-            const newColumn = {
+                const movingItemOrder = (afterItem?.order_column + beforeItem?.order_column) / 2;
+                movingItem.order_column = movingItemOrder;
+            }
+
+            const newCols = {
                 ...start,
-                jobs: clonedJobs
+                jobs: clonedJobs.sort(sortByOrder)
             }
 
             const columns = prevCols.map(col => {
-                if (col.id === newColumn.id) return newColumn
+                if (col.id === start.id) return newCols
                 return col
             })
 
-            setColumns(columns)
-            // await updateColumnItem(removed);
+            setColumns(columns);
+            updateColumnItem(movingItem).then(res => {
+                // 
+            }).catch(err => {
+                // 
+            });
+        } else {
+            // first remove the item from the start list
+            const sourceJobs = Array.from(start.jobs);
+            const destinationJobs = Array.from(finish.jobs);
+            const movingItem = sourceJobs.splice(source.index, 1)[0];
+            if (!movingItem || movingItem.order_column === null) return;
+
+            movingItem.status = finish.columnStatus;
+
+            //TODO: if there's nothing in the destination list, just add it to the end
+
+            // find the destination in the next list
+            if (destination.index === 0) {
+                const newItemOrder = destinationJobs[0]?.order_column || 0;
+                movingItem.order_column = newItemOrder - ORDER_DISTANCE;
+            } else if (destination.index === destinationJobs.length) {
+                movingItem.order_column = destinationJobs[destinationJobs.length - 1].order_column + ORDER_DISTANCE;
+            } else {
+                const beforeItem = destinationJobs[destination.index - 1];
+                const afterItem = destinationJobs[destination.index];
+                if (!beforeItem?.order_column || !afterItem?.order_column) return;
+                const movingItemOrder = (afterItem?.order_column + beforeItem?.order_column) / 2;
+                movingItem.order_column = movingItemOrder;
+            }
+
+            destinationJobs.push(movingItem);
+            const sourceCol = {
+                ...start,
+                jobs: sourceJobs.sort(sortByOrder)
+            }
+
+            const destinationCol = {
+                ...finish,
+                jobs: destinationJobs.sort(sortByOrder)
+            }
+
+            const columns = prevCols.map(col => {
+                if (col.id === start.id) return sourceCol
+                if (col.id === finish.id) return destinationCol
+                return col
+            })
+
+            setColumns(columns);
+            updateColumnItem(movingItem).then(res => {
+                // 
+            }).catch(err => {
+                // 
+            });
         }
-
-        // const startTasks = Array.from(start!.tasks);
-        // const [removed] = startTasks.splice(source.index, 1);
-        // const newStart = {
-        //     ...start!,
-        //     tasks: startTasks
-        // }
-
-        // const finishTasks = Array.from(finish!.tasks);
-        // finishTasks.splice(destination.index, 0, removed);
-        // const newFinish = {
-        //     ...finish!,
-        //     tasks: finishTasks
-        // }
-
-        // // this is also an optimistic update
-        // setKanbanColumns(kanbanColumns.map(col => {
-        //     if (col.id === newStart.id) return newStart
-        //     if (col.id === newFinish.id) return newFinish
-        //     return col
-        // }))
-
-        // setSyncing(true)
-        // const promises = newFinish.tasks.map(task => {
-        //     const index = newFinish.tasks.findIndex(x => x.id === task.id)
-        //     return supabase
-        //         .from('tasks')
-        //         .update({ column_order: index, status: finish?.columnStatus })
-        //         .eq('id', task.id)
-        //         .then(response => {
-        //             if (response.error) throw response.error
-
-        //             return response
-        //         })
-        // })
-
-        // Promise.all(promises)
-        //     .then(() => console.log('done'))
-        //     .catch((err) => {
-        //         alert('An error just occurred')
-        //         setKanbanColumns(prevCols)
-        //     })
-        //     .finally(() => setSyncing(false))
     }
 
     return (

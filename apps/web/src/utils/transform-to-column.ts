@@ -2,6 +2,17 @@
 import { type Job } from '@lib/types';
 import { v4 as uuid } from 'uuid';
 
+export function sortByOrder(a: Job, b: Job) {
+    if (a.order_column === undefined || a.order_column === null) return 1;
+    if (b.order_column === undefined || b.order_column === null) return -1;
+
+    const orderA = Number(a.order_column);
+    const orderB = Number(b.order_column);
+
+    return orderA - orderB;
+}
+
+
 export function transformJobs(jobs: Job[]) {
     const kanbanColumns: KanbanColumn[] = [
         {
@@ -49,7 +60,8 @@ export function transformJobs(jobs: Job[]) {
     ] as const
 
     // TODO: fix the typings here
-    jobs.forEach(job => {
+
+    jobs.sort(sortByOrder).forEach(job => {
         const colIndex = job.status || 0;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         kanbanColumns[colIndex].jobs.push(job)
@@ -59,13 +71,13 @@ export function transformJobs(jobs: Job[]) {
 }
 
 export enum ApplicationStatus {
-    Bookmarked = 'Bookmarked',
-    Applying = 'Applying',
-    Applied = 'Applied',
-    Interviewing = 'Interviewing',
-    Negotiating = 'Negotiating',
-    Hired = 'Hired',
-    Rejected = 'Rejected',
+    Bookmarked,
+    Applying,
+    Applied,
+    Interviewing,
+    Negotiating,
+    Hired,
+    Rejected,
 }
 
 

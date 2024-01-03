@@ -26,6 +26,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
                         size="sm"
                         value={job.priority || 0}
                     />
+                    {/* {JSON.stringify(job.order_column)} */}
                 </article>
             )}
         </Draggable>
