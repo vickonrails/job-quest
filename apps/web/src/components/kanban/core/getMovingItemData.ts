@@ -1,31 +1,9 @@
 import { type DropResult } from '@hello-pangea/dnd';
-import { type KanbanColumn } from '@utils/transform-to-column';
+import { type InvolvedColumns } from './getInvolvedColumns';
 
 const ORDER_DISTANCE = 0.5;
 
-export function getInvolvedColumns(columns: KanbanColumn[], { destination, source }: DropResult) {
-    if (!destination || !source) return;
-    if (
-        destination.droppableId === source.droppableId &&
-        destination.index === source.index
-    ) return;
-
-    const start = columns.find(col => col.id === source.droppableId);
-    const finish = columns.find(col => col.id === destination.droppableId);
-
-    if (!start || !finish) return;
-
-    return {
-        start,
-        finish
-    }
-}
-
-///
-
-export type InvolvedColumns = ReturnType<typeof getInvolvedColumns>
-
-export function getMovingItem(result: DropResult, involvedColumn: NonNullable<InvolvedColumns>) {
+export function getMovingItemData(result: DropResult, involvedColumn: NonNullable<InvolvedColumns>) {
     let movingItemOrder = 0;
 
     const { destination, source } = result
