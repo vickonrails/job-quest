@@ -1,20 +1,25 @@
 import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
+import JobsTable from '@components/table/job/JobsTable';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
-import { transformJobs, type KanbanColumn, ApplicationStatus } from '@utils/transform-to-column';
+import { transformJobs, type KanbanColumn } from '@utils/transform-to-column';
 import { type Database } from 'lib/database.types';
 import { type Job, type Profile } from 'lib/types';
 import { type GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 // I'm currently rendering on the client. How can we improve this
 
 const Tracker = ({ session, profile, jobs, jobColumns }: {
     session: Session, profile: Profile, jobs: Job[], jobColumns: KanbanColumn[]
 }) => {
+    const router = useRouter();
+    const isTable = router.query.view === 'table';
     return (
         <Layout session={session} profile={profile}>
-            {/* <JobsTable /> */}
-            <JobsKanban jobColumns={jobColumns} />
+            {isTable ? <JobsTable jobs={jobs} /> :
+                <JobsKanban jobColumns={jobColumns} />
+            }
         </Layout>
     )
 }

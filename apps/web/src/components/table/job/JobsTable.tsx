@@ -1,5 +1,3 @@
-import { FullPageSpinner } from '@components/spinner'
-import { useJobs } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
@@ -28,13 +26,12 @@ const SORT_OPTIONS: SelectOption[] = [
 
 // TODO: I want the filtering to work in a very simple way - Just provide sorting buttons on the head of the table columns. Once clicked, it'll sort descending, clicking again will sort ascending and clicking again will remove the sort.
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
-const JobsTable = () => {
+const JobsTable = ({ jobs }: { jobs: Job[] }) => {
     const client = useSupabaseClient<Database>();
     const [sizeLimit, setSizeLimit] = useState(SIZE_LIMIT)
     // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
     const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
-    const { data, isLoading } = useJobs({ params: { offset, limit: sizeLimit, orderBy: { field: sort?.value as string, direction: 'desc' } } });
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
@@ -68,23 +65,21 @@ const JobsTable = () => {
                     </div>
                 </div>
             </section>
-            {isLoading ? <FullPageSpinner /> : (
-                <>
-                    <Table<Job>
-                        columns={columns}
-                        data={data?.jobs ?? []}
-                        actions={actions}
-                    />
-                    <Pagination
-                        totalCount={data?.count}
-                        count={data?.jobs.length}
-                        setLimit={(val) => setSizeLimit(val)}
-                        limit={sizeLimit}
-                        offset={offset}
-                        setOffset={setOffset}
-                    />
-                </>
-            )}
+            <>
+                <Table<Job>
+                    columns={columns}
+                    data={jobs}
+                    actions={actions}
+                />
+                <Pagination
+                    totalCount={jobs.length}
+                    count={jobs.length}
+                    setLimit={(val) => setSizeLimit(val)}
+                    limit={sizeLimit}
+                    offset={offset}
+                    setOffset={setOffset}
+                />
+            </>
         </section >
     )
 }
