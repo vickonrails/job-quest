@@ -8,6 +8,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
         <Draggable draggableId={job.id} index={index}>
             {(provided) => (
                 <article
+                    data-testid="kanban-card"
                     className="flex flex-col border-1 border p-3 rounded-md select-none bg-white items-start"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -26,7 +27,6 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
                         size="sm"
                         value={job.priority || 0}
                     />
-                    {/* {JSON.stringify(job.order_column)} */}
                 </article>
             )}
         </Draggable>

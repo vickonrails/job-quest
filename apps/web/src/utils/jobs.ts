@@ -10,6 +10,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 1,
+    order_column: 1,
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef',
   },
   {
@@ -21,6 +22,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
+    order_column: 1,
     labels: ['Frontend', 'Javascript'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -33,6 +35,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 4,
+    order_column: 2,
     labels: ['Frontend', 'NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -45,6 +48,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 5,
+    order_column: 1,
     labels: ['Frontend', 'Javascript', 'NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -57,6 +61,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
     status: 3,
     priority: 1,
+    order_column: 3,
     labels: ['NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -67,8 +72,9 @@ const jobs: JobInsertDTO[] = [
     'location': 'Remote',
     'description': 'Aliqua aliqua elit ut ut id. Nulla pariatur ipsum magna exercitation culpa commodo voluptate officia. Nulla adipisicing et amet voluptate magna labore quis magna dolor aute mollit eiusmod. Nostrud proident nisi occaecat laborum est sunt. Id culpa sunt ea anim aute magna ut culpa qui officia duis cillum proident minim. Lorem proident aliqua deserunt non eiusmod.\r\nAnim cupidatat sunt ad occaecat voluptate reprehenderit et. Pariatur culpa duis incididunt id ea labore id ea quis aliqua pariatur in. Lorem ex labore Lorem sit et ex. Est nisi aliquip et in et incididunt sunt irure eiusmod adipisicing proident minim irure. Do sunt deserunt labore ex ex sit do.\r\n',
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
-    status: 5,
+    status: 3,
     priority: 1,
+    order_column: 4,
     labels: ['Frontend', 'NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -81,6 +87,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 1,
     priority: 2,
+    order_column: 1,
     labels: ['Frontend', 'Javascript', 'NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -93,6 +100,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
+    order_column: 2,
     labels: ['Frontend', 'Javascript', 'NodeJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -105,6 +113,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 2,
+    order_column: 2,
     labels: ['Frontend', 'Beckend'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -115,8 +124,9 @@ const jobs: JobInsertDTO[] = [
     'location': 'Seattle',
     'description': 'Incididunt mollit voluptate culpa ipsum labore id consequat cupidatat nulla aliqua nisi velit id aliqua. Mollit ipsum esse cupidatat incididunt. Laborum non minim ea consectetur aliqua sunt ut labore excepteur nostrud eiusmod consequat. Minim sint laborum sunt consectetur eu ipsum aliquip. Fugiat id cillum anim tempor incididunt in incididunt aute ut ad minim sint.\r\nDo tempor deserunt et deserunt aliqua fugiat minim esse labore elit. Fugiat do duis pariatur eiusmod elit excepteur nisi voluptate. Adipisicing in nisi aliqua commodo eiusmod magna proident aute occaecat. Sint deserunt in proident id laboris ipsum aute dolor ipsum proident. Qui cillum duis elit qui quis. Cupidatat officia amet sint irure ex incididunt ut do. Minim in reprehenderit commodo incididunt sit.\r\n',
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
-    status: 5,
+    status: 3,
     priority: 2,
+    order_column: 5,
     labels: ['Frontend', 'VueJs'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -129,6 +139,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 4,
     priority: 2,
+    order_column: 3,
     labels: ['Frontend', 'Tailwind'],
     user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
@@ -141,6 +152,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 2,
+    order_column: 3,
     labels: ['Frontend', 'Javascript', 'NodeJs'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -153,6 +165,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
     status: 4,
     priority: 2,
+    order_column: 4,
     labels: ['Frontend', 'Javascript'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -165,6 +178,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 2,
     priority: 5,
+    order_column: 4,
     labels: ['Frontend', 'NodeJs'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -175,8 +189,9 @@ const jobs: JobInsertDTO[] = [
     'location': 'Seattle',
     'description': 'Mollit cupidatat fugiat commodo ad ex pariatur commodo magna ex dolor et cupidatat magna nostrud. In ut ipsum eu duis adipisicing excepteur in consectetur esse ipsum. Aliquip irure ipsum duis consectetur irure elit magna velit qui culpa cillum. Fugiat do pariatur in sit incididunt voluptate aliqua cillum proident ea enim magna incididunt. Mollit velit deserunt ea incididunt sunt veniam enim. Mollit ipsum ea ullamco sit sint tempor. Irure amet excepteur velit aliqua irure.\r\nLabore culpa labore ex minim anim. Nulla ullamco enim proident deserunt. Ea aliquip fugiat aliqua qui est veniam veniam. Enim reprehenderit quis minim quis do consequat incididunt nulla excepteur pariatur exercitation consectetur dolore. Laborum irure elit amet laboris dolor aliquip ex consectetur enim non. Eu nisi ut in reprehenderit tempor dolore qui esse ullamco proident velit dolore quis. Aliqua enim excepteur non culpa esse exercitation consectetur cupidatat nostrud.\r\n',
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
-    status: 5,
+    status: 3,
     priority: 3,
+    order_column: 6,
     labels: ['Frontend', 'Tailwindcss'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -187,8 +202,9 @@ const jobs: JobInsertDTO[] = [
     'location': 'Austin',
     'description': 'Veniam elit amet irure esse adipisicing tempor minim. Consectetur ex culpa adipisicing minim in. Culpa duis consectetur nostrud Lorem officia occaecat laborum. Culpa non qui magna irure. Proident aute nulla consectetur reprehenderit enim est ad exercitation nostrud. Incididunt ut do in pariatur eu adipisicing nisi cillum laboris mollit cillum. Amet veniam reprehenderit proident officia eu occaecat dolore incididunt cillum ex.\r\nExercitation esse consectetur eiusmod minim dolore sit magna anim sunt eu in sint. Quis est irure ut consequat fugiat ipsum eiusmod Lorem aute. Id labore officia anim ea sit aliqua id nostrud enim nostrud quis sit nulla. Sunt adipisicing magna adipisicing fugiat.\r\n',
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
-    status: 5,
+    status: 3,
     priority: 2,
+    order_column: 7,
     labels: ['Frontend', 'Typescript'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -201,18 +217,21 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
+    order_column: 5,
     labels: ['Frontend', 'backend'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
   {
+    id: '9bd9387d-f0b1-4550-9222-253686641ae3',
     'position': 'Software Engineer',
     company_name: 'Microsoft',
     'company_site': 'microsoft.com',
     'location': 'Seattle',
     'description': 'Nulla ex aliqua cillum quis sit. Nostrud est cupidatat veniam tempor reprehenderit quis incididunt irure elit do sunt. Aliquip sunt minim quis velit ut magna cupidatat officia enim labore pariatur. Tempor qui elit veniam id dolor qui proident fugiat ea consectetur cillum veniam occaecat velit. Eiusmod in cillum commodo sit voluptate adipisicing.\r\nExcepteur cupidatat minim voluptate sint amet magna ut id culpa commodo nulla ipsum ut. Irure mollit nostrud velit excepteur ea proident occaecat anim. Magna laborum proident enim occaecat veniam. Consequat commodo culpa irure id laborum id. Veniam adipisicing ex do aliquip duis nulla ipsum ea est. Consequat enim velit reprehenderit aliqua laborum in consectetur ullamco et nulla. Minim aliqua anim pariatur magna excepteur qui in.\r\n',
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
-    status: 5,
+    status: 0,
     priority: 5,
+    order_column: 1,
     labels: ['Frontend', 'NodeJs'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -225,6 +244,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 1,
     priority: 2,
+    order_column: 2,
     labels: ['Javascript', 'NodeJs'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   },
@@ -237,6 +257,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 2,
     priority: 2,
+    order_column: 5,
     labels: ['Frontend', 'Javascript'],
     user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
   }

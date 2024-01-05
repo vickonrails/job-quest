@@ -21,7 +21,7 @@ export default function JobsKanban({ jobColumns }: { jobColumns: KanbanColumn[] 
     }
 
     return (
-        <div className="flex w-full h-full gap-2">
+        <div className="flex w-full h-full gap-2" data-testid="kanban-container">
             <DragDropContext onDragEnd={onDragEnd}>
                 {columns.map((column) => (
                     <KanbanCol key={column.id} column={column} />
