@@ -5,18 +5,22 @@ import KanbanCol from './kanban-column';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
 
-export default function JobsKanban({ jobColumns }: { jobColumns: KanbanColumn[] }) {
+export default function JobsKanban({ jobColumns, onUpdateStart, onUpdateEnd }: { jobColumns: KanbanColumn[], onUpdateStart: () => void, onUpdateEnd: () => void }) {
     const { columns, updateMovedItem } = useKanbanColumns(jobColumns);
 
     const onDragEnd: OnDragEndResponder = (result) => {
         const involvedColumns = getInvolvedColumns(columns, result);
         if (!involvedColumns) return;
         const movingItemData = getMovingItemData(result, involvedColumns);
+
+        onUpdateStart && onUpdateStart();
         updateMovedItem(movingItemData, involvedColumns).then(res => {
             // handle success state
         }).catch(err => {
             // handle error state
             // reload back to previous state
+        }).finally(() => {
+            onUpdateEnd && onUpdateEnd();
         });
     }
 

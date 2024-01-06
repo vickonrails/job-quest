@@ -1,5 +1,6 @@
 import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
+import { Spinner } from '@components/spinner';
 import JobsTable from '@components/table/job/JobsTable';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { cn } from '@utils/cn';
@@ -9,7 +10,7 @@ import { type Job, type Profile } from 'lib/types';
 import { AlignStartHorizontal, TableIcon } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { type HTMLAttributes } from 'react';
+import { useState, type HTMLAttributes } from 'react';
 
 type View = 'kanban' | 'table';
 
@@ -21,15 +22,25 @@ const Tracker = ({ session, profile, jobs, jobColumns }: {
 }) => {
     const router = useRouter();
     const view = router.query.view as View ?? 'kanban';
+    const [isUpdating, setIsUpdating] = useState(false)
     const isTable = view === 'table';
     return (
         <Layout session={session} profile={profile}>
             <section className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Jobs</h1>
+                <h1 className="text-2xl flex font-bold gap-2 items-center">
+                    <span>
+                        Jobs
+                    </span>
+                    {isUpdating && <Spinner />}
+                </h1>
                 <ViewSwitcher view={view} />
             </section>
             {isTable ? <JobsTable jobs={jobs} /> :
-                <JobsKanban jobColumns={jobColumns} />
+                <JobsKanban
+                    jobColumns={jobColumns}
+                    onUpdateStart={() => setIsUpdating(true)}
+                    onUpdateEnd={() => setIsUpdating(false)}
+                />
             }
         </Layout>
     )

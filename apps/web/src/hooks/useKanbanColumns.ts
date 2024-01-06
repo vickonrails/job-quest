@@ -9,6 +9,7 @@ import { useState } from 'react';
 export function useKanbanColumns(jobs: KanbanColumn[]) {
     const client = useSupabaseClient<Database>()
     const [columns, setColumns] = useState(jobs);
+    const [isUpdating, setIsUpdating] = useState(false)
 
     const updateMovedItem = async (movingItemData: ReturnType<typeof getMovingItemData>, involvedColumns: NonNullable<InvolvedColumns>) => {
         const { start, finish } = involvedColumns
@@ -41,11 +42,14 @@ export function useKanbanColumns(jobs: KanbanColumn[]) {
         }
 
         try {
+            setIsUpdating(true)
             await client.from('jobs').update(movedItem).eq('id', movedItem.id);
         } catch (error) {
             // TODO: handle error
+        } finally {
+            setIsUpdating(false)
         }
     }
 
-    return { columns, setColumns, updateMovedItem }
+    return { columns, updateMovedItem, isUpdating }
 }
