@@ -24,6 +24,7 @@ const Tracker = ({ session, profile, jobs, jobColumns }: {
     const view = router.query.view as View ?? 'kanban';
     const [isUpdating, setIsUpdating] = useState(false)
     const isTable = view === 'table';
+
     return (
         <Layout session={session} profile={profile}>
             <section className="flex justify-between items-center">

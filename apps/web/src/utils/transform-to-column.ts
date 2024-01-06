@@ -29,52 +29,54 @@ export function sortByOrder(a: Job, b: Job) {
     return orderA - orderB;
 }
 
-const kanbanColumns: KanbanColumn[] = [
-    {
-        id: uuid(),
-        title: 'Bookmarked',
-        columnStatus: ApplicationStatus.Bookmarked,
-        jobs: [],
-    },
-    {
-        id: uuid(),
-        title: 'Applying',
-        columnStatus: ApplicationStatus.Applying,
-        jobs: []
-    },
-    {
-        id: uuid(),
-        title: 'Applied',
-        columnStatus: ApplicationStatus.Applied,
-        jobs: []
-    },
-    {
-        id: uuid(),
-        title: 'Interviewing',
-        columnStatus: ApplicationStatus.Interviewing,
-        jobs: []
-    },
-    {
-        id: uuid(),
-        title: 'Negotiating',
-        columnStatus: ApplicationStatus.Negotiating,
-        jobs: []
-    },
-    // {
-    //     id: uuid(),
-    //     title: 'Hired',
-    //     columnStatus: ApplicationStatus.Interviewing,
-    //     jobs: []
-    // },
-    // {
-    //     id: uuid(),
-    //     title: 'Rejected',
-    //     columnStatus: ApplicationStatus.Rejected,
-    //     jobs: []
-    // }
-] as const
 
 export function transformJobs(jobs: Job[]) {
+
+    const kanbanColumns: KanbanColumn[] = [
+        {
+            id: uuid(),
+            title: 'Bookmarked',
+            columnStatus: ApplicationStatus.Bookmarked,
+            jobs: [],
+        },
+        {
+            id: uuid(),
+            title: 'Applying',
+            columnStatus: ApplicationStatus.Applying,
+            jobs: []
+        },
+        {
+            id: uuid(),
+            title: 'Applied',
+            columnStatus: ApplicationStatus.Applied,
+            jobs: []
+        },
+        {
+            id: uuid(),
+            title: 'Interviewing',
+            columnStatus: ApplicationStatus.Interviewing,
+            jobs: []
+        },
+        {
+            id: uuid(),
+            title: 'Negotiating',
+            columnStatus: ApplicationStatus.Negotiating,
+            jobs: []
+        },
+        // {
+        //     id: uuid(),
+        //     title: 'Hired',
+        //     columnStatus: ApplicationStatus.Interviewing,
+        //     jobs: []
+        // },
+        // {
+        //     id: uuid(),
+        //     title: 'Rejected',
+        //     columnStatus: ApplicationStatus.Rejected,
+        //     jobs: []
+        // }
+    ] as const
+
     jobs.sort(sortByOrder).forEach(job => {
         const colIndex = job.status || 0;
         if (!kanbanColumns) return;
