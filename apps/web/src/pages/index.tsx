@@ -1,15 +1,15 @@
-import { Layout } from '@components/layout';
-import { SessionContext, type Session } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types';
-import { useRouter } from 'next/router';
 import { SummaryCard } from '@components/dashboard';
-import { WelcomeBanner } from '@components/dashboard/welcome-banner';
 import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
+import { WelcomeBanner } from '@components/dashboard/welcome-banner';
+import { Layout } from '@components/layout';
 import { Table, type Column, type TableActions } from '@components/table';
-import { type Profile, type Job } from 'lib/types';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { type Session } from '@supabase/auth-helpers-react';
+import { type Database } from 'lib/database.types';
+import { type Job, type Profile } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session

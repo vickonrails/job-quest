@@ -2,14 +2,23 @@
 import { type InvolvedColumns } from '@components/kanban/core/getInvolvedColumns';
 import { type getMovingItemData } from '@components/kanban/core/getMovingItemData';
 import { type Database } from '@lib/database.types';
+import { type Job } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sortByOrder, type KanbanColumn } from '@utils/transform-to-column';
 import { useState } from 'react';
 
 export function useKanbanColumns(jobs: KanbanColumn[]) {
     const client = useSupabaseClient<Database>()
+    const queryClient = useQueryClient();
     const [columns, setColumns] = useState(jobs);
-    const [isUpdating, setIsUpdating] = useState(false)
+
+    const updateMutation = useMutation({
+        mutationFn: async (data: Job) => {
+            return await client.from('jobs').update(data).eq('id', data.id)
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] })
+    })
 
     const updateMovedItem = async (movingItemData: ReturnType<typeof getMovingItemData>, involvedColumns: NonNullable<InvolvedColumns>) => {
         const { start, finish } = involvedColumns
@@ -42,14 +51,13 @@ export function useKanbanColumns(jobs: KanbanColumn[]) {
         }
 
         try {
-            setIsUpdating(true)
-            await client.from('jobs').update(movedItem).eq('id', movedItem.id);
+            await updateMutation.mutateAsync(movedItem)
         } catch (error) {
             // TODO: handle error
         } finally {
-            setIsUpdating(false)
+
         }
     }
 
-    return { columns, updateMovedItem, isUpdating }
+    return { columns, updateMovedItem, isUpdating: updateMutation.isLoading }
 }

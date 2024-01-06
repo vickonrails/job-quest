@@ -1,11 +1,13 @@
 import { DragDropContext, type OnDragEndResponder } from '@hello-pangea/dnd';
-import { type KanbanColumn } from '@utils/transform-to-column';
+import { type Job } from '@lib/types';
+import { transformJobs } from '@utils/transform-to-column';
 import { useKanbanColumns } from 'src/hooks/useKanbanColumns';
-import KanbanCol from './kanban-column';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
+import KanbanCol from './kanban-column';
 
-export default function JobsKanban({ jobColumns, onUpdateStart, onUpdateEnd }: { jobColumns: KanbanColumn[], onUpdateStart: () => void, onUpdateEnd: () => void }) {
+export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd }: { jobs: Job[], onUpdateStart: () => void, onUpdateEnd: () => void }) {
+    const jobColumns = transformJobs(jobs)
     const { columns, updateMovedItem } = useKanbanColumns(jobColumns);
 
     const onDragEnd: OnDragEndResponder = (result) => {

@@ -75,11 +75,10 @@ export function transformJobs(jobs: Job[]) {
         //     columnStatus: ApplicationStatus.Rejected,
         //     jobs: []
         // }
-    ] as const
+    ]
 
     jobs.sort(sortByOrder).forEach(job => {
         const colIndex = job.status || 0;
-        if (!kanbanColumns) return;
         kanbanColumns?.[colIndex]?.jobs.push(job)
     });
 

@@ -67,7 +67,7 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
                             {logoText}
                         </Typography>
                     </div>
-                </td >
+                </td>
             )
 
         case 'rating':

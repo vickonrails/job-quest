@@ -45,6 +45,9 @@ export function getMovingItemData(result: DropResult, involvedColumn: NonNullabl
             movingItemOrder = (afterItem?.order_column + beforeItem?.order_column) / 2;
         }
 
+        movingItem.status = finish.columnStatus;
+
+
         destinationJobs.push(movingItem);
     }
 
