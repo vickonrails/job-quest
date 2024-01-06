@@ -54,7 +54,7 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
 
     return (
         <section>
-            <section className="flex justify-between items-center mb-4">
+            {/* <section className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium">All Jobs</h3>
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
@@ -64,7 +64,7 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
                         <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val)!)} />
                     </div>
                 </div>
-            </section>
+            </section> */}
             <>
                 <Table<Job>
                     columns={columns}

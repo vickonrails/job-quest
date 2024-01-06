@@ -7,8 +7,8 @@ export default function KanbanColumnCmp({ column }: { column: KanbanColumn }) {
     return (
         <div className="flex-1" data-testid="kanban-column">
             <header className="flex justify-between items-center py-2 sticky top-0 bg-white">
-                <h2 className="text-sm font-medium p-1 px-3 bg-gray-100 inline-block" data-testid="column-title">{column.title}</h2>
-                <p className="text-xs bg-gray-100 p-1 py-0 rounded-sm">{column.jobs.length}</p>
+                <h2 className="text-sm font-medium p-1 px-3 bg-gray-100 inline-block select-none" data-testid="column-title">{column.title}</h2>
+                <p className="text-xs bg-gray-100 p-1 py-0 rounded-sm select-none">{column.jobs.length}</p>
             </header>
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (
