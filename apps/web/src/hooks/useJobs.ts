@@ -12,6 +12,7 @@ interface Options {
         orderBy?: { field: string, direction: SortDirection }
         offset?: number
     },
+    initialData?: Job[],
     jobId?: string
 }
 
@@ -42,7 +43,7 @@ async function getJobs(client: SupabaseClient<Database>, options: Options) {
     const { count, data: jobs, error } = await query;
 
     if (error) throw error;
-    return { count, jobs };
+    return { jobs, count };
 }
 
 type JobsResponse = {
@@ -56,9 +57,11 @@ type JobsResponse = {
 // TODO: write this hook to handle all querying info - search, pagination, ordering, etc
 export function useJobs(options?: Options, jobId?: string): UseQueryResult<JobsResponse> {
     const client = useSupabaseClient<Database>();
+    const { initialData } = options ?? {}
 
     return useQuery(
-        ['jobs', jobId, options?.params],
-        () => getJobs(client, { ...options, jobId })
+        ['jobs'],
+        () => getJobs(client, options ?? {}),
+        { initialData: { jobs: initialData ?? [], count: initialData?.length ?? 0 } }
     )
 }
