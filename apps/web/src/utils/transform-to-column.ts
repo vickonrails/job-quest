@@ -34,6 +34,7 @@ export function transformJobs(jobs: Job[]) {
 
     // used uuid ids which caused some diff to be erratic. so for now, I'll just stick with adding the uuid directly here
     // is there any reason I shouldn't do that?
+    // Also the tests for the kanban are heavily dependent on the id of the columns
     const kanbanColumns: KanbanColumn[] = [
         {
             id: 'dcd9707c-95f4-41ac-a527-29d062d7e680',

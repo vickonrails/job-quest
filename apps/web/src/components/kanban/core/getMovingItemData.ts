@@ -3,8 +3,10 @@ import { type InvolvedColumns } from './getInvolvedColumns';
 
 const ORDER_DISTANCE = 0.5;
 
-export function getMovingItemData(result: DropResult, involvedColumn: NonNullable<InvolvedColumns>) {
+export function getMovingItemData(result: DropResult, involvedColumn: InvolvedColumns) {
     let movingItemOrder = 0;
+
+    if (!involvedColumn) return;
 
     const { destination, source } = result
     if (!destination) return;
@@ -46,7 +48,6 @@ export function getMovingItemData(result: DropResult, involvedColumn: NonNullabl
         }
 
         movingItem.status = finish.columnStatus;
-
 
         destinationJobs.push(movingItem);
     }
