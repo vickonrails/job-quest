@@ -6,12 +6,14 @@ import { type Job } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sortByOrder, type KanbanColumn } from '@utils/transform-to-column';
-import { useState } from 'react';
+import isEqual from 'fast-deep-equal';
+import { useEffect, useRef, useState } from 'react';
 
 export function useKanbanColumns(jobs: KanbanColumn[]) {
     const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient();
     const [columns, setColumns] = useState(jobs);
+    const columnRef = useRef(jobs);
 
     const updateMutation = useMutation({
         mutationFn: async (data: Job) => {
@@ -19,6 +21,15 @@ export function useKanbanColumns(jobs: KanbanColumn[]) {
         },
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] })
     })
+
+    useEffect(() => {
+        if (!isEqual(columnRef.current, jobs)) {
+            if (updateMutation.isLoading) return
+            setColumns(jobs)
+            columnRef.current = jobs
+        }
+    }, [jobs, updateMutation.isLoading])
+
 
     const updateMovedItem = async (movingItemData: ReturnType<typeof getMovingItemData>, involvedColumns: NonNullable<InvolvedColumns>) => {
         const { start, finish } = involvedColumns

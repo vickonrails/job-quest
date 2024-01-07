@@ -34,7 +34,7 @@ const Tracker = ({ session, profile, jobs }: {
             </section>
             {isTable ? <JobsTable jobs={data?.jobs ?? []} /> :
                 <JobsKanban
-                    jobs={jobs}
+                    jobs={data?.jobs ?? []}
                     onUpdateStart={() => setIsUpdating(true)}
                     onUpdateEnd={() => setIsUpdating(false)}
                 />
