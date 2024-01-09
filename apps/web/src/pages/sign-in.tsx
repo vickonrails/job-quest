@@ -1,14 +1,16 @@
-import React, { type FormEvent, useState } from 'react'
-
-import Head from 'next/head'
-import { type NextPage, type GetServerSideProps } from 'next'
+import { Banner } from '@components/banner'
+import { useToast } from '@components/toast/use-toast'
+import { Typography } from '@components/typography'
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Database } from 'lib/database.types'
-import { Banner } from '@components/banner'
-import { Typography } from '@components/typography'
-import { useToast } from '@components/toast/use-toast'
-import { Button, Input, AuthCard } from 'ui'
+import { type GetServerSideProps, type NextPage } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import { useState, type FormEvent } from 'react'
+import { AuthCard, Button, Input } from 'ui'
+import GoogleLogo from '../../public/google-logo.png'
+
 
 interface SignInProps {
     session: Session
@@ -37,7 +39,11 @@ const SignIn: NextPage<SignInProps> = () => {
 
         //TODO: still need to fix problem with expired token
         supabaseClient.auth.signInWithOtp({
-            email
+            email,
+            options: {
+                shouldCreateUser: true,
+                emailRedirectTo: 'http://localhost:3000/api/auth/callback'
+            }
         })
             .then(res => {
                 setIsLoading(false);
@@ -72,10 +78,10 @@ const SignIn: NextPage<SignInProps> = () => {
                 <title>Sign In</title>
             </Head>
             <AuthCard>
-                <div className="p-5">
+                <div className="p-5 py-6 max-w-sm mx-auto">
                     <div className="mb-8">
-                        <Typography as="h1" variant="display-xs-md" className="mb-3 font-bold">Welcome to JobQuest!</Typography>
-                        <Typography variant="body-sm">Enter you email and we’ll send you a magic link. Click the link to authenticate.</Typography>
+                        <h1 className="mb-3 text-3xl font-medium">Welcome to JobQuest!</h1>
+                        <Typography variant="body-md" className="text-muted-foreground">Enter you email and we’ll send you a magic link. Click the link to authenticate.</Typography>
                     </div>
                     {emailSent && (
                         <Banner
@@ -84,11 +90,14 @@ const SignIn: NextPage<SignInProps> = () => {
                         />
                     )}
                     <form onSubmit={handleSignIn}>
-                        <Input autoFocus placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-2" label="Email" name="email" fullWidth />
-                        <Button disabled={emailSent || isLoading} loading={isLoading} className="mb-3 w-full">Send Magic Link</Button>
+                        <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-2" label="Email" name="email" fullWidth />
+                        <Button disabled={emailSent || isLoading} size="lg" loading={isLoading} className="mb-3 w-full">Send Magic Link</Button>
                     </form>
 
-                    <Button onClick={handleGoogleAuth} size="sm" variant="outline" className="w-full">Google Login</Button>
+                    <Button size="lg" onClick={handleGoogleAuth} variant="outline" className="w-full flex gap-1">
+                        <span><Image src={GoogleLogo} width={25} height={25} alt="" /></span>
+                        <span>Google Login</span>
+                    </Button>
                 </div>
             </AuthCard>
         </>

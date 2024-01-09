@@ -10,7 +10,7 @@ const Logo: FC<LogoProps> = ({ className, ...rest }) => {
                 'text-primary text-xl font-medium',
                 className
             )
-        } {...rest}>JobQuest</h1>
+        } {...rest}>JQ</h1>
     )
 }
 
