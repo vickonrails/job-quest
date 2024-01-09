@@ -9,8 +9,8 @@ import { type Database } from 'lib/database.types';
 import { type Job, type Profile } from 'lib/types';
 import { AlignStartHorizontal, TableIcon } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
-import { useState, type HTMLAttributes, useEffect } from 'react';
-import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'src/hooks/useJobs';
+import { useEffect, useState, type HTMLAttributes } from 'react';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET, DEFAULT_SORTING, parseSorting } from 'src/hooks/useJobs';
 
 type View = 'kanban' | 'table';
 
@@ -92,6 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const paginationQuery = context.query;
     const limit = Number(paginationQuery['limit'] ?? DEFAULT_LIMIT);
     const offset = Number(paginationQuery['offset'] ?? DEFAULT_OFFSET);
+    const orderBy = parseSorting(paginationQuery['orderBy'] as string) ?? DEFAULT_SORTING
     const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -109,6 +110,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (limit) {
         query = query.range(offset, (limit - 1) + (offset))
+    }
+
+    if (orderBy) {
+        query = query.order(orderBy.field, { ascending: orderBy.direction === 'asc' })
     }
 
     const { data: jobs } = await query;

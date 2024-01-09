@@ -5,15 +5,17 @@ import { useState } from 'react';
 import { type Database } from '../../lib/database.types';
 import { type Job } from '../../lib/types';
 
-type SortDirection = 'asc' | 'desc'
+export type SortDirection = 'asc' | 'desc'
+export type Sort = { field: string, direction: SortDirection }
 
 export const DEFAULT_LIMIT = 10;
 export const DEFAULT_OFFSET = 0;
+export const DEFAULT_SORTING: Sort = { field: 'created_at', direction: 'desc' }
 
 export interface QueryParams {
     search?: string;
     limit?: number
-    orderBy?: { field: string, direction: SortDirection }
+    orderBy?: Sort
     offset: number
 }
 
@@ -56,38 +58,57 @@ async function getJobs(client: SupabaseClient<Database>, options: Options) {
     return { jobs, count };
 }
 
+export function parseSorting(sort: string) {
+    if (!sort) return;
+
+    const [field, direction] = sort?.split(',');
+    if (!field || !direction) return;
+
+    return { field, direction: direction as SortDirection }
+}
+
+function stringifySorting(sort: Sort) {
+    return `${sort.field},${sort.direction}`
+}
+
 // TODO: add request parameters 
 // so I can implement search, pagination & limit, etc
 // also research possible ways to add react query in here too
 // TODO: write this hook to handle all querying info - search, pagination, ordering, etc
 export function useJobs(options?: UseJobsOptions, jobId?: string) {
-
     // TODO: I have a problem with the isRefetching property for many reasons
     // one of them is that it fires for every type of refetch, not just the one I want
     // I could introduce a property that just fires for the ones I want. Like changing the limit, next page & changing sort order
     const client = useSupabaseClient<Database>();
     const router = useRouter();
 
-    const [queryParams, setParams] = useState({
+    const [queryParams, setParams] = useState<QueryParams>({
         limit: router.query.limit ? Number(router.query.limit) : DEFAULT_LIMIT,
-        offset: router.query.offset ? Number(router.query.offset) : DEFAULT_OFFSET
+        offset: router.query.offset ? Number(router.query.offset) : DEFAULT_OFFSET,
+        orderBy: parseSorting(router.query.orderBy as string) ?? DEFAULT_SORTING,
     });
 
     const setQueryParams = (params: QueryParams) => {
         const newURL = new URL(window.location.href)
-        const newParams = {
+        const newParams: QueryParams = {
             limit: params.limit ?? DEFAULT_LIMIT,
             offset: params.offset ?? 0,
+            orderBy: params.orderBy ?? queryParams.orderBy ?? DEFAULT_SORTING,
         }
 
-        if (params.limit)
-            newURL.searchParams.set('limit', params.limit.toString())
+        if (newParams.limit)
+            newURL.searchParams.set('limit', newParams.limit.toString())
 
-        if (params.offset)
-            newURL.searchParams.set('offset', (params.offset ?? 0).toString())
+        if (newParams.offset)
+            newURL.searchParams.set('offset', (newParams.offset ?? 0).toString())
+
+        if (newParams.orderBy) {
+            const value = stringifySorting(newParams.orderBy)
+            newURL.searchParams.set('orderBy', value);
+        }
 
         setParams(newParams);
-        window.history.pushState(params, '', newURL);
+        window.history.pushState(newParams, '', newURL);
     }
 
     const queryResult = useQuery(

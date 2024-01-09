@@ -1,11 +1,10 @@
 import { Spinner } from '@components/spinner'
-import { type QueryParams } from '@hooks'
+import { type Sort, type SortDirection, type QueryParams } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
 import { type Job } from 'lib/types'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 import { Select, Status_Lookup, type SelectOption } from 'ui'
 import { Table, type Column, type TableActions } from '../Table'
@@ -18,10 +17,16 @@ export const columns: Column<Job> = [
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
-const SORT_OPTIONS: SelectOption[] = [
-    { label: 'Newest', value: 'created_at' },
-    { label: 'Highest Priority', value: 'priority' },
-    { label: 'Highest Status', value: 'status' }
+interface SortOption {
+    label: string
+    value: string
+    direction: SortDirection
+}
+
+const SORT_OPTIONS: SortOption[] = [
+    { label: 'Newest First', value: 'created_at', direction: 'desc' },
+    { label: 'Highest Priority', value: 'priority', direction: 'desc' },
+    { label: 'Highest Status', value: 'status', direction: 'desc' },
 ]
 
 interface JobsTableProps {
@@ -36,12 +41,19 @@ interface JobsTableProps {
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
 const JobsTable = ({ jobs, setFilterParams, queryParams, count, isRefetching }: JobsTableProps) => {
     const client = useSupabaseClient<Database>();
-    const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
     const router = useRouter();
 
     const onDelete = async (jobId: string) => {
         const { error } = await client.from('jobs').delete().eq('id', jobId);
         if (error) { throw error }
+    }
+
+    const onSortValueChange = (val: string) => {
+        const option = SORT_OPTIONS.find(option => option.value === val)
+        if (!option) return;
+
+        const orderBy: Sort = { direction: option.direction, field: String(option.value) }
+        setFilterParams({ ...queryParams, orderBy })
     }
 
     const onRowClick = (id: string) => {
@@ -66,7 +78,12 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count, isRefetching }: 
                         <span>
                             Sort:
                         </span>
-                        <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val)!)} />
+                        <Select
+                            size="sm"
+                            defaultValue={String(queryParams.orderBy?.field)}
+                            options={SORT_OPTIONS}
+                            onValueChange={onSortValueChange}
+                        />
                     </div>
                 </div>
             </section>
