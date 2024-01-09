@@ -9,7 +9,7 @@ import { type Database } from 'lib/database.types';
 import { type Job, type Profile } from 'lib/types';
 import { AlignStartHorizontal, TableIcon } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
-import { useState, type HTMLAttributes } from 'react';
+import { useState, type HTMLAttributes, useEffect } from 'react';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'src/hooks/useJobs';
 
 type View = 'kanban' | 'table';
@@ -17,9 +17,15 @@ type View = 'kanban' | 'table';
 const Tracker = ({ session, profile, jobs }: {
     session: Session, profile: Profile, jobs: Job[]
 }) => {
+    const [initialData, setInitialData] = useState(jobs);
     const { data, queryParams, setQueryParams } = useJobs({
-        initialData: jobs
+        initialData
     });
+
+    // to avoid initial data passed from SSR to always be the fallback data
+    useEffect(() => {
+        setInitialData(data.jobs)
+    }, [data.jobs])
 
     const [isUpdating, setIsUpdating] = useState(false)
     const [view, setView] = useState<View>('table');

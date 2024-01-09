@@ -34,7 +34,6 @@ interface JobsTableProps {
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
 const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps) => {
     const client = useSupabaseClient<Database>();
-    const [offset, setOffset] = useState<number>(0)
     const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
     const router = useRouter();
 
@@ -79,7 +78,6 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps
                     count={jobs.length}
                     setFilterParams={setFilterParams}
                     queryParams={queryParams}
-                    setOffset={setOffset}
                 />
             </>
         </section >
@@ -111,11 +109,10 @@ interface PaginationProps {
     queryParams: QueryParams
     setFilterParams: (params: QueryParams) => void
     setLimit?: (offset: number) => void
-    setOffset: (offset: number) => void
 }
 
 // TODO: move to another file
-function Pagination({ totalCount, count, setOffset, queryParams, setFilterParams }: PaginationProps) {
+function Pagination({ totalCount, count, queryParams, setFilterParams }: PaginationProps) {
     const { limit, offset } = queryParams
     if (!limit) return null;
 
@@ -126,16 +123,16 @@ function Pagination({ totalCount, count, setOffset, queryParams, setFilterParams
 
     const next = () => {
         if (isLastPage) return
-        setFilterParams?.({ offset: offset + limit })
+        setFilterParams?.({ offset: offset + limit, limit })
     }
 
     const prev = () => {
         if (isFirstPage) return;
         if (offset - limit < 0) {
-            setOffset(0)
+            setFilterParams?.({ offset: 0, limit })
             return;
         }
-        setFilterParams?.({ offset: offset - limit })
+        setFilterParams?.({ offset: offset - limit, limit })
     }
 
     return (
