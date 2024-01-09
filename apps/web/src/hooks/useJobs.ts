@@ -7,7 +7,7 @@ import { type Job } from '../../lib/types';
 
 type SortDirection = 'asc' | 'desc'
 
-export const DEFAULT_LIMIT = 5;
+export const DEFAULT_LIMIT = 10;
 export const DEFAULT_OFFSET = 0;
 
 export interface QueryParams {

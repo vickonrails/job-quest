@@ -18,7 +18,7 @@ const Tracker = ({ session, profile, jobs }: {
     session: Session, profile: Profile, jobs: Job[]
 }) => {
     const [initialData, setInitialData] = useState(jobs);
-    const { data, queryParams, setQueryParams } = useJobs({
+    const { data, queryParams, setQueryParams, isRefetching } = useJobs({
         initialData
     });
 
@@ -48,6 +48,7 @@ const Tracker = ({ session, profile, jobs }: {
                     setFilterParams={setQueryParams}
                     queryParams={queryParams}
                     count={data.count ?? undefined}
+                    isRefetching={isRefetching}
                 />
             ) :
                 <JobsKanban

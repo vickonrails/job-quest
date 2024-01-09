@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes } from 'react'
+import { type HTMLAttributes } from 'react';
 import { TableHeader } from './TableHeader';
 
 import { useWindowHeight } from 'src/hooks/useWindowHeight';

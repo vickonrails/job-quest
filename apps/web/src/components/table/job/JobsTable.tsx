@@ -1,3 +1,4 @@
+import { Spinner } from '@components/spinner'
 import { type QueryParams } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { cn } from '@utils/cn'
@@ -28,11 +29,12 @@ interface JobsTableProps {
     queryParams: QueryParams
     setFilterParams: (params: QueryParams) => void
     count?: number
+    isRefetching?: boolean
 }
 
 // TODO: I want the filtering to work in a very simple way - Just provide sorting buttons on the head of the table columns. Once clicked, it'll sort descending, clicking again will sort ascending and clicking again will remove the sort.
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
-const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps) => {
+const JobsTable = ({ jobs, setFilterParams, queryParams, count, isRefetching }: JobsTableProps) => {
     const client = useSupabaseClient<Database>();
     const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
     const router = useRouter();
@@ -57,7 +59,8 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps
 
     return (
         <section>
-            <section className="flex justify-end items-center mb-4">
+            <section className="flex justify-between items-center mb-4">
+                {isRefetching ? <Spinner /> : <span />}
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
                         <span>
@@ -67,7 +70,7 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps
                     </div>
                 </div>
             </section>
-            <>
+            <div className={cn(isRefetching && 'opacity-60 pointer-events-none')}>
                 <Table<Job>
                     columns={columns}
                     data={jobs}
@@ -79,16 +82,12 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps
                     setFilterParams={setFilterParams}
                     queryParams={queryParams}
                 />
-            </>
+            </div>
         </section >
     )
 }
 
 const PAGINATION_OPTIONS: SelectOption[] = [
-    {
-        value: 5,
-        label: '5 rows'
-    },
     {
         value: 10,
         label: '10 rows'
@@ -136,7 +135,7 @@ function Pagination({ totalCount, count, queryParams, setFilterParams }: Paginat
     }
 
     return (
-        <div className="flex items-center gap-1 mt-4">
+        <div className="flex items-center gap-1 my-4">
             <div className="flex gap-2">
                 <button onClick={prev} disabled={isFirstPage} className={cn(isFirstPage && 'cursor-not-allowed text-gray-300')}><ChevronLeft /></button>
                 <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setFilterParams?.({ limit: Number.parseInt(val), offset })} />
