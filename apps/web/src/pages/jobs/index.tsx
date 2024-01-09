@@ -10,15 +10,19 @@ import { type Job, type Profile } from 'lib/types';
 import { AlignStartHorizontal, TableIcon } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { useState, type HTMLAttributes } from 'react';
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'src/hooks/useJobs';
 
 type View = 'kanban' | 'table';
 
 const Tracker = ({ session, profile, jobs }: {
     session: Session, profile: Profile, jobs: Job[]
 }) => {
-    const { data } = useJobs({ initialData: jobs });
+    const { data, queryParams, setQueryParams } = useJobs({
+        initialData: jobs
+    });
+
     const [isUpdating, setIsUpdating] = useState(false)
-    const [view, setView] = useState<View>('kanban');
+    const [view, setView] = useState<View>('table');
     const isTable = view === 'table';
 
     return (
@@ -32,7 +36,14 @@ const Tracker = ({ session, profile, jobs }: {
                 </h1>
                 <ViewSwitcher view={view} setView={setView} />
             </section>
-            {isTable ? <JobsTable jobs={data?.jobs ?? []} /> :
+            {isTable ? (
+                <JobsTable
+                    jobs={data?.jobs ?? []}
+                    setFilterParams={setQueryParams}
+                    queryParams={queryParams}
+                    count={data.count ?? undefined}
+                />
+            ) :
                 <JobsKanban
                     jobs={data?.jobs ?? []}
                     onUpdateStart={() => setIsUpdating(true)}
@@ -71,6 +82,9 @@ function IconButton({ active, className, ...props }: HTMLAttributes<HTMLButtonEl
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const paginationQuery = context.query;
+    const limit = Number(paginationQuery['limit'] ?? DEFAULT_LIMIT);
+    const offset = Number(paginationQuery['offset'] ?? DEFAULT_OFFSET);
     const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -84,7 +98,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    const { data: jobs } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
+    let query = supabase.from('jobs').select().eq('user_id', session?.user.id)
+
+    if (limit) {
+        query = query.range(offset, (limit - 1) + (offset))
+    }
+
+    const { data: jobs } = await query;
 
     return {
         props: {

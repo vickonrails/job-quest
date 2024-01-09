@@ -1,3 +1,4 @@
+import { type QueryParams } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
@@ -16,20 +17,23 @@ export const columns: Column<Job> = [
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]
 
-const SIZE_LIMIT = 50
-
 const SORT_OPTIONS: SelectOption[] = [
     { label: 'Newest', value: 'created_at' },
     { label: 'Highest Priority', value: 'priority' },
     { label: 'Highest Status', value: 'status' }
 ]
 
+interface JobsTableProps {
+    jobs: Job[]
+    queryParams: QueryParams
+    setFilterParams: (params: QueryParams) => void
+    count?: number
+}
+
 // TODO: I want the filtering to work in a very simple way - Just provide sorting buttons on the head of the table columns. Once clicked, it'll sort descending, clicking again will sort ascending and clicking again will remove the sort.
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
-const JobsTable = ({ jobs }: { jobs: Job[] }) => {
+const JobsTable = ({ jobs, setFilterParams, queryParams, count }: JobsTableProps) => {
     const client = useSupabaseClient<Database>();
-    const [sizeLimit, setSizeLimit] = useState(SIZE_LIMIT)
-    // TODO: put the sorting and pagination capabilities inside the useJobs hook
     const [offset, setOffset] = useState<number>(0)
     const [sort, setSort] = useState<SelectOption>(SORT_OPTIONS[0]!)
     const router = useRouter();
@@ -54,8 +58,7 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
 
     return (
         <section>
-            {/* <section className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium">All Jobs</h3>
+            <section className="flex justify-end items-center mb-4">
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
                         <span>
@@ -64,7 +67,7 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
                         <Select size="sm" defaultValue={String(sort?.value)} options={SORT_OPTIONS} onValueChange={val => setSort(SORT_OPTIONS.find(x => x.value === val)!)} />
                     </div>
                 </div>
-            </section> */}
+            </section>
             <>
                 <Table<Job>
                     columns={columns}
@@ -72,11 +75,10 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
                     actions={actions}
                 />
                 <Pagination
-                    totalCount={jobs.length}
+                    totalCount={count}
                     count={jobs.length}
-                    setLimit={(val) => setSizeLimit(val)}
-                    limit={sizeLimit}
-                    offset={offset}
+                    setFilterParams={setFilterParams}
+                    queryParams={queryParams}
                     setOffset={setOffset}
                 />
             </>
@@ -85,6 +87,14 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
 }
 
 const PAGINATION_OPTIONS: SelectOption[] = [
+    {
+        value: 5,
+        label: '5 rows'
+    },
+    {
+        value: 10,
+        label: '10 rows'
+    },
     {
         value: 50,
         label: '50 rows'
@@ -98,14 +108,17 @@ const PAGINATION_OPTIONS: SelectOption[] = [
 interface PaginationProps {
     totalCount?: number
     count?: number
-    offset: number
-    limit: number
+    queryParams: QueryParams
+    setFilterParams: (params: QueryParams) => void
     setLimit?: (offset: number) => void
     setOffset: (offset: number) => void
 }
 
 // TODO: move to another file
-function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: PaginationProps) {
+function Pagination({ totalCount, count, setOffset, queryParams, setFilterParams }: PaginationProps) {
+    const { limit, offset } = queryParams
+    if (!limit) return null;
+
     const isLastPage = ((offset + 1) + limit >= (totalCount ?? 0))
     const isFirstPage = offset === 0;
     const totalPages = Math.ceil((totalCount ?? 0) / limit)
@@ -113,7 +126,7 @@ function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: P
 
     const next = () => {
         if (isLastPage) return
-        setOffset?.(offset + limit)
+        setFilterParams?.({ offset: offset + limit })
     }
 
     const prev = () => {
@@ -122,14 +135,14 @@ function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: P
             setOffset(0)
             return;
         }
-        setOffset?.(offset - limit)
+        setFilterParams?.({ offset: offset - limit })
     }
 
     return (
         <div className="flex items-center gap-1 mt-4">
             <div className="flex gap-2">
                 <button onClick={prev} disabled={isFirstPage} className={cn(isFirstPage && 'cursor-not-allowed text-gray-300')}><ChevronLeft /></button>
-                <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setLimit?.(Number.parseInt(val))} />
+                <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setFilterParams?.({ limit: Number.parseInt(val), offset })} />
                 <button onClick={next} disabled={isLastPage}><ChevronRight className={cn(isLastPage && 'cursor-not-allowed text-gray-300')} /></button>
             </div>
 
