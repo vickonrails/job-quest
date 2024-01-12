@@ -67,10 +67,6 @@ export function parseSorting(sort: string) {
     return { field, direction: direction as SortDirection }
 }
 
-function stringifySorting(sort: Sort) {
-    return `${sort.field},${sort.direction}`
-}
-
 // TODO: add request parameters 
 // so I can implement search, pagination & limit, etc
 // also research possible ways to add react query in here too
@@ -89,26 +85,13 @@ export function useJobs(options?: UseJobsOptions, jobId?: string) {
     });
 
     const setQueryParams = (params: QueryParams) => {
-        const newURL = new URL(window.location.href)
         const newParams: QueryParams = {
             limit: params.limit ?? DEFAULT_LIMIT,
             offset: params.offset ?? 0,
             orderBy: params.orderBy ?? queryParams.orderBy ?? DEFAULT_SORTING,
         }
 
-        if (newParams.limit)
-            newURL.searchParams.set('limit', newParams.limit.toString())
-
-        if (newParams.offset)
-            newURL.searchParams.set('offset', (newParams.offset ?? 0).toString())
-
-        if (newParams.orderBy) {
-            const value = stringifySorting(newParams.orderBy)
-            newURL.searchParams.set('orderBy', value);
-        }
-
         setParams(newParams);
-        window.history.pushState(newParams, '', newURL);
     }
 
     const queryResult = useQuery(
