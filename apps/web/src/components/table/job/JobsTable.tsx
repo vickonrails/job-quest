@@ -1,5 +1,4 @@
-import { Spinner } from '@components/spinner'
-import { type Sort, type SortDirection, type QueryParams } from '@hooks'
+import { type QueryParams, type Sort, type SortDirection } from '@hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
@@ -72,7 +71,6 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count, isRefetching }: 
     return (
         <section>
             <section className="flex justify-between items-center mb-4">
-                {isRefetching ? <Spinner /> : <span />}
                 <div className="flex gap-5 items-center">
                     <div className="flex gap-3 items-center">
                         <span>

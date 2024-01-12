@@ -45,7 +45,7 @@ export function Table<T extends BaseEntity,>({ columns, data, actions, hideActio
     const windowHeight = useWindowHeight()
     return (
         <div
-            style={{ maxHeight: windowHeight - 190, overflow: 'auto', position: 'relative' }}
+            style={{ maxHeight: windowHeight - 280, overflow: 'auto', position: 'relative' }}
             className="border-t border-b"
             {...rest}
         >
