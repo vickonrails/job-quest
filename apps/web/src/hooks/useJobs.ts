@@ -1,7 +1,7 @@
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type Database } from '../../lib/database.types';
 import { type Job } from '../../lib/types';
 
@@ -25,7 +25,7 @@ interface Options {
 }
 
 interface UseJobsOptions {
-    initialData: Job[]
+    initialData?: Job[]
 }
 
 async function getJobs(client: SupabaseClient<Database>, options: Options) {
@@ -67,6 +67,11 @@ export function parseSorting(sort: string) {
     return { field, direction: direction as SortDirection }
 }
 
+
+function stringifySorting(sort: Sort) {
+    return `${sort.field},${sort.direction}`
+}
+
 // TODO: add request parameters 
 // so I can implement search, pagination & limit, etc
 // also research possible ways to add react query in here too
@@ -91,7 +96,26 @@ export function useJobs(options?: UseJobsOptions, jobId?: string) {
             orderBy: params.orderBy ?? queryParams.orderBy ?? DEFAULT_SORTING,
         }
 
+        const newURL = new URL(window.location.href)
+
+        if (newParams.limit)
+            newURL.searchParams.set('limit', String(newParams.limit))
+
+        if (newParams.offset !== undefined)
+            newURL.searchParams.set('offset', String(newParams.offset))
+
+        if (newParams.orderBy) {
+            const value = stringifySorting(newParams.orderBy)
+            newURL.searchParams.set('orderBy', value);
+        }
+
+        const historyState = {
+            path: window.location.pathname,
+            ...newParams,
+        }
+
         setParams(newParams);
+        window.history.pushState(historyState, '', newURL);
     }
 
     const queryResult = useQuery(

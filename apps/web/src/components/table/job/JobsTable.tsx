@@ -78,7 +78,7 @@ const JobsTable = ({ jobs, setFilterParams, queryParams, count, isRefetching }: 
                         </span>
                         <Select
                             size="sm"
-                            defaultValue={String(queryParams.orderBy?.field)}
+                            value={String(queryParams.orderBy?.field)}
                             options={SORT_OPTIONS}
                             onValueChange={onSortValueChange}
                         />
@@ -153,7 +153,7 @@ function Pagination({ totalCount, count, queryParams, setFilterParams }: Paginat
         <div className="flex items-center gap-1 my-4">
             <div className="flex gap-2">
                 <button onClick={prev} disabled={isFirstPage} className={cn(isFirstPage && 'cursor-not-allowed text-gray-300')}><ChevronLeft /></button>
-                <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setFilterParams?.({ limit: Number.parseInt(val), offset })} />
+                <Select size="sm" options={PAGINATION_OPTIONS} value={String(limit)} onValueChange={val => setFilterParams?.({ limit: Number.parseInt(val), offset })} />
                 <button onClick={next} disabled={isLastPage}><ChevronRight className={cn(isLastPage && 'cursor-not-allowed text-gray-300')} /></button>
             </div>
 
