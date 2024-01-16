@@ -15,10 +15,9 @@ const Tracker = ({ session, profile, jobs }: {
     const [isUpdating, setIsUpdating] = useState(false)
 
     return (
-        <Layout session={session} profile={profile}>
+        <Layout session={session} profile={profile} pageTitle="Jobs">
             <section className="flex justify-between items-center mb-3">
                 <h1 className="text-xl flex font-bold gap-2 items-center">
-                    <span>Jobs</span>
                     {isUpdating && <Spinner />}
                 </h1>
             </section>

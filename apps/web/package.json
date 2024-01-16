@@ -36,6 +36,7 @@
     "lucide-react": "^0.268.0",
     "next": "^13.2.4",
     "qs": "^6.11.2",
+    "react-hook-form": "^7.49.3",
     "supabase": "^1.106.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",

@@ -33,6 +33,6 @@ export function getSize(size: Size) {
 
     case 'md':
     default:
-      return 'py-2 px-3 text-base'
+      return 'p-3 text-sm'
   }
 }

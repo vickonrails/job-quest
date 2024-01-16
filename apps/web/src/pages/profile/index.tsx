@@ -2,15 +2,15 @@ import { Layout } from '@components/layout';
 import { type Database } from '@lib/database.types';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
-import { type PageProps } from '.';
+import { type PageProps } from '..';
 
 export default function Profile({ session, profile }: PageProps) {
     return (
         <Layout
+            pageTitle="Profile"
             session={session}
             profile={profile}
         >
-            <h1 className="text-xl font-medium">Profile</h1>
         </Layout>
     )
 }

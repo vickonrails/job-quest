@@ -1,7 +1,7 @@
 import { type Session } from '@supabase/supabase-js';
 import { cn } from '@utils/cn';
 import dynamic from 'next/dynamic';
-import { useState, type FC, type HTMLAttributes } from 'react';
+import { useState, type FC, type HTMLAttributes, type ReactNode } from 'react';
 import { type Profile } from '../../../lib/types';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
@@ -15,17 +15,18 @@ export interface LayoutProps extends HTMLAttributes<HTMLElement> {
     session: Session;
     profile: Profile;
     containerClasses?: string
+    pageTitle?: ReactNode
 }
 
-export const Layout: FC<LayoutProps> = ({ children, className, session, profile: ssrProfile, containerClasses, ...rest }) => {
+export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, session, profile: ssrProfile, containerClasses, ...rest }) => {
     const [profile, setProfile] = useState(ssrProfile);
     const [showModal, setShowModal] = useState(!Boolean(ssrProfile));
 
     return (
-        <div className={cn('flex h-full max-w-screen-2xl m-auto', className)} {...rest}>
+        <div className={cn('flex overflow-y-auto h-full max-w-screen-2xl m-auto', className)} {...rest}>
             <Sidebar className="basis-60" />
             <main className="flex-1 p-6 flex flex-col">
-                <Navbar profile={profile} session={session} />
+                <Navbar profile={profile} session={session} pageTitle={pageTitle} />
                 <div className={cn('flex-1', containerClasses)}>
                     {children}
                 </div>
