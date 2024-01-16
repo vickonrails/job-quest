@@ -9,8 +9,6 @@ import { Button } from 'ui';
 export default function ResumeBuilder({ session, profile }: { session: Session, profile: Profile }) {
     return (
         <Layout
-            className="flex"
-            containerClasses="flex flex-col gap-4"
             session={session}
             profile={profile}
         >

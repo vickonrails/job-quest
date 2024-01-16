@@ -6,7 +6,7 @@ import { type Profile } from '../../../lib/types';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 
-// Error handling in this component is not good
+// TODO: Error handling in this component is not good
 const OnboardingDialog = dynamic(() => import('./OnboardingDialog'), {
     ssr: false
 });

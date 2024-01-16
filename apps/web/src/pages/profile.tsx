@@ -1,16 +1,16 @@
 import { Layout } from '@components/layout';
 import { type Database } from '@lib/database.types';
-import { type Profile } from '@lib/types';
-import { type Session, createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
+import { type PageProps } from '.';
 
-export default function ResumeBuilder({ session, profile }: { session: Session, profile: Profile }) {
+export default function Profile({ session, profile }: PageProps) {
     return (
         <Layout
             session={session}
             profile={profile}
         >
-            <h1 className="text-xl font-medium">Resume Builder</h1>
+            <h1 className="text-xl font-medium">Profile</h1>
         </Layout>
     )
 }

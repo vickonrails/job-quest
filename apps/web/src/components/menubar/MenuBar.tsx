@@ -1,15 +1,21 @@
-import * as RadixMenuBar from '@radix-ui/react-menubar'
+import * as RadixMenuBar from '@radix-ui/react-menubar';
+import { cn } from '@utils/cn';
+import { cva } from 'class-variance-authority';
 import clsx from 'clsx';
 import { type FC } from 'react';
 
 interface MenuBarProp extends RadixMenuBar.MenubarProps {
     trigger: React.ReactNode
     triggerProps?: RadixMenuBar.MenubarTriggerProps
+
+    contentProps?: RadixMenuBar.MenubarContentProps
 }
 
-// TODO: fix x index
-function MenuBar({ trigger, triggerProps, children, ...rest }: MenuBarProp) {
+// TODO: fix z index
+// TODO: I might just need to export the containing Content & Trigger to avoid taking children props on the parent
+function MenuBar({ trigger, triggerProps, children, contentProps, ...rest }: MenuBarProp) {
     const { className } = triggerProps ?? {}
+    const { className: contentClasses, ...restContentProps } = contentProps ?? {}
     return (
         <RadixMenuBar.Root className="text-base-col" {...rest}>
             <RadixMenuBar.Menu>
@@ -20,24 +26,40 @@ function MenuBar({ trigger, triggerProps, children, ...rest }: MenuBarProp) {
                     {trigger}
                 </RadixMenuBar.Trigger>
                 <RadixMenuBar.Portal>
-                    <RadixMenuBar.Content className="bg-white rounded-md p-2 min-w-[15px] shadow-sm border-solid border border-gray-100 mt-1 text-light-text">
+                    <RadixMenuBar.Content
+                        className={cn(
+                            'bg-white rounded-md p-1 min-w-[15px] shadow-sm border-solid border border-gray-200 mt-1 text-light-text',
+                            contentClasses
+                        )} {...restContentProps}
+                    >
                         {children}
                     </RadixMenuBar.Content>
                 </RadixMenuBar.Portal>
             </RadixMenuBar.Menu>
         </RadixMenuBar.Root>
     );
-
 }
+
 type MenuItemProps = RadixMenuBar.MenuItemProps & {
     icon?: React.ReactNode
+    variant?: 'default' | 'destructive'
 }
 
-const MenuItem: FC<MenuItemProps> = ({ icon, className, children, ...rest }) => {
-    // TODO: add variant prop for menu Item
+// TODO: there's a new prop :focus-visible. I also need to cater for this in styling
+const menuItemVariants = cva('transition text-sm px-2 py-1 flex items-center rounded-md hover:cursor-pointer', {
+    variants: {
+        variant: {
+            default: 'hover:bg-gray-100',
+            destructive: 'text-red-400 hover:bg-red-50 font-medium',
+        }
+    }
+})
+
+// TODO: wanted to use the cva here but I think a better design would be to use it in the content or even the wrapper itself
+const MenuItem: FC<MenuItemProps> = ({ icon, className, variant = 'default', children, ...rest }) => {
     return (
         <RadixMenuBar.Item
-            className={clsx('transition text-sm px-2 py-1 flex items-center rounded-md hover:bg-gray-100 hover:cursor-pointer', className)}
+            className={cn(menuItemVariants({ variant }), className)}
             {...rest}
         >
             <span className="pr-2">{icon}</span>
@@ -48,4 +70,4 @@ const MenuItem: FC<MenuItemProps> = ({ icon, className, children, ...rest }) => 
 const Separator = () => (
     <RadixMenuBar.Separator className="bg-gray-100 h-[1px]" />
 )
-export { MenuBar, MenuItem, Separator }
+export { MenuBar, MenuItem, Separator };

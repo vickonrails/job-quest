@@ -1,41 +1,45 @@
-import { type ImgHTMLAttributes } from 'react'
-import { clsx } from 'clsx'
+import { cn } from '@utils/cn'
+import { cva } from 'class-variance-authority'
+import Image, { type ImageProps } from 'next/image'
 
 type IAvatarBorder = 'curved' | 'round' | 'square'
-interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
+interface AvatarProps extends Omit<ImageProps, 'src'> {
     border?: IAvatarBorder
     size?: 'xs' | 'sm' | 'md' | 'lg'
+    src?: string
 }
 
-type IBorderLookup = Record<IAvatarBorder, string>;
-const borderLookup: IBorderLookup = {
+const avatarVariants = cva('', {
+    variants: {
+        size: {
+            xs: 'h-6 w-6',
+            sm: 'h-8 w-8',
+            md: 'h-9 w-9',
+            lg: 'h-12 w-12'
+        },
+        border: {
+            curved: 'rounded-lg',
+            round: 'rounded-full',
+            square: 'rounded-none'
+        }
+    }
+});
 
-    /**
-     * curved borders - 8px
-     */
-    curved: 'rounded-lg',
+export const Avatar = ({ border = 'round', src, size, alt, className, ...rest }: AvatarProps) => {
+    // TODO: fallback to placeholder
+    if (!src) return null;
 
-    /**
-     * full circle avatar
-     */
-    round: 'rounded-full',
-
-    /**
-     * perfect square avatar
-     */
-    square: 'rounded-none'
-}
-
-export const Avatar = ({ border = 'round', className, /** size = 'sm', */ alt, ...rest }: AvatarProps) => {
-
-    // TODO: use appropriate figure component
     return (
-        <img
-            className={clsx(borderLookup[border], className)}
-            width={40}
+        <Image
+            src={src}
+            objectFit="cover"
             height={40}
-            title={alt}
-            alt={alt}
+            width={40}
+            className={cn(
+                avatarVariants({ size, border }),
+                className
+            )}
+            alt={alt ?? ''}
             {...rest}
         />
     )
