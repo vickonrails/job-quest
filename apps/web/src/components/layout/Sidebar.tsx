@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from '@components/link';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@components/tooltip';
+import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@components/tooltip';
 import { cn } from '@utils/cn';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -99,12 +99,14 @@ const NavLink = ({ href, ...props }: LinkProps) => {
 
     return (
         <Tooltip delayDuration={300}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
                 {link}
             </TooltipTrigger>
-            <TooltipContent side="right">
-                Coming soon
-            </TooltipContent>
+            <TooltipPortal>
+                <TooltipContent side="right">
+                    Coming soon
+                </TooltipContent>
+            </TooltipPortal>
         </Tooltip>
     )
 }

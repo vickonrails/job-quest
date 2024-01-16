@@ -47,7 +47,7 @@ function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: P
         <div className="flex items-center gap-1 mt-4">
             <div className="flex gap-2">
                 <button onClick={prev} disabled={isFirstPage} className={cn(isFirstPage && 'cursor-not-allowed text-gray-300')}><ChevronLeft /></button>
-                <Select size="sm" options={PAGINATION_OPTIONS} defaultValue={String(limit)} onValueChange={val => setLimit?.(Number.parseInt(val))} />
+                <Select size="sm" options={PAGINATION_OPTIONS} value={String(limit)} onValueChange={(val: string) => setLimit?.(Number.parseInt(val))} />
                 <button onClick={next} disabled={isLastPage}><ChevronRight className={cn(isLastPage && 'cursor-not-allowed text-gray-300')} /></button>
             </div>
 

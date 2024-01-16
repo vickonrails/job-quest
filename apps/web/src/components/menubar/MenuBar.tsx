@@ -8,7 +8,7 @@ interface MenuBarProp extends RadixMenuBar.MenubarProps {
 }
 
 // TODO: fix x index
-const MenuBar: FC<MenuBarProp> = ({ trigger, triggerProps, children, ...rest }) => {
+function MenuBar({ trigger, triggerProps, children, ...rest }: MenuBarProp) {
     const { className } = triggerProps ?? {}
     return (
         <RadixMenuBar.Root className="text-base-col" {...rest}>
