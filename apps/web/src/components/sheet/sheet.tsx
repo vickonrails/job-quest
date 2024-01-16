@@ -7,16 +7,8 @@ import { cn } from '@utils/cn'
 
 const SheetRoot = SheetPrimitive.Root
 
-const SheetTrigger = SheetPrimitive.Trigger
+const SheetPortal = SheetPrimitive.Portal
 
-const SheetClose = SheetPrimitive.Close
-
-const SheetPortal = ({
-  className,
-  ...props
-}: SheetPrimitive.DialogPortalProps) => (
-  <SheetPrimitive.Portal className={cn(className)} {...props} />
-)
 SheetPortal.displayName = SheetPrimitive.Portal.displayName
 
 const SheetOverlay = React.forwardRef<
@@ -24,10 +16,7 @@ const SheetOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
-    className={cn(
-      'fixed inset-0 bg-black opacity-20 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:duration-200 data-[state=closed]:animate-out data-[state=closed]:duration-200 data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      className
-    )}
+    className={className}
     {...props}
     ref={ref}
   />

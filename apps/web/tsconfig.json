@@ -38,15 +38,12 @@
     }
   },
   "include": [
-    "apps/web/.eslintrc.cjs",
-    "apps/web/next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.mjs",
-    "apps/web/src/components/button",
-    "apps/web/src/utils/seed.ts",
-    "packages/web/tsconfig.json"
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "lib/**/*.{ts}",
+    ".eslintrc.cjs",
+    "next.config.mjs",
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules"

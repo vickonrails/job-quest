@@ -7,7 +7,7 @@ import { type Database } from 'lib/database.types'
 import { type GetServerSideProps, type NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { AuthCard, Button, Input } from 'ui'
 import GoogleLogo from '../../public/google-logo.png'
 
@@ -90,7 +90,7 @@ const SignIn: NextPage<SignInProps> = () => {
                         />
                     )}
                     <form onSubmit={handleSignIn}>
-                        <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev) => setEmail(ev.target.value)} className="mb-2" label="Email" name="email" fullWidth />
+                        <Input autoFocus size="lg" placeholder="Enter email" value={email} onChange={(ev: ChangeEvent<HTMLInputElement>) => setEmail(ev.target.value)} className="mb-2" label="Email" name="email" fullWidth />
                         <Button disabled={emailSent || isLoading} size="lg" loading={isLoading} className="mb-3 w-full">Send Magic Link</Button>
                     </form>
 
