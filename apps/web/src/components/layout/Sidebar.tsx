@@ -30,12 +30,12 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
 
                     <NavLink href="/jobs">
                         <Folder className="mr-2" />
-                        <span>Tracker</span>
+                        <span>Job Tracker</span>
                     </NavLink>
 
-                    <NavLink href="/resume-builder" disabled>
+                    <NavLink href="/resumes">
                         <File className="mr-2" />
-                        <span>Resume Builder</span>
+                        <span>My Resumes</span>
                     </NavLink>
                 </NavGroup>
 
