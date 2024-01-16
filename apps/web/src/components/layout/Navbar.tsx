@@ -16,7 +16,7 @@ const Navbar: FC<NavbarProps> = ({ profile, pageTitle, ...props }) => {
             {isTitleString ? (
                 <h1 className="text-xl font-medium">{pageTitle}</h1>
             ) : (
-                <span>pageTitle</span>
+                <span>{pageTitle}</span>
             )}
             <NavbarMenu profile={profile} />
         </nav>
