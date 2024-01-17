@@ -4,7 +4,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { type Note, type Job } from 'lib/types';
 import React, { type HTMLAttributes } from 'react'
-import { useRowDelete } from 'src/hooks/useDeleteModal';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useNotes } from 'src/hooks/useNotes';
 import NoteItem from './note-item';
 import { cn } from '@utils/cn';
@@ -23,7 +23,7 @@ function NotesList({ job, ...rest }: NoteListProps) {
         handleDelete,
         setIsOpen,
         loading: isDeleting
-    } = useRowDelete<Note>({
+    } = useDeleteModal<Note>({
         onDelete: async (id: string) => {
             const { error } = await client.from('notes').delete().eq('id', id)
             if (error) throw error;

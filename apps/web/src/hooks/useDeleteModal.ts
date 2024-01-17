@@ -2,12 +2,12 @@ import { type BaseEntity } from '@components/table'
 import { useToast } from '@components/toast/use-toast'
 import { useCallback, useState } from 'react'
 
-interface RowDeleteHookProps {
+interface UseDeleteProps {
     onDelete?: (id: string) => Promise<void>
     refresh?: () => Promise<void>
 }
 
-export function useRowDelete<T extends BaseEntity>(initialProps: RowDeleteHookProps) {
+export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProps) {
     const { toast } = useToast()
     const [isOpen, setIsOpen] = useState(false)
     const [entity, setEntity] = useState<T | null>(null)
