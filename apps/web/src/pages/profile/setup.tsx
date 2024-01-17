@@ -62,12 +62,12 @@ export default function Setup({ profile, session, workExperience }: SetupPagePro
     return (
         <Layout
             pageTitle="Setup Profile"
-            containerClasses="flex px-4 py-8 bg-gray-50"
+            containerClasses="flex px-4 py-8 bg-gray-50 overflow-auto"
             session={session}
             profile={profile}
         >
             <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session }}>
-                <aside className="w-1/5 border-r">
+                <aside className="w-1/5 border-r sticky top-0">
                     <ul className="text-sm flex flex-col">
                         <SetupNavigator step={1} onClick={() => setStep(1)}>Basic Information</SetupNavigator>
                         <SetupNavigator step={2} onClick={() => setStep(2)}>Work Experience</SetupNavigator>

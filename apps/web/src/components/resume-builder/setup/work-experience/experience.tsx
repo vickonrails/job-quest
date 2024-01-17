@@ -6,20 +6,29 @@ import { useSetupContext } from 'src/hooks/useSetupContext'
 import { type FormFields } from 'src/pages/profile/setup'
 import { Button, Input } from 'ui'
 import { StepContainer } from '../container'
-import { Highlights, type RefTypeWorkExperience } from './highlights'
+import { type RefTypeWorkExperience } from './highlights'
 
 export function WorkExperience() {
     const { register, control, handleSubmit, formState: { isSubmitting } } = useFormContext<FormFields>()
     const { fields, append, remove } = useFieldArray({
         name: 'workExperience',
-        control
+        control,
+        keyName: '_id'
     })
-    const { next, updateWorkExperience, session } = useSetupContext()
+    const { next, updateWorkExperience, deleteExperience, session } = useSetupContext()
     const highlightRef = useRef<RefTypeWorkExperience>(null)
     const onSubmit = async (values: FormFields) => {
         if (!session?.user.id) return;
         await updateWorkExperience(values, session?.user.id)
         next();
+    }
+
+    // TODO: add a confirmation dialog before deleting the work experience
+    // TODO: optimistic update and rollback if the request fails
+    const deleteWorkExperience = async (experience: WorkExperience, index: number) => {
+        if (!session?.user.id) return;
+        await deleteExperience(experience.id)
+        remove(index);
     }
 
     return (
@@ -28,7 +37,7 @@ export function WorkExperience() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 {fields.map((field, index) => (
                     <section className="p-4 border mb-8" key={field.id}>
-                        <section className="mb-4 grid grid-cols-2 gap-3 rounded-md" key={field.id}>
+                        <section className="mb-4 grid grid-cols-2 gap-3 rounded-md" key={field._id}>
                             <Input label="Company Name" placeholder="Company name" {...register(`workExperience.${index}.company_name`)} />
                             <Input label="Title" placeholder="Job titled held..." {...register(`workExperience.${index}.job_title`)} />
                             <Input label="Location" placeholder="Location..." {...register(`workExperience.${index}.location`)} />
@@ -39,7 +48,7 @@ export function WorkExperience() {
                         </section>
                         <div className="flex justify-end gap-2">
                             <Button size="sm" type="button" variant="outline" onClick={() => highlightRef.current?.append('')}>Add Highlight</Button>
-                            <Button size="sm" className="text-red-400 flex items-center gap-1" type="button" variant="outline" onClick={() => remove(index)}>
+                            <Button size="sm" className="text-red-400 flex items-center gap-1" type="button" variant="outline" onClick={() => deleteWorkExperience(field, index)}>
                                 <Trash2 size={18} />
                                 <span>Remove Block</span>
                             </Button>

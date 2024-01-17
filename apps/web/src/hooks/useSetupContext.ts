@@ -1,5 +1,4 @@
 import { type Database } from '@lib/database.types'
-import { WorkExperience } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Session } from '@supabase/supabase-js'
 import { createContext, useContext } from 'react'
@@ -59,9 +58,21 @@ export function useSetupContext() {
         await Promise.all(promise);
     }
 
+    const deleteExperience = async (id: string) => {
+        const { data, error } = await client.from('work_experience').delete().eq('id', id);
+
+        if (error) {
+            console.error(error)
+            return
+        }
+
+        console.log(data)
+    }
+
     return {
         ...useContext(SetupContext),
         updateBasicInfo,
-        updateWorkExperience
+        updateWorkExperience,
+        deleteExperience
     }
 }
