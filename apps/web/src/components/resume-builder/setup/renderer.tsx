@@ -1,4 +1,4 @@
-import { useSetupContext } from 'src/pages/profile/setup'
+import { useSetupContext } from 'src/hooks/useSetupContext'
 import { BasicInformation } from './basic-info'
 import { Education } from './education'
 import { OtherLinks } from './links'

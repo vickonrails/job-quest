@@ -11,6 +11,7 @@ export default function Profile({ session, profile }: PageProps) {
             session={session}
             profile={profile}
         >
+            {JSON.stringify(profile)}
         </Layout>
     )
 }

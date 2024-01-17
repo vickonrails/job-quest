@@ -31,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <>
         <label>
-          <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
+          <span className="block m-1.5 text-sm text-gray-500 select-none">{label}</span>
           <input
             type={type}
             className={cn(
