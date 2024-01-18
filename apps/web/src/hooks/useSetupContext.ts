@@ -1,6 +1,7 @@
 import { type Database } from '@lib/database.types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { type Session } from '@supabase/supabase-js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createContext, useContext } from 'react'
 import { type FormFields } from 'src/pages/profile/setup'
 
@@ -30,43 +31,47 @@ type BasicInfo = Pick<FormFields, 'full_name' | 'professional_summary' | 'title'
 // TODO: am I getting a new useSetupContext instance when I call this hook?
 export function useSetupContext() {
     const client = useSupabaseClient<Database>()
+    const queryClient = useQueryClient()
     const updateBasicInfo = async (values: BasicInfo, userId: string) => {
+        // TODO: error handling
         const { data, error } = await client.from('profiles').update(values).eq('id', userId);
 
         if (error) {
-            console.error(error)
             return
         }
-
-        console.log(data)
     }
 
-    // TODO: delete previously saved work experience
-    const updateWorkExperience = async (values: FormFields, userId: string) => {
-        const { workExperience } = values
+    const updateWorkExperience = useMutation({
+        // mutationFn: async (values: BasicInfo, userId: string) => {}
+        mutationFn: async ({ values, userId }: { values: FormFields, userId: string }) => {
+            const { workExperience } = values
 
-        const promise = workExperience?.map((value) => {
-            const exists = Boolean(value.id);
-            return exists ?
-                client.from('work_experience').update({ ...value, user_id: userId }).eq('id', userId) :
-                client.from('work_experience').insert({ ...value, user_id: userId }).eq('id', userId)
-        })
+            const promise = workExperience?.map((value) => {
+                const exists = Boolean(value.id);
+                return exists ?
+                    client.from('work_experience').update({ ...value, user_id: userId }).eq('id', userId) :
+                    client.from('work_experience').insert({ ...value, user_id: userId }).eq('id', userId)
+            })
 
-        if (!promise) return;
+            if (!promise) return;
 
-        // TODO: error handling
-        await Promise.all(promise);
-    }
+            // TODO: error handling
+            const promiseValue = await Promise.all(promise);
+
+            console.log({ promiseValue })
+        },
+        onSuccess: async (data, variables) => {
+            // await queryClient.invalidateQueries('')
+        }
+    })
 
     const deleteExperience = async (id: string) => {
+        // TODO: error handling
         const { data, error } = await client.from('work_experience').delete().eq('id', id);
 
         if (error) {
-            console.error(error)
             return
         }
-
-        console.log(data)
     }
 
     return {

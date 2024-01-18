@@ -1,7 +1,7 @@
 import { Layout } from '@components/layout';
 import { Steps } from '@components/resume-builder/setup/renderer';
 import { type Database } from '@lib/database.types';
-import { type WorkExperience } from '@lib/types';
+import { type WorkExperienceInsertDTO, type WorkExperience } from '@lib/types';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { cn } from '@utils/cn';
 import { type GetServerSideProps } from 'next';
@@ -9,6 +9,8 @@ import { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { SetupProvider, useSetupContext } from 'src/hooks/useSetupContext';
 import { type PageProps } from '..';
+import { useQuery } from '@tanstack/react-query';
+import { type SupabaseClient, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // TODO: support to toggle close and open the jobs
 
@@ -22,7 +24,7 @@ export interface FormFields {
     website?: string
     // skills?: Skills
     // change to work_experience
-    workExperience?: WorkExperience[]
+    workExperience?: WorkExperienceInsertDTO[]
     // otherProjects?: OtherProjects[]
     // education?: Education[]
 }
@@ -31,7 +33,7 @@ interface SetupPageProps extends PageProps {
     workExperience: WorkExperience[]
 }
 
-const defaultWorkExperience = {
+export const defaultWorkExperience = {
     company_name: '',
     job_title: '',
     location: '',
@@ -41,12 +43,31 @@ const defaultWorkExperience = {
     user_id: ''
 }
 
+async function fetchProfile(userId: string, client: SupabaseClient<Database>) {
+    try {
+        const { data, error } = await client.from('profiles').select().eq('id', userId).single()
+
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        // TODO: handle error
+    }
+}
+
 // TODO: fetch the initial values from the database and instantiate the form with it 
 // TODO: the steps should be available to navigate to from the UI
-export default function Setup({ profile, session, workExperience }: SetupPageProps) {
-    const [step, setStep] = useState(2)
+export default function Setup({ profile: initialProfile, session, workExperience }: SetupPageProps) {
+    const [step, setStep] = useState(1)
+    const client = useSupabaseClient<Database>()
+
+    const { data: profile } = useQuery(
+        ['profile'],
+        () => fetchProfile(session.user.id, client),
+        { initialData: initialProfile }
+    );
+
     // TODO: find a way to serialize this initial info into the form
-    const form = useForm<FormFields>({ defaultValues: { full_name: profile.full_name ?? '', location: profile.location ?? '', title: profile.title ?? '', professional_summary: profile.professional_summary ?? '', workExperience: workExperience.length ? workExperience : [defaultWorkExperience] } });
+    const form = useForm<FormFields>({ defaultValues: { full_name: profile?.full_name ?? '', location: profile?.location ?? '', title: profile.title ?? '', professional_summary: profile.professional_summary ?? '', workExperience: workExperience.length ? workExperience : [defaultWorkExperience] } });
 
     const canMoveNext = step < 4
     const canMovePrev = useMemo(() => step > 1, [step])

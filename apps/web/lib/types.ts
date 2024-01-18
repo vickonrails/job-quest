@@ -10,3 +10,4 @@ export type NoteUpdateDTO = Database['public']['Tables']['notes']['Update'];
 export type Note = Database['public']['Tables']['notes']['Row'];
 
 export type WorkExperience = Database['public']['Tables']['work_experience']['Row'];
+export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experience']['Insert'];
