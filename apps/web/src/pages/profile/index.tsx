@@ -3,6 +3,7 @@ import { type Database } from '@lib/database.types';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { type PageProps } from '..';
+import Link from 'next/link';
 
 export default function Profile({ session, profile }: PageProps) {
     return (
@@ -10,8 +11,12 @@ export default function Profile({ session, profile }: PageProps) {
             pageTitle="Profile"
             session={session}
             profile={profile}
+            containerClasses="p-6"
         >
             {JSON.stringify(profile)}
+            <div>
+                <Link href="/profile/setup">Setup</Link>
+            </div>
         </Layout>
     )
 }

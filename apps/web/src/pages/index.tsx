@@ -19,11 +19,13 @@ export interface PageProps {
     profile: Profile
 }
 
+// TODO: put profile in the react query cache so I can use it any and everywhere
 const Index = ({ session, profile, jobs }: PageProps & { jobs: Job[] }) => {
     return (
         <Layout
             session={session}
             profile={profile}
+            containerClasses="p-6"
         >
             <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">

@@ -22,11 +22,13 @@ export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, sessio
     const [profile, setProfile] = useState(ssrProfile);
     const [showModal, setShowModal] = useState(!Boolean(ssrProfile));
 
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
     return (
         <div className={cn('flex overflow-y-auto h-full max-w-screen-2xl m-auto', className)} {...rest}>
-            <Sidebar className="basis-60" />
+            {sidebarOpen && <Sidebar className="basis-60" />}
             <main className="flex-1  flex flex-col">
-                <Navbar profile={profile} session={session} pageTitle={pageTitle} />
+                <Navbar profile={profile} session={session} pageTitle={pageTitle} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
                 <div className={cn('flex-1', containerClasses)}>
                     {children}
                 </div>

@@ -13,11 +13,11 @@ export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProp
     const [entity, setEntity] = useState<T | null>(null)
     const [loading, setLoading] = useState(false)
 
-    const handleDelete = useCallback(() => {
+    const handleDelete = useCallback(async () => {
         if (!entity) return
 
         setLoading(true)
-        initialProps.onDelete?.(entity?.id).then(async () => {
+        await initialProps.onDelete?.(entity?.id).then(async () => {
             await initialProps.refresh?.()
             toast({
                 variant: 'success',

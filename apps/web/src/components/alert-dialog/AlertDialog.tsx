@@ -17,11 +17,11 @@ export const AlertDialog: FC<AlertDialogProps> = ({ open, description, title, on
         <Root open={open} {...rest}>
             <Portal>
                 <Overlay className="fixed bg-black opacity-20 inset-0" />
-                <Content className="bg-white w-full max-h-36 max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed rounded-md box-content h-[90%] flex flex-col">
+                <Content className="bg-white w-full h-auto max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed rounded-md box-content flex flex-col">
                     <Typography variant="display-sm-md" className="px-4 py-3">{title}</Typography>
                     <hr />
                     <div className="p-4 text-light-text">
-                        <Description>{description}</Description>
+                        <Description className="mb-4">{description}</Description>
                         <div className="flex justify-end gap-2">
                             <Button variant="outline" onClick={onCancel}>Cancel</Button>
                             <Button variant="destructive" onClick={onOk} loading={isProcessing}>Delete</Button>
