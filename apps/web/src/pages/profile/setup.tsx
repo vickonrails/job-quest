@@ -1,80 +1,42 @@
 import { Layout } from '@components/layout';
 import { Steps } from '@components/resume-builder/setup/renderer';
+import { SetupNavigator } from '@components/resume-builder/setup/set-up-navigator';
 import { type Database } from '@lib/database.types';
-import { type WorkExperienceInsertDTO, type WorkExperience } from '@lib/types';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { cn } from '@utils/cn';
+import { createPagesServerClient, type SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { type GetServerSideProps } from 'next';
 import { useMemo, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { SetupProvider, useSetupContext } from 'src/hooks/useSetupContext';
+import { SetupProvider } from 'src/hooks/useSetupContext';
 import { type PageProps } from '..';
-import { useQuery } from '@tanstack/react-query';
-import { type SupabaseClient, useSupabaseClient } from '@supabase/auth-helpers-react';
 
-// TODO: support to toggle close and open the jobs
-
-export interface FormFields {
-    full_name?: string
-    title?: string
-    professional_summary?: string
-    email?: string
-    location?: string
-    phoneNumber?: string
-    website?: string
-    // skills?: Skills
-    // change to work_experience
-    workExperience?: WorkExperienceInsertDTO[]
-    // otherProjects?: OtherProjects[]
-    // education?: Education[]
-}
-
-interface SetupPageProps extends PageProps {
-    workExperience: WorkExperience[]
-}
-
-export const defaultWorkExperience = {
-    company_name: '',
-    job_title: '',
-    location: '',
-    start_date: '',
-    end_date: '',
-    highlights: [],
-    user_id: ''
-}
-
-async function fetchProfile(userId: string, client: SupabaseClient<Database>) {
-    try {
-        const { data, error } = await client.from('profiles').select().eq('id', userId).single()
-
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        // TODO: handle error
-    }
+export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
+    if (!userId) return;
+    // TODO: error handling
+    return (await client.from('work_experience').select('*').eq('user_id', userId)).data;
 }
 
 // TODO: fetch the initial values from the database and instantiate the form with it 
 // TODO: the steps should be available to navigate to from the UI
-export default function Setup({ profile: initialProfile, session, workExperience }: SetupPageProps) {
-    const [step, setStep] = useState(1)
+export default function Setup({ profile, session }: PageProps) {
+    const [step, setStep] = useState(1);
     const client = useSupabaseClient<Database>()
-
-    const { data: profile } = useQuery(
-        ['profile'],
-        () => fetchProfile(session.user.id, client),
-        { initialData: initialProfile }
-    );
-
-    // TODO: find a way to serialize this initial info into the form
-    const form = useForm<FormFields>({ defaultValues: { full_name: profile?.full_name ?? '', location: profile?.location ?? '', title: profile.title ?? '', professional_summary: profile.professional_summary ?? '', workExperience: workExperience.length ? workExperience : [defaultWorkExperience] } });
+    const queryClient = useQueryClient()
 
     const canMoveNext = step < 4
     const canMovePrev = useMemo(() => step > 1, [step])
-    const next = () => {
+    const next = async () => {
         if (!canMoveNext) return
+
+        switch (step) {
+            case 1:
+            default:
+                await queryClient.prefetchQuery(['work_experience'], { queryFn: () => fetchWorkExperience({ client, userId: session.user.id }) })
+        }
+
         setStep(step + 1)
     }
+
     const prev = () => {
         if (step <= 1) return
         setStep(step - 1)
@@ -87,7 +49,7 @@ export default function Setup({ profile: initialProfile, session, workExperience
             session={session}
             profile={profile}
         >
-            <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session }}>
+            <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session, }}>
                 <aside className="w-1/5 border-r sticky top-0">
                     <ul className="text-sm flex flex-col">
                         <SetupNavigator step={1} onClick={() => setStep(1)}>Basic Information</SetupNavigator>
@@ -97,27 +59,10 @@ export default function Setup({ profile: initialProfile, session, workExperience
                     </ul>
                 </aside>
                 <main className="flex-1">
-                    <FormProvider {...form}>
-                        {/* <section> */}
-                        <Steps />
-                        {/* TODO: on every click, we're submitting the form and doing an optimistic update */}
-                        {/* <Button onClick={next}>{canMoveNext ? 'Continue' : 'Complete'}</Button> */}
-                        {/* </section> */}
-                    </FormProvider>
+                    <Steps profile={profile} />
                 </main>
             </SetupProvider>
         </Layout >
-    )
-}
-
-function SetupNavigator(props: React.AllHTMLAttributes<HTMLAnchorElement> & { step: number }) {
-    const { step: currentStep } = useSetupContext()
-    const isActive = currentStep === props.step
-
-    return (
-        <li className={cn('px-2 py-3 text-muted-foreground', isActive && 'bg-gray-100 border-l-4 border-primary pl-3 text-primary')}>
-            <a href="#" className="block" {...props} />
-        </li>
     )
 }
 
