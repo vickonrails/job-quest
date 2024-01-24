@@ -19,7 +19,7 @@ export async function fetchWorkExperience({ userId, client }: { userId?: string,
 export default function Setup({ profile, session }: PageProps) {
     const [step, setStep] = useState(1);
 
-    const canMoveNext = step < 4
+    const canMoveNext = step < 6
     const canMovePrev = useMemo(() => step > 1, [step])
     const next = () => {
         if (!canMoveNext) return
@@ -44,7 +44,9 @@ export default function Setup({ profile, session }: PageProps) {
                         <SetupNavigator step={1} onClick={() => setStep(1)}>Basic Information</SetupNavigator>
                         <SetupNavigator step={2} onClick={() => setStep(2)}>Work Experience</SetupNavigator>
                         <SetupNavigator step={3} onClick={() => setStep(3)}>Education</SetupNavigator>
-                        <SetupNavigator step={4} onClick={() => setStep(4)}>Other Links</SetupNavigator>
+                        <SetupNavigator step={4} onClick={() => setStep(4)}>Projects</SetupNavigator>
+                        <SetupNavigator step={5} onClick={() => setStep(5)}>Skills</SetupNavigator>
+                        <SetupNavigator step={6} onClick={() => setStep(6)}>Contact Information</SetupNavigator>
                     </ul>
                 </aside>
                 <main className="flex-1">

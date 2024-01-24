@@ -1,8 +1,10 @@
 import { type Profile } from '@lib/types'
 import { useSetupContext } from 'src/hooks/useSetupContext'
 import { BasicInformation } from './basic-info'
-import { Education } from './education'
-import { OtherLinks } from './links'
+import ContactInformation from './contact-information'
+import { EducationStep as Education } from './education'
+import Projects from './projects'
+import Skills from './skills'
 import { WorkExperience } from './work-experience/experience'
 
 export function Steps({ profile }: { profile: Profile }) {
@@ -11,6 +13,8 @@ export function Steps({ profile }: { profile: Profile }) {
         case 1: return <BasicInformation profile={profile} />
         case 2: return <WorkExperience />
         case 3: return <Education />
-        case 4: return <OtherLinks />
+        case 4: return <Projects />
+        case 5: return <Skills />
+        case 6: return <ContactInformation />
     }
 }
