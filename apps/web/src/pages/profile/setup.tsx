@@ -3,8 +3,6 @@ import { Steps } from '@components/resume-builder/setup/renderer';
 import { SetupNavigator } from '@components/resume-builder/setup/set-up-navigator';
 import { type Database } from '@lib/database.types';
 import { createPagesServerClient, type SupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useQueryClient } from '@tanstack/react-query';
 import { type GetServerSideProps } from 'next';
 import { useMemo, useState } from 'react';
 import { SetupProvider } from 'src/hooks/useSetupContext';
@@ -20,20 +18,11 @@ export async function fetchWorkExperience({ userId, client }: { userId?: string,
 // TODO: the steps should be available to navigate to from the UI
 export default function Setup({ profile, session }: PageProps) {
     const [step, setStep] = useState(1);
-    const client = useSupabaseClient<Database>()
-    const queryClient = useQueryClient()
 
     const canMoveNext = step < 4
     const canMovePrev = useMemo(() => step > 1, [step])
-    const next = async () => {
+    const next = () => {
         if (!canMoveNext) return
-
-        switch (step) {
-            case 1:
-            default:
-                await queryClient.prefetchQuery(['work_experience'], { queryFn: () => fetchWorkExperience({ client, userId: session.user.id }) })
-        }
-
         setStep(step + 1)
     }
 

@@ -9,6 +9,8 @@ import { Button, Input } from 'ui';
 import { StepContainer } from './container';
 import { useToast } from '@components/toast/use-toast';
 
+// useProfile hook to get the profile with default value from the parent component
+
 export function BasicInformation({ profile }: { profile: Profile }) {
     const { next, session } = useSetupContext()
     const client = useSupabaseClient<Database>()
@@ -35,7 +37,7 @@ export function BasicInformation({ profile }: { profile: Profile }) {
 
         try {
             await updateBasicInfo.mutateAsync({ values, userId: session?.user?.id });
-            await next();
+            next();
         } catch (error) {
             toast({
                 title: 'An error occured',
@@ -49,7 +51,7 @@ export function BasicInformation({ profile }: { profile: Profile }) {
             <p className="mb-4 text-gray-500">Enter relevant basic information. These are mostly contact information.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="grid grid-cols-2 mb-4 gap-4">
-                    <Input label="Fullname" placeholder="fullname" {...register('full_name', { required: { message: 'It is required', value: true } })} />
+                    <Input autoFocus label="Fullname" placeholder="fullname" {...register('full_name', { required: { message: 'It is required', value: true } })} />
                     <Input label="Title" placeholder="Title" {...register('title')} />
                     <Textarea rows={5} label="Professional summary" placeholder="Professional Summary" {...register('professional_summary')} containerClasses="col-span-2" />
                     <Input label="Location" placeholder="Location" {...register('location')} />

@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react'
 
 interface SetupContext {
     step: number,
-    next: () => Promise<void>,
+    next: () => void,
     prev: () => void,
     canMoveNext: boolean,
     canMovePrev: boolean,
@@ -14,7 +14,7 @@ interface SetupContext {
 // TODO: use context
 const setupContextDefault: SetupContext = {
     step: 1,
-    next: async () => {/** */ },
+    next: () => {/** */ },
     prev: () => { /** */ },
     canMoveNext: false,
     canMovePrev: false
