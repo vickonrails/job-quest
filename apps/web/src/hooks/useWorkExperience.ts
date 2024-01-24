@@ -47,13 +47,6 @@ export function useWorkExperience() {
         }
     })
 
-    const deleteExperience = useMutation({
-        mutationFn: async ({ id }: { id: string }) => {
-            const { error } = await client.from('work_experience').delete().eq('id', id)
-            if (error) throw error;
-        }
-    })
-
     useEffect(() => {
         form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] })
     }, [queryResult.data, form])
@@ -62,8 +55,7 @@ export function useWorkExperience() {
         experiences: queryResult,
         form,
         fieldsArr,
-        updateExperiences,
-        deleteExperience
+        updateExperiences
     }
 }
 
