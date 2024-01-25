@@ -80,7 +80,7 @@ export function WorkExperience() {
                         />
                     ))}
                     <FormFooter
-                        saveDisabled={fields.length < 0}
+                        saveDisabled={fields.length <= 0}
                         isSubmitting={form.formState.isSubmitting}
                         append={append}
                     />

@@ -10,8 +10,8 @@ import { type UseFieldArrayAppend } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
 import { Button } from 'ui';
-import { EducationForm } from '../education/form';
-import { StepContainer } from './container';
+import { EducationForm } from './education-fields';
+import { StepContainer } from '../container';
 
 export function EducationStep() {
     const client = useSupabaseClient<Database>()

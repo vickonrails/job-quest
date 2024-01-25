@@ -1,6 +1,6 @@
 import { type Database } from '@lib/database.types';
 import { type WorkExperience } from '@lib/types';
-import { type SupabaseClient, useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -11,8 +11,7 @@ import { useSetupContext } from './useSetupContext';
 export function useWorkExperience() {
     const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient()
-    const { next } = useSetupContext()
-    const session = useSession();
+    const { next, session } = useSetupContext()
     const queryResult = useQuery(['work_experience'], () => fetchWorkExperience({ userId: session?.user.id, client }));
     const form = useForm<{ workExperience: WorkExperience[] }>({
         defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] }
@@ -48,7 +47,7 @@ export function useWorkExperience() {
     })
 
     useEffect(() => {
-        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] })
+        form.reset({ workExperience: queryResult.data ?? [getDefaultExperience()] })
     }, [queryResult.data, form])
 
     return {

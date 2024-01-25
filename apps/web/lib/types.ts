@@ -13,3 +13,4 @@ export type WorkExperience = Database['public']['Tables']['work_experience']['Ro
 export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experience']['Insert'];
 
 export type Education = Database['public']['Tables']['education']['Row'];
+export type Project = Database['public']['Tables']['projects']['Row'];

@@ -38,7 +38,7 @@ export default function Setup({ profile, session }: PageProps) {
             session={session}
             profile={profile}
         >
-            <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session, }}>
+            <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session }}>
                 <aside className="w-1/5 border-r sticky top-0">
                     <ul className="text-sm flex flex-col">
                         <SetupNavigator step={1} onClick={() => setStep(1)}>Basic Information</SetupNavigator>

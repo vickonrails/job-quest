@@ -1,4 +1,3 @@
-import { useSession } from '@supabase/auth-helpers-react'
 import { type Session } from '@supabase/supabase-js'
 import { createContext, useContext } from 'react'
 
@@ -24,11 +23,8 @@ const SetupContext = createContext(setupContextDefault)
 export const SetupProvider = SetupContext.Provider
 
 export function useSetupContext() {
-    const session = useSession()
-    // if (!session) throw new Error('useSetupContext must be used inside a SetupProvider');
 
     return {
-        ...useContext(SetupContext),
-        session,
+        ...useContext(SetupContext)
     }
 }
