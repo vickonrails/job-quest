@@ -12,6 +12,7 @@ import { type Job, type Profile } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { ChevronLeft } from 'react-feather';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { useJobs } from 'src/hooks/useJobs';
@@ -23,7 +24,7 @@ const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profi
     const { data, isLoading, isRefetching } = useJobs({}, jobId)
 
     return (
-        <Layout session={session} profile={profile}>
+        <Layout session={session} profile={profile} containerClasses="px-6">
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />
@@ -41,6 +42,9 @@ const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profi
 
 const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
+    const labels = useMemo(() => {
+        return job?.labels?.map(label => ({ label }))
+    }, [job?.labels])
 
     if (!job) return;
 
@@ -83,7 +87,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                     </header>
 
                     <footer>
-                        <ChipsGroup labels={job.labels ?? []} />
+                        <ChipsGroup labels={labels ?? []} />
                     </footer>
                 </div>
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3">
