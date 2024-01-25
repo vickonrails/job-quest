@@ -1,18 +1,19 @@
+import { AlertDialog } from '@components/alert-dialog'
 import { Spinner } from '@components/spinner'
 import { useToast } from '@components/toast/use-toast'
 import { type Database } from '@lib/database.types'
 import { type Project } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { type UseFieldArrayAppend } from 'react-hook-form'
+import { createRef, useEffect, useState } from 'react'
+import { FormProvider, type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
 import { Button } from 'ui'
 import { StepContainer } from './container'
 import { ProjectFields } from './projects/project-fields'
-import { AlertDialog } from '@components/alert-dialog'
 
+export type Projects = { projects: Project[] }
 export default function ProjectsView() {
     const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient()
@@ -31,6 +32,8 @@ export default function ProjectsView() {
     } = useDeleteModal({
         onDelete: async (id: string) => { await deleteProject(id, client) }
     });
+
+    const formRef = createRef<HTMLFormElement>()
 
     const handleDeleteClick = (project: Project, index: number) => {
         if (!project.id) {
@@ -53,6 +56,23 @@ export default function ProjectsView() {
         }
     }
 
+    // Prevent form submission on enter
+    useEffect(() => {
+        const form = formRef.current;
+        const handler = (ev: KeyboardEvent) => {
+            if (ev.target instanceof HTMLTextAreaElement) return;
+            if (ev.key === 'Enter') {
+                ev.preventDefault();
+                return;
+            }
+        }
+
+        form?.addEventListener('keypress', handler);
+        return () => {
+            form?.removeEventListener('keypress', handler)
+        }
+    }, [formRef])
+
     const onDeleteOk = async () => {
         await handleDelete();
         remove(idxToRemove);
@@ -69,22 +89,24 @@ export default function ProjectsView() {
         <>
             <StepContainer title="Projects">
                 <p className="mb-4 text-gray-500">Project.</p>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {fields.map((field, index) => (
-                        <ProjectFields
-                            key={field._id}
-                            index={index}
-                            field={field}
-                            form={form}
-                            onDeleteClick={handleDeleteClick}
+                <FormProvider {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
+                        {fields.map((field, index) => (
+                            <ProjectFields
+                                key={field._id}
+                                index={index}
+                                field={field}
+                                form={form}
+                                onDeleteClick={handleDeleteClick}
+                            />
+                        ))}
+                        <FormFooter
+                            append={append}
+                            isSubmitting={formState.isSubmitting}
+                            saveDisabled={fields.length <= 0}
                         />
-                    ))}
-                    <FormFooter
-                        append={append}
-                        isSubmitting={formState.isSubmitting}
-                        saveDisabled={fields.length <= 0}
-                    />
-                </form>
+                    </form>
+                </FormProvider>
             </StepContainer>
 
             <AlertDialog
@@ -107,7 +129,7 @@ export default function ProjectsView() {
 interface FormFooterProps {
     saveDisabled: boolean;
     isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ projects: Project[] }>
+    append: UseFieldArrayAppend<{ projects: Project[] }, 'projects'>
 }
 
 function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
@@ -121,7 +143,7 @@ function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
             >
                 Add Project
             </Button>
-            <Button loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
+            <Button type="submit" loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
         </div>
     )
 }

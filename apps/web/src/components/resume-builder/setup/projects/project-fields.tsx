@@ -1,13 +1,15 @@
+import { Chip } from '@components/chips'
 import { Textarea } from '@components/textarea'
 import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'
-import { type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { createRef, useEffect, useState } from 'react'
+import { useFieldArray, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
 
 interface ProjectsFieldsProps {
     form: UseFormReturn<{ projects: Project[] }>
     index: number,
-    field: FieldArrayWithId<{ project: Project[] }>,
+    field: FieldArrayWithId<{ project: Project[] }, 'project', '_id'>,
     onDeleteClick: (project: Project, index: number) => void
 }
 
@@ -46,6 +48,9 @@ export function ProjectFields({ form, index, field, onDeleteClick }: ProjectsFie
                 className="mb-4"
                 {...register(`projects.${index}.highlights`)}
             />
+
+            <ProjectSkills index={index} form={form} />
+
             <div className="flex justify-end gap-2">
                 <Button
                     size="sm"
@@ -58,6 +63,51 @@ export function ProjectFields({ form, index, field, onDeleteClick }: ProjectsFie
                     <span>Remove Block</span>
                 </Button>
             </div>
+        </section>
+    )
+}
+
+// ---------------------- Project Skills ---------------------- //
+
+function ProjectSkills({ index, form }: { index: number, form: UseFormReturn<{ projects: Project[] }> }) {
+    const [skill, setSkill] = useState<string>('')
+    const { fields, remove, append } = useFieldArray({
+        name: `projects.${index}.skills`,
+        control: form.control,
+        keyName: '_id'
+    })
+
+    const inputRef = createRef<HTMLInputElement>()
+
+    // TODO: optimize this block
+    useEffect(() => {
+        const input = inputRef.current;
+        const handler = (ev: KeyboardEvent) => {
+            if (!skill) return
+            if (ev.key === 'Enter') {
+                append({ label: skill })
+                setSkill('')
+            }
+        }
+        input?.addEventListener('keypress', handler);
+        return () => {
+            input?.removeEventListener('keypress', handler);
+        }
+    }, [append, inputRef, skill])
+
+    return (
+        <section className="mb-4">
+            <Input
+                placeholder='Press "Enter" to add a skill'
+                className="mb-4"
+                label="Skills Required (Press Enter to add)"
+                value={skill}
+                onChange={ev => setSkill(ev.target.value)}
+                ref={inputRef}
+            />
+            {fields.map((field, idx) => (
+                <Chip key={field._id} label={field.label} onCloseClick={() => remove(idx)} />
+            ))}
         </section>
     )
 }

@@ -46,7 +46,7 @@ export function useProjects() {
     })
 
     useEffect(() => {
-        form.reset({ projects: queryResult.data ?? [getDefaultProject()] })
+        form.reset({ projects: queryResult.data?.length ? queryResult.data : [getDefaultProject()] })
     }, [queryResult.data, form])
 
     return {
@@ -73,8 +73,7 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
-    // TODO: error handling
-    return (await client.from('projects').select('*').eq('user_id', userId)).data;
+    return (await client.from('projects').select('*').eq('user_id', userId)).data
 }
 
 /**
@@ -87,6 +86,7 @@ export function getDefaultProject() {
         description: '',
         start_date: '',
         end_date: '',
+        skills: [],
         highlights: '',
     } as unknown as Project
 
