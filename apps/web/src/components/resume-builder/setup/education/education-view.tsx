@@ -68,7 +68,7 @@ export function EducationStep() {
     return (
         <>
             <StepContainer title="Education">
-                <p className="mb-2">Education.</p>
+                <p className="mb-4 text-gray-500">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (
                         <EducationForm

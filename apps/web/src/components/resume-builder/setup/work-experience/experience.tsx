@@ -68,7 +68,7 @@ export function WorkExperience() {
     return (
         <>
             <StepContainer title="Work Experience">
-                <p className="mb-4 text-gray-500">Work Experience.</p>
+                <p className="mb-4 text-gray-500">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you're applying for..</p>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (
                         <WorkExperienceForm

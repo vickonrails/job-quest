@@ -3,8 +3,10 @@ import { Steps } from '@components/resume-builder/setup/renderer';
 import { SetupNavigator } from '@components/resume-builder/setup/set-up-navigator';
 import { type Database } from '@lib/database.types';
 import { createPagesServerClient, type SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { Briefcase, Construction, Contact2, GraduationCap, Library, Zap } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { useMemo, useState } from 'react';
+import { useProfile } from 'src/hooks/useProfile';
 import { SetupProvider } from 'src/hooks/useSetupContext';
 import { type PageProps } from '..';
 
@@ -16,8 +18,9 @@ export async function fetchWorkExperience({ userId, client }: { userId?: string,
 
 // TODO: fetch the initial values from the database and instantiate the form with it 
 // TODO: the steps should be available to navigate to from the UI
-export default function Setup({ profile, session }: PageProps) {
+export default function Setup({ profile: initialProfile, session }: PageProps) {
     const [step, setStep] = useState(1);
+    const { data: profile } = useProfile(session.user.id, initialProfile)
 
     const canMoveNext = step < 6
     const canMovePrev = useMemo(() => step > 1, [step])
@@ -34,22 +37,40 @@ export default function Setup({ profile, session }: PageProps) {
     return (
         <Layout
             pageTitle="Setup Profile"
-            containerClasses="flex px-4 py-8 bg-gray-50 overflow-auto"
+            containerClasses="flex bg-gray-50 overflow-auto"
             session={session}
             profile={profile}
         >
             <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session }}>
-                <aside className="w-1/5 border-r sticky top-0">
+                <aside className="w-1/5 border-r sticky top-0 px-3 py-6">
                     <ul className="text-sm flex flex-col">
-                        <SetupNavigator step={1} onClick={() => setStep(1)}>Basic Information</SetupNavigator>
-                        <SetupNavigator step={2} onClick={() => setStep(2)}>Work Experience</SetupNavigator>
-                        <SetupNavigator step={3} onClick={() => setStep(3)}>Education</SetupNavigator>
-                        <SetupNavigator step={4} onClick={() => setStep(4)}>Projects</SetupNavigator>
-                        <SetupNavigator step={5} onClick={() => setStep(5)}>Skills</SetupNavigator>
-                        <SetupNavigator step={6} onClick={() => setStep(6)}>Contact Information</SetupNavigator>
+                        <SetupNavigator step={1} onClick={() => setStep(1)}>
+                            <Library size={20} />
+                            <span>Basic Information</span>
+                        </SetupNavigator>
+                        <SetupNavigator step={2} onClick={() => setStep(2)}>
+                            <Briefcase size={20} />
+                            <span>Work Experience</span>
+                        </SetupNavigator>
+                        <SetupNavigator step={3} onClick={() => setStep(3)}>
+                            <GraduationCap size={20} />
+                            <span>Education</span>
+                        </SetupNavigator>
+                        <SetupNavigator step={4} onClick={() => setStep(4)}>
+                            <Construction size={20} />
+                            <span>Projects</span>
+                        </SetupNavigator>
+                        <SetupNavigator step={5} onClick={() => setStep(5)}>
+                            <Zap size={20} />
+                            <span>Skills</span>
+                        </SetupNavigator>
+                        <SetupNavigator step={6} onClick={() => setStep(6)}>
+                            <Contact2 />
+                            <span>Contact Information</span>
+                        </SetupNavigator>
                     </ul>
                 </aside>
-                <main className="flex-1">
+                <main className="flex-1 py-6">
                     <Steps profile={profile} />
                 </main>
             </SetupProvider>

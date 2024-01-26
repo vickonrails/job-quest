@@ -6,7 +6,7 @@ import { type Project } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
-import { FormProvider, type UseFieldArrayAppend } from 'react-hook-form'
+import { type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
 import { Button } from 'ui'
@@ -88,25 +88,23 @@ export default function ProjectsView() {
     return (
         <>
             <StepContainer title="Projects">
-                <p className="mb-4 text-gray-500">Project.</p>
-                <FormProvider {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
-                        {fields.map((field, index) => (
-                            <ProjectFields
-                                key={field._id}
-                                index={index}
-                                field={field}
-                                form={form}
-                                onDeleteClick={handleDeleteClick}
-                            />
-                        ))}
-                        <FormFooter
-                            append={append}
-                            isSubmitting={formState.isSubmitting}
-                            saveDisabled={fields.length <= 0}
+                <p className="mb-4 text-gray-500">Showcase specific projects you've worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
+                <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
+                    {fields.map((field, index) => (
+                        <ProjectFields
+                            key={field._id}
+                            index={index}
+                            field={field}
+                            form={form}
+                            onDeleteClick={handleDeleteClick}
                         />
-                    </form>
-                </FormProvider>
+                    ))}
+                    <FormFooter
+                        append={append}
+                        isSubmitting={formState.isSubmitting}
+                        saveDisabled={fields.length <= 0}
+                    />
+                </form>
             </StepContainer>
 
             <AlertDialog

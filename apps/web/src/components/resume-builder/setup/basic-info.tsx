@@ -48,9 +48,9 @@ export function BasicInformation({ profile }: { profile: Profile }) {
 
     return (
         <StepContainer title="Basic Information">
-            <p className="mb-4 text-gray-500">Enter relevant basic information. These are mostly contact information.</p>
+            <p className="mb-4 text-gray-500">Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="grid grid-cols-2 mb-4 gap-4">
+                <section className="grid grid-cols-2 gap-4 p-4 border bg-white mb-8">
                     <Input autoFocus label="Fullname" placeholder="fullname" {...register('full_name', { required: { message: 'It is required', value: true } })} />
                     <Input label="Title" placeholder="Title" {...register('title')} />
                     <Textarea rows={5} label="Professional summary" placeholder="Professional Summary" {...register('professional_summary')} containerClasses="col-span-2" />

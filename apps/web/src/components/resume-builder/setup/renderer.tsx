@@ -14,7 +14,7 @@ export function Steps({ profile }: { profile: Profile }) {
         case 2: return <WorkExperience />
         case 3: return <Education />
         case 4: return <Projects />
-        case 5: return <Skills />
-        case 6: return <ContactInformation />
+        case 5: return <Skills profile={profile} />
+        case 6: return <ContactInformation profile={profile} />
     }
 }
