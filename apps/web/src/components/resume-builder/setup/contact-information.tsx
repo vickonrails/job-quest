@@ -34,29 +34,36 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Contact Information">
+        <StepContainer title="Contact Information" data-testid="contact-information">
             <p className="mb-4 text-gray-500">Make it easy for employers to reach you by providing your up-to-date contact details, including your phone number, email address, and professional networking profile links.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="p-4 border bg-white mb-8">
                     <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                         <Input
-                            type="email"
                             autoFocus
+                            data-testid="email-address"
+                            type="email"
                             label="Email Address"
                             placeholder="yourname@gmail.com"
                             {...register('email_address')}
                         />
                         <Input
+                            type="url"
+                            data-testid="linkedin-url"
                             label="LinkedIn URL"
                             placeholder="in/yourname"
                             {...register('linkedin_url')}
                         />
                         <Input
+                            type="url"
+                            data-testid="personal-website"
                             label="Personal Website"
                             placeholder="www.yourname.com"
                             {...register('personal_website')}
                         />
                         <Input
+                            type="url"
+                            data-testid="github-url"
                             label="Github URL"
                             placeholder="www.github.com/yourname"
                             {...register('github_url')}

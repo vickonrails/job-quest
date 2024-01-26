@@ -60,14 +60,14 @@ export function WorkExperience() {
 
     // TODO: use skeleton loaders
     if (experiences.isLoading) return (
-        <div className="inline-grid place-items-center mt-12 w-full">
+        <div className="inline-grid place-items-center mt-12 w-full" data-testid="work-experience-spinner">
             <Spinner />
         </div>
     )
 
     return (
         <>
-            <StepContainer title="Work Experience">
+            <StepContainer title="Work Experience" data-testid="work-experience">
                 <p className="mb-4 text-gray-500">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you're applying for..</p>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (

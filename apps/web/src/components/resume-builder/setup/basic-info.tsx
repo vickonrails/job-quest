@@ -9,8 +9,6 @@ import { Button, Input } from 'ui';
 import { StepContainer } from './container';
 import { useToast } from '@components/toast/use-toast';
 
-// useProfile hook to get the profile with default value from the parent component
-
 export function BasicInformation({ profile }: { profile: Profile }) {
     const { next, session } = useSetupContext()
     const client = useSupabaseClient<Database>()
@@ -47,14 +45,37 @@ export function BasicInformation({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Basic Information">
+        <StepContainer title="Basic Information" data-testid="basic-information">
             <p className="mb-4 text-gray-500">Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="grid grid-cols-2 gap-4 p-4 border bg-white mb-8">
-                    <Input autoFocus label="Fullname" placeholder="fullname" {...register('full_name', { required: { message: 'It is required', value: true } })} />
-                    <Input label="Title" placeholder="Title" {...register('title')} />
-                    <Textarea rows={5} label="Professional summary" placeholder="Professional Summary" {...register('professional_summary')} containerClasses="col-span-2" />
-                    <Input label="Location" placeholder="Location" {...register('location')} />
+                    <Input
+                        autoFocus
+                        data-testid="fullname"
+                        label="Fullname"
+                        placeholder="fullname"
+                        {...register('full_name', { required: { message: 'It is required', value: true } })}
+                    />
+                    <Input
+                        data-testid="title"
+                        label="Title"
+                        placeholder="Title"
+                        {...register('title')}
+                    />
+                    <Textarea
+                        data-testid="summary"
+                        rows={5}
+                        label="Professional summary"
+                        placeholder="Professional Summary"
+                        containerClasses="col-span-2"
+                        {...register('professional_summary')}
+                    />
+                    <Input
+                        data-testid="location"
+                        label="Location"
+                        placeholder="Location"
+                        {...register('location')}
+                    />
                 </section>
                 <Button loading={isSubmitting}>Save & Proceed</Button>
             </form>

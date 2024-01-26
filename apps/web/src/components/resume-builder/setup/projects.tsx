@@ -80,14 +80,14 @@ export default function ProjectsView() {
     }
 
     if (projects.isLoading) return (
-        <div className="inline-grid place-items-center mt-12 w-full">
+        <div className="inline-grid place-items-center mt-12 w-full" data-testid="projects-spinner">
             <Spinner />
         </div>
     )
 
     return (
         <>
-            <StepContainer title="Projects">
+            <StepContainer title="Projects" data-testid="projects">
                 <p className="mb-4 text-gray-500">Showcase specific projects you've worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
                 <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
                     {fields.map((field, index) => (

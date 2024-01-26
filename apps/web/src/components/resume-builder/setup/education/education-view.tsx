@@ -60,14 +60,14 @@ export function EducationStep() {
     }
 
     if (education.isLoading) return (
-        <div className="inline-grid place-items-center mt-12 w-full">
+        <div className="inline-grid place-items-center mt-12 w-full" data-testid="education-spinner">
             <Spinner />
         </div>
     )
 
     return (
         <>
-            <StepContainer title="Education">
+            <StepContainer title="Education" data-testid="education">
                 <p className="mb-4 text-gray-500">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (

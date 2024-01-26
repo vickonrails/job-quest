@@ -78,7 +78,7 @@ export default function Skills({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Skills">
+        <StepContainer title="Skills" data-testid="skills">
             <p className="mb-4 text-gray-500">Highlight the skills that set you apart, including technical and soft skills. Focus on those that are most relevant to the job you want.</p>
             <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
                 <section className="p-4 border bg-white mb-8">

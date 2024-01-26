@@ -20,7 +20,10 @@ const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: Ch
             'chip',
             variant,
             className
-        )} {...rest}>
+        )}
+            data-testid="chip"
+            {...rest}
+        >
             <span className="w-full select-none">
                 {label}
             </span>

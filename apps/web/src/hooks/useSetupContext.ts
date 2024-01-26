@@ -1,7 +1,7 @@
 import { type Session } from '@supabase/supabase-js'
 import { createContext, useContext } from 'react'
 
-interface SetupContext {
+export interface SetupContext {
     step: number,
     next: () => void,
     prev: () => void,

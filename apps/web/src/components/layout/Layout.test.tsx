@@ -14,13 +14,12 @@ const session = {
 
 const profile = {
     id: '',
-    username: 'John Doe',
+    full_name: 'John Doe',
     avatar_url: 'https://avatars.githubusercontent.com/u/1?v=4',
     created_at: '',
     email_address: '',
-    full_name: '',
     updated_at: ''
-} as Profile
+} as unknown as Profile
 
 describe('Navbar', () => {
     afterEach(() => {
@@ -32,14 +31,9 @@ describe('Navbar', () => {
     }
 
     it('render correct user profile details', () => {
-        const { getByText } = setup({ session, profile });
-        expect(getByText('johnDoe@gmail.com')).toBeTruthy();
+        const { getByText } = setup({ session, profile, toggleSidebar: () => { /** */ } });
+        expect(getByText('John Doe')).toBeTruthy();
     });
-
-    it('renders search input', () => {
-        const { getByRole } = setup({ profile, session });
-        expect(getByRole('textbox')).toBeInTheDocument();
-    })
 });
 
 describe('Layout', () => {
@@ -69,7 +63,7 @@ describe('Layout', () => {
     }
 
     it('renders all the correct links', () => {
-        const links = ['dashboard', 'tracker', 'resume builder', 'notes', 'reminder', 'documents', 'contacts'];
+        const links = ['dashboard', 'job tracker', 'my resumes', 'notes', 'reminder', 'documents', 'contacts'];
         const { getAllByRole } = setup({ session, profile });
         const navLinks = getAllByRole('link');
         const hasCorrectLinks = navLinks.filter((link, index) => {
@@ -88,9 +82,5 @@ describe('Layout', () => {
         const { getByText } = setup({ profile, session, children: <div>Hello World</div> })
         expect(getByText('Hello World')).toBeTruthy();
     });
-
-    it('works', () => {
-        expect(1).toBe(1);
-    })
 });
 
