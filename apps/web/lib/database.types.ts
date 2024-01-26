@@ -175,9 +175,13 @@ export interface Database {
           created_at: string | null
           email_address: string | null
           full_name: string | null
+          github_url: string | null
           id: string
+          linkedin_url: string | null
           location: string | null
+          personal_website: string | null
           professional_summary: string | null
+          skills: Database['public']['CompositeTypes']['skills'][] | null
           title: string | null
           updated_at: string | null
         }
@@ -186,9 +190,13 @@ export interface Database {
           created_at?: string | null
           email_address?: string | null
           full_name?: string | null
+          github_url?: string | null
           id: string
+          linkedin_url?: string | null
           location?: string | null
+          personal_website?: string | null
           professional_summary?: string | null
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
           title?: string | null
           updated_at?: string | null
         }
@@ -197,9 +205,13 @@ export interface Database {
           created_at?: string | null
           email_address?: string | null
           full_name?: string | null
+          github_url?: string | null
           id?: string
+          linkedin_url?: string | null
           location?: string | null
+          personal_website?: string | null
           professional_summary?: string | null
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
           title?: string | null
           updated_at?: string | null
         }

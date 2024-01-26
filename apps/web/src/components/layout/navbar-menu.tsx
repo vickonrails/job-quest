@@ -26,7 +26,7 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
                 contentProps={{ side: 'bottom', align: 'end', className: 'w-lg w-40' }}
                 trigger={<NavTrigger profile={profile} />}
             >
-                <MenuItem className="py-2" icon={<User size={20} />} onClick={() => router.push('/profile')}>
+                <MenuItem className="py-2" icon={<User size={20} />} onClick={() => router.push('/profile/setup')}>
                     Profile
                 </MenuItem>
                 <Separator />
