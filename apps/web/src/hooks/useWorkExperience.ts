@@ -32,6 +32,10 @@ export function useWorkExperience() {
                     work.user_id = session?.user.id
                     work.id = uuid()
                 }
+
+                if ((work.still_working_here && work.end_date) || !work.end_date) {
+                    work.end_date = null
+                }
                 return work
             })
             const { data, error } = await client.from('work_experience').upsert(preparedValues).eq('user_id', session.user.id).select('*');
@@ -78,8 +82,6 @@ export function getDefaultExperience() {
         company_name: '',
         job_title: '',
         location: '',
-        start_date: '',
-        end_date: '',
         highlights: '',
     } as unknown as WorkExperience
 

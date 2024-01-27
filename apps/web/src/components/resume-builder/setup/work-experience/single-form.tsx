@@ -1,8 +1,10 @@
+import { Checkbox } from '@components/checkbox'
 import { Textarea } from '@components/textarea'
 import { type WorkExperience } from '@lib/types'
 import { Trash2 } from 'lucide-react'
-import { type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
+import { ErrorHint } from '../error-hint'
 
 interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -12,7 +14,10 @@ interface WorkExperienceFormProps {
 }
 
 export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkExperienceFormProps) {
-    const { register } = form
+    const { register, formState: { errors } } = form
+    const fieldErrs = errors?.workExperience?.[index] ?? {}
+    const stillWorking = useWatch({ control: form.control, name: `workExperience.${index}.still_working_here` })
+
     return (
         <section className="p-4 border bg-white mb-8">
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
@@ -21,12 +26,14 @@ export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkEx
                     autoFocus
                     label="Company Name"
                     placeholder="Company name"
-                    {...register(`workExperience.${index}.company_name`)}
+                    hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}
+                    {...register(`workExperience.${index}.company_name`, { required: { message: 'Company name is required', value: true } })}
                 />
                 <Input
                     label="Title"
                     placeholder="Job titled held..."
-                    {...register(`workExperience.${index}.job_title`)}
+                    hint={<ErrorHint>{fieldErrs.job_title?.message}</ErrorHint>}
+                    {...register(`workExperience.${index}.job_title`, { required: { message: 'Job Title is required', value: true } })}
                 />
                 <Input
                     label="Location"
@@ -37,14 +44,32 @@ export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkEx
                     type="date"
                     label="Start Date"
                     placeholder="Start Date..."
-                    {...register(`workExperience.${index}.start_date`)}
+                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                    {...register(`workExperience.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
                 />
-                <Input
+
+                <Controller
+                    name={`workExperience.${index}.still_working_here`}
+                    control={form.control}
+                    render={({ field: item }) => (
+                        <Checkbox
+                            label="I'm Still Working Here?"
+                            checked={item.value ?? false}
+                            onCheckedChange={val => item.onChange(val)}
+                            className="h-[84px]"
+                        />
+                    )}
+                />
+
+                {!stillWorking && (<Input
                     type="date"
                     label="End Date"
                     placeholder="End Date..."
-                    {...register(`workExperience.${index}.end_date`)}
-                />
+                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                    disabled={Boolean(stillWorking)}
+                    {...register(`workExperience.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
+                />)}
+
             </section>
             <Textarea
                 placeholder="A summary of what you did in this role"

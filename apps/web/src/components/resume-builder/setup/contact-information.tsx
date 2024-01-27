@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from 'ui'
 import { StepContainer } from './container'
+import { ErrorHint } from './error-hint'
 
 export default function ContactInformation({ profile }: { profile: Profile }) {
     const { register, handleSubmit, formState } = useForm({ defaultValues: profile })
@@ -45,7 +46,8 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
                             type="email"
                             label="Email Address"
                             placeholder="yourname@gmail.com"
-                            {...register('email_address')}
+                            hint={<ErrorHint>{formState.errors.email_address?.message}</ErrorHint>}
+                            {...register('email_address', { required: { message: 'Email address is required', value: true } })}
                         />
                         <Input
                             type="url"

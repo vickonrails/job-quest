@@ -16,7 +16,7 @@ export interface InputProps
    */
   name?: string
   // provide hint color based on the state of the field
-  hint?: string
+  hint?: React.ReactNode
   fullWidth?: boolean
 
   /** size of the input */
@@ -43,6 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               ),
               className
             )}
+            disabled={disabled}
             ref={ref}
             {...rest}
           />

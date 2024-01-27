@@ -5,6 +5,7 @@ import { Trash2 } from 'lucide-react'
 import { createRef, useEffect, useState } from 'react'
 import { useFieldArray, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
+import { ErrorHint } from '../error-hint'
 
 interface ProjectsFieldsProps {
     form: UseFormReturn<{ projects: Project[] }>
@@ -14,19 +15,24 @@ interface ProjectsFieldsProps {
 }
 
 export function ProjectFields({ form, index, field, onDeleteClick }: ProjectsFieldsProps) {
-    const { register } = form
+    const { register, formState: { errors } } = form
+    const fieldErrs = errors?.projects?.[index] ?? {}
+
     return (
         <section className="p-4 border bg-white mb-8">
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                 <Input
                     label="Project Title..."
                     placeholder="Title"
-                    {...register(`projects.${index}.title`)}
+                    hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
+                    {...register(`projects.${index}.title`, { required: { message: 'Project title is required', value: true } })}
                 />
                 <Input
                     label="URL"
+                    type="url"
                     placeholder="Link to Demo..."
-                    {...register(`projects.${index}.url`)}
+                    hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
+                    {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
                 />
                 <Input
                     type="date"

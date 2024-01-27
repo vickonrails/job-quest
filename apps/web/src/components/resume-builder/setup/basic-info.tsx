@@ -1,4 +1,5 @@
 import { Textarea } from '@components/textarea';
+import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Profile } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -7,13 +8,12 @@ import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input } from 'ui';
 import { StepContainer } from './container';
-import { useToast } from '@components/toast/use-toast';
 
 export function BasicInformation({ profile }: { profile: Profile }) {
     const { next, session } = useSetupContext()
     const client = useSupabaseClient<Database>()
     const { toast } = useToast()
-    const { register, handleSubmit, formState: { isSubmitting } } = useForm<Profile>({
+    const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<Profile>({
         defaultValues: {
             professional_summary: profile.professional_summary ?? '',
             full_name: profile.full_name,
@@ -53,8 +53,9 @@ export function BasicInformation({ profile }: { profile: Profile }) {
                         autoFocus
                         data-testid="fullname"
                         label="Fullname"
+                        hint={<p className="text-destructive">{errors.full_name?.message}</p>}
                         placeholder="fullname"
-                        {...register('full_name', { required: { message: 'It is required', value: true } })}
+                        {...register('full_name', { required: { message: 'Name is required', value: true } })}
                     />
                     <Input
                         data-testid="title"

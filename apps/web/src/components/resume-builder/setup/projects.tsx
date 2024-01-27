@@ -88,7 +88,7 @@ export default function ProjectsView() {
     return (
         <>
             <StepContainer title="Projects" data-testid="projects">
-                <p className="mb-4 text-gray-500">Showcase specific projects you've worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
+                <p className="mb-4 text-gray-500">Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
                 <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
                     {fields.map((field, index) => (
                         <ProjectFields

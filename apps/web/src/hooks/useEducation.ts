@@ -32,6 +32,9 @@ export function useEducation() {
                     education.user_id = session?.user.id
                     education.id = uuid()
                 }
+                if ((education.still_studying_here && education.end_date) || !education.end_date) {
+                    education.end_date = null
+                }
                 return education
             })
             const { data, error } = await client.from('education').upsert(preparedValues).eq('user_id', session.user.id).select('*');

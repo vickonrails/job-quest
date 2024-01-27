@@ -19,7 +19,8 @@ export interface Database {
           id: string
           institution: string | null
           location: string | null
-          start_date: string | null
+          start_date: string
+          still_studying_here: boolean | null
           updated_at: string | null
           user_id: string
         }
@@ -32,7 +33,8 @@ export interface Database {
           id?: string
           institution?: string | null
           location?: string | null
-          start_date?: string | null
+          start_date: string
+          still_studying_here?: boolean | null
           updated_at?: string | null
           user_id: string
         }
@@ -45,7 +47,8 @@ export interface Database {
           id?: string
           institution?: string | null
           location?: string | null
-          start_date?: string | null
+          start_date?: string
+          still_studying_here?: boolean | null
           updated_at?: string | null
           user_id?: string
         }
@@ -284,7 +287,8 @@ export interface Database {
           id: string
           job_title: string | null
           location: string | null
-          start_date: string | null
+          start_date: string
+          still_working_here: boolean | null
           updated_at: string | null
           user_id: string
         }
@@ -296,7 +300,8 @@ export interface Database {
           id?: string
           job_title?: string | null
           location?: string | null
-          start_date?: string | null
+          start_date: string
+          still_working_here?: boolean | null
           updated_at?: string | null
           user_id: string
         }
@@ -308,7 +313,8 @@ export interface Database {
           id?: string
           job_title?: string | null
           location?: string | null
-          start_date?: string | null
+          start_date?: string
+          still_working_here?: boolean | null
           updated_at?: string | null
           user_id?: string
         }

@@ -31,6 +31,9 @@ export function useProjects() {
                     project.user_id = session?.user.id
                     project.id = uuid()
                 }
+
+                if (!project.start_date) project.start_date = null;
+                if (!project.end_date) project.end_date = null;
                 return project
             })
             const { data, error } = await client.from('projects').upsert(preparedValues).eq('user_id', session.user.id).select('*');
