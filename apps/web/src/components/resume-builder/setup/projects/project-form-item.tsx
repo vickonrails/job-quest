@@ -10,11 +10,11 @@ import { ErrorHint } from '../error-hint'
 interface ProjectsFieldsProps {
     form: UseFormReturn<{ projects: Project[] }>
     index: number,
-    field: FieldArrayWithId<{ project: Project[] }, 'project', '_id'>,
+    field: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>,
     onDeleteClick: (project: Project, index: number) => void
 }
 
-export function ProjectFields({ form, index, field, onDeleteClick }: ProjectsFieldsProps) {
+export function ProjectForm({ form, index, field, onDeleteClick }: ProjectsFieldsProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.projects?.[index] ?? {}
 

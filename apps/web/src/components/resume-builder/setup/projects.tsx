@@ -11,7 +11,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
 import { Button } from 'ui'
 import { StepContainer } from './container'
-import { ProjectFields } from './projects/project-fields'
+import { ProjectForm } from './projects/project-form-item'
 
 export type Projects = { projects: Project[] }
 export default function ProjectsView() {
@@ -91,7 +91,7 @@ export default function ProjectsView() {
                 <p className="mb-4 text-gray-500">Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
                 <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
                     {fields.map((field, index) => (
-                        <ProjectFields
+                        <ProjectForm
                             key={field._id}
                             index={index}
                             field={field}

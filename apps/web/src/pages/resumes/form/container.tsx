@@ -1,16 +1,17 @@
+import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
+import { ProjectForm } from '@components/resume-builder/setup/projects/project-form-item';
+import { WorkExperienceForm } from '@components/resume-builder/setup/work-experience/work-experience-form-item';
 import { Textarea } from '@components/textarea';
-import { type Education, type Profile, type Project, type WorkExperience } from '@lib/types';
+import { type Profile, type Education, type Project, type WorkExperience } from '@lib/types';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Input } from 'ui';
-import { type FormValues } from '../builder';
 
-export function ResumeForm({ profile, profileEducation, profileWorkExperience, profileProjects }: { profile: Profile, profileEducation: Education[], profileWorkExperience: WorkExperience[], profileProjects: Project[] }) {
-    const form = useFormContext<FormValues>();
-    const { register, control, formState: { errors } } = form
-    const { fields } = useFieldArray<FormValues, 'workExperience', '_id'>({ control, name: 'workExperience', keyName: '_id' });
+export function ResumeForm() {
+    const form = useFormContext<{ profile: Profile }>();
+    const { register, formState: { errors } } = form
 
     return (
-        <section>
+        <section className="w-1/2 border-r p-6 flex-shrink-0">
             <section className="grid grid-cols-2 gap-4 p-4 bg-white mb-8">
                 <Input
                     autoFocus
@@ -42,42 +43,67 @@ export function ResumeForm({ profile, profileEducation, profileWorkExperience, p
                 />
             </section>
 
-            <section>
-                <p className="font-bold">Profile Education</p>
-                <ul className="list-disc list-inside">
-                    {profileEducation.map(education => (
-                        <li key={education.id}>{education.institution}</li>
-                    ))}
-                </ul>
-            </section>
-
-            <section>
-                <p className="font-bold">Profile Work Experience</p>
-                <ul className="list-disc list-inside">
-                    {profileWorkExperience.map(experience => (
-                        <li key={experience.id}>{experience.company_name}</li>
-                    ))}
-                </ul>
-            </section>
-
-            <section>
-                <p className="font-bold">Profile Projects</p>
-                <ul className="list-disc list-inside">
-                    {profileProjects.map(projects => (
-                        <li key={projects.id}>{projects.title}</li>
-                    ))}
-                </ul>
-            </section>
-
-
-            <section>
-                <p className="font-bold">Profile Projects</p>
-                <ul className="list-disc list-inside">
-                    {profile.skills?.map(skill => (
-                        <li key={skill.label}>{skill.label}</li>
-                    ))}
-                </ul>
-            </section>
+            <WorkExperienceSection />
+            <ProjectsSection />
+            <EducationSection />
         </section>
     )
+}
+
+function WorkExperienceSection() {
+    const form = useFormContext<{ workExperience: WorkExperience[] }>();
+    const { fields } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
+
+    return (
+        <section>
+            {fields.map((field, index) => (
+                <WorkExperienceForm
+                    field={field}
+                    index={index}
+                    form={form}
+                    key={field._id}
+                    onDeleteClick={() => {/** */ }}
+                />
+            ))}
+        </section>
+    )
+}
+
+function ProjectsSection() {
+    const form = useFormContext<{ projects: Project[] }>();
+    const { fields } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
+
+    return (
+        <section>
+            {fields.map((field, index) => (
+                <ProjectForm
+                    field={field}
+                    index={index}
+                    form={form}
+                    key={field._id}
+                    onDeleteClick={() => {/** */ }}
+                />
+            ))}
+        </section>
+    )
+}
+
+function EducationSection() {
+    const form = useFormContext<{ education: Education[] }>();
+    const { fields } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
+
+    return (
+        <section>
+            {fields.map((field, index) => (
+                <EducationForm
+                    field={field}
+                    index={index}
+                    form={form}
+                    key={field._id}
+                    onDeleteClick={() => {/** */ }}
+                />
+            ))}
+        </section>
+    )
+
 }

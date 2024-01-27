@@ -11,7 +11,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteExperience, getDefaultExperience, useWorkExperience } from 'src/hooks/useWorkExperience'
 import { Button } from 'ui'
 import { StepContainer } from '../container'
-import { WorkExperienceForm } from './single-form'
+import { WorkExperienceForm } from './work-experience-form-item'
 
 export function WorkExperience() {
     const client = useSupabaseClient<Database>()

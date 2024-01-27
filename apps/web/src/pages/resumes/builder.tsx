@@ -8,23 +8,23 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ResumeForm } from './form/container';
 
 interface PageProps {
-    session: Session,
-    profile: Profile,
-    profileEducation: Education[],
-    profileWorkExperience: WorkExperience[],
-    workExperience: WorkExperience[],
-    profileProjects: Project[]
+    session: Session
+    profile: Profile
+    workExperience: WorkExperience[]
+    projects: Project[]
+    education: Education[]
 }
 
 export interface FormValues {
     profile: Profile,
-    profileEducation: Education[],
-    workExperience: WorkExperience[],
-    profileProjects: Project[]
+    projects: Project[],
+    education: Education[]
+    workExperience: WorkExperience[]
 }
 
-export default function ResumeBuilder({ session, profile, workExperience, profileEducation, profileWorkExperience, profileProjects }: PageProps) {
-    const form = useForm<FormValues>({ defaultValues: { profile, workExperience } });
+export default function ResumeBuilder({ session, profile, education, projects, workExperience }: PageProps) {
+    const form = useForm<FormValues>({ defaultValues: { profile, workExperience, projects, education } });
+
     return (
         <Layout
             session={session}
@@ -33,18 +33,8 @@ export default function ResumeBuilder({ session, profile, workExperience, profil
         >
             <div className="flex w-full h-full">
                 <FormProvider {...form}>
-                    <section className="w-1/2 border-r p-6 flex-shrink-0">
-                        <ResumeForm
-                            profile={profile}
-                            profileEducation={profileEducation}
-                            profileWorkExperience={profileWorkExperience}
-                            profileProjects={profileProjects}
-                        />
-                    </section>
-
-                    <section className="bg-gray-100 flex-1 p-6 overflow-auto">
-                        <Preview />
-                    </section>
+                    <ResumeForm />
+                    <Preview />
                 </FormProvider>
             </div>
         </Layout>
@@ -70,18 +60,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // all the education without resume_id
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: profileEducation } = await supabase.from('education').select().eq('user_id', session.user.id);
-    const { data: profileWorkExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id);
-    const { data: profileProjects } = await supabase.from('projects').select().eq('user_id', session.user.id);
+    const { data: education } = await supabase.from('education').select().eq('user_id', session.user.id);
+    const { data: workExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id);
+    const { data: projects } = await supabase.from('projects').select().eq('user_id', session.user.id);
 
     return {
         props: {
             session,
             profile,
-            profileEducation,
-            profileWorkExperience,
-            workExperience: profileWorkExperience,
-            profileProjects
+            workExperience,
+            projects,
+            education
         }
     }
 }
