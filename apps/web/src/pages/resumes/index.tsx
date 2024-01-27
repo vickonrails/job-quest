@@ -11,6 +11,7 @@ export default function ResumeBuilder({ session, profile }: { session: Session, 
         <Layout
             session={session}
             profile={profile}
+            containerClasses="p-6"
         >
             <div>
                 <h1 className="text-xl font-medium">Resumes</h1>

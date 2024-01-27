@@ -89,6 +89,9 @@
   html, body, #__next {
     @apply h-full;
   }
+  html {
+    @apply overflow-hidden;
+  }
   #__description {
     @apply text-foreground;
   }
