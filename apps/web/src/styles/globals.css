@@ -57,6 +57,9 @@
     background: var(--chip-background);
     color: var(--chip-color);
   }
+  .chip.plain {
+    --chip-background: theme('colors.gray.200');
+  }
   .chip.green {
     --chip-background: #EFFAEB;
     --chip-color: #6BB34C;

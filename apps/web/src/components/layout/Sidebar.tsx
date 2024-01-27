@@ -10,7 +10,6 @@ import { Logo } from 'ui';
 type SidebarProps = HTMLAttributes<HTMLElement>;
 
 // TODO: reconfigure this whole link system to use just /jobs/jobs-id. Rename Application Tracker to just Jobs.
-
 export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
         <aside data-testid="sidebar" className={
@@ -30,12 +29,12 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
 
                     <NavLink href="/jobs">
                         <Folder className="mr-2" />
-                        <span>Tracker</span>
+                        <span>Job Tracker</span>
                     </NavLink>
 
-                    <NavLink href="/resume-builder" disabled>
+                    <NavLink href="/resumes">
                         <File className="mr-2" />
-                        <span>Resume Builder</span>
+                        <span>My Resumes</span>
                     </NavLink>
                 </NavGroup>
 
@@ -86,7 +85,7 @@ const NavLink = ({ href, ...props }: LinkProps) => {
         <Link
             onClick={handleClick}
             className={cn(
-                'flex items-center py-2 px-3 rounded-lg text-sm',
+                'flex items-center py-2 px-3 rounded-lg text-sm select-none',
                 isActiveNav ? 'bg-indigo-100 text-primary-light font-medium' : 'text-gray-500',
                 props.disabled && 'cursor-not-allowed text-gray-400'
             )}

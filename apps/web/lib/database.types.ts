@@ -9,6 +9,59 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      education: {
+        Row: {
+          created_at: string | null
+          degree: string | null
+          end_date: string | null
+          field_of_study: string | null
+          highlights: string | null
+          id: string
+          institution: string | null
+          location: string | null
+          start_date: string
+          still_studying_here: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          degree?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          highlights?: string | null
+          id?: string
+          institution?: string | null
+          location?: string | null
+          start_date: string
+          still_studying_here?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          degree?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          highlights?: string | null
+          id?: string
+          institution?: string | null
+          location?: string | null
+          start_date?: string
+          still_studying_here?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'education_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       jobs: {
         Row: {
           company_name: string
@@ -125,7 +178,14 @@ export interface Database {
           created_at: string | null
           email_address: string | null
           full_name: string | null
+          github_url: string | null
           id: string
+          linkedin_url: string | null
+          location: string | null
+          personal_website: string | null
+          professional_summary: string | null
+          skills: Database['public']['CompositeTypes']['skills'][] | null
+          title: string | null
           updated_at: string | null
         }
         Insert: {
@@ -133,7 +193,14 @@ export interface Database {
           created_at?: string | null
           email_address?: string | null
           full_name?: string | null
+          github_url?: string | null
           id: string
+          linkedin_url?: string | null
+          location?: string | null
+          personal_website?: string | null
+          professional_summary?: string | null
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
+          title?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -141,7 +208,14 @@ export interface Database {
           created_at?: string | null
           email_address?: string | null
           full_name?: string | null
+          github_url?: string | null
           id?: string
+          linkedin_url?: string | null
+          location?: string | null
+          personal_website?: string | null
+          professional_summary?: string | null
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
+          title?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -150,6 +224,106 @@ export interface Database {
             columns: ['id']
             isOneToOne: true
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          highlights: string | null
+          id: string
+          skills: Database['public']['CompositeTypes']['skills'][] | null
+          start_date: string | null
+          title: string | null
+          updated_at: string | null
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          highlights?: string | null
+          id?: string
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
+          start_date?: string | null
+          title?: string | null
+          updated_at?: string | null
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          highlights?: string | null
+          id?: string
+          skills?: Database['public']['CompositeTypes']['skills'][] | null
+          start_date?: string | null
+          title?: string | null
+          updated_at?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'projects_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      work_experience: {
+        Row: {
+          company_name: string | null
+          created_at: string | null
+          end_date: string | null
+          highlights: string | null
+          id: string
+          job_title: string | null
+          location: string | null
+          start_date: string
+          still_working_here: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          highlights?: string | null
+          id?: string
+          job_title?: string | null
+          location?: string | null
+          start_date: string
+          still_working_here?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          highlights?: string | null
+          id?: string
+          job_title?: string | null
+          location?: string | null
+          start_date?: string
+          still_working_here?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'work_experience_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
             referencedColumns: ['id']
           }
         ]
@@ -165,7 +339,9 @@ export interface Database {
       [_ in never]: never
     }
     CompositeTypes: {
-      [_ in never]: never
+      skills: {
+        label: string
+      }
     }
   }
 }

@@ -43,7 +43,8 @@
     "lib/**/*.{ts}",
     ".eslintrc.cjs",
     "next.config.mjs",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    "vitest/setup.ts",
   ],
   "exclude": [
     "node_modules"

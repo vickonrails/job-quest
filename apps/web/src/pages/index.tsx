@@ -14,13 +14,18 @@ import { useRouter } from 'next/router';
 // I have to solve the problem of expired tokens and already used tokens
 // right now it just redirects to the app page but doesn't load the session
 
-const Index = ({ session, profile, jobs }: { session: Session, profile: Profile, jobs: Job[] }) => {
+export interface PageProps {
+    session: Session,
+    profile: Profile
+}
+
+// TODO: put profile in the react query cache so I can use it any and everywhere
+const Index = ({ session, profile, jobs }: PageProps & { jobs: Job[] }) => {
     return (
         <Layout
-            className="flex"
-            containerClasses="flex flex-col gap-4"
             session={session}
             profile={profile}
+            containerClasses="p-6"
         >
             <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">

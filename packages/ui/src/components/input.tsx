@@ -16,7 +16,7 @@ export interface InputProps
    */
   name?: string
   // provide hint color based on the state of the field
-  hint?: string
+  hint?: React.ReactNode
   fullWidth?: boolean
 
   /** size of the input */
@@ -31,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <>
         <label>
-          <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
+          <span className="block m-1.5 text-sm text-gray-500 select-none">{label}</span>
           <input
             type={type}
             className={cn(
@@ -43,6 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               ),
               className
             )}
+            disabled={disabled}
             ref={ref}
             {...rest}
           />

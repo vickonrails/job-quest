@@ -2,7 +2,7 @@ import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { Edit, MoreVertical, Trash2 } from 'react-feather';
-import { useRowDelete } from 'src/hooks/useDeleteModal';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { type BaseEntity, type Column, type TableActions } from './Table';
 import { TableCellRender } from './TableCellRender';
@@ -27,7 +27,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
         handleDelete,
         setIsOpen: setIsDeleteModalOpen,
         loading: isDeleting
-    } = useRowDelete<T>({ onDelete, refresh })
+    } = useDeleteModal<T>({ onDelete, refresh })
 
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet<T>({ refresh })
 

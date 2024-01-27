@@ -6,7 +6,7 @@ import { type Job } from 'lib/types'
 import { Edit, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { MoreVertical } from 'react-feather'
-import { useRowDelete } from 'src/hooks/useDeleteModal'
+import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { useEditSheet } from 'src/hooks/useEditModal'
 import { Rating } from 'ui'
 
@@ -18,7 +18,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
         handleDelete,
         setIsOpen: setIsDeleteModalOpen,
         loading: isDeleting
-    } = useRowDelete({})
+    } = useDeleteModal({})
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({})
 
     return (
