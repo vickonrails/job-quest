@@ -5,7 +5,7 @@ import { type Education, type Profile, type Project, type Resume, type WorkExper
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ResumeForm } from '../../components/resume-builder/builder/form/container';
+import { ResumeForm } from '../../components/resume-builder/builder/sections';
 
 interface PageProps {
     session: Session
@@ -33,7 +33,7 @@ export default function ResumeBuilder({ session, profile, resume, education, pro
         >
             <div className="flex w-full h-full">
                 <FormProvider {...form}>
-                    <ResumeForm />
+                    <ResumeForm session={session} />
                     <Preview />
                 </FormProvider>
             </div>
@@ -62,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { data: projects } = await supabase.from('projects').select().eq('user_id', session.user.id);
     const { data: currentResume } = await supabase.from('resumes').select().eq('user_id', session.user.id).eq('id', resumeId).single();
 
+    // TODO: more cleaner way to do this
     const resume: Partial<Resume> = currentResume ?? {
         title: profile?.title ?? '',
         skills: profile?.skills ?? [],

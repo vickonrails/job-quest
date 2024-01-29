@@ -5,7 +5,7 @@ import { cleanup, render, waitFor } from '@testing-library/react';
 import { SetupProvider, type SetupContext } from 'src/hooks/useSetupContext';
 import { SetupSection } from 'src/pages/profile/setup';
 import { describe } from 'vitest';
-import { Steps } from './renderer';
+import { Steps } from './steps-renderer';
 
 const createTestQueryClient = () => new QueryClient({
     defaultOptions: {
