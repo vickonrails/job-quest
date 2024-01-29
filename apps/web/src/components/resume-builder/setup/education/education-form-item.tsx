@@ -23,7 +23,6 @@ export function EducationForm({ form, index, onDeleteClick, field }: EducationFo
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                 <input type="hidden" {...register(`education.${index}.id`)} />
                 <Input
-                    autoFocus
                     label="Institution"
                     placeholder="Institution of study..."
                     hint={<ErrorHint>{fieldErrs.institution?.message}</ErrorHint>}

@@ -23,7 +23,6 @@ export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkEx
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                 <input type="hidden" {...register(`workExperience.${index}.id`)} />
                 <Input
-                    autoFocus
                     label="Company Name"
                     placeholder="Company name"
                     hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}

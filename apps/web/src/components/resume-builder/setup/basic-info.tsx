@@ -50,7 +50,6 @@ export function BasicInformation({ profile }: { profile: Profile }) {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="grid grid-cols-2 gap-4 p-4 border bg-white mb-8">
                     <Input
-                        autoFocus
                         data-testid="fullname"
                         label="Fullname"
                         hint={<p className="text-destructive">{errors.full_name?.message}</p>}
