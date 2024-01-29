@@ -29,27 +29,29 @@ export function ResumeForm({ session }: { session: Session }) {
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0">
-            <Button variant="link" className="pl-0" onClick={() => router.back()}>
-                <ChevronLeft />
-                <span>Back</span>
-            </Button>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0 mx-auto">
+            <section className="max-w-xl mx-auto">
+                <Button variant="link" className="pl-0" onClick={() => router.back()}>
+                    <ChevronLeft />
+                    <span>Back</span>
+                </Button>
 
-            <header>
-                <h3 className="font-medium text-lg">Personal Information</h3>
-                <p className="mb-4 text-sm text-muted-foreground">
-                    Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.
-                </p>
-            </header>
+                <header>
+                    <h3 className="font-medium text-lg">Personal Information</h3>
+                    <p className="mb-4 text-sm text-muted-foreground">
+                        Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.
+                    </p>
+                </header>
 
-            <BasicInfoSection />
-            <WorkExperienceSection session={session} />
-            <ProjectsSection />
-            <EducationSection />
-            <Button loading={isSubmitting} className="flex items-center gap-1">
-                <Save size={18} />
-                <span>Save</span>
-            </Button>
+                <BasicInfoSection />
+                <WorkExperienceSection session={session} />
+                <ProjectsSection />
+                <EducationSection />
+                <Button loading={isSubmitting} className="flex items-center gap-1">
+                    <Save size={18} />
+                    <span>Save</span>
+                </Button>
+            </section>
         </form>
     )
 }

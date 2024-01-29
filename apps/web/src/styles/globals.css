@@ -80,6 +80,14 @@
     --chip-background: #F6ECE4;
     --chip-color: #EB8E4A;
   }
+
+  .accordion[data-state='open'] .open-icon {
+    @apply hidden;
+  }
+
+  .accordion[data-state='closed'] .close-icon {
+    @apply hidden;
+  }
 }
 
 @layer base {

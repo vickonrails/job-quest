@@ -110,7 +110,7 @@ interface FormFooterProps {
 
 function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
     return (
-        <div className="flex gap-2">
+        <div className="flex gap-2 pt-2">
             <Button
                 className="text-primary"
                 type="button"

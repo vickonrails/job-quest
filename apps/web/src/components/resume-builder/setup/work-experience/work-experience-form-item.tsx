@@ -1,10 +1,12 @@
 import { Checkbox } from '@components/checkbox'
 import { Textarea } from '@components/textarea'
 import { type WorkExperience } from '@lib/types'
-import { Trash2 } from 'lucide-react'
+import { Minus, Plus, Trash2 } from 'lucide-react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
 import { ErrorHint } from '../error-hint'
+import { Accordion } from '@components/accordion'
+import { formatDate } from '@components/utils'
 
 interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -13,82 +15,123 @@ interface WorkExperienceFormProps {
     onDeleteClick: (experience: WorkExperience, index: number) => void
 }
 
-export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkExperienceFormProps) {
-    const { register, formState: { errors } } = form
-    const fieldErrs = errors?.workExperience?.[index] ?? {}
-    const stillWorking = useWatch({ control: form.control, name: `workExperience.${index}.still_working_here` })
+function DateRenderer({ startDate, endDate }: { startDate: string, endDate?: string }) {
+    if (!startDate) return;
+    const formattedStartDate = formatDate(startDate);
+
+    if (!endDate) {
+        return `- ${formattedStartDate}`
+    }
+    const formattedEndDate = formatDate(endDate);
+
+    const experienceDate = startDate === '' ? '' : `${formattedStartDate} - ${formattedEndDate}`;
+
+    return ` - (${experienceDate})`;
+}
+
+function Header({ experience }: { experience: WorkExperience }) {
+    const { start_date, job_title, end_date, company_name } = experience
 
     return (
-        <section className="p-4 border bg-white mb-8">
-            <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
-                <input type="hidden" {...register(`workExperience.${index}.id`)} />
-                <Input
-                    label="Company Name"
-                    placeholder="Company name"
-                    hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}
-                    {...register(`workExperience.${index}.company_name`, { required: { message: 'Company name is required', value: true } })}
-                />
-                <Input
-                    label="Title"
-                    placeholder="Job titled held..."
-                    hint={<ErrorHint>{fieldErrs.job_title?.message}</ErrorHint>}
-                    {...register(`workExperience.${index}.job_title`, { required: { message: 'Job Title is required', value: true } })}
-                />
-                <Input
-                    label="Location"
-                    placeholder="Location..."
-                    {...register(`workExperience.${index}.location`)}
-                />
-                <Input
-                    type="date"
-                    label="Start Date"
-                    placeholder="Start Date..."
-                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
-                    {...register(`workExperience.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
-                />
-
-                <Controller
-                    name={`workExperience.${index}.still_working_here`}
-                    control={form.control}
-                    render={({ field: item }) => (
-                        <Checkbox
-                            label="I'm Still Working Here?"
-                            checked={item.value ?? false}
-                            onCheckedChange={val => item.onChange(val)}
-                            className="h-[84px]"
-                        />
-                    )}
-                />
-
-                {!stillWorking && (<Input
-                    type="date"
-                    label="End Date"
-                    placeholder="End Date..."
-                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
-                    disabled={Boolean(stillWorking)}
-                    {...register(`workExperience.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
-                />)}
-
-            </section>
-            <Textarea
-                placeholder="A summary of what you did in this role"
-                label="Highlights"
-                rows={5}
-                className="mb-4"
-                {...register(`workExperience.${index}.highlights`)}
-            />
-            <div className="flex justify-end gap-2">
-                <Button
-                    size="sm"
-                    className="text-red-400 flex items-center gap-1"
-                    type="button"
-                    variant="outline"
-                    onClick={() => onDeleteClick(field, index)}
-                >
-                    <Trash2 size={18} />
-                    <span>Remove Block</span>
-                </Button>
+        <header className="flex items-start justify-between group cursor-pointer hover:text-primary w-full p-4">
+            <div>
+                <p className="flex gap-2 select-none font-medium">{job_title}</p>
+                <span className="text-sm text-muted-foreground">{company_name}
+                    <DateRenderer startDate={start_date} endDate={end_date ?? ''} />
+                </span>
             </div>
+
+            <Plus size={32} className="text-muted-foreground group-hover:bg-gray-50 p-2 rounded-md open-icon" />
+            <Minus size={32} className="text-muted-foreground group-hover:bg-gray-50 p-2 rounded-md close-icon" />
+        </header>
+    )
+}
+
+export function WorkExperienceForm({ form, index, field, onDeleteClick }: WorkExperienceFormProps) {
+    const { register, formState: { errors }, control } = form
+    const fieldErrs = errors?.workExperience?.[index] ?? {}
+    const experience = useWatch({ control, name: `workExperience.${index}` })
+
+    return (
+        <section className="border bg-white mb-2">
+            <Accordion header={(
+                <Header
+                    experience={experience}
+                />
+            )}>
+                <div className="p-4 pt-0">
+                    <section className="grid grid-cols-2 gap-3 rounded-md">
+                        <input type="hidden" {...register(`workExperience.${index}.id`)} />
+                        <Input
+                            label="Company Name"
+                            placeholder="Company name"
+                            hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}
+                            {...register(`workExperience.${index}.company_name`, { required: { message: 'Company name is required', value: true } })}
+                        />
+                        <Input
+                            label="Title"
+                            placeholder="Job titled held..."
+                            hint={<ErrorHint>{fieldErrs.job_title?.message}</ErrorHint>}
+                            {...register(`workExperience.${index}.job_title`, { required: { message: 'Job Title is required', value: true } })}
+                        />
+                        <Input
+                            label="Location"
+                            placeholder="Location..."
+                            {...register(`workExperience.${index}.location`)}
+                        />
+                        <Input
+                            type="date"
+                            label="Start Date"
+                            placeholder="Start Date..."
+                            hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                            {...register(`workExperience.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
+                        />
+
+                        <Controller
+                            name={`workExperience.${index}.still_working_here`}
+                            control={form.control}
+                            render={({ field: item }) => (
+                                <Checkbox
+                                    id={`${experience.job_title ?? ''}-${experience.company_name ?? ''}-still-working-here`}
+                                    label="I'm Still Working Here?"
+                                    checked={item.value ?? false}
+                                    onCheckedChange={val => item.onChange(val)}
+                                    className="h-[84px]"
+                                />
+                            )}
+                        />
+
+                        {!experience.still_working_here && (<Input
+                            type="date"
+                            label="End Date"
+                            placeholder="End Date..."
+                            hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                            disabled={Boolean(experience.still_working_here)}
+                            {...register(`workExperience.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
+                        />)}
+
+                    </section>
+                    <Textarea
+                        placeholder="A summary of what you did in this role"
+                        label="Highlights"
+                        rows={5}
+                        className="mb-4"
+                        {...register(`workExperience.${index}.highlights`)}
+                    />
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            size="sm"
+                            className="text-red-400 flex items-center gap-1"
+                            type="button"
+                            variant="outline"
+                            onClick={() => onDeleteClick(field, index)}
+                        >
+                            <Trash2 size={18} />
+                            <span>Remove Block</span>
+                        </Button>
+                    </div>
+                </div>
+            </Accordion>
         </section>
     )
 }
