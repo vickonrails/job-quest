@@ -6,6 +6,7 @@ import { type Profile } from 'lib/types';
 import { ChevronDown, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import { Button } from 'ui';
 
 export function NavbarMenu({ profile }: { profile: Profile }) {
     const client = useSupabaseClient<Database>();
@@ -24,7 +25,13 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
         <section className="flex items-center">
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'end', className: 'w-lg w-40' }}
-                trigger={<NavTrigger profile={profile} />}
+                trigger={(
+                    <Button variant="ghost" className="border flex items-center rounded-3xl gap-2 p-2 py-1">
+                        <Avatar src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="" size="sm" />
+                        {profile.full_name}
+                        <ChevronDown />
+                    </Button>
+                )}
             >
                 <MenuItem className="py-2" icon={<User size={20} />} onClick={() => router.push('/profile/setup')}>
                     Profile
@@ -35,18 +42,5 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
                 </MenuItem>
             </MenuBar>
         </section>
-    )
-}
-
-function NavTrigger({ profile }: { profile: Profile }) {
-    return (
-        <div className="border flex items-center rounded-3xl p-2 py-1 gap-2 hover:bg-gray-100 active:bg-gray-100 focus:bg-gray-100">
-            {/* TODO: use real avatar image & provide some fallback */}
-            <Avatar src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="" size="sm" />
-            <div>
-                <p className="text-sm">{profile.full_name}</p>
-            </div>
-            <ChevronDown />
-        </div>
     )
 }

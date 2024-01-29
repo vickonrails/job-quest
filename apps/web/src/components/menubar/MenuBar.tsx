@@ -19,7 +19,7 @@ function MenuBar({ trigger, triggerProps, children, contentProps, ...rest }: Men
     return (
         <RadixMenuBar.Root className="text-base-col" {...rest}>
             <RadixMenuBar.Menu>
-                <RadixMenuBar.Trigger
+                <RadixMenuBar.Trigger asChild
                     className={clsx(className)}
                     {...triggerProps}
                 >

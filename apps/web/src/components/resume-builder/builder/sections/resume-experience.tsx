@@ -40,6 +40,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
             ))}
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
+                triggerProps={{ className: 'text-primary' }}
                 trigger={(
                     <AddSectionBtn>
                         Add Experience

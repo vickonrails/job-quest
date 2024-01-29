@@ -1,32 +1,19 @@
+import { Accordion } from '@components/accordion'
 import { Checkbox } from '@components/checkbox'
+import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
+import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { Textarea } from '@components/textarea'
 import { type WorkExperience } from '@lib/types'
-import { Minus, Plus, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
 import { ErrorHint } from '../error-hint'
-import { Accordion } from '@components/accordion'
-import { formatDate } from '@components/utils'
 
 interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
     index: number,
     field: FieldArrayWithId<{ workExperience: WorkExperience[] }>,
     onDeleteClick: (experience: WorkExperience, index: number) => void
-}
-
-function DateRenderer({ startDate, endDate }: { startDate: string, endDate?: string }) {
-    if (!startDate) return;
-    const formattedStartDate = formatDate(startDate);
-
-    if (!endDate) {
-        return `- ${formattedStartDate}`
-    }
-    const formattedEndDate = formatDate(endDate);
-
-    const experienceDate = startDate === '' ? '' : `${formattedStartDate} - ${formattedEndDate}`;
-
-    return ` - (${experienceDate})`;
 }
 
 function Header({ experience }: { experience: WorkExperience }) {
@@ -41,8 +28,7 @@ function Header({ experience }: { experience: WorkExperience }) {
                 </span>
             </div>
 
-            <Plus size={32} className="text-muted-foreground group-hover:bg-gray-50 p-2 rounded-md open-icon" />
-            <Minus size={32} className="text-muted-foreground group-hover:bg-gray-50 p-2 rounded-md close-icon" />
+            <AccordionExpandIcon />
         </header>
     )
 }

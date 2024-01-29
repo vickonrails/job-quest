@@ -2,6 +2,7 @@ import { type Database } from '@lib/database.types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { ChevronLeft, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { forwardRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Button, type ButtonProps } from 'ui';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
@@ -25,7 +26,6 @@ export function ResumeForm({ session }: { session: Session }) {
         }
         if (isNew) newResume.id = router.query.resume as string;
         await client.from('resumes').insert(newResume).select();
-
     }
 
     return (
@@ -43,10 +43,11 @@ export function ResumeForm({ session }: { session: Session }) {
                     </p>
                 </header>
 
+                {/* TODO: use context to avoid passing session to every component */}
                 <BasicInfoSection />
                 <WorkExperienceSection session={session} />
-                <ProjectsSection />
-                <EducationSection />
+                <ProjectsSection session={session} />
+                <EducationSection session={session} />
                 <Button loading={isSubmitting} className="flex items-center gap-1">
                     <Save size={18} />
                     <span>Save</span>
@@ -60,13 +61,12 @@ export function ResumeForm({ session }: { session: Session }) {
 /**
  * Button to add new sections
  */
-export function AddSectionBtn({ children, ...props }: ButtonProps) {
+export const AddSectionBtn = forwardRef<HTMLButtonElement, ButtonProps>(({ children, ...props }, ref) => {
     return (
-        <Button type="button" variant="ghost" className="text-primary hover:text-primary flex items-center gap-1" {...props}>
+        <Button type="button" variant="ghost" {...props} ref={ref}>
             <Plus size={18} />
             <span className="text-sm">{children}</span>
         </Button>
     )
-}
-
-
+})
+AddSectionBtn.displayName = 'AddSectionBtn'
