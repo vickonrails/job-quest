@@ -14,6 +14,11 @@ export function Preview() {
                     <p><span className="font-bold">Title</span>: {resume.title}</p>
                     <p><span className="font-bold">Summary</span>: {resume.professional_summary}</p>
                     <p><span className="font-bold">Location</span>: {resume.location}</p>
+
+
+                    {resume.skills?.map((skill, idx) => (
+                        <p key={idx}>{skill.label}</p>
+                    ))}
                 </section>
             </div>
         </section>

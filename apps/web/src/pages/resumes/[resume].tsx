@@ -29,6 +29,7 @@ export default function ResumeBuilder({ session, profile, resume, education, pro
         <Layout
             session={session}
             profile={profile}
+            containerClasses="overflow-hidden"
             pageTitle="Resume Builder"
         >
             <div className="flex w-full h-full">
