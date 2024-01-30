@@ -1,5 +1,5 @@
 import { Layout } from '@components/layout';
-import { Steps } from '@components/resume-builder/setup/renderer';
+import { Steps } from '@components/resume-builder/setup/steps-renderer';
 import { SetupNavigator } from '@components/resume-builder/setup/set-up-navigator';
 import { type Database } from '@lib/database.types';
 import { type Profile } from '@lib/types';
@@ -14,7 +14,7 @@ import { type PageProps } from '..';
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('work_experience').select('*').eq('user_id', userId)).data;
+    return (await client.from('work_experience').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data;
 }
 
 // TODO: fetch the initial values from the database and instantiate the form with it 

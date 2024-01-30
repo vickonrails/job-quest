@@ -1,6 +1,5 @@
 
 import { type Job } from '@lib/types';
-import { v4 as uuid } from 'uuid';
 
 export enum ApplicationStatus {
     Bookmarked,

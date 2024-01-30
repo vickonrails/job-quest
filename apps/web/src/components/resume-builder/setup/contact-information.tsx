@@ -41,7 +41,6 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
                 <section className="p-4 border bg-white mb-8">
                     <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                         <Input
-                            autoFocus
                             data-testid="email-address"
                             type="email"
                             label="Email Address"

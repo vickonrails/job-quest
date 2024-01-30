@@ -7,19 +7,19 @@ import { type FC } from 'react';
 interface MenuBarProp extends RadixMenuBar.MenubarProps {
     trigger: React.ReactNode
     triggerProps?: RadixMenuBar.MenubarTriggerProps
-
+    Header?: React.ReactNode
     contentProps?: RadixMenuBar.MenubarContentProps
 }
 
 // TODO: fix z index
 // TODO: I might just need to export the containing Content & Trigger to avoid taking children props on the parent
-function MenuBar({ trigger, triggerProps, children, contentProps, ...rest }: MenuBarProp) {
+function MenuBar({ trigger, triggerProps, children, contentProps, Header, ...rest }: MenuBarProp) {
     const { className } = triggerProps ?? {}
     const { className: contentClasses, ...restContentProps } = contentProps ?? {}
     return (
         <RadixMenuBar.Root className="text-base-col" {...rest}>
             <RadixMenuBar.Menu>
-                <RadixMenuBar.Trigger
+                <RadixMenuBar.Trigger asChild
                     className={clsx(className)}
                     {...triggerProps}
                 >
@@ -32,6 +32,10 @@ function MenuBar({ trigger, triggerProps, children, contentProps, ...rest }: Men
                             contentClasses
                         )} {...restContentProps}
                     >
+                        {typeof Header === 'string' ? (
+                            <div className="text-sm font-semibold p-2 px-4 select-none">{Header}</div>
+                        ) : Header}
+                        <Separator />
                         {children}
                     </RadixMenuBar.Content>
                 </RadixMenuBar.Portal>
