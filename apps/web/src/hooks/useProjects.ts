@@ -76,7 +76,7 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
-    return (await client.from('projects').select('*').eq('user_id', userId)).data
+    return (await client.from('projects').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data
 }
 
 /**

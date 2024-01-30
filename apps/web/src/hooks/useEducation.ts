@@ -94,5 +94,5 @@ export function getDefaultEducation() {
 export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('education').select('*').eq('user_id', userId)).data;
+    return (await client.from('education').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data;
 }
