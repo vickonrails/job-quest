@@ -58,8 +58,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
     const { data: education } = await supabase.from('education').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
-    const { data: workExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id);
-    const { data: projects } = await supabase.from('projects').select().eq('user_id', session.user.id);
+    const { data: workExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
+    const { data: projects } = await supabase.from('projects').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
     const { data: currentResume } = await supabase.from('resumes').select().eq('user_id', session.user.id).eq('id', resumeId).single();
 
     // TODO: more cleaner way to do this

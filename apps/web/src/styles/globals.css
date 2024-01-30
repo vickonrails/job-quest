@@ -27,6 +27,9 @@
 
     --shadow-crispy: 16px 16px 70px rgba(81, 67, 188, 0.1), -8px -8px 70px rgba(81, 67, 188, 0.1);
     --shadow-light: 0px 1px 2px rgba(16, 24, 40, 0.05);
+
+    --success: 142, 72%, 29%;
+    --success-foreground: 0, 0%, 100%;
   }
 
   .dark {

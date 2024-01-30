@@ -1,3 +1,4 @@
+import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { ChevronLeft, Plus, Save } from 'lucide-react';
@@ -5,6 +6,7 @@ import { useRouter } from 'next/router';
 import { forwardRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Button, type ButtonProps } from 'ui';
+import { v4 as uuid } from 'uuid';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
 import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
@@ -15,17 +17,38 @@ export function ResumeForm({ session }: { session: Session }) {
     const client = useSupabaseClient<Database>()
     const form = useFormContext<FormValues>();
     const router = useRouter()
-    const { formState: { isSubmitting } } = form
+    const { formState } = form
+    const { toast } = useToast()
 
-    const onSubmit = async ({ resume }: FormValues) => {
-        const isNew = !resume.id
-        if (!session) return
-        const newResume = {
-            ...resume,
-            user_id: session.user.id
+    const onSubmit = async ({ resume, workExperience }: FormValues) => {
+        const resumeUpdatePromise = client.from('resumes').upsert(resume);
+        // TODO: abstract away this logic
+        const preparedWorkExperience = workExperience.map((experience) => {
+            if (!experience.id) {
+                experience.user_id = session.user.id;
+                experience.resume_id = resume.id;
+                experience.id = uuid();
+            }
+            if ((experience.still_working_here && experience.end_date) || !experience.end_date) {
+                experience.end_date = null
+            }
+            return experience
+        });
+
+        const workExperienceUpdatePromise = client.from('work_experience').upsert(preparedWorkExperience);
+        const promiseResult = await Promise.all([resumeUpdatePromise, workExperienceUpdatePromise]);
+
+        if (promiseResult.some((res) => res.error)) {
+            toast({
+                title: 'An error occured',
+                variant: 'destructive'
+            })
+        } else {
+            toast({
+                title: 'Resume saved',
+                variant: 'success'
+            })
         }
-        if (isNew) newResume.id = router.query.resume as string;
-        await client.from('resumes').insert(newResume).select();
     }
 
     return (
@@ -48,7 +71,7 @@ export function ResumeForm({ session }: { session: Session }) {
                 <WorkExperienceSection session={session} />
                 <ProjectsSection session={session} />
                 <EducationSection session={session} />
-                <Button loading={isSubmitting} className="flex items-center gap-1">
+                <Button loading={formState.isSubmitting} type="submit" className="flex items-center gap-1">
                     <Save size={18} />
                     <span>Save</span>
                 </Button>

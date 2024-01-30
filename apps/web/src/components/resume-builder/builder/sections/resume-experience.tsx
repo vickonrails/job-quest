@@ -1,12 +1,22 @@
-import { MenuBar, MenuItem } from '@components/menubar';
+import { AlertDialog } from '@components/alert-dialog';
+import { MenuBar, MenuItem, Separator } from '@components/menubar';
+import { DateRenderer } from '@components/resume-builder/date-renderer';
 import { WorkExperienceForm } from '@components/resume-builder/setup/work-experience/work-experience-form-item';
-import { formatDate } from '@components/utils';
 import { type Database } from '@lib/database.types';
 import { type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { deleteExperience } from 'src/hooks/useWorkExperience';
 import { AddSectionBtn } from '.';
+
+const defaultWorkExperience = {
+    company_name: 'Untitled...',
+    job_title: 'Untitled...',
+    user_id: ''
+} as WorkExperience
 
 /**
  * Work Experience section in resume builder
@@ -14,7 +24,8 @@ import { AddSectionBtn } from '.';
 export function WorkExperienceSection({ session }: { session: Session }) {
     const client = useSupabaseClient<Database>()
     const form = useFormContext<{ workExperience: WorkExperience[] }>();
-    const { fields } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
+    const [idxToRemove, setRemoveIdx] = useState<number>();
+    const { fields, append, remove } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
     const { data: templateWorkExperience } = useQuery({
         queryKey: ['workExperienceTemplate'],
         queryFn: async () => {
@@ -24,6 +35,35 @@ export function WorkExperienceSection({ session }: { session: Session }) {
             return data;
         }
     })
+    const {
+        showDeleteDialog,
+        onCancel,
+        handleDelete,
+        loading,
+        setIsOpen,
+        isOpen
+    } = useDeleteModal({
+        onDelete: async (id: string) => { await deleteExperience(id, client) }
+    });
+
+    const handleDeleteClick = (experience: WorkExperience, idx: number) => {
+        // if it already has an id, show a prompt to confirm deletion
+        // if not, just remove from the array
+
+        if (!experience.id) {
+            remove(idx);
+            return;
+        }
+        setRemoveIdx(idx);
+        if (!experience.id) return
+        showDeleteDialog({ ...experience, id: experience.id });
+    }
+
+    const onDeleteOk = async () => {
+        await handleDelete();
+        remove(idxToRemove);
+        // await queryClient.refetchQueries(['work_experience']);
+    }
 
     return (
         <section className="mb-4">
@@ -35,12 +75,13 @@ export function WorkExperienceSection({ session }: { session: Session }) {
                     index={index}
                     form={form}
                     key={field._id}
-                    onDeleteClick={() => {/** */ }}
+                    onDeleteClick={handleDeleteClick}
                 />
             ))}
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}
+                Header="From your profile"
                 trigger={(
                     <AddSectionBtn>
                         Add Experience
@@ -48,19 +89,51 @@ export function WorkExperienceSection({ session }: { session: Session }) {
                 )}
                 onClick={e => e.stopPropagation()}
             >
-                {templateWorkExperience?.map((workExperience) => {
-                    const { company_name, job_title, id, start_date, end_date } = workExperience
-                    const endDate = end_date ? formatDate(end_date) : 'Now'
+                {templateWorkExperience?.map((experience) => {
                     return (
-                        <MenuItem className="py-2" key={id}>
-                            <p className="font-medium">{job_title} - {company_name}</p>
-                            <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
+                        <MenuItem className="py-2" key={experience.id} onClick={() => append(copyObj(experience, ['id']))}>
+                            {experience.job_title}
+                            <p className="text-sm text-muted-foreground flex gap-1">
+                                <span>{experience.company_name}</span>
+                                <span><DateRenderer startDate={experience.start_date} endDate={experience.end_date ?? ''} /></span>
+                            </p>
                         </MenuItem>
                     )
-                }
-                )}
+                })}
+
+                <Separator />
+                <MenuItem
+                    className="py-2"
+                    onClick={() => append(defaultWorkExperience)}
+                >
+                    <p>Add Blank</p>
+                    <p className="text-sm text-muted-foreground">Add from scratch</p>
+                </MenuItem>
             </MenuBar>
 
-        </section>
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description="Are you sure you want to remove this experience"
+                onOk={onDeleteOk}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+                isProcessing={loading}
+            />
+        </section >
     )
+}
+
+type Value = string | number | boolean | null | undefined;
+function copyObj<T extends Record<string, Value>>(source: T, excludeArr?: Array<keyof T>): T {
+    const newObj: T = {} as T;
+    Object.keys(source).map(key => {
+        if (excludeArr && excludeArr?.includes(key)) return;
+        // TODO: take some time to fix this error
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        newObj[key] = source[key]
+    });
+
+    return newObj;
 }
