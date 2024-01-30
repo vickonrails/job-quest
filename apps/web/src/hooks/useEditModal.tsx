@@ -16,5 +16,10 @@ export function useEditSheet<T>(intitialProps: RowEditHookProps<T>) {
         setSelectedEntity(item)
     }
 
-    return { isOpen, showEditSheet, setIsOpen, selectedEntity }
+    const closeEditSheet = () => {
+        setIsOpen(false)
+        setSelectedEntity(null)
+    }
+
+    return { isOpen, showEditSheet, setIsOpen, selectedEntity, closeEditSheet }
 }

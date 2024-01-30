@@ -1,6 +1,6 @@
-import React, { type ReactNode, type FC } from 'react'
-import { Root, Portal, Overlay, Content, type DialogProps, Description } from '@radix-ui/react-alert-dialog'
 import { Typography } from '@components/typography'
+import { Content, Description, Overlay, Portal, Root, type DialogProps } from '@radix-ui/react-alert-dialog'
+import { type FC, type ReactNode } from 'react'
 import { Button } from 'ui'
 
 interface AlertDialogProps extends DialogProps {
@@ -21,7 +21,7 @@ export const AlertDialog: FC<AlertDialogProps> = ({ open, description, title, on
                     <Typography variant="display-sm-md" className="px-4 py-3">{title}</Typography>
                     <hr />
                     <div className="p-4 text-light-text">
-                        <Description className="mb-4">{description}</Description>
+                        <Description className="text-sm mb-4">{description}</Description>
                         <div className="flex justify-end gap-2">
                             <Button variant="outline" onClick={onCancel}>Cancel</Button>
                             <Button variant="destructive" onClick={onOk} loading={isProcessing}>Delete</Button>

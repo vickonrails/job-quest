@@ -2,9 +2,23 @@ import { Droppable } from '@hello-pangea/dnd';
 import { type Job } from '@lib/types';
 import { cn } from '@utils/cn';
 import { type KanbanColumn } from '@utils/transform-to-column';
-import KanbanCard from './kanban-card';
+import { KanbanCard as DefaultKanbanCard } from './kanban-card';
 
-export default function KanbanColumnCmp({ column, openEditSheet }: { column: KanbanColumn, openEditSheet: (job?: Job) => void }) {
+export interface KanbanCardProps {
+    job: Job
+    index: number
+    openEditSheet?: (job?: Job) => void
+    openDeleteDialog?: (job: Job) => void
+}
+
+interface KanbanColumnProps {
+    column: KanbanColumn
+    openEditSheet?: (job?: Job) => void
+    openDeleteDialog?: (job: Job) => void
+    KanbanCard?: React.ComponentType<KanbanCardProps>
+}
+
+export default function KanbanColumnCmp({ column, openEditSheet, openDeleteDialog, KanbanCard = DefaultKanbanCard }: KanbanColumnProps) {
     return (
         <div className="flex-1" data-testid="kanban-column">
             <header className="flex justify-between items-center py-2 sticky top-0 bg-white">
@@ -23,7 +37,13 @@ export default function KanbanColumnCmp({ column, openEditSheet }: { column: Kan
                     >
                         {column.jobs.map((job, index) => {
                             return (
-                                <KanbanCard key={job.id} job={job} index={index} openEditSheet={openEditSheet} />
+                                <KanbanCard
+                                    key={job.id}
+                                    job={job}
+                                    index={index}
+                                    openDeleteDialog={openDeleteDialog}
+                                    openEditSheet={openEditSheet}
+                                />
                             )
                         })}
                         {provided.placeholder}

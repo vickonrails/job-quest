@@ -4,16 +4,26 @@ import { transformJobs } from '@utils/transform-to-column';
 import { useKanbanColumns } from 'src/hooks/useKanbanColumns';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
-import KanbanCol from './kanban-column';
+import KanbanCol, { type KanbanCardProps } from './kanban-column';
 
 interface KanbanContainerProps {
     jobs: Job[],
     onUpdateStart: () => void,
     onUpdateEnd: () => void,
-    openEditSheet: (job?: Job) => void
+    openEditSheet?: (job?: Job) => void
+    openDeleteDialog?: (job: Job) => void
+    KanbanCard?: React.ComponentType<KanbanCardProps>
 }
 
-export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd, openEditSheet }: KanbanContainerProps) {
+export default function JobsKanban({
+    jobs,
+    onUpdateStart,
+    onUpdateEnd,
+    KanbanCard,
+    openEditSheet,
+    openDeleteDialog
+}: KanbanContainerProps) {
+
     const jobColumns = transformJobs(jobs)
     const { columns, updateMovedItem } = useKanbanColumns(jobColumns);
 
@@ -37,7 +47,13 @@ export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd, openEditS
         <div className="flex w-full h-full gap-2" data-testid="kanban-container">
             <DragDropContext onDragEnd={onDragEnd}>
                 {columns.map((column) => (
-                    <KanbanCol key={column.id} column={column} openEditSheet={openEditSheet} />
+                    <KanbanCol
+                        key={column.id}
+                        column={column}
+                        openDeleteDialog={openDeleteDialog}
+                        openEditSheet={openEditSheet}
+                        KanbanCard={KanbanCard}
+                    />
                 ))}
             </DragDropContext>
         </div>

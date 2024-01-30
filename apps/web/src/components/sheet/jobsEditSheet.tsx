@@ -61,6 +61,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                     {({ values, handleSubmit, handleChange, setFieldValue, resetForm }) => (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                             <Input
+                                autoFocus
                                 placeholder="Job title"
                                 value={values.position}
                                 name="position"
