@@ -6,7 +6,14 @@ import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
 import KanbanCol from './kanban-column';
 
-export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd }: { jobs: Job[], onUpdateStart: () => void, onUpdateEnd: () => void }) {
+interface KanbanContainerProps {
+    jobs: Job[],
+    onUpdateStart: () => void,
+    onUpdateEnd: () => void,
+    openEditSheet: (job?: Job) => void
+}
+
+export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd, openEditSheet }: KanbanContainerProps) {
     const jobColumns = transformJobs(jobs)
     const { columns, updateMovedItem } = useKanbanColumns(jobColumns);
 
@@ -30,7 +37,7 @@ export default function JobsKanban({ jobs, onUpdateStart, onUpdateEnd }: { jobs:
         <div className="flex w-full h-full gap-2" data-testid="kanban-container">
             <DragDropContext onDragEnd={onDragEnd}>
                 {columns.map((column) => (
-                    <KanbanCol key={column.id} column={column} />
+                    <KanbanCol key={column.id} column={column} openEditSheet={openEditSheet} />
                 ))}
             </DragDropContext>
         </div>

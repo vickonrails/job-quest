@@ -1,9 +1,10 @@
 import { Droppable } from '@hello-pangea/dnd';
+import { type Job } from '@lib/types';
 import { cn } from '@utils/cn';
 import { type KanbanColumn } from '@utils/transform-to-column';
 import KanbanCard from './kanban-card';
 
-export default function KanbanColumnCmp({ column }: { column: KanbanColumn }) {
+export default function KanbanColumnCmp({ column, openEditSheet }: { column: KanbanColumn, openEditSheet: (job?: Job) => void }) {
     return (
         <div className="flex-1" data-testid="kanban-column">
             <header className="flex justify-between items-center py-2 sticky top-0 bg-white">
@@ -22,7 +23,7 @@ export default function KanbanColumnCmp({ column }: { column: KanbanColumn }) {
                     >
                         {column.jobs.map((job, index) => {
                             return (
-                                <KanbanCard key={job.id} job={job} index={index} />
+                                <KanbanCard key={job.id} job={job} index={index} openEditSheet={openEditSheet} />
                             )
                         })}
                         {provided.placeholder}

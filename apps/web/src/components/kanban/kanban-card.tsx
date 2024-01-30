@@ -12,7 +12,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { useEditSheet } from 'src/hooks/useEditModal'
 import { Button, Rating } from 'ui'
 
-export default function KanbanCard({ job, index }: { job: Job, index: number }) {
+export default function KanbanCard({ job, index, openEditSheet }: { job: Job, index: number, openEditSheet: (job?: Job) => void }) {
     const router = useRouter()
     const {
         showDeleteDialog,
@@ -22,7 +22,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
         setIsOpen: setIsDeleteModalOpen,
         loading: isDeleting
     } = useDeleteModal({})
-    const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({})
+    // const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({})
 
     const navigateToJob = (job: Job) => {
         return router.push(`/jobs/${job.id}`);
@@ -33,7 +33,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
             <Draggable draggableId={job.id} index={index}>
                 {(provided) => (
                     <article
-                        onClick={() => showEditSheet?.(job)}
+                        onClick={() => openEditSheet?.(job)}
                         data-testid="kanban-card"
                         className="flex flex-col border-1 border p-3 rounded-md select-none bg-white items-start group"
                         ref={provided.innerRef}
@@ -56,7 +56,7 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
                             >
                                 <MenuItem
                                     icon={<PanelRightClose size={16} />}
-                                    onClick={() => showEditSheet?.(job)}
+                                    onClick={() => openEditSheet?.(job)}
                                 >
                                     Quick View
                                 </MenuItem>
@@ -98,24 +98,6 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
                 onCancel={onCancel}
                 isProcessing={isDeleting}
             />
-
-            {
-                editSheetOpen && (
-                    <JobEditSheet
-                        icons={
-                            <Button asChild variant="ghost" size="icon">
-                                <Link href={`/jobs/${job.id}`}>
-                                    <ExternalLink size={18} />
-                                </Link>
-                            </Button>
-                        }
-                        entity={selectedEntity}
-                        open={editSheetOpen}
-                        title="Edit Job"
-                        onOpenChange={setIsOpen}
-                    />
-                )
-            }
         </>
     )
 }
