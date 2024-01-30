@@ -41,7 +41,7 @@ export function ProjectForm({ form, index, field, onDeleteClick }: ProjectsField
     const projects = useWatch({ control, name: `projects.${index}` })
 
     return (
-        <section className="border bg-white mb-4">
+        <section className="border bg-white mb-2">
             <Accordion header={<Header project={projects} />}>
                 <div className="p-4 pt-0">
                     <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">

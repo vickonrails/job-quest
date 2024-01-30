@@ -6,6 +6,7 @@ import { type Database } from '@lib/database.types';
 import { type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
+import { copyObject } from '@utils/copy-object';
 import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
@@ -62,6 +63,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     const onDeleteOk = async () => {
         await handleDelete();
         remove(idxToRemove);
+        // TODO: might need to invalidate the query cache here
         // await queryClient.refetchQueries(['work_experience']);
     }
 
@@ -91,7 +93,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
             >
                 {templateWorkExperience?.map((experience) => {
                     return (
-                        <MenuItem className="py-2" key={experience.id} onClick={() => append(copyObj(experience, ['id']))}>
+                        <MenuItem className="py-2" key={experience.id} onClick={() => append(copyObject(experience, ['id']))}>
                             {experience.job_title}
                             <p className="text-sm text-muted-foreground flex gap-1">
                                 <span>{experience.company_name}</span>
@@ -122,18 +124,4 @@ export function WorkExperienceSection({ session }: { session: Session }) {
             />
         </section >
     )
-}
-
-type Value = string | number | boolean | null | undefined;
-function copyObj<T extends Record<string, Value>>(source: T, excludeArr?: Array<keyof T>): T {
-    const newObj: T = {} as T;
-    Object.keys(source).map(key => {
-        if (excludeArr && excludeArr?.includes(key)) return;
-        // TODO: take some time to fix this error
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        newObj[key] = source[key]
-    });
-
-    return newObj;
 }

@@ -20,7 +20,8 @@ export function ResumeForm({ session }: { session: Session }) {
     const { formState } = form
     const { toast } = useToast()
 
-    const onSubmit = async ({ resume, workExperience }: FormValues) => {
+    const onSubmit = async ({ resume, workExperience, projects }: FormValues) => {
+        // TODO: I might need to refetch the whole resume after updating...
         const resumeUpdatePromise = client.from('resumes').upsert(resume);
         // TODO: abstract away this logic
         const preparedWorkExperience = workExperience.map((experience) => {
@@ -35,8 +36,18 @@ export function ResumeForm({ session }: { session: Session }) {
             return experience
         });
 
+        const preparedProjects = projects.map((project) => {
+            if (!project.id) {
+                project.user_id = session.user.id;
+                project.resume_id = resume.id;
+                project.id = uuid();
+            }
+            return project
+        })
+
         const workExperienceUpdatePromise = client.from('work_experience').upsert(preparedWorkExperience);
-        const promiseResult = await Promise.all([resumeUpdatePromise, workExperienceUpdatePromise]);
+        const projectUpdatePromise = client.from('projects').upsert(preparedProjects);
+        const promiseResult = await Promise.all([resumeUpdatePromise, workExperienceUpdatePromise, projectUpdatePromise]);
 
         if (promiseResult.some((res) => res.error)) {
             toast({

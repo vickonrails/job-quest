@@ -1,4 +1,4 @@
-import { MenuBar, MenuItem } from '@components/menubar';
+import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { ProjectForm } from '@components/resume-builder/setup/projects/project-form-item';
 import { formatDate } from '@components/utils';
 import { type Database } from '@lib/database.types';
@@ -7,6 +7,15 @@ import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { AddSectionBtn } from '.';
+import { copyObject } from '@utils/copy-object';
+import { useState } from 'react';
+import { deleteProject } from 'src/hooks/useProjects';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { AlertDialog } from '@components/alert-dialog';
+
+const defaultProjects = {
+    title: ''
+} as Project
 
 /**
  * Projects section in resume builder
@@ -14,7 +23,8 @@ import { AddSectionBtn } from '.';
 export function ProjectsSection({ session }: { session: Session }) {
     const form = useFormContext<{ projects: Project[] }>();
     const client = useSupabaseClient<Database>();
-    const { fields } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
+    const [idxToRemove, setRemoveIdx] = useState<number>();
+    const { fields, append, remove } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
     const { data: projectTemplates } = useQuery({
         queryKey: ['projectTemplates'],
         queryFn: async () => {
@@ -24,6 +34,34 @@ export function ProjectsSection({ session }: { session: Session }) {
             return data;
         }
     })
+    const {
+        showDeleteDialog,
+        onCancel,
+        handleDelete,
+        loading,
+        setIsOpen,
+        isOpen
+    } = useDeleteModal({
+        onDelete: async (id: string) => { await deleteProject(id, client) }
+    });
+
+    const onDeleteOk = async () => {
+        await handleDelete();
+        remove(idxToRemove);
+        // TODO: might need to invalidate the query cache here
+        // await queryClient.refetchQueries(['projects']);
+    }
+
+    const handleDeleteClick = (project: Project, idx: number) => {
+
+        if (!project.id) {
+            remove(idx);
+            return;
+        }
+        setRemoveIdx(idx);
+        if (!project.id) return
+        showDeleteDialog({ ...project, id: project.id });
+    }
 
     return (
         <section className="mb-4">
@@ -35,7 +73,7 @@ export function ProjectsSection({ session }: { session: Session }) {
                     index={index}
                     form={form}
                     key={field._id}
-                    onDeleteClick={() => {/** */ }}
+                    onDeleteClick={handleDeleteClick}
                 />
             ))}
 
@@ -53,13 +91,32 @@ export function ProjectsSection({ session }: { session: Session }) {
                     const { title, id, start_date, end_date } = education
                     const endDate = end_date ? formatDate(end_date) : 'Now'
                     return (
-                        <MenuItem className="py-2" key={id}>
+                        <MenuItem className="py-2" key={id} onClick={() => append(copyObject(education, ['id']))}>
                             <p className="font-medium">{title}</p>
                             {start_date && <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>}
                         </MenuItem>
                     )
                 })}
+
+                <Separator />
+                <MenuItem
+                    className="py-2"
+                    onClick={() => append(defaultProjects)}
+                >
+                    <p>Add Blank</p>
+                    <p className="text-sm text-muted-foreground">Add from scratch</p>
+                </MenuItem>
             </MenuBar>
+
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description="Are you sure you want to remove this project"
+                onOk={onDeleteOk}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+                isProcessing={loading}
+            />
         </section>
     )
 }
