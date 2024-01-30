@@ -3,44 +3,38 @@ import { Layout } from '@components/layout';
 import NoteForm from '@components/notes/note-form';
 import NotesList from '@components/notes/note-list';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
-import { FullPageSpinner, Spinner } from '@components/spinner';
 import { Typography } from '@components/typography';
 import { formatDate } from '@components/utils';
+import { useJobs } from '@hooks';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type Database } from 'lib/database.types';
-import { type Job, type Profile } from 'lib/types';
+import { type Job, type Note, type Profile } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { ChevronLeft } from 'react-feather';
 import { useEditSheet } from 'src/hooks/useEditModal';
-import { useJobs } from 'src/hooks/useJobs';
 import { Button, Rating, Status_Lookup } from 'ui';
 
-const JobDetailsPage = ({ session, profile }: { session: Session, profile: Profile }) => {
-    const router = useRouter();
-    const jobId = router.query.job as string;
-    const { data, isLoading, isRefetching } = useJobs({}, jobId)
-
+const JobDetailsPage = ({ session, profile, job, notes }: { session: Session, profile: Profile, job: Job, notes: Note[] }) => {
+    const { data } = useJobs({ initialData: [job] }, job.id);
+    const router = useRouter()
     return (
-        <Layout session={session} profile={profile} containerClasses="px-6">
+        <Layout session={session} profile={profile} containerClasses="p-6">
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />
                     Back
                 </button>
-                {isLoading ?
-                    <FullPageSpinner /> :
-                    <JobDetails job={data?.jobs[0]} isRefetching={isRefetching} />
-                }
+                <JobDetails job={data?.jobs[0]} notes={notes} />
             </div>
         </Layout>
     )
 }
 
 
-const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean }) => {
+const JobDetails = ({ job, notes }: { job?: Job, notes: Note[] }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
     const labels = useMemo(() => {
         return job?.labels?.map(label => ({ label }))
@@ -68,7 +62,6 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                                 <div className="flex items-center gap-3">
                                     <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
                                     <Button size="sm" variant="outline" onClick={_ => showEditSheet(job)} className="inline-block py-1">Edit</Button>
-                                    {isRefetching && <Spinner />}
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">
                                     <li className="list-none max-w-[200px]">
@@ -93,7 +86,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3">
                     <h2>Notes</h2>
                     <NoteForm job={job} />
-                    <NotesList job={job} />
+                    <NotesList notes={notes} job={job} />
                 </div>
             </div>
             {editSheetOpen && (
@@ -111,6 +104,7 @@ const JobDetails = ({ job, isRefetching }: { job?: Job, isRefetching: boolean })
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
+    const jobId = context.query.job as string
 
     if (!session) {
         return {
@@ -122,11 +116,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: job, error } = await supabase.from('jobs').select().eq('id', jobId).single()
+    const { data: notes, error: notesError } = await supabase.from('notes').select().eq('job_id', jobId).order('created_at', { ascending: false });
+    // redirect back to jobs page if job doesn't exist
 
     return {
         props: {
             session,
-            profile
+            profile,
+            job,
+            notes
         }
     }
 }

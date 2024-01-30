@@ -1,11 +1,11 @@
-import { type Job } from 'lib/types';
-import { Formik } from 'formik'
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types'
-import { Sheet, type SheetProps } from './sheet';
 import { useToast } from '@components/toast/use-toast';
-import { Button, Input, Rating, Select, Status_Lookup } from 'ui'
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Formik } from 'formik';
+import { type Database } from 'lib/database.types';
+import { type Job } from 'lib/types';
+import { Button, Input, Rating, Select, Status_Lookup } from 'ui';
+import { Sheet, type SheetProps } from './sheet';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -52,7 +52,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const initialValues = { ...entity }
 
     return (
-        <Sheet {...props}>
+        <Sheet icons={props.icons} {...props}>
             <div className="flex flex-col gap-3">
                 <Formik
                     initialValues={initialValues}

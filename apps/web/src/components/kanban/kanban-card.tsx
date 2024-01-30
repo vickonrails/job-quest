@@ -3,14 +3,17 @@ import { MenuBar, MenuItem, Separator } from '@components/menubar'
 import { JobEditSheet } from '@components/sheet/jobsEditSheet'
 import { Draggable } from '@hello-pangea/dnd'
 import { type Job } from 'lib/types'
-import { Edit, Trash2 } from 'lucide-react'
+import { ExternalLink, FileText, PanelRightClose, Trash2 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { MoreVertical } from 'react-feather'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { useEditSheet } from 'src/hooks/useEditModal'
-import { Rating } from 'ui'
+import { Button, Rating } from 'ui'
 
 export default function KanbanCard({ job, index }: { job: Job, index: number }) {
+    const router = useRouter()
     const {
         showDeleteDialog,
         isOpen: deleteModalOpen,
@@ -21,10 +24,13 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
     } = useDeleteModal({})
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({})
 
+    const navigateToJob = (job: Job) => {
+        return router.push(`/jobs/${job.id}`);
+    }
+
     return (
         <>
             <Draggable draggableId={job.id} index={index}>
-
                 {(provided) => (
                     <article
                         onClick={() => showEditSheet?.(job)}
@@ -43,15 +49,22 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
 
                             <MenuBar
                                 triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
+                                contentProps={{ side: 'bottom', align: 'end' }}
                                 trigger={<MoreVertical size={16} />}
                                 onClick={e => e.stopPropagation()}
                                 className="transition-opacity opacity-0 group-hover:opacity-100"
                             >
                                 <MenuItem
-                                    icon={<Edit size={16} />}
+                                    icon={<PanelRightClose size={16} />}
                                     onClick={() => showEditSheet?.(job)}
                                 >
-                                    Edit
+                                    Quick View
+                                </MenuItem>
+                                <MenuItem
+                                    icon={<FileText size={16} />}
+                                    onClick={() => navigateToJob?.(job)}
+                                >
+                                    Detailed View
                                 </MenuItem>
                                 <Separator />
                                 <MenuItem
@@ -89,6 +102,13 @@ export default function KanbanCard({ job, index }: { job: Job, index: number }) 
             {
                 editSheetOpen && (
                     <JobEditSheet
+                        icons={
+                            <Button asChild variant="ghost" size="icon">
+                                <Link href={`/jobs/${job.id}`}>
+                                    <ExternalLink size={18} />
+                                </Link>
+                            </Button>
+                        }
                         entity={selectedEntity}
                         open={editSheetOpen}
                         title="Edit Job"

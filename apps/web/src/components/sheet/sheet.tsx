@@ -1,9 +1,10 @@
-import * as React from 'react'
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
+import * as React from 'react'
 
 import { cn } from '@utils/cn'
+import { Button } from 'ui'
 
 const SheetRoot = SheetPrimitive.Root
 
@@ -16,7 +17,7 @@ const SheetOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
-    className={className}
+    className={cn('bg-black/30 absolute top-0 left-0 right-0 bottom-0', className)}
     {...props}
     ref={ref}
   />
@@ -58,10 +59,6 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </SheetPrimitive.Close>
     </SheetPrimitive.Content>
   </SheetPortal>
 ))
@@ -96,14 +93,28 @@ const SheetFooter = ({
 SheetFooter.displayName = 'SheetFooter'
 
 const SheetTitle = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title
-    ref={ref}
-    className={cn('text-lg font-semibold text-foreground', className)}
-    {...props}
-  />
+  React.ElementRef<typeof SheetPrimitive.Title> & { icon?: React.ReactNode },
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & { icons?: React.ReactNode }
+>(({ className, children, icons, ...props }, ref) => (
+  <header className="flex items-start justify-between">
+    <SheetPrimitive.Title
+      ref={ref}
+      className={cn('text-lg flex font-semibold text-foreground gap-2', className)}
+      {...props}
+    >
+      {children}
+    </SheetPrimitive.Title>
+    <section className="flex">
+      {icons}
+      <SheetPrimitive.Close asChild>
+        <Button variant="ghost" size="icon">
+          <X size={16} />
+          <span className="sr-only">Close</span>
+        </Button>
+      </SheetPrimitive.Close>
+
+    </section>
+  </header>
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
@@ -121,13 +132,14 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export type SheetProps = SheetPrimitive.DialogProps & {
   title?: string
+  icons?: React.ReactNode
 }
 
-export function Sheet({ open, children, title, ...rest }: SheetProps) {
+export function Sheet({ open, children, icons, title, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
       <SheetContent className="overflow-auto">
-        {title && <SheetTitle className="mb-5">{title}</SheetTitle>}
+        {title && <SheetTitle className="mb-5" icons={icons}>{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>

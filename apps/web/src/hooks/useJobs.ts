@@ -60,8 +60,8 @@ export function useJobs(options?: Options, jobId?: string): UseQueryResult<JobsR
     const { initialData } = options ?? {}
 
     return useQuery(
-        ['jobs'],
-        () => getJobs(client, options ?? {}),
+        ['jobs', jobId ?? ''],
+        () => getJobs(client, { ...options, jobId } ?? {}),
         { initialData: { jobs: initialData ?? [], count: initialData?.length ?? 0 } }
     )
 }

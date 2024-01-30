@@ -1,21 +1,21 @@
 import { AlertDialog } from '@components/alert-dialog';
-import { Spinner } from '@components/spinner';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { cn } from '@utils/cn';
 import { type Database } from 'lib/database.types';
-import { type Note, type Job } from 'lib/types';
-import React, { type HTMLAttributes } from 'react'
+import { type Job, type Note } from 'lib/types';
+import { type HTMLAttributes } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useNotes } from 'src/hooks/useNotes';
 import NoteItem from './note-item';
-import { cn } from '@utils/cn';
 
 interface NoteListProps extends HTMLAttributes<HTMLElement> {
+    notes: Note[]
     job: Job
 }
 
-function NotesList({ job, ...rest }: NoteListProps) {
+function NotesList({ notes, job, ...rest }: NoteListProps) {
     const client = useSupabaseClient<Database>();
-    const { data: notes, isLoading, refetch } = useNotes({ jobId: job.id })
+    const { data, refetch } = useNotes({ initialData: notes, jobId: job.id })
     const {
         showDeleteDialog,
         isOpen: deleteModalOpen,
@@ -31,15 +31,13 @@ function NotesList({ job, ...rest }: NoteListProps) {
         refresh: async () => { await refetch() }
     })
 
-    if (isLoading) return <Spinner />
-
     return (
-        <section {...rest} className={cn('flex flex-col', notes?.length && 'border rounded-md')}>
-            {notes?.map((note, idx) => (
+        <section {...rest} className={cn('flex flex-col', data?.length && 'border rounded-md')}>
+            {data?.map((note, idx) => (
                 <NoteItem
                     note={note}
                     key={idx}
-                    className={cn(idx + 1 !== notes.length && 'border-b')}
+                    className={cn(idx + 1 !== data.length && 'border-b')}
                     showDeleteDialog={showDeleteDialog}
                 />
             ))}

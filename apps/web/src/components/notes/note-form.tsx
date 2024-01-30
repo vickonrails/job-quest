@@ -15,12 +15,15 @@ function NoteForm({ job }: { job: Job }) {
 
     // TODO: error handling
     const { mutateAsync, isLoading: isAddingNotes } = useMutation({
-        mutationFn: async (data: NoteInsertDTO) => {
-            const { error } = await client.from('notes').insert(data)
+        mutationFn: async (note: NoteInsertDTO) => {
+            const { data, error } = await client.from('notes').insert(note).select('*');
             if (error) throw error;
+            return data
         },
         // TODO: might want to use query.setQuery   Data here too
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes', job.id] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['notes', job.id] })
+        }
     })
 
     const canSubmit = note.trim();
