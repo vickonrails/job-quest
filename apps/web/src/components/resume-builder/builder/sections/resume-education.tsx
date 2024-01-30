@@ -1,4 +1,4 @@
-import { MenuBar, MenuItem } from '@components/menubar';
+import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
 import { formatDate } from '@components/utils';
 import { type Database } from '@lib/database.types';
@@ -8,6 +8,16 @@ import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { AddSectionBtn } from '.';
+import { deleteEducation } from 'src/hooks/useEducation';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { AlertDialog } from '@components/alert-dialog';
+import { useState } from 'react';
+import { copyObject } from '@utils/copy-object';
+
+const defaultEducation = {
+    field_of_study: 'Untitled...',
+    institution: 'Untitled...',
+} as Education
 
 /**
  * Education section in resume builder
@@ -15,7 +25,8 @@ import { AddSectionBtn } from '.';
 export function EducationSection({ session }: { session: Session }) {
     const form = useFormContext<{ education: Education[] }>();
     const client = useSupabaseClient<Database>();
-    const { fields } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
+    const [idxToRemove, setRemoveIdx] = useState<number>();
+    const { fields, remove, append } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
     const { data: educationTemplates } = useQuery({
         queryKey: ['educationTemplates'],
         queryFn: async () => {
@@ -25,6 +36,36 @@ export function EducationSection({ session }: { session: Session }) {
             return data;
         }
     })
+    const {
+        showDeleteDialog,
+        onCancel,
+        handleDelete,
+        loading,
+        setIsOpen,
+        isOpen
+    } = useDeleteModal({
+        onDelete: async (id: string) => { await deleteEducation(id, client) }
+    });
+
+    const handleDeleteClick = (education: Education, idx: number) => {
+        // if it already has an id, show a prompt to confirm deletion
+        // if not, just remove from the array
+
+        if (!education.id) {
+            remove(idx);
+            return;
+        }
+        setRemoveIdx(idx);
+        if (!education.id) return
+        showDeleteDialog({ ...education, id: education.id });
+    }
+
+    const onDeleteOk = async () => {
+        await handleDelete();
+        remove(idxToRemove);
+        // TODO: might need to invalidate the query cache here
+        // await queryClient.refetchQueries(['education']);
+    }
 
     return (
         <section className="mb-4">
@@ -36,13 +77,14 @@ export function EducationSection({ session }: { session: Session }) {
                     index={index}
                     form={form}
                     key={field._id}
-                    onDeleteClick={() => {/** */ }}
+                    onDeleteClick={handleDeleteClick}
                 />
             ))}
 
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}
+                Header="From your profile"
                 trigger={(
                     <AddSectionBtn>
                         Add Education
@@ -54,13 +96,32 @@ export function EducationSection({ session }: { session: Session }) {
                     const { institution, field_of_study, id, start_date, end_date } = education
                     const endDate = end_date ? formatDate(end_date) : 'Now'
                     return (
-                        <MenuItem className="py-2" key={id}>
+                        <MenuItem className="py-2" key={id} onClick={() => append(copyObject(education, ['id']))}>
                             <p className="font-medium">{institution} - {field_of_study}</p>
                             <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
                         </MenuItem>
                     )
                 })}
+
+                <Separator />
+                <MenuItem
+                    className="py-2"
+                    onClick={() => append(defaultEducation)}
+                >
+                    <p>Add Blank</p>
+                    <p className="text-sm text-muted-foreground">Add from scratch</p>
+                </MenuItem>
             </MenuBar>
+
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description="Are you sure you want to remove this Education?"
+                onOk={onDeleteOk}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+                isProcessing={loading}
+            />
         </section>
     )
 

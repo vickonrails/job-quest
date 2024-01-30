@@ -14,7 +14,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { AlertDialog } from '@components/alert-dialog';
 
 const defaultProjects = {
-    title: ''
+    title: 'Untitled...'
 } as Project
 
 /**

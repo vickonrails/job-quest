@@ -20,7 +20,7 @@ export function ResumeForm({ session }: { session: Session }) {
     const { formState } = form
     const { toast } = useToast()
 
-    const onSubmit = async ({ resume, workExperience, projects }: FormValues) => {
+    const onSubmit = async ({ resume, workExperience, projects, education }: FormValues) => {
         // TODO: I might need to refetch the whole resume after updating...
         const resumeUpdatePromise = client.from('resumes').upsert(resume);
         // TODO: abstract away this logic
@@ -45,9 +45,27 @@ export function ResumeForm({ session }: { session: Session }) {
             return project
         })
 
+        const preparedEducation = education.map((education) => {
+            if (!education.id) {
+                education.user_id = session.user.id;
+                education.resume_id = resume.id;
+                education.id = uuid();
+            }
+            if ((education.still_studying_here && education.end_date) || !education.end_date) {
+                education.end_date = null
+            }
+            return education
+        })
+
+        const educationUpdatePromise = client.from('education').upsert(preparedEducation);
         const workExperienceUpdatePromise = client.from('work_experience').upsert(preparedWorkExperience);
         const projectUpdatePromise = client.from('projects').upsert(preparedProjects);
-        const promiseResult = await Promise.all([resumeUpdatePromise, workExperienceUpdatePromise, projectUpdatePromise]);
+        const promiseResult = await Promise.all([
+            resumeUpdatePromise,
+            workExperienceUpdatePromise,
+            projectUpdatePromise,
+            educationUpdatePromise
+        ]);
 
         if (promiseResult.some((res) => res.error)) {
             toast({
@@ -65,7 +83,7 @@ export function ResumeForm({ session }: { session: Session }) {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0 mx-auto">
             <section className="max-w-xl mx-auto">
-                <Button variant="link" className="pl-0" onClick={() => router.back()}>
+                <Button variant="link" type="button" className="pl-0" onClick={() => router.back()}>
                     <ChevronLeft />
                     <span>Back</span>
                 </Button>
