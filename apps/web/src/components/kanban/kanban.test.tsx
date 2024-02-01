@@ -4,9 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render } from '@testing-library/react';
 import jobs from '@utils/jobs';
 import { transformJobs } from '@utils/transform-to-column';
+import { vi } from 'vitest';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
-import JobsKanban from './kanban-container';
 import { getMovingItemData } from './core/getMovingItemData';
+import JobsKanban from './kanban-container';
 
 const createTestQueryClient = () => new QueryClient({
     defaultOptions: {
@@ -17,6 +18,20 @@ const createTestQueryClient = () => new QueryClient({
 })
 
 describe('Kanban', () => {
+    // mock next/router
+    // TODO: move to setup if required frequently
+    vi.mock('next/router', () => ({
+        useRouter: vi.fn(() => ({
+            pathname: '',
+            query: { mock: '' },
+            asPath: '',
+        })),
+    }));
+
+    afterAll(() => {
+        vi.clearAllMocks();
+    })
+
     const testClient = createTestQueryClient()
 
     afterEach(() => {
