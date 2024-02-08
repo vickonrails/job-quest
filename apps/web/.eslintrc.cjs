@@ -7,8 +7,10 @@ const config = {
     extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
     files: ['*.ts', '*.tsx'],
     rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
     },
     parserOptions: {
       project: path.join(__dirname, 'tsconfig.json')
@@ -25,7 +27,6 @@ const config = {
       prefer: 'type-imports',
       fixStyle: 'inline-type-imports'
     }],
-    '@typescript-eslint/no-unsafe-assignment': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn', {
       argsIgnorePattern: '^_'
     }],
