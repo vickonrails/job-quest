@@ -8,7 +8,7 @@ import { type Database } from 'lib/database.types'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
 import { Trash } from 'react-feather'
-import { Button, Status_Lookup } from 'ui'
+import { Button } from 'ui'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */
@@ -53,10 +53,7 @@ function NoteText({ note, showDeleteDialog }: { note: Note, showDeleteDialog: (n
     return (
         <>
             <p className="leading-tight text-sm mb-2 max-w-[17em]">{note.text}</p>
-            <div className="flex justify-between">
-                {note.created_at && <p className="text-sm text-gray-400">{formatDate(note.created_at)}</p>}
-                <p className="text-sm text-gray-400">{Status_Lookup[note.status]}</p>
-            </div>
+            {note.created_at && <p className="text-sm text-gray-400">{formatDate(note.created_at)}</p>}
             <button
                 onClick={(ev: React.MouseEvent<HTMLButtonElement>) => {
                     ev.stopPropagation();

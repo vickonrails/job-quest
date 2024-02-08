@@ -140,7 +140,7 @@ function Skills() {
 
 // TODO: refactor to use SkillsForm from profile setup
 export function SkillsForm({ form }: { form: UseFormReturn<FormValues> }) {
-    const [skillValue, setSkillValue] = useState<string>()
+    const [skillValue, setSkillValue] = useState<string>('')
     const inputRef = createRef<HTMLInputElement>()
 
     const { append, fields, remove } = useFieldArray({

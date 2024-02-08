@@ -5,7 +5,7 @@ import { Textarea } from '@components/textarea'
 import { formatDate } from '@components/utils'
 import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'
-import { createRef, useEffect, useState } from 'react'
+import { type ChangeEvent, createRef, useEffect, useState } from 'react'
 import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input } from 'ui'
 import { ErrorHint } from '../error-hint'
@@ -134,7 +134,7 @@ function ProjectSkills({ index, form }: { index: number, form: UseFormReturn<{ p
                 className="mb-4"
                 label="Skills Required (Press Enter to add)"
                 value={skill}
-                onChange={ev => setSkill(ev.target.value)}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => setSkill(ev.target.value)}
                 ref={inputRef}
             />
             {fields.map((field, idx) => (

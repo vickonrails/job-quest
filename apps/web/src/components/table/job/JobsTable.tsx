@@ -8,7 +8,15 @@ import { Table, type Column, type TableActions } from '../Table'
 export const columns: Column<Job> = [
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
     { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ src: item.company_site ? `https://logo.clearbit.com/${item.company_site}` : '', text: item.company_name }) },
-    { header: 'Status', type: 'text', renderValue: (item) => ({ text: Status_Lookup[item.status] ?? '' }) },
+    {
+        // TODO: refactor
+        header: 'Status', type: 'text', renderValue: (item) => {
+            if (!item.status) return { text: '' };
+            const status = Status_Lookup.find((x, idx) => idx === item.status)
+            const text = status?.[1] ?? ''
+            return { text }
+        }
+    },
     { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: item.priority ?? 0 }) },
     { header: 'Date', type: 'date', renderValue: (item) => ({ date: item.created_at ?? '' }) },
 ]

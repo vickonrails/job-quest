@@ -23,7 +23,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const client = useSupabaseClient<Database>();
     const entity = props.entity as Job;
     const session = useSession();
-    const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
+    const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x[idx] ?? 0 }))
     const { toast } = useToast()
     const { handleSubmit, reset, register, control, formState: { errors } } = useForm({ defaultValues: entity })
 

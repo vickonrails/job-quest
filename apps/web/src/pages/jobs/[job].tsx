@@ -20,6 +20,9 @@ import { Button, Rating, Status_Lookup } from 'ui';
 const JobDetailsPage = ({ session, profile, job, notes }: { session: Session, profile: Profile, job: Job, notes: Note[] }) => {
     const { data } = useJobs({ initialData: [job] }, job.id);
     const router = useRouter()
+    const jobsData = data?.jobs[0]
+    if (!jobsData) return null;
+
     return (
         <Layout session={session} profile={profile} containerClasses="p-6">
             <div>
@@ -27,20 +30,22 @@ const JobDetailsPage = ({ session, profile, job, notes }: { session: Session, pr
                     <ChevronLeft size={20} />
                     Back
                 </button>
-                <JobDetails job={data?.jobs[0]} notes={notes} />
+                <JobDetails job={jobsData} notes={notes} />
             </div>
         </Layout>
     )
 }
 
 
-const JobDetails = ({ job, notes }: { job?: Job, notes: Note[] }) => {
+const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
     const labels = useMemo(() => {
         return job?.labels?.map(label => ({ label }))
     }, [job?.labels])
 
     if (!job) return;
+
+    const status = Status_Lookup.find((x, idx) => idx === job.status)
 
     return (
         <>
@@ -68,7 +73,7 @@ const JobDetails = ({ job, notes }: { job?: Job, notes: Note[] }) => {
                                         <Typography variant="body-md">{job.company_name}</Typography>
                                     </li>
                                     {job.location && <li>{job.location}</li>}
-                                    <li>{Status_Lookup[job.status]}</li>
+                                    <li>{status}</li>
                                 </ul>
                             </div>
                             <Rating size="md" value={job.priority ?? 0} />
