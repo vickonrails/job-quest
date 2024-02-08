@@ -56,7 +56,7 @@ function RecentlyAdded({ jobs }: { jobs: Job[] }) {
     const onRowClick = (id: string) => {
         router.push(`/jobs/${id}`).then(() => {
             // 
-        }).catch(err => {
+        }).catch(() => {
             // 
         })
     }

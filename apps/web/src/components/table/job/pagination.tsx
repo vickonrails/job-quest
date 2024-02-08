@@ -23,7 +23,7 @@ const PAGINATION_OPTIONS: SelectOption[] = [
 ]
 
 // TODO: move to another file
-function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: PaginationProps) {
+export function Pagination({ totalCount, count, offset, setOffset, setLimit, limit }: PaginationProps) {
     const isLastPage = ((offset + 1) + limit >= (totalCount ?? 0))
     const isFirstPage = offset === 0;
     const totalPages = Math.ceil((totalCount ?? 0) / limit)

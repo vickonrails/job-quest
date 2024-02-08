@@ -33,9 +33,9 @@ export default function JobsKanban({
         const movingItemData = getMovingItemData(result, involvedColumns);
 
         onUpdateStart && onUpdateStart();
-        updateMovedItem(movingItemData, involvedColumns).then(res => {
+        updateMovedItem(movingItemData, involvedColumns).then(() => {
             // handle success state
-        }).catch(err => {
+        }).catch(() => {
             // handle error state
             // reload back to previous state
         }).finally(() => {

@@ -24,7 +24,7 @@ export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProp
                 title: 'deleted'
             })
             setIsOpen(false)
-        }).catch(err => {
+        }).catch(() => {
             toast({
                 variant: 'destructive',
                 title: 'Failed to delete'

@@ -116,8 +116,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    const { data: job, error } = await supabase.from('jobs').select().eq('id', jobId).single()
-    const { data: notes, error: notesError } = await supabase.from('notes').select().eq('job_id', jobId).order('created_at', { ascending: false });
+    const { data: job } = await supabase.from('jobs').select().eq('id', jobId).single()
+    const { data: notes } = await supabase.from('notes').select().eq('job_id', jobId).order('created_at', { ascending: false });
     // redirect back to jobs page if job doesn't exist
 
     return {

@@ -45,7 +45,7 @@ const SignIn: NextPage<SignInProps> = () => {
                 emailRedirectTo: 'http://localhost:3000/api/auth/callback'
             }
         })
-            .then(res => {
+            .then(() => {
                 setIsLoading(false);
                 setEmailSent(true);
                 toast({
@@ -55,7 +55,7 @@ const SignIn: NextPage<SignInProps> = () => {
                     duration: 5000
                 })
             })
-            .catch(err => {
+            .catch(() => {
                 setIsLoading(false);
                 toast({
                     title: 'An error occurred',

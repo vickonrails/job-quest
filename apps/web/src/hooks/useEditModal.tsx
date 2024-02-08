@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
-
 interface RowEditHookProps<T> {
     refresh?: () => Promise<void>
-    // onEdit: (item: T) => Promise<void>
+    onEdit?: (item: T) => Promise<void>
 }
 
-export function useEditSheet<T>(intitialProps: RowEditHookProps<T>) {
+export function useEditSheet<T>(intitialProps: RowEditHookProps<T> = {}) {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedEntity, setSelectedEntity] = useState<T | null>(null)
 
@@ -16,9 +15,10 @@ export function useEditSheet<T>(intitialProps: RowEditHookProps<T>) {
         setSelectedEntity(item)
     }
 
-    const closeEditSheet = () => {
+    const closeEditSheet = async () => {
         setIsOpen(false)
         setSelectedEntity(null)
+        await intitialProps.refresh?.();
     }
 
     return { isOpen, showEditSheet, setIsOpen, selectedEntity, closeEditSheet }
