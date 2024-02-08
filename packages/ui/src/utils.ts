@@ -19,7 +19,6 @@ export const Status_Lookup = [
   [6, 'Hired']
 ]
 
-// TODO: move to appropriate file
 export function getSize(size: Size) {
   switch (size) {
     case 'xs':
