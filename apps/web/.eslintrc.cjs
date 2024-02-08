@@ -6,6 +6,10 @@ const config = {
   overrides: [{
     extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
     files: ['*.ts', '*.tsx'],
+    rules: {
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+    },
     parserOptions: {
       project: path.join(__dirname, 'tsconfig.json')
     }
@@ -22,8 +26,6 @@ const config = {
       fixStyle: 'inline-type-imports'
     }],
     '@typescript-eslint/no-unsafe-assignment': 'warn',
-    '@typescript-eslint/no-unsafe-argument': 'off',
-    '@typescript-eslint/no-unsafe-member-access': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', {
       argsIgnorePattern: '^_'
     }],

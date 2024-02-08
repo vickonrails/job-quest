@@ -6,7 +6,6 @@
   "author": "Plasmo Corp. <foss@plasmo.com>",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
     "package": "plasmo package",
     "clean": "rm -rf build && rm -rf .plasmo & plasmo dev"
   },

@@ -3,14 +3,14 @@
     "pipeline": {
         "dev": {
             "cache": false,
-            "persistent": true
+            "persistent": false
         },
-        "test": {
-            "dependsOn": ["lint"]
-        },
+        "test": {},
         "lint": {},
         "build": {
-            "dependsOn": ["test"]
+            "dependsOn": ["test", "^build", "lint"],
+            "cache": false,
+            "persistent": false
         }
     }
 }
