@@ -7,7 +7,7 @@ import { type Database } from 'lib/database.types'
 import { type GetServerSideProps, type NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent, useEffect, useRef } from 'react'
 import { AuthCard, Button, Input } from 'ui'
 import GoogleLogo from '../../public/google-logo.png'
 
@@ -23,6 +23,14 @@ const SignIn: NextPage<SignInProps> = () => {
     const [emailSent, setEmailSent] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast()
+
+    const redirectUrlRef = useRef<string>('');
+
+    useEffect(() => {
+        const { protocol, host } = window.location;
+        const redirectUrl = `${protocol}//${host}/api/auth/callback`;
+        redirectUrlRef.current = redirectUrl;
+    }, [])
 
     // TODO: add tests for this
     const handleSignIn = (ev: FormEvent<HTMLFormElement>) => {
@@ -42,7 +50,7 @@ const SignIn: NextPage<SignInProps> = () => {
             email,
             options: {
                 shouldCreateUser: true,
-                emailRedirectTo: 'http://localhost:3000/api/auth/callback'
+                emailRedirectTo: redirectUrlRef.current
             }
         })
             .then(() => {
@@ -67,7 +75,7 @@ const SignIn: NextPage<SignInProps> = () => {
     const handleGoogleAuth = async () => {
         await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: 'http://localhost:3000/api/auth/callback' }
+            options: { redirectTo: redirectUrlRef.current }
         })
     }
 
