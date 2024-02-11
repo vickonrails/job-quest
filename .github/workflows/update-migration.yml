@@ -22,13 +22,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Navigate to main app directory
-        run: cd apps/web
-
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
           version: latest
+
+      - name: Navigate to main app directory
+        run: cd apps/web
 
       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: supabase db push
