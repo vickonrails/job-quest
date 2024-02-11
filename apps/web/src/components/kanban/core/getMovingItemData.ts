@@ -17,10 +17,12 @@ export function getMovingItemData(result: DropResult, involvedColumn: InvolvedCo
     const sourceJobs = Array.from(involvedColumn.start.jobs) || [];
     const destinationJobs = Array.from(involvedColumn.finish.jobs);
 
+    // source cannot be empty, but destination can be empty
+    if (sourceJobs.length === 0) return;
+
     const movingItem = sameColumn ? sourceJobs[source.index] : sourceJobs.splice(source.index, 1)[0];
 
     if (!movingItem) return;
-    if (sourceJobs.length === 0 && destinationJobs.length === 0) return;
 
     if (sameColumn) {
         const downwards = destination.index < source.index;
@@ -43,8 +45,12 @@ export function getMovingItemData(result: DropResult, involvedColumn: InvolvedCo
 
     } else {
         if (destination.index === 0) {
+            // if we're replacing the item in the first index, remove 0.5 from the index of the first item
             const newItemOrder = destinationJobs[0]?.order_column || 0;
             movingItemOrder = newItemOrder - ORDER_DISTANCE;
+        } else if (destination.index === 0 && destinationJobs.length === 0) {
+            // case where the destination is empty
+            movingItemOrder = 1;
         } else if (destination.index === destinationJobs.length) {
             const lastIndex = destinationJobs.length - 1
             const lastItemOrder = destinationJobs[lastIndex]?.order_column;
