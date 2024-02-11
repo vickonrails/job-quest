@@ -12,6 +12,9 @@ jobs:
   release:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./apps/web
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
@@ -27,7 +30,5 @@ jobs:
         with:
           version: latest
 
-      - working-directory: ./apps/web
-        run: supabase link --project-ref $SUPABASE_PROJECT_ID
-      - working-directory: ./apps/web
-        run: supabase db push
+      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - run: supabase db push
