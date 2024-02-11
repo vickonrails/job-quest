@@ -12,7 +12,8 @@
     "types:pregen": "npx supabase start",
     "types:gen": "npx supabase gen types typescript --project-id",
     "db:seed": "bun run ./src/utils/seed.ts",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "migration:add": "npx supabase db diff -f"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.5.0",
