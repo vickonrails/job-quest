@@ -211,6 +211,11 @@ end;
 $function$
 ;
 
+-- Had to add this manually because of https://github.com/supabase/cli/issues/120
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
 grant delete on table "public"."education" to "anon";
 
 grant insert on table "public"."education" to "anon";
