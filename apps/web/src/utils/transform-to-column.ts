@@ -65,18 +65,18 @@ export function transformJobs(jobs: Job[]) {
             columnStatus: ApplicationStatus.Negotiating,
             jobs: []
         },
-        // {
-        //     id: uuid(),
-        //     title: 'Hired',
-        //     columnStatus: ApplicationStatus.Interviewing,
-        //     jobs: []
-        // },
-        // {
-        //     id: uuid(),
-        //     title: 'Rejected',
-        //     columnStatus: ApplicationStatus.Rejected,
-        //     jobs: []
-        // }
+        {
+            id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef',
+            title: 'Hired',
+            columnStatus: ApplicationStatus.Interviewing,
+            jobs: []
+        },
+        {
+            id: '35632587-efc1-4b16-a6ef-01ea727a4c48',
+            title: 'Rejected',
+            columnStatus: ApplicationStatus.Rejected,
+            jobs: []
+        }
     ]
 
     jobs.sort(sortByOrder).forEach(job => {

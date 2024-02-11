@@ -44,7 +44,7 @@ export default function JobsKanban({
     }
 
     return (
-        <div className="flex w-full h-full gap-2" data-testid="kanban-container">
+        <div className="flex px-4 flex-1 gap-2 overflow-x-auto" data-testid="kanban-container">
             <DragDropContext onDragEnd={onDragEnd}>
                 {columns.map((column) => (
                     <KanbanCol
