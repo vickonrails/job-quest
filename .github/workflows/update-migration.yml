@@ -22,7 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Navigate to main app directory
+      - name: Navigate to main app
         run: cd apps/web
 
       - name: Setup Supabase CLI
