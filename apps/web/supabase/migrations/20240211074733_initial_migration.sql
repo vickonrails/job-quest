@@ -1,3 +1,5 @@
+create type "public"."skill" as ("label" character varying(255));
+
 create table "public"."education" (
     "id" uuid not null default uuid_generate_v4(),
     "user_id" uuid not null,
@@ -208,8 +210,6 @@ begin
 end;
 $function$
 ;
-
-create type "public"."skill" as ("label" character varying(255));
 
 grant delete on table "public"."education" to "anon";
 
