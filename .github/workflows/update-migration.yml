@@ -27,8 +27,7 @@ jobs:
         with:
           version: latest
 
-      - name: Navigate to main app directory
-        run: cd apps/web
-
-      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
-      - run: supabase db push
+      - working-directory: ./apps/web
+        run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - working-directory: ./apps/web
+        run: supabase db push
