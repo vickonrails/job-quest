@@ -146,7 +146,7 @@ describe('Kanban', () => {
     describe('transformJobs', () => {
         const columns = transformJobs(jobs as Job[]);
         it('transformJobs returns correct number of columns', () => {
-            expect(columns).toHaveLength(5)
+            expect(columns).toHaveLength(7)
         });
 
         it('renders the correct number of jobs per column', () => {
@@ -173,12 +173,12 @@ describe('Kanban', () => {
     it('renders all children without crashing', () => {
         const { getByTestId, getAllByTestId } = setup();
         expect(getByTestId('kanban-container')).toBeInTheDocument();
-        expect(getAllByTestId('kanban-column')).toHaveLength(5);
+        expect(getAllByTestId('kanban-column')).toHaveLength(7);
         expect(getAllByTestId('kanban-card')).toHaveLength(20);
     });
 
     it('renders column titles', () => {
         const { getAllByTestId } = setup();
-        expect(getAllByTestId('column-title')).toHaveLength(5);
+        expect(getAllByTestId('column-title')).toHaveLength(7);
     })
 })

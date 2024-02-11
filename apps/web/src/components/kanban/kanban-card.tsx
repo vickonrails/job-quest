@@ -29,7 +29,7 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                     <div className="flex justify-between w-full">
                         <div className="flex gap-1 items-center mb-1">
                             {job.company_site && <Image width={20} height={20} src={`https://logo.clearbit.com/${job.company_site}`} alt="" />}
-                            <p className="text-sm text-gray-600">{job.company_name}</p>
+                            <p className="text-sm text-muted-foreground">{job.company_name}</p>
                         </div>
 
                         <MenuBar
@@ -61,9 +61,9 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                             </MenuItem>
                         </MenuBar>
                     </div>
-                    <div className="mb-2">
-                        <h3 className="text-sm font-medium">{job.position}</h3>
-                        <p className="text-sm text-gray-500">{job.location}</p>
+                    <div className="mb-2 text-sm">
+                        <h3 className="font-medium">{job.position}</h3>
+                        <p className="text-muted-foreground">{job.location}</p>
                     </div>
                     <Rating
                         size="sm"

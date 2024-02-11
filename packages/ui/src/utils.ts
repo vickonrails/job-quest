@@ -10,13 +10,13 @@ export function cn(...inputs: ClassValue[]) {
  * Lookup for current status of the job application
  */
 export const Status_Lookup = [
-  [0, 'Bookmarked'],
-  [1, 'Applying'],
-  [2, 'Applied'],
-  [3, 'Interviewing'],
-  [4, 'Rejected'],
-  [5, 'Negotiating'],
-  [6, 'Hired']
+  'Bookmarked',
+  'Applying',
+  'Applied',
+  'Interviewing',
+  'Negotiating',
+  'Hired',
+  'Rejected',
 ]
 
 export function getSize(size: Size) {
