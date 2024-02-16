@@ -20,6 +20,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-feather": "^2.0.10",
+    "react-hook-form": "^7.50.1",
     "vite-tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
