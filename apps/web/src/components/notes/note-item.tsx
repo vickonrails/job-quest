@@ -1,4 +1,3 @@
-import { Textarea } from '@components/textarea'
 import { useToast } from '@components/toast/use-toast'
 import { formatDate } from '@components/utils'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
@@ -8,7 +7,7 @@ import { type Database } from 'lib/database.types'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
 import { Trash } from 'react-feather'
-import { Button } from 'ui'
+import { Button, Textarea } from 'ui'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */

@@ -1,10 +1,11 @@
 import { Briefcase, MapPin } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Rating, Textarea } from 'ui';
+import { Button, Input, Rating, Textarea } from 'ui';
 import { useJob } from '~hooks/useJob';
 import { getJobId } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
 import { sendToBackground } from '@plasmohq/messaging';
+import { useEffect } from 'react';
 
 interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
@@ -25,13 +26,14 @@ function getJobDetails() {
         location: location.textContent.split(' ')[1],
         priority: 1,
         status: 0,
-        source: 'LinkedIn',
+        source: 'linkedin',
         source_id: getJobId(),
         link
     }
 }
 
 interface Job {
+    id: string
     position: string
     company_name: string
     location: string
@@ -39,18 +41,44 @@ interface Job {
     priority: number
     status?: number,
     link: string
+    source: string,
+    source_id: string
 }
 
 export function JobInfoSheet(props: JobInfoSheetProps) {
     const { img, position, company_name, location, link, ...rest } = getJobDetails()
-    const { register, control, handleSubmit } = useForm<Job>({ defaultValues: { position, company_name, location, link, ...rest } })
     const { isLoading, job } = useJob(getJobId())
+    const { register, control, handleSubmit, formState: { isSubmitting }, reset } = useForm<Job>({ defaultValues: { id: job ? job.id : '', position, company_name, location, link, ...rest } })
 
-    const onSubmit = (data: Job) => { }
+    useEffect(() => {
+        if (!job) return
+        reset({ id: job ? job.id : '', position, company_name, location, link, ...rest })
+    }, [job])
+
+    const onSubmit = async (data: Job) => {
+        try {
+            const res = await sendToBackground<Job>({
+                name: 'add-job',
+                body: { source: 'linkedIn', source_id: getJobId(), ...data }
+            });
+
+            if (res.error || !res.success) {
+                throw new Error(res.error);
+            }
+
+            if (res.success) {
+                alert('Job added')
+            }
+
+        } catch (error) {
+            alert('Error')
+        }
+    }
 
     return (
         <Sheet {...props}>
             <form onSubmit={handleSubmit(onSubmit)}>
+                <input type='hidden' {...register('id')} />
                 <div className="flex flex-col gap-4">
                     <div className='m-1.5 hidden' />
                     <header className='flex gap-2 items-center'>
@@ -64,9 +92,14 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                                 </div>
                             )}
                             {location && (
-                                <div className='flex items-center gap-1'>
-                                    <MapPin className='text-muted-foreground' size={16} />
-                                    <p className="text-sm text-muted-foreground">{location}</p>
+                                <div className='flex gap-2'>
+                                    <div className='flex items-center gap-1'>
+                                        <MapPin className='text-muted-foreground' size={16} />
+                                        <p className="text-sm text-muted-foreground">{location}</p>
+                                    </div>
+                                    {job && (
+                                        <div className='select-none bg-green-100 text-xs text-green-800 rounded-full p-2 py-1'>Added</div>
+                                    )}
                                 </div>
                             )}
                         </section>
@@ -89,10 +122,13 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
                     <Textarea autoFocus className='py-2' label='Notes' {...register('notes')} />
 
-                    <Button className='p-3' loading={isLoading}>
-                        {job ? 'Update Job' : 'Add Job'}
-                    </Button>
-                    {job && <a href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
+                    <div>
+                        <Button className='p-3 block w-full mb-2' loading={isLoading || isSubmitting}>
+                            {job ? 'Update Job' : 'Add Job'}
+                        </Button>
+
+                        {job && <a className='text-center underline block' target='_blank' rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
+                    </div>
                 </div>
             </form>
         </Sheet>

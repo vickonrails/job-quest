@@ -2,11 +2,10 @@ import { Accordion } from '@components/accordion'
 import { Checkbox } from '@components/checkbox'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
-import { Textarea } from '@components/textarea'
 import { type Education } from '@lib/types'
 import { Trash2 } from 'lucide-react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input } from 'ui'
+import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../error-hint'
 
 interface EducationFormProps {

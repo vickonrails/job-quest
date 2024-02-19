@@ -51,7 +51,7 @@ const Tracker = ({ session, profile, jobs }: {
     }
 
     return (
-        <Layout session={session} profile={profile} pageTitle="Jobs" containerClasses="flex flex-col mt-4">
+        <Layout session={session} profile={profile} pageTitle="Jobs" containerClasses="flex flex-col mt-4 overflow-auto">
             <section className="flex justify-between items-center mb-3 px-4">
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}

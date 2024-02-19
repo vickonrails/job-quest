@@ -1,4 +1,3 @@
-import { Textarea } from '@components/textarea';
 import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Profile } from '@lib/types';
@@ -6,7 +5,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
-import { Button, Input } from 'ui';
+import { Button, Input, Textarea } from 'ui';
 import { StepContainer } from './container';
 
 export function BasicInformation({ profile }: { profile: Profile }) {

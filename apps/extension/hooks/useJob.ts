@@ -20,19 +20,14 @@ export const useJob = (id: string) => {
             body: { id }
         }).then((res) => {
             // timer = setTimeout(() => {
+            // TODO: refresh job once it's been added
             const { data, success } = res
             if (success) setJob(data.job);
-            // }, 1500)
         }).catch(err => {
             console.log({ err })
-            // handle error
         }).finally(() => {
             setIsLoading(false)
         })
-
-        // return () => {
-        //     clearTimeout(timer)
-        // }
     }, [id])
 
     const refresh = useCallback((job: Job) => {
