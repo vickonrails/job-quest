@@ -4,14 +4,13 @@ import type { Job } from "~types"
 import { v4 as uuid } from 'uuid'
 
 const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (req, res) => {
-  const userId = 'f589f572-6cf1-4636-a900-ace2653918f4'
   const { notes, ...job } = req.body
 
   if (!job.id) {
     job.id = uuid();
   }
 
-  const { data, error } = await client.from("jobs").upsert({ ...job, user_id: userId }).select().single() :
+  const { data, error } = await client.from("jobs").upsert({ ...job }).select().single();
 
   if (error) {
     res.send({
@@ -21,7 +20,7 @@ const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (
   }
 
   if (notes) {
-    const { data: __, error: noteError } = await client.from("notes").insert({ text: notes, job_id: job?.id, user_id: userId, status: 0 })
+    const { data: __, error: noteError } = await client.from("notes").insert({ text: notes, job_id: data?.id, status: 0 })
     if (noteError) {
       res.send({
         success: false,

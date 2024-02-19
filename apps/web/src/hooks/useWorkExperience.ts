@@ -28,8 +28,7 @@ export function useWorkExperience() {
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
             if (!session) return
             const preparedValues = values.map(work => {
-                if (!work.user_id) {
-                    work.user_id = session?.user.id
+                if (!work.id) {
                     work.id = uuid()
                 }
 
@@ -38,7 +37,7 @@ export function useWorkExperience() {
                 }
                 return work
             })
-            const { data, error } = await client.from('work_experience').upsert(preparedValues).eq('user_id', session.user.id).select('*');
+            const { data, error } = await client.from('work_experience').upsert(preparedValues).select('*');
             if (error) throw error;
 
             return data;

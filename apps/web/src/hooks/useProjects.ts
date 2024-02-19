@@ -27,8 +27,7 @@ export function useProjects() {
         mutationFn: async ({ values }: { values: Project[] }) => {
             if (!session) return
             const preparedValues = values.map(project => {
-                if (!project.user_id) {
-                    project.user_id = session?.user.id
+                if (!project.id) {
                     project.id = uuid()
                 }
 
@@ -36,7 +35,7 @@ export function useProjects() {
                 if (!project.end_date) project.end_date = null;
                 return project
             })
-            const { data, error } = await client.from('projects').upsert(preparedValues).eq('user_id', session.user.id).select('*');
+            const { data, error } = await client.from('projects').upsert(preparedValues).select('*');
             if (error) throw error;
 
             return data;
@@ -76,7 +75,7 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
-    return (await client.from('projects').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data
+    return (await client.from('projects').select('*').filter('resume_id', 'is', null)).data
 }
 
 /**

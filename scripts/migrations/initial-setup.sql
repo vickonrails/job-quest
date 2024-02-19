@@ -67,8 +67,6 @@ CREATE TABLE jobs (
     position VARCHAR(255) NOT NULL,
     company_name VARCHAR(255) NOT NULL,
     company_site VARCHAR(255),
-    user_id uuid not null,
-    foreign key (user_id) references auth.users (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     location VARCHAR(255),
@@ -85,8 +83,6 @@ CREATE TABLE jobs (
 -- Create Resume Table
 CREATE TABLE resumes (
     id UUID DEFAULT (uuid_generate_v4()) PRIMARY KEY,
-    user_id uuid not null,
-    foreign key (user_id) references profiles(id),
     title VARCHAR(255),
     professional_summary TEXT,
     full_name VARCHAR(255),
@@ -103,8 +99,6 @@ CREATE TABLE resumes (
 -- Create Table for Projects
 CREATE TABLE projects (
     id UUID DEFAULT (uuid_generate_v4()) PRIMARY KEY,
-    user_id uuid not null,
-    foreign key (user_id) references profiles(id),
     resume_id uuid,
     foreign key (resume_id) references resumes(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -121,8 +115,6 @@ CREATE TABLE projects (
 -- Create Work Experience Table
 CREATE TABLE work_experience (
     id UUID DEFAULT (uuid_generate_v4()) PRIMARY KEY,
-    user_id uuid not null,
-    foreign key (user_id) references profiles(id),
     resume_id uuid,
     foreign key (resume_id) references resumes(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -139,8 +131,6 @@ CREATE TABLE work_experience (
 -- Create Education Table
 CREATE TABLE education (
     id UUID DEFAULT (uuid_generate_v4()) PRIMARY KEY,
-    user_id uuid not null,
-    foreign key (user_id) references profiles(id),
     resume_id uuid,
     foreign key (resume_id) references resumes(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -161,8 +151,6 @@ create table
     id uuid default (uuid_generate_v4 ()) primary key,
     job_id uuid not null,
     foreign key (job_id) references jobs (id),
-    user_id uuid not null,
-    foreign key (user_id) references auth.users (id),
     status int not null,
     text text not null,
     created_at timestamp default current_timestamp,

@@ -16,7 +16,6 @@ import { AddSectionBtn } from '.';
 const defaultWorkExperience = {
     company_name: 'Untitled...',
     job_title: 'Untitled...',
-    user_id: ''
 } as WorkExperience
 
 /**
@@ -31,7 +30,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         queryKey: ['workExperienceTemplate'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('work_experience').select().eq('user_id', session?.user?.id).filter('resume_id', 'is', null)
+            const { data, error } = await client.from('work_experience').select().filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }

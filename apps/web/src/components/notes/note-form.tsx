@@ -34,7 +34,6 @@ function NoteForm({ job }: { job: Job }) {
             await mutateAsync({
                 text: note,
                 job_id: job.id,
-                user_id: job.user_id,
                 status: job.status
             })
             setNote('');

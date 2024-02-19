@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    const { data: jobs } = await supabase.from('jobs').select().eq('user_id', session?.user.id)
+    const { data: jobs } = await supabase.from('jobs').select();
 
     return {
         props: {

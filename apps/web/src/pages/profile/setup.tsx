@@ -14,7 +14,7 @@ import { type PageProps } from '..';
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('work_experience').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data;
+    return (await client.from('work_experience').select('*').filter('resume_id', 'is', null)).data;
 }
 
 // TODO: fetch the initial values from the database and instantiate the form with it 
@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: workExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id);
+    const { data: workExperience } = await supabase.from('work_experience').select();
 
     return {
         props: {

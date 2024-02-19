@@ -31,7 +31,7 @@ export default function ResumeBuilder({ session, profile, resumes }: { session: 
                 </header>
 
                 <main>
-                    {resumes.map((resume) => (
+                    {resumes?.map((resume) => (
                         <Link className="underline text-primary block" key={resume.id} href={`/resumes/${resume.id}`}>{resume.title} - {resume.created_at?.split('T')[0]}</Link>
                     ))}
                 </main>
@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: resumes } = await supabase.from('resumes').select().eq('user_id', session.user.id);
+    const { data: resumes } = await supabase.from('resumes').select();
 
     return {
         props: {

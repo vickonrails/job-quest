@@ -17,12 +17,8 @@ interface Options {
 }
 
 async function getJobs(client: SupabaseClient<Database>, options: Options) {
-    const { data: { user } } = await client.auth.getUser();
-
-    if (!user) throw new Error('User not found');
-
     const { params, jobId } = options ?? {}
-    let query = client.from('jobs').select('*', { count: 'exact' }).eq('user_id', user?.id);
+    let query = client.from('jobs').select('*', { count: 'exact' });
 
     if (params?.search) {
         query = query.ilike('position', `%${params.search}%`)

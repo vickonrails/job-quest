@@ -29,7 +29,7 @@ export function ProjectsSection({ session }: { session: Session }) {
         queryKey: ['projectTemplates'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('projects').select().eq('user_id', session?.user?.id).filter('resume_id', 'is', null)
+            const { data, error } = await client.from('projects').select().filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }
