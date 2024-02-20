@@ -1,24 +1,38 @@
 import { type PlasmoMessaging } from "@plasmohq/messaging"
-import { Storage } from '@plasmohq/storage'
 import { supabase as client } from "~core/supabase"
+import type { Job } from "~types"
+import { v4 as uuid } from 'uuid'
 
-// TODO: is it possible to export the types from supabase into the ui package so it can be reused here?
-const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-  console.log(req)
-  const { data: { user } } = await client.auth.getUser();
+const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (req, res) => {
+  const { notes, ...job } = req.body
 
-  if (!user) throw new Error("User not found");
-  const { data: _, error } = await client.from("jobs").insert({ ...req.body, user_id: user.id })
+  if (!job.id) {
+    job.id = uuid();
+  }
+
+  const { data, error } = await client.from("jobs").upsert({ ...job }).select().single();
+
   if (error) {
     res.send({
       success: false,
-      error: error.message,
+      error: error.message
     })
-    throw new Error(error.message, { cause: error.details })
+  }
+
+  if (notes) {
+    const { data: __, error: noteError } = await client.from("notes").insert({ text: notes, job_id: data?.id, status: 0 })
+    if (noteError) {
+      res.send({
+        success: false,
+        error: noteError.message,
+        job: data
+      })
+    }
   }
 
   res.send({
-    success: true
+    success: true,
+    job: data
   })
 }
 

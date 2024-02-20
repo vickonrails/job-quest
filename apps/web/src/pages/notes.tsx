@@ -1,11 +1,11 @@
 import React from 'react'
 import { Layout } from '@components/layout'
-import { FullPageSpinner } from '@components/spinner'
 import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { type Database } from 'lib/database.types'
 import { type Profile } from 'lib/types'
 import { type GetServerSideProps } from 'next'
 import { useNotes } from 'src/hooks/useNotes'
+import { FullPageSpinner } from 'ui'
 
 const Notes = ({ session, profile }: { session: Session, profile: Profile }) => {
     const { data, isLoading } = useNotes({})

@@ -35,13 +35,13 @@ function ColumnHeaders({ column }: { column: KanbanColumn }) {
 
 export default function KanbanColumnCmp({ column, openEditSheet, openDeleteDialog, KanbanCard = DefaultKanbanCard }: KanbanColumnProps) {
     return (
-        <div className="min-w-[220px] flex-1 bg-gray-100" data-testid="kanban-column">
+        <div className="min-w-[220px] flex-1 bg-gray-100 overflow-hidden" data-testid="kanban-column">
             <ColumnHeaders column={column} />
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (
                     <div
                         className={cn(
-                            'flex flex-col rounded-sm p-2 h-full gap-2 min-h-[100px] transition-colors duration-0',
+                            'flex flex-col rounded-sm p-2 pb-14 overflow-auto h-full gap-2 min-h-[100px] transition-colors duration-0',
                             snapshot.isDraggingOver && 'bg-gray-200'
                         )}
                         ref={provided.innerRef}

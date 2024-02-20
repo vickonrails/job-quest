@@ -1,159 +1,160 @@
 import { sendToBackground } from '@plasmohq/messaging';
-import { useStorage } from '@plasmohq/storage/hook';
-import { Formik } from 'formik';
-import { useState } from 'react';
-import { Banner, Button, Input, Rating } from 'ui';
-import type { Job } from '~types';
+import { Briefcase, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Rating, Spinner, Textarea } from 'ui';
+import { useJob } from '~hooks/useJob';
+import { getJobId } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
 
-interface JobInfoSheetProps<T> extends SheetProps {
-    entity: T
-    onSubmit: (job: T) => Promise<void>
+interface JobInfoSheetProps extends SheetProps {
+    onSubmit: () => void
 }
 
-interface useFormProps<T> {
-    onSubmit: (entity: T) => Promise<void>
-    entity: T
-}
+function getJobDetails() {
+    const isFullPage = window.location.href.includes('jobs/view');
+    let title: HTMLElement | ChildNode | null;
 
-enum FormStatus {
-    IDLE = 'idle',
-    SUBMITTING = 'submitting',
-    SUCCESS = 'success',
-    ERROR = 'error',
-}
+    const img = document.querySelector('.jobs-company img');
+    const container = document.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
+    const company = container.querySelector('.app-aware-link')
+    const location = container.childNodes[3]
+    const link = isFullPage ? window.location.href.split('?')[0] : window.location.href.split('&')[0];
 
-const useForm = <T extends {}>({ onSubmit, entity }: useFormProps<T>) => {
-    const [isSubmitting, setSubmitting] = useState(false)
-    const [initialValues] = useState(entity)
-    const [status, setStatus] = useState(FormStatus.IDLE)
-
-    const handleSubmit = async (entity: T) => {
-        setStatus(FormStatus.SUBMITTING)
-        setSubmitting(true)
-        try {
-            // might need to throw error here
-            await onSubmit(entity);
-            setStatus(FormStatus.SUCCESS)
-        } catch {
-            setStatus(FormStatus.ERROR)
-            // handle error
-        } finally {
-            setSubmitting(false)
-        }
+    if (isFullPage) {
+        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
+    } else {
+        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title-link');
     }
 
     return {
-        isSubmitting,
-        handleSubmit,
-        initialValues,
-        status
+        img: img?.getAttribute('src'),
+        position: title?.textContent ?? '',
+        company_name: company.textContent,
+        location: location.textContent.split(' ')[1],
+        priority: 1,
+        status: 0,
+        source: 'linkedIn',
+        source_id: getJobId(),
+        link
     }
 }
-/**
- * Sheets component for editing job items
- */
-export function JobInfoSheet(props: JobInfoSheetProps<Job>) {
-    const [auth, setAuth] = useStorage('auth')
-    const { initialValues, isSubmitting, handleSubmit, status } = useForm({
-        onSubmit: props.onSubmit,
-        entity: props.entity
+
+interface Job {
+    id: string
+    position: string
+    company_name: string
+    location: string
+    notes?: string
+    priority: number
+    status?: number,
+    link: string
+    source: string,
+    source_id: string
+}
+
+export function JobInfoSheet(props: JobInfoSheetProps) {
+    const { img, position, company_name, location, link, ...rest } = getJobDetails()
+    const { isLoading, job, refresh } = useJob(getJobId())
+    const { register, control, handleSubmit, formState: { isSubmitting }, reset } = useForm<Job>({
+        defaultValues: { id: job ? job.id : '', position, company_name, location, link, ...rest }
     })
 
-    const handleSignIn = async () => {
-        const result = await sendToBackground({
-            name: 'handle-auth'
-        })
-        setAuth(result);
-    }
+    useEffect(() => {
+        if (!job) return
+        reset({ ...job })
+    }, [job])
 
-    if (auth === undefined) return;
+    const onSubmit = async (data: Job) => {
+        try {
+            const res = await sendToBackground<Job>({
+                name: 'add-job',
+                body: { source: 'linkedIn', source_id: getJobId(), ...data }
+            });
+
+            if (res.error || !res.success) {
+                throw new Error(res.error);
+            }
+
+            if (res.success) {
+                alert('Job added')
+                refresh(res.job);
+                reset({ notes: '', ...res.job });
+            }
+
+        } catch (error) {
+            alert('Error')
+        }
+    }
 
     return (
         <Sheet {...props}>
-            <div className="flex flex-col gap-3">
-                {auth ? (
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={handleSubmit}
-                    >
-                        {({ values, handleSubmit, handleChange, setFieldValue }) => (
-                            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                                {/* TODO: render either error or success depending on the state of the submit */}
-                                {status === FormStatus.SUCCESS && (
-                                    <Banner
-                                        variant='success'
-                                        message='Job added to JobQuest'
-                                    />
-                                )}
-
-                                {status === FormStatus.ERROR && (
-                                    <Banner
-                                        variant='error'
-                                        message='Could not add job to JobQuest'
-                                    />
-                                )}
-                                <p className='px-3.5 px-3 my-1.5 py-2.5 hidden h-10' />
-                                <Input
-                                    placeholder="Job title"
-                                    value={values.position}
-                                    name="position"
-                                    label='Position'
-                                    onChange={handleChange}
-                                />
-
-                                <div className="mb-4">
-                                    <div className="mb-1.5">Rating</div>
-                                    <Rating
-                                        onClick={(val) => setFieldValue('priority', val)}
-                                        size="md"
-                                        value={values.priority ?? 0}
-                                    />
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type='hidden' {...register('id')} />
+                <div className="flex flex-col gap-4">
+                    <div className='m-1.5 hidden' />
+                    <header className='flex gap-2 items-center'>
+                        <img src={img} alt="Company Logo" style={{ height: 60, width: 60 }} />
+                        <section className='flex flex-col gap-1'>
+                            {position && <h2 className="text-base font-semibold text-foreground mb-1">{position}</h2>}
+                            {company_name && (
+                                <div className='flex items-center gap-1'>
+                                    <Briefcase className='text-muted-foreground' size={16} />
+                                    <p className="text-sm text-muted-foreground">{company_name}</p>
                                 </div>
+                            )}
+                            {location && (
+                                <div className='flex gap-2'>
+                                    <div className='flex items-center gap-1'>
+                                        <MapPin className='text-muted-foreground' size={16} />
+                                        <p className="text-sm text-muted-foreground">{location}</p>
+                                    </div>
+                                    {job && (
+                                        <div className='select-none bg-green-100 text-xs text-green-800 rounded-full p-2 py-1'>Added</div>
+                                    )}
+                                </div>
+                            )}
+                        </section>
+                    </header>
 
-                                <Input
-                                    placeholder="Company name"
-                                    name="company_name"
-                                    onChange={handleChange}
-                                    label='Company Name'
-                                    value={values.company_name}
+                    {isLoading ? <SpinnerContainer /> : (
+                        <section className='flex flex-col gap-4'>
+                            <div>
+                                <div className="m-1.5 select-none text-muted-foreground text-sm">Rating</div>
+                                <Controller
+                                    name='priority'
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Rating
+                                            value={field.value}
+                                            onClick={(val) => { field.onChange(val) }}
+                                            size='md'
+                                        />
+                                    )}
                                 />
-                                <Input
-                                    placeholder="Location"
-                                    name="location"
-                                    label='Location'
-                                    onChange={handleChange}
-                                    value={values.location ?? ''}
-                                />
-                                <Input
-                                    placeholder="Company site"
-                                    name="company_site"
-                                    label='Company Site'
-                                    onChange={handleChange}
-                                    value={values.company_site ?? ''}
-                                    hint='Helps for rendering company logo'
-                                />
-                                <Button
-                                    variant='default'
-                                    loading={isSubmitting}
-                                    disabled={status === FormStatus.SUCCESS || status === FormStatus.ERROR}
-                                >
-                                    Add to Job Quest
+                            </div>
+
+                            <Textarea autoFocus className='py-2' label='Notes' {...register('notes')} />
+
+                            <div>
+                                <Button className='p-3 block w-full mb-2' loading={isSubmitting}>
+                                    {job ? 'Update Job' : 'Add Job'}
                                 </Button>
-                                <Button type='button' variant='ghost' onClick={_ => props.onOpenChange(false)}>
-                                    Close
-                                </Button>
-                            </form>
-                        )}
-                    </Formik>
-                ) : (
-                    <div className='mx-auto flex flex-col gap-3'>
-                        {/* <h1 className='text-3xl text-center font-bold'>Authenticate to Continue</h1> */}
-                        <p className='text-muted-foreground'>Click on the button to authenticate with your Google Account.</p>
-                        <Button onClick={handleSignIn}>Authenticate</Button>
-                    </div>
-                )}
-            </div>
+
+                                {job && <a className='text-center underline block' target='_blank' rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
+                            </div>
+                        </section>
+                    )}
+                </div>
+            </form>
         </Sheet>
+    )
+}
+
+function SpinnerContainer() {
+    return (
+        <div className='flex justify-center mt-6'>
+            <Spinner />
+        </div>
     )
 }

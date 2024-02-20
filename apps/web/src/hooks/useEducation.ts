@@ -28,8 +28,7 @@ export function useEducation() {
         mutationFn: async ({ values }: { values: Education[] }) => {
             if (!session) return
             const preparedValues = values.map(education => {
-                if (!education.user_id) {
-                    education.user_id = session?.user.id
+                if (!education.id) {
                     education.id = uuid()
                 }
                 if ((education.still_studying_here && education.end_date) || !education.end_date) {
@@ -37,7 +36,7 @@ export function useEducation() {
                 }
                 return education
             })
-            const { data, error } = await client.from('education').upsert(preparedValues).eq('user_id', session.user.id).select('*');
+            const { data, error } = await client.from('education').upsert(preparedValues).select('*');
             if (error) throw error;
 
             return data;
@@ -82,7 +81,6 @@ export function getDefaultEducation() {
         degree: '',
         field_of_study: '',
         institution: '',
-        user_id: '',
         location: '',
         end_date: '',
         start_date: ''
@@ -94,5 +92,5 @@ export function getDefaultEducation() {
 export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('education').select('*').eq('user_id', userId).filter('resume_id', 'is', null)).data;
+    return (await client.from('education').select('*').filter('resume_id', 'is', null)).data;
 }

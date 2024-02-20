@@ -14,23 +14,20 @@ export const useJob = (id: string) => {
     const [job, setJob] = useState<Job>();
 
     useEffect(() => {
-        let timer;
-        setIsLoading(true)
+        // let timer;
         sendToBackground<{ id: string }, BackgroundResponse<JobResponse>>({
             name: 'get-job',
             body: { id }
-        }).then(({ data }) => {
-            timer = setTimeout(() => {
-                setJob(data.job)
-                setIsLoading(false)
-            }, 1500)
+        }).then((res) => {
+            // timer = setTimeout(() => {
+            // TODO: refresh job once it's been added
+            const { data, success } = res
+            if (success) setJob(data.job);
         }).catch(err => {
-            // handle error
+            console.log({ err })
+        }).finally(() => {
+            setIsLoading(false)
         })
-
-        return () => {
-            clearTimeout(timer)
-        }
     }, [id])
 
     const refresh = useCallback((job: Job) => {

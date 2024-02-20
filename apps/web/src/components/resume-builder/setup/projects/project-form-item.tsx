@@ -1,13 +1,12 @@
 import { Accordion } from '@components/accordion'
 import { Chip } from '@components/chips'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
-import { Textarea } from '@components/textarea'
 import { formatDate } from '@components/utils'
 import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'
-import { type ChangeEvent, createRef, useEffect, useState } from 'react'
+import { createRef, useEffect, useState, type ChangeEvent } from 'react'
 import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input } from 'ui'
+import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../error-hint'
 
 interface ProjectsFieldsProps {

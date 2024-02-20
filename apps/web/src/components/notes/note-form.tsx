@@ -1,11 +1,10 @@
-import { Textarea } from '@components/textarea';
 import { useToast } from '@components/toast/use-toast';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Database } from 'lib/database.types';
 import { type Job, type NoteInsertDTO } from 'lib/types';
 import { useState } from 'react';
-import { Button } from 'ui';
+import { Button, Textarea } from 'ui';
 
 function NoteForm({ job }: { job: Job }) {
     const [note, setNote] = useState('')
@@ -35,7 +34,6 @@ function NoteForm({ job }: { job: Job }) {
             await mutateAsync({
                 text: note,
                 job_id: job.id,
-                user_id: job.user_id,
                 status: job.status
             })
             setNote('');

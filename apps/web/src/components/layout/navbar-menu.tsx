@@ -28,7 +28,7 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
                 trigger={(
                     <Button variant="ghost" className="border flex items-center rounded-3xl gap-2 p-2 py-1">
                         <Avatar src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="" size="sm" />
-                        {profile.full_name}
+                        {profile?.full_name}
                         <ChevronDown />
                     </Button>
                 )}

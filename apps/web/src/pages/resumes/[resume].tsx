@@ -58,10 +58,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: education } = await supabase.from('education').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
-    const { data: workExperience } = await supabase.from('work_experience').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
-    const { data: projects } = await supabase.from('projects').select().eq('user_id', session.user.id).eq('resume_id', resumeId);
-    const { data: currentResume } = await supabase.from('resumes').select().eq('user_id', session.user.id).eq('id', resumeId).single();
+    const { data: education } = await supabase.from('education').select().eq('resume_id', resumeId);
+    const { data: workExperience } = await supabase.from('work_experience').select().eq('resume_id', resumeId);
+    const { data: projects } = await supabase.from('projects').select().eq('resume_id', resumeId);
+    const { data: currentResume } = await supabase.from('resumes').select().eq('id', resumeId).single();
 
     // TODO: more cleaner way to do this
     const resume: Partial<Resume> = currentResume ?? {
@@ -69,7 +69,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         skills: profile?.skills ?? [],
         full_name: profile?.full_name ?? '',
         professional_summary: profile?.professional_summary ?? '',
-        user_id: session.user.id,
         linkedin_url: profile?.linkedin_url ?? '',
         email_address: profile?.email_address ?? '',
         personal_website: profile?.personal_website ?? '',

@@ -28,7 +28,6 @@ export function ResumeForm({ session }: { session: Session }) {
         // TODO: abstract away this logic
         const preparedWorkExperience = workExperience.map((experience) => {
             if (!experience.id) {
-                experience.user_id = session.user.id;
                 experience.resume_id = resume.id;
                 experience.id = uuid();
             }
@@ -40,7 +39,6 @@ export function ResumeForm({ session }: { session: Session }) {
 
         const preparedProjects = projects.map((project) => {
             if (!project.id) {
-                project.user_id = session.user.id;
                 project.resume_id = resume.id;
                 project.id = uuid();
             }
@@ -49,7 +47,6 @@ export function ResumeForm({ session }: { session: Session }) {
 
         const preparedEducation = education.map((education) => {
             if (!education.id) {
-                education.user_id = session.user.id;
                 education.resume_id = resume.id;
                 education.id = uuid();
             }

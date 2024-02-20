@@ -10,8 +10,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 1,
-    order_column: 1,
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef',
+    order_column: 1
   },
   {
     'position': 'Frontend Engineer',
@@ -24,7 +23,6 @@ const jobs: JobInsertDTO[] = [
     priority: 2,
     order_column: 1,
     labels: ['Frontend', 'Javascript'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
   {
     'position': 'Software Engineer',
@@ -37,7 +35,6 @@ const jobs: JobInsertDTO[] = [
     priority: 4,
     order_column: 2,
     labels: ['Frontend', 'NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
   },
   {
     id: '156e6eee-d897-49d4-80f9-7c1aedc714ad',
@@ -50,8 +47,7 @@ const jobs: JobInsertDTO[] = [
     status: 2,
     priority: 5,
     order_column: 1,
-    labels: ['Frontend', 'Javascript', 'NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
     'position': 'Frontend Engineer',
@@ -63,8 +59,7 @@ const jobs: JobInsertDTO[] = [
     status: 3,
     priority: 1,
     order_column: 3,
-    labels: ['NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['NodeJs']
   },
   {
     'position': 'Fullstack Engineer',
@@ -76,8 +71,7 @@ const jobs: JobInsertDTO[] = [
     status: 3,
     priority: 1,
     order_column: 4,
-    labels: ['Frontend', 'NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'NodeJs']
   },
   {
     'position': 'Fullstack Engineer',
@@ -89,8 +83,7 @@ const jobs: JobInsertDTO[] = [
     status: 1,
     priority: 2,
     order_column: 1,
-    labels: ['Frontend', 'Javascript', 'NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
     'position': 'Fullstack Engineer',
@@ -102,8 +95,7 @@ const jobs: JobInsertDTO[] = [
     status: 4,
     priority: 2,
     order_column: 2,
-    labels: ['Frontend', 'Javascript', 'NodeJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
     'position': 'Frontend Engineer',
@@ -115,8 +107,7 @@ const jobs: JobInsertDTO[] = [
     status: 2,
     priority: 2,
     order_column: 2,
-    labels: ['Frontend', 'Beckend'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'Beckend']
   },
   {
     'position': 'Software Engineer',
@@ -128,8 +119,7 @@ const jobs: JobInsertDTO[] = [
     status: 3,
     priority: 2,
     order_column: 5,
-    labels: ['Frontend', 'VueJs'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'VueJs']
   },
   {
     'position': 'Fullstack Engineer',
@@ -141,8 +131,7 @@ const jobs: JobInsertDTO[] = [
     status: 4,
     priority: 2,
     order_column: 3,
-    labels: ['Frontend', 'Tailwind'],
-    user_id: '65b1195d-fa82-4a9b-a28d-85cfdab0c6ef'
+    labels: ['Frontend', 'Tailwind']
   },
   {
     'position': 'Fullstack Engineer',
@@ -154,8 +143,7 @@ const jobs: JobInsertDTO[] = [
     status: 2,
     priority: 2,
     order_column: 3,
-    labels: ['Frontend', 'Javascript', 'NodeJs'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
     'position': 'Frontend Engineer',
@@ -167,8 +155,7 @@ const jobs: JobInsertDTO[] = [
     status: 4,
     priority: 2,
     order_column: 4,
-    labels: ['Frontend', 'Javascript'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'Javascript']
   },
   {
     'position': 'Software Engineer',
@@ -180,8 +167,7 @@ const jobs: JobInsertDTO[] = [
     status: 2,
     priority: 5,
     order_column: 4,
-    labels: ['Frontend', 'NodeJs'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'NodeJs']
   },
   {
     'position': 'Software Engineer',
@@ -193,8 +179,7 @@ const jobs: JobInsertDTO[] = [
     status: 3,
     priority: 3,
     order_column: 6,
-    labels: ['Frontend', 'Tailwindcss'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'Tailwindcss']
   },
   {
     'position': 'Frontend Engineer',
@@ -206,8 +191,7 @@ const jobs: JobInsertDTO[] = [
     status: 3,
     priority: 2,
     order_column: 7,
-    labels: ['Frontend', 'Typescript'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'Typescript']
   },
   {
     'position': 'Software Engineer',
@@ -219,8 +203,7 @@ const jobs: JobInsertDTO[] = [
     status: 4,
     priority: 2,
     order_column: 5,
-    labels: ['Frontend', 'backend'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'backend']
   },
   {
     id: '9bd9387d-f0b1-4550-9222-253686641ae3',
@@ -233,8 +216,7 @@ const jobs: JobInsertDTO[] = [
     status: 0,
     priority: 5,
     order_column: 1,
-    labels: ['Frontend', 'NodeJs'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'NodeJs']
   },
   {
     'position': 'Software Engineer',
@@ -246,8 +228,7 @@ const jobs: JobInsertDTO[] = [
     status: 1,
     priority: 2,
     order_column: 2,
-    labels: ['Javascript', 'NodeJs'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Javascript', 'NodeJs']
   },
   {
     'position': 'Fullstack Engineer',
@@ -259,8 +240,7 @@ const jobs: JobInsertDTO[] = [
     status: 2,
     priority: 2,
     order_column: 5,
-    labels: ['Frontend', 'Javascript'],
-    user_id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+    labels: ['Frontend', 'Javascript']
   }
 ]
 

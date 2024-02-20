@@ -1,6 +1,5 @@
+import { cn } from '@/utils'
 import * as React from 'react'
-
-import { cn } from '@utils/cn'
 
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string, containerClasses?: string }
 

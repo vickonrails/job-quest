@@ -31,7 +31,7 @@ export function EducationSection({ session }: { session: Session }) {
         queryKey: ['educationTemplates'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('education').select().eq('user_id', session?.user?.id).filter('resume_id', 'is', null)
+            const { data, error } = await client.from('education').select().filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }

@@ -1,6 +1,6 @@
 import { ErrorHint } from '@components/resume-builder/setup/error-hint';
 import { useToast } from '@components/toast/use-toast';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Database } from 'lib/database.types';
 import { type Job } from 'lib/types';
@@ -22,29 +22,28 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     // TODO: abstract this away
     const client = useSupabaseClient<Database>();
     const entity = props.entity as Job;
-    const session = useSession();
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
     const { toast } = useToast()
     const { handleSubmit, reset, register, control, formState: { errors } } = useForm({ defaultValues: entity })
 
     const updateMutation = useMutation({
-        mutationFn: async (data: { job: Job, userId: string }) => {
-            const { job, userId } = data
+        mutationFn: async (data: { job: Job }) => {
+            const { job } = data
             if (!job.id) {
                 job.id = uuid()
-                job.user_id = userId
             }
             return await client.from('jobs').upsert(job).eq('id', job.id)
         },
         // TODO: we're currently invalidating the cache now, but we can use setQueryData to just replace the job in the cache
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobs'] })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['jobs'] })
+            props.onOpenChange?.(false)
+        }
     })
 
     const onSubmit = async (job: Job) => {
         try {
-            const userId = session?.user.id
-            if (!userId) return;
-            const { error } = await updateMutation.mutateAsync({ job, userId });
+            const { error } = await updateMutation.mutateAsync({ job });
             if (error) {
                 throw error
             }
@@ -115,7 +114,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                         label="Location"
                         {...register('location')}
                     />
-                    <Button type="submit" loading={updateMutation.isLoading}>Update</Button>
+                    <Button type="submit" loading={updateMutation.isLoading}>{entity ? 'Update' : 'Create'}</Button>
                     <Button type="button" variant="ghost" onClick={() => reset(initialValues)}>Clear Changes</Button>
                 </form>
             </div>

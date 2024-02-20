@@ -1,7 +1,6 @@
-import { Textarea } from '@components/textarea';
 import { type Resume } from '@lib/types';
 import { useFormContext } from 'react-hook-form';
-import { Input } from 'ui';
+import { Input, Textarea } from 'ui';
 
 /**
  * Basic Information section in resume builder

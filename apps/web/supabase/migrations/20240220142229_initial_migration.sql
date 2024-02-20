@@ -2,7 +2,6 @@ create type "public"."skill" as ("label" character varying(255));
 
 create table "public"."education" (
     "id" uuid not null default uuid_generate_v4(),
-    "user_id" uuid not null,
     "resume_id" uuid,
     "created_at" timestamp without time zone default CURRENT_TIMESTAMP,
     "updated_at" timestamp without time zone default CURRENT_TIMESTAMP,
@@ -22,7 +21,6 @@ create table "public"."jobs" (
     "position" character varying(255) not null,
     "company_name" character varying(255) not null,
     "company_site" character varying(255),
-    "user_id" uuid not null,
     "created_at" timestamp without time zone default CURRENT_TIMESTAMP,
     "updated_at" timestamp without time zone default CURRENT_TIMESTAMP,
     "location" character varying(255),
@@ -40,7 +38,6 @@ create table "public"."jobs" (
 create table "public"."notes" (
     "id" uuid not null default uuid_generate_v4(),
     "job_id" uuid not null,
-    "user_id" uuid not null,
     "status" integer not null,
     "text" text not null,
     "created_at" timestamp without time zone default CURRENT_TIMESTAMP,
@@ -69,7 +66,6 @@ alter table "public"."profiles" enable row level security;
 
 create table "public"."projects" (
     "id" uuid not null default uuid_generate_v4(),
-    "user_id" uuid not null,
     "resume_id" uuid,
     "created_at" timestamp without time zone default CURRENT_TIMESTAMP,
     "updated_at" timestamp without time zone default CURRENT_TIMESTAMP,
@@ -85,7 +81,6 @@ create table "public"."projects" (
 
 create table "public"."resumes" (
     "id" uuid not null default uuid_generate_v4(),
-    "user_id" uuid not null,
     "title" character varying(255),
     "professional_summary" text,
     "full_name" character varying(255),
@@ -102,7 +97,6 @@ create table "public"."resumes" (
 
 create table "public"."work_experience" (
     "id" uuid not null default uuid_generate_v4(),
-    "user_id" uuid not null,
     "resume_id" uuid,
     "created_at" timestamp without time zone default CURRENT_TIMESTAMP,
     "updated_at" timestamp without time zone default CURRENT_TIMESTAMP,
@@ -150,21 +144,9 @@ alter table "public"."education" add constraint "education_resume_id_fkey" FOREI
 
 alter table "public"."education" validate constraint "education_resume_id_fkey";
 
-alter table "public"."education" add constraint "education_user_id_fkey" FOREIGN KEY (user_id) REFERENCES profiles(id) not valid;
-
-alter table "public"."education" validate constraint "education_user_id_fkey";
-
-alter table "public"."jobs" add constraint "jobs_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) not valid;
-
-alter table "public"."jobs" validate constraint "jobs_user_id_fkey";
-
 alter table "public"."notes" add constraint "notes_job_id_fkey" FOREIGN KEY (job_id) REFERENCES jobs(id) not valid;
 
 alter table "public"."notes" validate constraint "notes_job_id_fkey";
-
-alter table "public"."notes" add constraint "notes_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) not valid;
-
-alter table "public"."notes" validate constraint "notes_user_id_fkey";
 
 alter table "public"."profiles" add constraint "profiles_id_fkey" FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE not valid;
 
@@ -180,21 +162,9 @@ alter table "public"."projects" add constraint "projects_resume_id_fkey" FOREIGN
 
 alter table "public"."projects" validate constraint "projects_resume_id_fkey";
 
-alter table "public"."projects" add constraint "projects_user_id_fkey" FOREIGN KEY (user_id) REFERENCES profiles(id) not valid;
-
-alter table "public"."projects" validate constraint "projects_user_id_fkey";
-
-alter table "public"."resumes" add constraint "resumes_user_id_fkey" FOREIGN KEY (user_id) REFERENCES profiles(id) not valid;
-
-alter table "public"."resumes" validate constraint "resumes_user_id_fkey";
-
 alter table "public"."work_experience" add constraint "work_experience_resume_id_fkey" FOREIGN KEY (resume_id) REFERENCES resumes(id) not valid;
 
 alter table "public"."work_experience" validate constraint "work_experience_resume_id_fkey";
-
-alter table "public"."work_experience" add constraint "work_experience_user_id_fkey" FOREIGN KEY (user_id) REFERENCES profiles(id) not valid;
-
-alter table "public"."work_experience" validate constraint "work_experience_user_id_fkey";
 
 set check_function_bodies = off;
 
@@ -210,11 +180,6 @@ begin
 end;
 $function$
 ;
-
--- Had to add this manually because of https://github.com/supabase/cli/issues/120
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
 
 grant delete on table "public"."education" to "anon";
 

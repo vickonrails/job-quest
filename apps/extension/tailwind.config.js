@@ -27,7 +27,8 @@ const config = {
         // sm: ["var(--text-sm)", "2rem"],
         // base: ["var(--text-base)", "2rem"],
         // lg: ["var(--text-lg)", "1.8rem"]
-        sm: "var(--text-sm)",
+        xs: "var(--text-xs)",
+        sm: ["var(--text-sm)", "1.25em"],
         base: "var(--text-base)",
         lg: "var(--text-lg)",
       },

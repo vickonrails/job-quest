@@ -1,5 +1,4 @@
 import { AlertDialog } from '@components/alert-dialog';
-import { Spinner } from '@components/spinner';
 import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Education } from '@lib/types';
@@ -9,7 +8,7 @@ import { useState } from 'react';
 import { type UseFieldArrayAppend } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
-import { Button } from 'ui';
+import { Button, Spinner } from 'ui';
 import { EducationForm } from './education-form-item';
 import { StepContainer } from '../container';
 
