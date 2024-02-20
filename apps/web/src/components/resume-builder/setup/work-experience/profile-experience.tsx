@@ -104,7 +104,7 @@ export function WorkExperience() {
 interface FormFooterProps {
     saveDisabled: boolean;
     isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ workExperience: IWorkExperience[] }>
+    append: UseFieldArrayAppend<{ workExperience: IWorkExperience[] }, 'workExperience'>
 }
 
 function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {

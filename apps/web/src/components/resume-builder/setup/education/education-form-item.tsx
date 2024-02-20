@@ -4,7 +4,7 @@ import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand
 import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { type Education } from '@lib/types'
 import { Trash2 } from 'lucide-react'
-import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn, useFieldArray, useFormContext } from 'react-hook-form'
 import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../error-hint'
 
@@ -97,13 +97,9 @@ export function EducationForm({ form, index, onDeleteClick, field }: EducationFo
                             />
                         )}
                     </section>
-                    <Textarea
-                        placeholder="A summary of what you did in this role"
-                        label="Highlights"
-                        rows={5}
-                        className="mb-4"
-                        {...register(`education.${index}.highlights`)}
-                    />
+
+                    <Highlights />
+
                     <div className="flex justify-end gap-2">
                         <Button
                             size="sm"
@@ -118,6 +114,27 @@ export function EducationForm({ form, index, onDeleteClick, field }: EducationFo
                     </div>
                 </div>
             </Accordion>
+        </section>
+    )
+}
+
+
+function Highlights() {
+    const { control, register } = useFormContext();
+    const { fields } = useFieldArray({ name: 'highlights', control, keyName: '_id' })
+
+    return (
+        <section>
+            {fields.map(field => (
+                <Textarea
+                    key={field._id}
+                    placeholder="A summary of what you did in this role"
+                    label="Highlights"
+                    rows={5}
+                    className="mb-4"
+                    {...register(`highlights.${field._id}.text`)}
+                />
+            ))}
         </section>
     )
 }

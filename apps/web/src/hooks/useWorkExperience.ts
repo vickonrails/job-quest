@@ -1,5 +1,5 @@
 import { type Database } from '@lib/database.types';
-import { type WorkExperience } from '@lib/types';
+import { Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -27,9 +27,19 @@ export function useWorkExperience() {
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
             if (!session) return
+            const highlights = values.map(work => work.highlights).flat().filter(highlight => highlight !== undefined).map(x => {
+                if (x && !x.id) x.id = uuid();
+                return x
+            }) as Highlight[]
+
+            // assign the highlights to the work experience
             const preparedValues = values.map(work => {
                 if (!work.id) {
                     work.id = uuid()
+                }
+
+                if (work.highlights) {
+                    delete work.highlights
                 }
 
                 if ((work.still_working_here && work.end_date) || !work.end_date) {
@@ -37,7 +47,12 @@ export function useWorkExperience() {
                 }
                 return work
             })
-            const { data, error } = await client.from('work_experience').upsert(preparedValues).select('*');
+
+
+            const { data: _data, error: _error } = await client.from('highlights').upsert(highlights).select();
+            if (_error) throw _error;
+
+            const { data, error } = await client.from('work_experience').upsert(preparedValues).select();
             if (error) throw error;
 
             return data;
@@ -81,7 +96,7 @@ export function getDefaultExperience() {
         company_name: '',
         job_title: '',
         location: '',
-        highlights: '',
+        highlights: [{}],
     } as unknown as WorkExperience
 
     return experience

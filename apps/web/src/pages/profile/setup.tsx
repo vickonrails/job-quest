@@ -14,7 +14,7 @@ import { type PageProps } from '..';
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('work_experience').select('*').filter('resume_id', 'is', null)).data;
+    return (await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null)).data;
 }
 
 // TODO: fetch the initial values from the database and instantiate the form with it 

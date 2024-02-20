@@ -70,13 +70,13 @@ export function ProjectForm({ form, index, field, onDeleteClick }: ProjectsField
                             {...register(`projects.${index}.end_date`)}
                         />
                     </section>
-                    <Textarea
+                    {/* <Textarea
                         placeholder="A summary of what you did in this role"
                         label="Project description"
                         rows={5}
                         className="mb-4"
                         {...register(`projects.${index}.highlights`)}
-                    />
+                    /> */}
 
                     <ProjectSkills index={index} form={form} />
 

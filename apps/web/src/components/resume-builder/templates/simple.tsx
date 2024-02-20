@@ -2,6 +2,7 @@ import { formatDate } from '@components/utils';
 import { type HTMLAttributes } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';
+import { Textarea } from 'ui';
 
 export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingElement> & { title: string }) {
     if (!title) return null;
@@ -70,7 +71,9 @@ export function SimpleTemplate() {
                                     )}
                                 </div>
                                 <ul className="text-xs text-muted-foreground flex flex-col gap-1">
-                                    {highlights}
+                                    {highlights?.map((highlight) => (
+                                        <Textarea key={highlight.id} value={highlight.text} />
+                                    ))}
                                 </ul>
                             </div>
                         </article>
@@ -81,7 +84,7 @@ export function SimpleTemplate() {
             <section>
                 <SectionHeading title="EDUCATION" />
                 {education?.map((education, idx) => {
-                    const { end_date, start_date, highlights, institution, degree, field_of_study, location } = education
+                    const { end_date, start_date, institution, degree, field_of_study, location } = education
                     return (
                         <article className="flex mb-4" key={idx}>
                             <DateRange startDate={start_date} endDate={end_date ?? 'Till Date'} />
@@ -91,10 +94,10 @@ export function SimpleTemplate() {
                                     <p className="text-xs mb-2">{degree}, {field_of_study}</p>
                                 </header>
 
-                                <ul className="text-xs text-muted-foreground list-disc flex flex-col gap-1">
-                                    {/* <HighlightsList highlights={highlights ?? []} /> */}
+                                {/* <ul className="text-xs text-muted-foreground list-disc flex flex-col gap-1">
+                                    <HighlightsList highlights={highlights ?? []} />
                                     {highlights}
-                                </ul>
+                                </ul> */}
                             </div>
                         </article>
                     )
@@ -105,7 +108,7 @@ export function SimpleTemplate() {
             <section>
                 <SectionHeading title="OTHER PROJECTS" />
                 {projects?.map((project, idx) => {
-                    const { highlights, description, skills, title, url } = project
+                    const { description, skills, title, url } = project
                     return (
                         <article className="flex mb-4" key={idx}>
                             <section className="w-1/4 pr-4 text-muted-foreground">
@@ -123,9 +126,9 @@ export function SimpleTemplate() {
                                     <p className="text-muted-foreground">{description}</p>
                                 </header>
 
-                                <div className="text-xs text-muted-foreground">
+                                {/* <div className="text-xs text-muted-foreground">
                                     {highlights}
-                                </div>
+                                </div> */}
                             </div>
                         </article>
                     )
