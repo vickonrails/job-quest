@@ -1,5 +1,4 @@
 import { AlertDialog } from '@components/alert-dialog'
-import { Spinner } from '@components/spinner'
 import { useToast } from '@components/toast/use-toast'
 import { type Database } from '@lib/database.types'
 import { type Project } from '@lib/types'
@@ -9,11 +8,12 @@ import { createRef, useEffect, useState } from 'react'
 import { type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
-import { Button } from 'ui'
+import { Button, Spinner } from 'ui'
 import { StepContainer } from './container'
 import { ProjectForm } from './projects/project-form-item'
 
 export type Projects = { projects: Project[] }
+
 export default function ProjectsView() {
     const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient()

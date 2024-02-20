@@ -24,13 +24,15 @@ const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (
     if (noteError) {
       res.send({
         success: false,
-        error: noteError.message
+        error: noteError.message,
+        job: data
       })
     }
   }
 
   res.send({
-    success: true
+    success: true,
+    job: data
   })
 }
 
