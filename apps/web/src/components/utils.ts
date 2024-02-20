@@ -39,10 +39,11 @@ export function getSize(size: Size) {
     }
 }
 
-export function formatDate(dateString: string) {
+export function formatDate(dateString: string, short = false) {
     const date = new Date(dateString);
+    if (date.toString() === 'Invalid Date') return dateString;
     const month = months[date.getMonth()] as string;
-    return `${date.getDate()} ${month}, ${date.getFullYear()}`;
+    return `${!short ? date.getDate() : ''} ${month}, ${date.getFullYear()}`;
 }
 
 export function djb2Hash(str: string, arrayLength: number) {

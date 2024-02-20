@@ -128,8 +128,8 @@ function Skills() {
     const form = useFormContext<FormValues>();
     return (
         <section className="mb-4">
-            <h3 className="font-medium text-lg">Education</h3>
-            <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
+            <h3 className="font-medium text-lg">Skills</h3>
+            <p className="mb-4 text-sm text-muted-foreground">List relevant skills that match this job description.</p>
             <SkillsForm form={form} />
         </section>
     )
