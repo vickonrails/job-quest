@@ -9,7 +9,7 @@ import { type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteExperience, getDefaultExperience, useWorkExperience } from 'src/hooks/useWorkExperience'
 import { Button, Spinner } from 'ui'
-import { StepContainer } from '../container'
+import { StepContainer } from '../components/container'
 import { WorkExperienceForm } from './work-experience-form-item'
 
 export function WorkExperience() {
@@ -66,8 +66,11 @@ export function WorkExperience() {
 
     return (
         <>
-            <StepContainer title="Work Experience" data-testid="work-experience">
-                <p className="mb-4 text-gray-500">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for..</p>
+            <StepContainer
+                title="Work Experience"
+                data-testid="work-experience"
+                description="Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.."
+            >
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (
                         <WorkExperienceForm

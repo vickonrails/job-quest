@@ -8,7 +8,7 @@ import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input } from 'ui';
-import { StepContainer } from './container';
+import { StepContainer } from '../components/container';
 
 export default function Skills({ profile }: { profile: Profile }) {
     const client = useSupabaseClient<Database>()
@@ -60,8 +60,11 @@ export default function Skills({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Skills" data-testid="skills">
-            <p className="mb-4 text-gray-500">Highlight the skills that set you apart, including technical and soft skills. Focus on those that are most relevant to the job you want.</p>
+        <StepContainer
+            data-testid="skills"
+            title="Skills"
+            description="Highlight the skills that set you apart, including technical and soft skills. Focus on those that are most relevant to the job you want."
+        >
             <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
                 <section className="p-4 border bg-white mb-8">
                     <SkillsForm form={form} />

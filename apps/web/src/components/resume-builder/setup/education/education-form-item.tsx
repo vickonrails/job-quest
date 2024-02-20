@@ -6,7 +6,7 @@ import { type Education } from '@lib/types'
 import { Trash2 } from 'lucide-react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn, useFieldArray, useFormContext } from 'react-hook-form'
 import { Button, Input, Textarea } from 'ui'
-import { ErrorHint } from '../error-hint'
+import { ErrorHint } from '../components/error-hint'
 
 interface EducationFormProps {
     form: UseFormReturn<{ education: Education[] }>

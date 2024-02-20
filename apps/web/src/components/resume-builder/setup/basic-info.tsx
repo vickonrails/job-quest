@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input, Textarea } from 'ui';
-import { StepContainer } from './container';
+import { StepContainer } from './components/container';
 
 export function BasicInformation({ profile }: { profile: Profile }) {
     const { next, session } = useSetupContext()
@@ -44,8 +44,10 @@ export function BasicInformation({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Basic Information" data-testid="basic-information">
-            <p className="mb-4 text-gray-500">Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.</p>
+        <StepContainer
+            title="Basic Information"
+            description="Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count." data-testid="basic-information"
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="grid grid-cols-2 gap-4 p-4 border bg-white mb-8">
                     <Input

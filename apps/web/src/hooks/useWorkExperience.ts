@@ -1,5 +1,5 @@
 import { type Database } from '@lib/database.types';
-import { Highlight, type WorkExperience } from '@lib/types';
+import { type Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -49,7 +49,7 @@ export function useWorkExperience() {
             })
 
 
-            const { data: _data, error: _error } = await client.from('highlights').upsert(highlights).select();
+            const { error: _error } = await client.from('highlights').upsert(highlights).select();
             if (_error) throw _error;
 
             const { data, error } = await client.from('work_experience').upsert(preparedValues).select();

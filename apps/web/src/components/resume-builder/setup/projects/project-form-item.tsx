@@ -6,8 +6,8 @@ import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'
 import { createRef, useEffect, useState, type ChangeEvent } from 'react'
 import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input, Textarea } from 'ui'
-import { ErrorHint } from '../error-hint'
+import { Button, Input } from 'ui'
+import { ErrorHint } from '../components/error-hint'
 
 interface ProjectsFieldsProps {
     form: UseFormReturn<{ projects: Project[] }>
@@ -70,13 +70,6 @@ export function ProjectForm({ form, index, field, onDeleteClick }: ProjectsField
                             {...register(`projects.${index}.end_date`)}
                         />
                     </section>
-                    {/* <Textarea
-                        placeholder="A summary of what you did in this role"
-                        label="Project description"
-                        rows={5}
-                        className="mb-4"
-                        {...register(`projects.${index}.highlights`)}
-                    /> */}
 
                     <ProjectSkills index={index} form={form} />
 

@@ -70,9 +70,9 @@ export function SimpleTemplate() {
                                         <p className="text-xs">{location}</p>
                                     )}
                                 </div>
-                                <ul className="text-xs text-muted-foreground flex flex-col gap-1">
+                                <ul className="text-xs list-disc ml-3 text-muted-foreground flex flex-col gap-1">
                                     {highlights?.map((highlight) => (
-                                        <Textarea key={highlight.id} value={highlight.text} />
+                                        <li key={highlight.id}>{highlight.text}</li>
                                     ))}
                                 </ul>
                             </div>

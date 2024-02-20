@@ -2,11 +2,11 @@ import { Accordion } from '@components/accordion'
 import { Checkbox } from '@components/checkbox'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
-import { type Highlight, type WorkExperience } from '@lib/types'
-import { Trash2 } from 'lucide-react'
-import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input, Textarea } from 'ui'
-import { ErrorHint } from '../error-hint'
+import { type WorkExperience } from '@lib/types'
+import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Input } from 'ui'
+import { ErrorHint } from '../components/error-hint'
+import { WorkExperienceHighlights } from './work-experience-highlights'
 
 interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -15,6 +15,7 @@ interface WorkExperienceFormProps {
     onDeleteClick: (experience: WorkExperience, index: number) => void
 }
 
+/** ------------------ Accordion Header ------------------ */
 function Header({ experience }: { experience: WorkExperience }) {
     const { start_date, job_title, end_date, company_name } = experience
 
@@ -32,6 +33,8 @@ function Header({ experience }: { experience: WorkExperience }) {
     )
 }
 
+
+/** ------------------ Work Experience Form ------------------ */
 export function WorkExperienceForm({ form, index, onDeleteClick }: WorkExperienceFormProps) {
     const { register, formState: { errors }, control } = form
     const fieldErrs = errors?.workExperience?.[index] ?? {}
@@ -96,7 +99,7 @@ export function WorkExperienceForm({ form, index, onDeleteClick }: WorkExperienc
                         )}
                     </section>
 
-                    <Highlights
+                    <WorkExperienceHighlights
                         form={form}
                         index={index}
                         entity={experience}
@@ -107,57 +110,3 @@ export function WorkExperienceForm({ form, index, onDeleteClick }: WorkExperienc
         </section>
     )
 }
-
-interface HighlightsProps {
-    form: UseFormReturn<{ workExperience: WorkExperience[] }>
-    index: number,
-    onDeleteClick: () => void
-    entity: WorkExperience
-}
-
-function Highlights({ form, index, onDeleteClick, entity }: HighlightsProps) {
-    const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
-    return (
-        <>
-            <section className="mb-4">
-                {fields.map((field, idx) => (
-                    <section key={field._id} className="mb-2 flex flex-col items-end">
-                        <Textarea
-                            placeholder="A summary of what you did in this role"
-                            label={idx === 0 ? 'Highlights' : ''}
-                            containerClasses="w-full mb-1"
-                            rows={2}
-                            {...form.register(`workExperience.${index}.highlights.${idx}.text`)}
-                        />
-                        <button className="text-xs" onClick={() => remove(idx)}>Remove</button>
-                    </section>
-                ))}
-            </section>
-
-
-            <div className="flex justify-end gap-2">
-                <Button variant="outline" type="button" onClick={() => append(getDefaultHighlight(entity.id))}>
-                    Add Highlight
-                </Button>
-                <Button
-                    size="sm"
-                    className="text-red-400 flex items-center gap-1"
-                    type="button"
-                    variant="outline"
-                    onClick={onDeleteClick}
-                >
-                    <Trash2 size={18} />
-                    <span>Remove Block</span>
-                </Button>
-            </div>
-        </>
-    )
-}
-
-function getDefaultHighlight(id: string) {
-    return {
-        text: '',
-        work_experience_id: id,
-        type: 'work_experience'
-    } as unknown as Highlight
-} 

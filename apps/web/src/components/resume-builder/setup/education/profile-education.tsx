@@ -9,8 +9,8 @@ import { type UseFieldArrayAppend } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
 import { Button, Spinner } from 'ui';
+import { StepContainer } from '../components/container';
 import { EducationForm } from './education-form-item';
-import { StepContainer } from '../container';
 
 export function EducationStep() {
     const client = useSupabaseClient<Database>()
@@ -66,8 +66,11 @@ export function EducationStep() {
 
     return (
         <>
-            <StepContainer title="Education" data-testid="education">
-                <p className="mb-4 text-gray-500">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
+            <StepContainer
+                data-testid="education"
+                title="Education"
+                description="List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here."
+            >
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     {fields.map((field, index) => (
                         <EducationForm

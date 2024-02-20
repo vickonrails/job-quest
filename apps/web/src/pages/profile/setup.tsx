@@ -1,6 +1,6 @@
 import { Layout } from '@components/layout';
-import { Steps } from '@components/resume-builder/setup/steps-renderer';
-import { SetupNavigator } from '@components/resume-builder/setup/set-up-navigator';
+import { Steps } from '@components/resume-builder/setup/components/steps-renderer';
+import { SetupNavigator } from '@components/resume-builder/setup/components/set-up-navigator';
 import { type Database } from '@lib/database.types';
 import { type Profile } from '@lib/types';
 import { createPagesServerClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-nextjs';
