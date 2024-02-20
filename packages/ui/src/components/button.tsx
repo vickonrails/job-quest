@@ -1,7 +1,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
-// TODO: fix this alias issue
+import { Spinner } from "."
 import { cn } from "../utils"
 
 const buttonVariants = cva(
@@ -53,7 +53,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {loading ? '...' : children}
+        {loading ? (
+          <span className="flex justify-center">
+            <Spinner className="h-7 w-7" variant="secondary" />
+          </span>
+        ) : children}
       </Comp>
     )
   }

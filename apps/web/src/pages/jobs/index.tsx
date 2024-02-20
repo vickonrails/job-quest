@@ -2,7 +2,6 @@ import { AlertDialog } from '@components/alert-dialog';
 import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
-import { Spinner } from '@components/spinner';
 import { useJobs } from '@hooks';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -14,7 +13,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
-import { Button } from 'ui';
+import { Button, Spinner } from 'ui';
 
 const deleteTextWarning = `
     Are you sure you want to delete this job? 

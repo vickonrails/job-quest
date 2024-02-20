@@ -6,11 +6,11 @@ import { JobInfoSheet } from "~components/sheets/JobInfoSheet"
 import { LinkedInButton } from "~components/linkedin-button";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://www.linkedin.com/jobs/*"],
+    matches: ["https://www.linkedin.com/*"],
 }
 
 export const getInlineAnchor = () => {
-    return document.querySelector(".job-view-layout .jobs-save-button")
+    return document.querySelector(".job-view-layout .jobs-unified-top-card .jobs-save-button")
 }
 
 export function getStyle() {
