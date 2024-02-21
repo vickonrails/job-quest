@@ -2,11 +2,16 @@ import { type Database } from '@lib/database.types';
 import { type Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { fetchWorkExperience } from 'src/pages/profile/setup';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
+
+function setEntityId<T extends { id: string }>(entity: T): T {
+    if (entity && !entity.id) entity.id = uuid();
+    return entity
+}
 
 export function useWorkExperience() {
     const client = useSupabaseClient<Database>()
@@ -16,6 +21,7 @@ export function useWorkExperience() {
     const form = useForm<{ workExperience: WorkExperience[] }>({
         defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] }
     })
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
     const fieldsArr = useFieldArray({
         name: 'workExperience',
@@ -27,35 +33,39 @@ export function useWorkExperience() {
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
             if (!session) return
-            const highlights = values.map(work => work.highlights).flat().filter(highlight => highlight !== undefined).map(x => {
-                if (x && !x.id) x.id = uuid();
-                return x
-            }) as Highlight[]
 
-            // assign the highlights to the work experience
-            const preparedValues = values.map(work => {
-                if (!work.id) {
-                    work.id = uuid()
-                }
+            // first delete the highlights marked for delete
+            try {
+                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+                if (result.error) throw new Error(result.error.message)
 
-                if (work.highlights) {
-                    delete work.highlights
-                }
+                const highlights = values.map(work => work.highlights).flat().filter(x => x?.work_experience_id) as Highlight[]
+                const preparedHighlights = highlights.map(highlight => setEntityId<Highlight>(highlight))
 
-                if ((work.still_working_here && work.end_date) || !work.end_date) {
-                    work.end_date = null
-                }
-                return work
-            })
+                const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+                if (highlightsError) throw new Error(highlightsError.message);
 
+                const preparedValues = values.map(work => {
+                    if (!work.id) {
+                        work.id = uuid()
+                    }
 
-            const { error: _error } = await client.from('highlights').upsert(highlights).select();
-            if (_error) throw _error;
+                    if (work.highlights) {
+                        delete work.highlights
+                    }
 
-            const { data, error } = await client.from('work_experience').upsert(preparedValues).select();
-            if (error) throw error;
+                    if ((work.still_working_here && work.end_date) || !work.end_date) {
+                        work.end_date = null
+                    }
+                    return work
+                })
 
-            return data;
+                const { data, error } = await client.from('work_experience').upsert(preparedValues).select();
+                if (error) throw new Error(error.message)
+                return data
+            } catch (error) {
+                throw error
+            }
         },
         onSuccess: (data) => {
             next();
@@ -72,7 +82,8 @@ export function useWorkExperience() {
         experiences: queryResult,
         form,
         fieldsArr,
-        updateExperiences
+        updateExperiences,
+        setHighlightsToDelete
     }
 }
 
