@@ -7,23 +7,28 @@ const Header = RadixAccordion.Header
 const Content = RadixAccordion.Content
 const Trigger = RadixAccordion.Trigger
 
-interface AccordionProps {
+type AccordionItemProps = RadixAccordion.AccordionItemProps & {
     header: React.ReactNode
-    children?: React.ReactNode
+    children: React.ReactNode
 }
 
-// TODO: animating the accordion
-export function Accordion(props: AccordionProps) {
+export function AccordionItem({ header, children, ...rest }: AccordionItemProps) {
     return (
-        <Root collapsible type="single">
-            <Item value="item-1">
-                <Header>
-                    <Trigger className="w-full text-base text-left accordion">{props.header}</Trigger>
-                </Header>
-                <Content>
-                    {props.children}
-                </Content>
-            </Item>
+        <Item {...rest}>
+            <Header>
+                <Trigger className="w-full text-base text-left accordion">{header}</Trigger>
+            </Header>
+            <Content>
+                {children}
+            </Content>
+        </Item>
+    )
+}
+
+export function Accordion({ children, type = 'single', collapsible = true, ...rest }: RadixAccordion.AccordionSingleProps) {
+    return (
+        <Root type={type} collapsible={collapsible} {...rest}>
+            {children}
         </Root>
     )
 }

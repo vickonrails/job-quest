@@ -1,4 +1,4 @@
-import { Accordion } from '@components/accordion'
+import { Accordion, AccordionItem } from '@components/accordion'
 import { Chip } from '@components/chips'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { formatDate } from '@components/utils'
@@ -10,14 +10,17 @@ import { Button, Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 
 interface ProjectsFieldsProps {
-    form: UseFormReturn<{ projects: Project[] }>
-    index: number,
-    field: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>,
+    form: UseFormReturn<{ projects: Project[] }, 'projects'>
+    fields: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>[],
     onDeleteClick: (project: Project, index: number) => void
 }
 
-function Header({ project }: { project: Project }) {
+
+/** ------------------ Work Experience Header ------------------ */
+function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 'projects'>, index: number }) {
+    const project = useWatch({ control: form.control, name: `projects.${index}` })
     const { start_date, title } = project
+
     return (
         <header className="flex items-start justify-between group cursor-pointer hover:text-primary w-full p-4">
             <div>
@@ -34,60 +37,84 @@ function Header({ project }: { project: Project }) {
     )
 }
 
-export function ProjectForm({ form, index, field, onDeleteClick }: ProjectsFieldsProps) {
-    const { register, formState: { errors }, control } = form
+export function ProjectForm({ form, fields, onDeleteClick }: ProjectsFieldsProps) {
+    return (
+        <Accordion type="single" collapsible>
+            {fields.map((field, index) => (
+                <AccordionItem
+                    header={<Header form={form} index={index} />}
+                    key={field._id}
+                    value={field._id}
+                    className="border bg-white mb-2"
+                >
+                    <FormItem
+                        form={form}
+                        onDeleteClick={onDeleteClick}
+                        field={field}
+                        index={index}
+                    />
+                </AccordionItem>
+            ))}
+        </Accordion>
+    )
+}
+
+interface FormItemProps {
+    form: UseFormReturn<{ projects: Project[] }>
+    index: number,
+    field: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>,
+    onDeleteClick: (projects: Project, index: number) => void
+}
+
+function FormItem({ form, field, index, onDeleteClick }: FormItemProps) {
+    const { register, formState: { errors } } = form
     const fieldErrs = errors?.projects?.[index] ?? {}
-    const projects = useWatch({ control, name: `projects.${index}` })
 
     return (
-        <section className="border bg-white mb-2">
-            <Accordion header={<Header project={projects} />}>
-                <div className="p-4 pt-0">
-                    <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
-                        <Input
-                            label="Project Title..."
-                            placeholder="Title"
-                            hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
-                            {...register(`projects.${index}.title`, { required: { message: 'Project title is required', value: true } })}
-                        />
-                        <Input
-                            label="URL"
-                            type="url"
-                            placeholder="Link to Demo..."
-                            hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
-                            {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
-                        />
-                        <Input
-                            type="date"
-                            label="Start Date"
-                            placeholder="Start Date..."
-                            {...register(`projects.${index}.start_date`)}
-                        />
-                        <Input
-                            type="date"
-                            label="End Date"
-                            placeholder="End Date..."
-                            {...register(`projects.${index}.end_date`)}
-                        />
-                    </section>
+        <div className="p-4 pt-0">
+            <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
+                <Input
+                    label="Project Title..."
+                    placeholder="Title"
+                    hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
+                    {...register(`projects.${index}.title`, { required: { message: 'Project title is required', value: true } })}
+                />
+                <Input
+                    label="URL"
+                    type="url"
+                    placeholder="Link to Demo..."
+                    hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
+                    {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
+                />
+                <Input
+                    type="date"
+                    label="Start Date"
+                    placeholder="Start Date..."
+                    {...register(`projects.${index}.start_date`)}
+                />
+                <Input
+                    type="date"
+                    label="End Date"
+                    placeholder="End Date..."
+                    {...register(`projects.${index}.end_date`)}
+                />
+            </section>
 
-                    <ProjectSkills index={index} form={form} />
+            <ProjectSkills index={index} form={form} />
 
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            size="sm"
-                            className="text-red-400 flex items-center gap-1"
-                            type="button"
-                            variant="outline"
-                            onClick={() => onDeleteClick(field, index)}
-                        >
-                            <Trash2 size={18} />
-                            <span>Remove Block</span>
-                        </Button>
-                    </div>
-                </div>
-            </Accordion>
-        </section>
+            <div className="flex justify-end gap-2">
+                <Button
+                    size="sm"
+                    className="text-red-400 flex items-center gap-1"
+                    type="button"
+                    variant="outline"
+                    onClick={() => onDeleteClick(field, index)}
+                >
+                    <Trash2 size={18} />
+                    <span>Remove Block</span>
+                </Button>
+            </div>
+        </div>
     )
 }
 

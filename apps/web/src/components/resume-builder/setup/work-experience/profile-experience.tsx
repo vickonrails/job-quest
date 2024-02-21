@@ -5,11 +5,11 @@ import { type WorkExperience as IWorkExperience } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteExperience, getDefaultExperience, useWorkExperience } from 'src/hooks/useWorkExperience'
-import { Button, Spinner } from 'ui'
+import { Spinner } from 'ui'
 import { StepContainer } from '../components/container'
+import { SectionFooter } from '../components/section-footer'
 import { WorkExperienceForm } from './work-experience-form-item'
 
 export function WorkExperience() {
@@ -17,7 +17,7 @@ export function WorkExperience() {
     const queryClient = useQueryClient()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { experiences, form, fieldsArr, updateExperiences } = useWorkExperience();
+    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience();
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,
@@ -76,11 +76,12 @@ export function WorkExperience() {
                         form={form}
                         fields={fields}
                         onDeleteClick={handleDeleteClick}
+                        onHighlightDelete={setHighlightsToDelete}
                     />
-                    <FormFooter
+                    <SectionFooter
                         saveDisabled={fields.length <= 0}
                         isSubmitting={form.formState.isSubmitting}
-                        append={append}
+                        onAppendClick={() => append(getDefaultExperience())}
                     />
                 </form>
             </StepContainer>
@@ -95,29 +96,5 @@ export function WorkExperience() {
                 isProcessing={loading}
             />
         </>
-    )
-}
-
-// ---------------------- Form Footer ---------------------- // 
-
-interface FormFooterProps {
-    saveDisabled: boolean;
-    isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ workExperience: IWorkExperience[] }, 'workExperience'>
-}
-
-function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
-    return (
-        <div className="flex gap-2 pt-2">
-            <Button
-                className="text-primary"
-                type="button"
-                variant="outline"
-                onClick={() => append(getDefaultExperience())}
-            >
-                Add Experience
-            </Button>
-            <Button loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
-        </div>
     )
 }

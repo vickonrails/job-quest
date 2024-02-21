@@ -71,16 +71,8 @@ export function EducationSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
-            {fields.map((field, index) => (
-                <EducationForm
-                    field={field}
-                    index={index}
-                    form={form}
-                    key={field._id}
-                    onDeleteClick={handleDeleteClick}
-                />
-            ))}
 
+            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}

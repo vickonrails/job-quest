@@ -1,8 +1,9 @@
-import { Accordion, AccordionItem } from '@components/accordion-replacement'
+import { Accordion, AccordionItem } from '@components/accordion'
 import { Checkbox } from '@components/checkbox'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { type WorkExperience } from '@lib/types'
+import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
@@ -12,10 +13,11 @@ interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
     fields: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>[],
     onDeleteClick: (experience: WorkExperience, index: number) => void
+    onHighlightDelete?: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Form ------------------ */
-export function WorkExperienceForm({ form, fields, onDeleteClick }: WorkExperienceFormProps) {
+export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete }: WorkExperienceFormProps) {
     return (
         <Accordion type="single" collapsible defaultValue={fields[0]?._id}>
             {fields.map((field, index) => (
@@ -30,6 +32,7 @@ export function WorkExperienceForm({ form, fields, onDeleteClick }: WorkExperien
                         index={index}
                         onDeleteClick={onDeleteClick}
                         field={field}
+                        onHighlightDelete={onHighlightDelete}
                     />
                 </AccordionItem>
             ))}
@@ -42,10 +45,11 @@ interface FormItemProps {
     index: number,
     field: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>,
     onDeleteClick: (experience: WorkExperience, index: number) => void
+    onHighlightDelete?: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Form Item ------------------ */
-function FormItem({ form, index, onDeleteClick, field }: FormItemProps) {
+function FormItem({ form, index, onDeleteClick, field, onHighlightDelete }: FormItemProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.workExperience?.[index] ?? {}
 
@@ -54,6 +58,7 @@ function FormItem({ form, index, onDeleteClick, field }: FormItemProps) {
             <section className="grid grid-cols-2 gap-3 mb-4 rounded-md">
                 <input type="hidden" {...register(`workExperience.${index}.id`)} />
                 <Input
+                    autoFocus
                     label="Company Name"
                     placeholder="Company name"
                     hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}
@@ -109,6 +114,7 @@ function FormItem({ form, index, onDeleteClick, field }: FormItemProps) {
                 index={index}
                 entity={field}
                 onDeleteClick={() => onDeleteClick(field, index)}
+                onHighlightDelete={onHighlightDelete}
             />
         </div>
     )

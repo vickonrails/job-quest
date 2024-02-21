@@ -1,5 +1,6 @@
 import { type Highlight, type WorkExperience } from '@lib/types'
-import { type UseFormReturn, useFieldArray } from 'react-hook-form'
+import { type Dispatch, type SetStateAction } from 'react'
+import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 import { Textarea } from 'ui'
 import { HighlightFooter } from '../components/highlights-footer'
 
@@ -8,10 +9,20 @@ interface HighlightsProps {
     index: number,
     onDeleteClick: () => void
     entity: WorkExperience
+    onHighlightDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-export function WorkExperienceHighlights({ form, index, onDeleteClick, entity }: HighlightsProps) {
+export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
+
+    const handleRemove = (idx: number) => {
+        const highlight = fields[idx]
+        if (highlight?.id) {
+            onHighlightDelete?.((prev) => [...prev, highlight.id])
+        }
+        remove(idx)
+    }
+
     return (
         <>
             <section className="mb-4">
@@ -24,7 +35,7 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity }:
                             rows={2}
                             {...form.register(`workExperience.${index}.highlights.${idx}.text`)}
                         />
-                        <button className="text-xs" onClick={() => remove(idx)}>Remove</button>
+                        <button className="text-xs" onClick={() => handleRemove(idx)}>Remove</button>
                     </section>
                 ))}
             </section>

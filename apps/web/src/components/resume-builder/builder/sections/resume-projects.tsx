@@ -67,16 +67,8 @@ export function ProjectsSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Projects</h3>
             <p className="mb-4 text-sm text-muted-foreground">Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
-            {fields.map((field, index) => (
-                <ProjectForm
-                    field={field}
-                    index={index}
-                    form={form}
-                    key={field._id}
-                    onDeleteClick={handleDeleteClick}
-                />
-            ))}
 
+            <ProjectForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary hover:text-primary flex items-center gap-1' }}

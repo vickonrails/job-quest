@@ -5,11 +5,11 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { type UseFieldArrayAppend } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
-import { Button, Spinner } from 'ui';
+import { Spinner } from 'ui';
 import { StepContainer } from '../components/container';
+import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
 
 export function EducationStep() {
@@ -19,7 +19,7 @@ export function EducationStep() {
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { form, education, fieldsArr, updateEducation } = useEducation();
     const { formState } = form
-    const { fields, remove } = fieldsArr
+    const { fields, remove, append } = fieldsArr
     const {
         showDeleteDialog,
         onCancel,
@@ -72,19 +72,15 @@ export function EducationStep() {
                 description="List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here."
             >
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {fields.map((field, index) => (
-                        <EducationForm
-                            key={field._id}
-                            form={form}
-                            index={index}
-                            field={field}
-                            onDeleteClick={handleDeleteClick}
-                        />
-                    ))}
-                    <FormFooter
-                        append={fieldsArr.append}
+                    <EducationForm
+                        form={form}
+                        fields={fields}
+                        onDeleteClick={handleDeleteClick}
+                    />
+                    <SectionFooter
                         saveDisabled={fields.length === 0}
                         isSubmitting={formState.isSubmitting}
+                        onAppendClick={() => append(getDefaultEducation())}
                     />
                 </form>
             </StepContainer>
@@ -98,28 +94,5 @@ export function EducationStep() {
                 isProcessing={loading}
             />
         </>
-    )
-}
-
-// ---------------------- Form Footer ---------------------- // 
-interface FormFooterProps {
-    saveDisabled: boolean;
-    isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ education: Education[] }>
-}
-
-function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
-    return (
-        <div className="flex gap-2">
-            <Button
-                className="text-primary"
-                type="button"
-                variant="outline"
-                onClick={() => append(getDefaultEducation())}
-            >
-                Add Education
-            </Button>
-            <Button loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
-        </div>
     )
 }
