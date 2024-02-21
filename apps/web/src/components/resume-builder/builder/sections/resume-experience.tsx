@@ -14,8 +14,8 @@ import { deleteExperience } from 'src/hooks/useWorkExperience';
 import { AddSectionBtn } from '.';
 
 const defaultWorkExperience = {
-    company_name: 'Untitled...',
-    job_title: 'Untitled...',
+    company_name: '',
+    job_title: '',
 } as WorkExperience
 
 /**
@@ -70,15 +70,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Work Experience</h3>
             <p className="mb-4 text-sm text-muted-foreground">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.</p>
-            {fields.map((field, index) => (
-                <WorkExperienceForm
-                    field={field}
-                    index={index}
-                    form={form}
-                    key={field._id}
-                    onDeleteClick={handleDeleteClick}
-                />
-            ))}
+            <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}

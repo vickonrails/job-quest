@@ -72,15 +72,11 @@ export function WorkExperience() {
                 description="Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.."
             >
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {fields.map((field, index) => (
-                        <WorkExperienceForm
-                            key={field._id}
-                            index={index}
-                            form={form}
-                            field={field}
-                            onDeleteClick={handleDeleteClick}
-                        />
-                    ))}
+                    <WorkExperienceForm
+                        form={form}
+                        fields={fields}
+                        onDeleteClick={handleDeleteClick}
+                    />
                     <FormFooter
                         saveDisabled={fields.length <= 0}
                         isSubmitting={form.formState.isSubmitting}

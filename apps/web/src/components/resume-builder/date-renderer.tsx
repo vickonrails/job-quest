@@ -5,12 +5,12 @@ import { formatDate } from '@components/utils';
  */
 export function DateRenderer({ startDate, endDate }: { startDate: string, endDate?: string }) {
     if (!startDate) return;
-    const formattedStartDate = formatDate(startDate);
+    const formattedStartDate = formatDate(startDate, true);
 
     if (!endDate) {
         return `- ${formattedStartDate}`
     }
-    const formattedEndDate = formatDate(endDate);
+    const formattedEndDate = formatDate(endDate, true);
 
     const experienceDate = startDate === '' ? '' : `${formattedStartDate} - ${formattedEndDate}`;
 
