@@ -13,6 +13,6 @@ export type Highlight = Database['public']['Tables']['highlights']['Row'];
 export type WorkExperience = Database['public']['Tables']['work_experience']['Row'] & { highlights?: Highlight[] };
 export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experience']['Insert'];
 
-export type Education = Database['public']['Tables']['education']['Row'];
+export type Education = Database['public']['Tables']['education']['Row'] & { highlights?: Highlight[] };
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];

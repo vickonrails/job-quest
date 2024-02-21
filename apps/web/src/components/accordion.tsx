@@ -25,9 +25,9 @@ export function AccordionItem({ header, children, ...rest }: AccordionItemProps)
     )
 }
 
-export function Accordion({ children, type = 'single', collapsible = true, ...rest }: RadixAccordion.AccordionSingleProps) {
+export function Accordion({ children, ...rest }: RadixAccordion.AccordionMultipleProps | RadixAccordion.AccordionSingleProps) {
     return (
-        <Root type={type} collapsible={collapsible} {...rest}>
+        <Root {...rest}>
             {children}
         </Root>
     )

@@ -2,16 +2,18 @@ import { Accordion, AccordionItem } from '@components/accordion'
 import { Checkbox } from '@components/checkbox'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
-import { type Education } from '@lib/types'
-import { Trash2 } from 'lucide-react'
-import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input } from 'ui'
+import { type Education, type Highlight } from '@lib/types'
+import { type Dispatch, type SetStateAction } from 'react'
+import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
+import { HighlightFooter } from '../components/highlights-footer'
 
 interface EducationFormProps {
     form: UseFormReturn<{ education: Education[] }, 'education'>
     fields: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>[],
     onDeleteClick: (education: Education, index: number) => void
+    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Header ------------------ */
@@ -33,21 +35,22 @@ function Header({ form, index }: { form: UseFormReturn<{ education: Education[] 
     )
 }
 
-export function EducationForm({ form, onDeleteClick, fields }: EducationFormProps) {
+export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete }: EducationFormProps) {
     return (
-        <Accordion type="single" collapsible>
+        <Accordion type="multiple" defaultValue={[fields[0]?.id ?? '']}>
             {fields.map((field, index) => (
                 <AccordionItem
                     header={<Header form={form} index={index} />}
-                    value={field._id}
-                    key={field._id}
-                    className="border bg-white mb-2"
+                    value={field.id}
+                    key={field.id}
+                    className="border bg-white mb-3 rounded-sm"
                 >
                     <FormItem
                         form={form}
                         index={index}
                         onDeleteClick={onDeleteClick}
                         field={field}
+                        setHighlightsToDelete={setHighlightsToDelete}
                     />
                 </AccordionItem>
 
@@ -61,9 +64,10 @@ interface FormItemProps {
     index: number,
     field: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>,
     onDeleteClick: (education: Education, index: number) => void
+    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-function FormItem({ form, index, field, onDeleteClick }: FormItemProps) {
+function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete }: FormItemProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.education?.[index] ?? {}
 
@@ -72,6 +76,7 @@ function FormItem({ form, index, field, onDeleteClick }: FormItemProps) {
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                 <input type="hidden" {...register(`education.${index}.id`)} />
                 <Input
+                    autoFocus
                     label="Institution"
                     placeholder="Institution of study..."
                     hint={<ErrorHint>{fieldErrs.institution?.message}</ErrorHint>}
@@ -126,7 +131,15 @@ function FormItem({ form, index, field, onDeleteClick }: FormItemProps) {
                 )}
             </section>
 
-            <div className="flex justify-end gap-2">
+            <EducationHighlights
+                form={form}
+                index={index}
+                entity={field}
+                onDeleteClick={() => onDeleteClick(field, index)}
+                setHighlightsToDelete={setHighlightsToDelete}
+            />
+
+            {/* <div className="flex justify-end gap-2">
                 <Button
                     size="sm"
                     className="text-red-400 flex items-center gap-1"
@@ -137,7 +150,59 @@ function FormItem({ form, index, field, onDeleteClick }: FormItemProps) {
                     <Trash2 size={18} />
                     <span>Remove Block</span>
                 </Button>
-            </div>
+            </div> */}
         </div>
     )
 }
+
+interface HighlightsProps {
+    form: UseFormReturn<{ education: Education[] }>
+    index: number,
+    onDeleteClick: () => void
+    entity: Education
+    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
+}
+
+export function EducationHighlights({ form, index, onDeleteClick, entity, setHighlightsToDelete }: HighlightsProps) {
+    const { fields, remove, append } = useFieldArray({ name: `education.${index}.highlights`, control: form.control, keyName: '_id' })
+
+    const handleRemove = (idx: number) => {
+        const highlight = fields[idx]
+        if (highlight?.id) {
+            setHighlightsToDelete?.((prev) => [...prev, highlight.id])
+        }
+        remove(idx)
+    }
+
+    return (
+        <>
+            <section className="mb-4">
+                {fields.map((field, idx) => (
+                    <section key={field._id} className="mb-2 flex flex-col items-end">
+                        <Textarea
+                            placeholder="A summary of what you did in this role"
+                            label={idx === 0 ? 'Highlights' : ''}
+                            containerClasses="w-full mb-1"
+                            rows={2}
+                            {...form.register(`education.${index}.highlights.${idx}.text`)}
+                        />
+                        <button className="text-xs" onClick={() => handleRemove(idx)}>Remove</button>
+                    </section>
+                ))}
+            </section>
+
+            <HighlightFooter
+                onDeleteClick={onDeleteClick}
+                addHighlight={() => append(getDefaultEntity(entity.id))}
+            />
+        </>
+    )
+}
+
+function getDefaultEntity(id: string): Highlight {
+    return {
+        text: '',
+        education_id: id,
+        type: 'education'
+    } as unknown as Highlight
+} 

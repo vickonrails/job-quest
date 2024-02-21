@@ -6,7 +6,7 @@ import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'
 import { createRef, useEffect, useState, type ChangeEvent } from 'react'
 import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Button, Input } from 'ui'
+import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 
 interface ProjectsFieldsProps {
@@ -39,12 +39,12 @@ function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 
 
 export function ProjectForm({ form, fields, onDeleteClick }: ProjectsFieldsProps) {
     return (
-        <Accordion type="single" collapsible>
+        <Accordion type="multiple" defaultValue={[fields[0]?.id ?? '']}>
             {fields.map((field, index) => (
                 <AccordionItem
                     header={<Header form={form} index={index} />}
                     key={field._id}
-                    value={field._id}
+                    value={field.id}
                     className="border bg-white mb-2"
                 >
                     <FormItem
@@ -74,6 +74,7 @@ function FormItem({ form, field, index, onDeleteClick }: FormItemProps) {
         <div className="p-4 pt-0">
             <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                 <Input
+                    autoFocus
                     label="Project Title..."
                     placeholder="Title"
                     hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
@@ -97,6 +98,14 @@ function FormItem({ form, field, index, onDeleteClick }: FormItemProps) {
                     label="End Date"
                     placeholder="End Date..."
                     {...register(`projects.${index}.end_date`)}
+                />
+
+                <Textarea
+                    label="Description"
+                    containerClasses="col-span-2 w-full"
+                    // className='col-span-2 w-full'
+                    placeholder="A brief description of the project..."
+                    {...register(`projects.${index}.description`)}
                 />
             </section>
 

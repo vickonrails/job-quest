@@ -17,7 +17,7 @@ export function EducationStep() {
     const queryClient = useQueryClient()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { form, education, fieldsArr, updateEducation } = useEducation();
+    const { form, education, fieldsArr, updateEducation, setHighlightsToDelete } = useEducation();
     const { formState } = form
     const { fields, remove, append } = fieldsArr
     const {
@@ -33,6 +33,7 @@ export function EducationStep() {
 
     const onSubmit = async (values: { education: Education[] }) => {
         try {
+            await form.trigger('education')
             await updateEducation.mutateAsync({ values: values.education });
         } catch (error) {
             toast({
@@ -66,6 +67,7 @@ export function EducationStep() {
 
     return (
         <>
+            {JSON.stringify(form.getValues())}
             <StepContainer
                 data-testid="education"
                 title="Education"
@@ -76,6 +78,7 @@ export function EducationStep() {
                         form={form}
                         fields={fields}
                         onDeleteClick={handleDeleteClick}
+                        setHighlightsToDelete={setHighlightsToDelete}
                     />
                     <SectionFooter
                         saveDisabled={fields.length === 0}

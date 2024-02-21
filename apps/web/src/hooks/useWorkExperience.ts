@@ -1,3 +1,4 @@
+import { setEntityId } from '@components/utils';
 import { type Database } from '@lib/database.types';
 import { type Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
@@ -7,11 +8,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { fetchWorkExperience } from 'src/pages/profile/setup';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
-
-function setEntityId<T extends { id: string }>(entity: T): T {
-    if (entity && !entity.id) entity.id = uuid();
-    return entity
-}
 
 export function useWorkExperience() {
     const client = useSupabaseClient<Database>()

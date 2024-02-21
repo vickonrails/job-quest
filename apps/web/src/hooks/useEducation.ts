@@ -1,8 +1,9 @@
+import { setEntityId } from '@components/utils';
 import { type Database } from '@lib/database.types';
-import { type Education } from '@lib/types';
+import { type Highlight, type Education } from '@lib/types';
 import { useSession, useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
@@ -14,8 +15,11 @@ export function useEducation() {
     const session = useSession();
     const queryResult = useQuery(['education'], () => fetchEducation({ userId: session?.user.id, client }));
     const form = useForm<{ education: Education[] }>({
-        defaultValues: { education: queryResult.data?.length ? queryResult.data : [getDefaultEducation()] }
+        defaultValues: { education: queryResult.data?.length ? queryResult.data : [getDefaultEducation()] },
+        shouldUnregister: false
     })
+
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
     const fieldsArr = useFieldArray({
         name: 'education',
@@ -27,19 +31,38 @@ export function useEducation() {
     const updateEducation = useMutation({
         mutationFn: async ({ values }: { values: Education[] }) => {
             if (!session) return
-            const preparedValues = values.map(education => {
-                if (!education.id) {
-                    education.id = uuid()
-                }
-                if ((education.still_studying_here && education.end_date) || !education.end_date) {
-                    education.end_date = null
-                }
-                return education
-            })
-            const { data, error } = await client.from('education').upsert(preparedValues).select('*');
-            if (error) throw error;
 
-            return data;
+            try {
+                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+                if (result.error) throw new Error(result.error.message)
+
+                const highlights = values.map(work => work.highlights).flat().filter(x => x?.education_id) as Highlight[]
+                const preparedHighlights = highlights.map(highlight => setEntityId<Highlight>(highlight))
+
+                const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+                if (highlightsError) throw new Error(highlightsError.message);
+
+                const preparedValues = values.map(education => {
+                    if (!education.id) {
+                        education.id = uuid()
+                    }
+
+                    if (education.highlights) {
+                        delete education.highlights
+                    }
+
+                    if ((education.still_studying_here && education.end_date) || !education.end_date) {
+                        education.end_date = null
+                    }
+                    return education
+                })
+                const { data, error } = await client.from('education').upsert(preparedValues).select('*');
+                if (error) throw error;
+
+                return data;
+            } catch (error) {
+                throw error
+            }
         },
         onSuccess: (data) => {
             next();
@@ -57,7 +80,8 @@ export function useEducation() {
         education: queryResult,
         form,
         fieldsArr,
-        updateEducation
+        updateEducation,
+        setHighlightsToDelete
     }
 }
 
@@ -80,10 +104,12 @@ export function getDefaultEducation() {
     const education = {
         degree: '',
         field_of_study: '',
+        id: uuid(),
         institution: '',
         location: '',
         end_date: '',
-        start_date: ''
+        start_date: '',
+        highlights: [],
     } as unknown as Education;
 
     return education
@@ -92,5 +118,5 @@ export function getDefaultEducation() {
 export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('education').select('*').filter('resume_id', 'is', null)).data;
+    return (await client.from('education').select('*, highlights ( * )').filter('resume_id', 'is', null)).data;
 }

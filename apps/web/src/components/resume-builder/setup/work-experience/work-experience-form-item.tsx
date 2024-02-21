@@ -19,12 +19,12 @@ interface WorkExperienceFormProps {
 /** ------------------ Work Experience Form ------------------ */
 export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete }: WorkExperienceFormProps) {
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?._id}>
+        <Accordion type="multiple" defaultValue={[fields[0]?.id ?? '']}>
             {fields.map((field, index) => (
                 <AccordionItem
                     header={<Header form={form} index={index} />}
-                    value={field._id}
-                    key={field._id}
+                    value={field.id}
+                    key={field.id}
                     className="border bg-white mb-2"
                 >
                     <FormItem
