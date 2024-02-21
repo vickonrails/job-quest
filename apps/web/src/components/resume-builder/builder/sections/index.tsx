@@ -31,6 +31,11 @@ export function ResumeForm({ session }: { session: Session }) {
                 experience.resume_id = resume.id;
                 experience.id = uuid();
             }
+
+            if (experience.highlights) {
+                delete experience.highlights;
+            }
+
             if ((experience.still_working_here && experience.end_date) || !experience.end_date) {
                 experience.end_date = null
             }
@@ -46,9 +51,14 @@ export function ResumeForm({ session }: { session: Session }) {
         })
 
         const preparedEducation = education.map((education) => {
+            // TODO: check for education.created_at instead
+            education.resume_id = resume.id;
+
             if (!education.id) {
-                education.resume_id = resume.id;
                 education.id = uuid();
+            }
+            if (education.highlights) {
+                delete education.highlights
             }
             if ((education.still_studying_here && education.end_date) || !education.end_date) {
                 education.end_date = null

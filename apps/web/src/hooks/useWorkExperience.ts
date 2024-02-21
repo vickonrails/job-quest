@@ -100,6 +100,7 @@ export async function deleteExperience(id: string, client: SupabaseClient<Databa
  */
 export function getDefaultExperience() {
     const experience = {
+        id: uuid(),
         company_name: '',
         job_title: '',
         location: '',

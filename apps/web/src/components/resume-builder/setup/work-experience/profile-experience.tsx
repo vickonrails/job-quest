@@ -79,7 +79,7 @@ export function WorkExperience() {
                         onHighlightDelete={setHighlightsToDelete}
                     />
                     <SectionFooter
-                        saveDisabled={fields.length <= 0}
+                        saveDisabled={fields.length <= 0 || !form.formState.isValid}
                         isSubmitting={form.formState.isSubmitting}
                         onAppendClick={() => append(getDefaultExperience())}
                     />

@@ -37,24 +37,17 @@ function Header({ form, index }: { form: UseFormReturn<{ education: Education[] 
 
 export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete }: EducationFormProps) {
     return (
-        <Accordion type="multiple" defaultValue={[fields[0]?.id ?? '']}>
-            {fields.map((field, index) => (
-                <AccordionItem
-                    header={<Header form={form} index={index} />}
-                    value={field.id}
+        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+            {fields.map((field, index) =>
+                <FormItem
+                    form={form}
+                    field={field}
+                    index={index}
                     key={field.id}
-                    className="border bg-white mb-3 rounded-sm"
-                >
-                    <FormItem
-                        form={form}
-                        index={index}
-                        onDeleteClick={onDeleteClick}
-                        field={field}
-                        setHighlightsToDelete={setHighlightsToDelete}
-                    />
-                </AccordionItem>
-
-            ))}
+                    onDeleteClick={onDeleteClick}
+                    setHighlightsToDelete={setHighlightsToDelete}
+                />
+            )}
         </Accordion>
     )
 }
@@ -72,86 +65,80 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete }: 
     const fieldErrs = errors?.education?.[index] ?? {}
 
     return (
-        <div className="p-4 pt-0">
-            <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
-                <input type="hidden" {...register(`education.${index}.id`)} />
-                <Input
-                    autoFocus
-                    label="Institution"
-                    placeholder="Institution of study..."
-                    hint={<ErrorHint>{fieldErrs.institution?.message}</ErrorHint>}
-                    {...register(`education.${index}.institution`, { required: { message: 'Institution is required', value: true } })}
-                />
-                <Input
-                    label="Field of Study"
-                    placeholder="Field of study..."
-                    hint={<ErrorHint>{fieldErrs.field_of_study?.message}</ErrorHint>}
-                    {...register(`education.${index}.field_of_study`, { required: { message: 'Field of Study is required', value: true } })}
-                />
-                <Input
-                    label="Degree of Study"
-                    placeholder="Degree..."
-                    hint={<ErrorHint>{fieldErrs.degree?.message}</ErrorHint>}
-                    {...register(`education.${index}.degree`, { required: { message: 'Degree is required', value: true } })}
-                />
-                <Input
-                    label="Location"
-                    placeholder="Location..."
-                    {...register(`education.${index}.location`)}
-                />
-                <Input
-                    type="date"
-                    label="Start Date"
-                    placeholder="Start Date..."
-                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
-                    {...register(`education.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
-                />
-                <Controller
-                    name={`education.${index}.still_studying_here`}
-                    control={form.control}
-                    render={({ field: item }) => (
-                        <Checkbox
-                            label="I'm Still Studying Here?"
-                            checked={item.value ?? false}
-                            onCheckedChange={val => item.onChange(val)}
-                            className="mt-6"
-                        />
-                    )}
-                />
-
-                {!field.still_studying_here && (
+        <AccordionItem
+            header={<Header form={form} index={index} />}
+            value={field.id}
+            key={field.id}
+            className="border bg-white mb-3 rounded-sm"
+        >
+            <div className="p-4 pt-0">
+                <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
+                    <input type="hidden" {...register(`education.${index}.id`)} />
+                    <Input
+                        autoFocus
+                        label="Institution"
+                        placeholder="Institution of study..."
+                        hint={<ErrorHint>{fieldErrs.institution?.message}</ErrorHint>}
+                        {...register(`education.${index}.institution`, { required: { message: 'Institution is required', value: true } })}
+                    />
+                    <Input
+                        label="Field of Study"
+                        placeholder="Field of study..."
+                        hint={<ErrorHint>{fieldErrs.field_of_study?.message}</ErrorHint>}
+                        {...register(`education.${index}.field_of_study`, { required: { message: 'Field of Study is required', value: true } })}
+                    />
+                    <Input
+                        label="Degree of Study"
+                        placeholder="Degree..."
+                        hint={<ErrorHint>{fieldErrs.degree?.message}</ErrorHint>}
+                        {...register(`education.${index}.degree`, { required: { message: 'Degree is required', value: true } })}
+                    />
+                    <Input
+                        label="Location"
+                        placeholder="Location..."
+                        {...register(`education.${index}.location`)}
+                    />
                     <Input
                         type="date"
-                        label="End Date"
-                        placeholder="End Date..."
-                        hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
-                        disabled={Boolean(field.still_studying_here)}
-                        {...register(`education.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
+                        label="Start Date"
+                        placeholder="Start Date..."
+                        hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                        {...register(`education.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
                     />
-                )}
-            </section>
+                    <Controller
+                        name={`education.${index}.still_studying_here`}
+                        control={form.control}
+                        render={({ field: item }) => (
+                            <Checkbox
+                                label="I'm Still Studying Here?"
+                                checked={item.value ?? false}
+                                onCheckedChange={val => item.onChange(val)}
+                                className="mt-6"
+                            />
+                        )}
+                    />
 
-            <EducationHighlights
-                form={form}
-                index={index}
-                entity={field}
-                onDeleteClick={() => onDeleteClick(field, index)}
-                setHighlightsToDelete={setHighlightsToDelete}
-            />
+                    {!field.still_studying_here && (
+                        <Input
+                            type="date"
+                            label="End Date"
+                            placeholder="End Date..."
+                            hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                            disabled={Boolean(field.still_studying_here)}
+                            {...register(`education.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
+                        />
+                    )}
+                </section>
 
-            {/* <div className="flex justify-end gap-2">
-                <Button
-                    size="sm"
-                    className="text-red-400 flex items-center gap-1"
-                    type="button"
-                    variant="outline"
-                    onClick={() => onDeleteClick(field, index)}
-                >
-                    <Trash2 size={18} />
-                    <span>Remove Block</span>
-                </Button>
-            </div> */}
-        </div>
+                <EducationHighlights
+                    form={form}
+                    index={index}
+                    entity={field}
+                    onDeleteClick={() => onDeleteClick(field, index)}
+                    setHighlightsToDelete={setHighlightsToDelete}
+                />
+            </div>
+        </AccordionItem>
     )
 }
 

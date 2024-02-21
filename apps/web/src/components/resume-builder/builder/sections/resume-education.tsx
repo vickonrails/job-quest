@@ -1,3 +1,4 @@
+import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
 import { formatDate } from '@components/utils';
@@ -6,18 +7,12 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import { AddSectionBtn } from '.';
-import { deleteEducation } from 'src/hooks/useEducation';
-import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { AlertDialog } from '@components/alert-dialog';
 import { useState } from 'react';
-import { copyObject } from '@utils/copy-object';
-
-const defaultEducation = {
-    field_of_study: 'Untitled...',
-    institution: 'Untitled...',
-} as Education
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
+import { v4 as uuid } from 'uuid';
+import { AddSectionBtn } from '.';
 
 /**
  * Education section in resume builder
@@ -88,7 +83,7 @@ export function EducationSection({ session }: { session: Session }) {
                     const { institution, field_of_study, id, start_date, end_date } = education
                     const endDate = end_date ? formatDate(end_date) : 'Now'
                     return (
-                        <MenuItem className="py-2" key={id} onClick={() => append(copyObject(education, ['id']))}>
+                        <MenuItem className="py-2" key={id} onClick={() => append({ ...education, id: uuid() })}>
                             <p className="font-medium">{institution} - {field_of_study}</p>
                             <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
                         </MenuItem>
@@ -98,7 +93,7 @@ export function EducationSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(defaultEducation)}
+                    onClick={() => append(getDefaultEducation())}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>

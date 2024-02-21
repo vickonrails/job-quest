@@ -24,7 +24,7 @@ function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 
     return (
         <header className="flex items-start justify-between group cursor-pointer hover:text-primary w-full p-4">
             <div>
-                <p className="flex gap-2 select-none font-medium">{title}</p>
+                <p className="flex gap-2 select-none font-medium">{title || 'Untitled...'}</p>
                 {start_date && (
                     <span className="text-sm text-muted-foreground">
                         {formatDate(start_date)}
@@ -39,23 +39,17 @@ function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 
 
 export function ProjectForm({ form, fields, onDeleteClick }: ProjectsFieldsProps) {
     return (
-        <Accordion type="multiple" defaultValue={[fields[0]?.id ?? '']}>
+        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
             {fields.map((field, index) => (
-                <AccordionItem
-                    header={<Header form={form} index={index} />}
-                    key={field._id}
-                    value={field.id}
-                    className="border bg-white mb-2"
-                >
-                    <FormItem
-                        form={form}
-                        onDeleteClick={onDeleteClick}
-                        field={field}
-                        index={index}
-                    />
-                </AccordionItem>
+                <FormItem
+                    key={field.id}
+                    form={form}
+                    onDeleteClick={onDeleteClick}
+                    field={field}
+                    index={index}
+                />
             ))}
-        </Accordion>
+        </Accordion >
     )
 }
 
@@ -71,59 +65,66 @@ function FormItem({ form, field, index, onDeleteClick }: FormItemProps) {
     const fieldErrs = errors?.projects?.[index] ?? {}
 
     return (
-        <div className="p-4 pt-0">
-            <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
-                <Input
-                    autoFocus
-                    label="Project Title..."
-                    placeholder="Title"
-                    hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
-                    {...register(`projects.${index}.title`, { required: { message: 'Project title is required', value: true } })}
-                />
-                <Input
-                    label="URL"
-                    type="url"
-                    placeholder="Link to Demo..."
-                    hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
-                    {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
-                />
-                <Input
-                    type="date"
-                    label="Start Date"
-                    placeholder="Start Date..."
-                    {...register(`projects.${index}.start_date`)}
-                />
-                <Input
-                    type="date"
-                    label="End Date"
-                    placeholder="End Date..."
-                    {...register(`projects.${index}.end_date`)}
-                />
+        <AccordionItem
+            header={<Header form={form} index={index} />}
+            key={field._id}
+            value={field.id}
+            className="border bg-white mb-2"
+        >
+            <div className="p-4 pt-0">
+                <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
+                    <Input
+                        autoFocus
+                        label="Project Title..."
+                        placeholder="Title"
+                        hint={<ErrorHint>{fieldErrs.title?.message}</ErrorHint>}
+                        {...register(`projects.${index}.title`, { required: { message: 'Project title is required', value: true } })}
+                    />
+                    <Input
+                        label="URL"
+                        type="url"
+                        placeholder="Link to Demo..."
+                        hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
+                        {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
+                    />
+                    <Input
+                        type="date"
+                        label="Start Date"
+                        placeholder="Start Date..."
+                        {...register(`projects.${index}.start_date`)}
+                    />
+                    <Input
+                        type="date"
+                        label="End Date"
+                        placeholder="End Date..."
+                        {...register(`projects.${index}.end_date`)}
+                    />
 
-                <Textarea
-                    label="Description"
-                    containerClasses="col-span-2 w-full"
-                    // className='col-span-2 w-full'
-                    placeholder="A brief description of the project..."
-                    {...register(`projects.${index}.description`)}
-                />
-            </section>
+                    <Textarea
+                        label="Description"
+                        containerClasses="col-span-2 w-full"
+                        // className='col-span-2 w-full'
+                        placeholder="A brief description of the project..."
+                        {...register(`projects.${index}.description`)}
+                    />
+                </section>
 
-            <ProjectSkills index={index} form={form} />
+                <ProjectSkills index={index} form={form} />
 
-            <div className="flex justify-end gap-2">
-                <Button
-                    size="sm"
-                    className="text-red-400 flex items-center gap-1"
-                    type="button"
-                    variant="outline"
-                    onClick={() => onDeleteClick(field, index)}
-                >
-                    <Trash2 size={18} />
-                    <span>Remove Block</span>
-                </Button>
+                <div className="flex justify-end gap-2">
+                    <Button
+                        size="sm"
+                        className="text-red-400 flex items-center gap-1"
+                        type="button"
+                        variant="outline"
+                        onClick={() => onDeleteClick(field, index)}
+                    >
+                        <Trash2 size={18} />
+                        <span>Remove Block</span>
+                    </Button>
+                </div>
             </div>
-        </div>
+        </AccordionItem>
     )
 }
 

@@ -105,6 +105,7 @@ function SkillsForm({ form }: { form: UseFormReturn<Profile> }) {
             <Input
                 label="Relevant Skills (Press Enter to add)"
                 className="mb-4"
+                autoFocus
                 value={skillValue}
                 onChange={ev => setSkillValue(ev.target.value)}
                 placeholder="Press Enter to add skill"

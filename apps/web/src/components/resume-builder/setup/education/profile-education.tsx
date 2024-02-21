@@ -67,7 +67,6 @@ export function EducationStep() {
 
     return (
         <>
-            {JSON.stringify(form.getValues())}
             <StepContainer
                 data-testid="education"
                 title="Education"
@@ -81,7 +80,7 @@ export function EducationStep() {
                         setHighlightsToDelete={setHighlightsToDelete}
                     />
                     <SectionFooter
-                        saveDisabled={fields.length === 0}
+                        saveDisabled={fields.length === 0 || !form.formState.isValid}
                         isSubmitting={formState.isSubmitting}
                         onAppendClick={() => append(getDefaultEducation())}
                     />
