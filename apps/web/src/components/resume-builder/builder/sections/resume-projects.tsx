@@ -1,3 +1,4 @@
+import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { ProjectForm } from '@components/resume-builder/setup/projects/project-form-item';
 import { formatDate } from '@components/utils';
@@ -5,17 +6,12 @@ import { type Database } from '@lib/database.types';
 import { type Project } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import { AddSectionBtn } from '.';
-import { copyObject } from '@utils/copy-object';
 import { useState } from 'react';
-import { deleteProject } from 'src/hooks/useProjects';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { AlertDialog } from '@components/alert-dialog';
-
-const defaultProjects = {
-    title: 'Untitled...'
-} as Project
+import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
+import { v4 as uuid } from 'uuid';
+import { AddSectionBtn } from '.';
 
 /**
  * Projects section in resume builder
@@ -79,11 +75,11 @@ export function ProjectsSection({ session }: { session: Session }) {
                 )}
                 onClick={e => e.stopPropagation()}
             >
-                {projectTemplates?.map((education) => {
-                    const { title, id, start_date, end_date } = education
+                {projectTemplates?.map((project) => {
+                    const { title, id, start_date, end_date } = project
                     const endDate = end_date ? formatDate(end_date) : 'Now'
                     return (
-                        <MenuItem className="py-2" key={id} onClick={() => append(copyObject(education, ['id']))}>
+                        <MenuItem className="py-2" key={id} onClick={() => append({ ...project, id: uuid() })}>
                             <p className="font-medium">{title}</p>
                             {start_date && <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>}
                         </MenuItem>
@@ -93,7 +89,7 @@ export function ProjectsSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(defaultProjects)}
+                    onClick={() => append(getDefaultProject())}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>

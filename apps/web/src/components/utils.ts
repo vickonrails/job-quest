@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid'
-
 /** type for size (input|buttons) */
 export type Size = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -54,9 +52,4 @@ export function djb2Hash(str: string, arrayLength: number) {
         hash = (hash * 33) ^ str.charCodeAt(i);
     }
     return Math.abs(hash) % arrayLength;
-}
-
-export function setEntityId<T extends { id: string }>(entity: T): T {
-    if (entity && !entity.id) entity.id = uuid();
-    return entity
 }

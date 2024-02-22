@@ -89,8 +89,7 @@ export function getDefaultProject() {
         description: '',
         start_date: '',
         end_date: '',
-        skills: [],
-        highlights: '',
+        skills: []
     } as unknown as Project
 
     return experience

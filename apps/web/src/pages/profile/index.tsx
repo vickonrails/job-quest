@@ -13,7 +13,6 @@ export default function Profile({ session, profile }: PageProps) {
             profile={profile}
             containerClasses="p-6"
         >
-            {JSON.stringify(profile)}
             <div>
                 <Link href="/profile/setup">Setup</Link>
             </div>

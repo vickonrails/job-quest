@@ -6,17 +6,12 @@ import { type Database } from '@lib/database.types';
 import { type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { copyObject } from '@utils/copy-object';
 import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { deleteExperience } from 'src/hooks/useWorkExperience';
+import { deleteExperience, getDefaultExperience } from 'src/hooks/useWorkExperience';
+import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
-
-const defaultWorkExperience = {
-    company_name: '',
-    job_title: '',
-} as WorkExperience
 
 /**
  * Work Experience section in resume builder
@@ -30,7 +25,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         queryKey: ['workExperienceTemplate'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('work_experience').select().filter('resume_id', 'is', null)
+            const { data, error } = await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }
@@ -47,13 +42,6 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     });
 
     const handleDeleteClick = (experience: WorkExperience, idx: number) => {
-        // if it already has an id, show a prompt to confirm deletion
-        // if not, just remove from the array
-
-        if (!experience.id) {
-            remove(idx);
-            return;
-        }
         setRemoveIdx(idx);
         if (!experience.id) return
         showDeleteDialog({ ...experience, id: experience.id });
@@ -83,8 +71,9 @@ export function WorkExperienceSection({ session }: { session: Session }) {
                 onClick={e => e.stopPropagation()}
             >
                 {templateWorkExperience?.map((experience) => {
+                    const newWorkExperience = generateNewExperience(experience)
                     return (
-                        <MenuItem className="py-2" key={experience.id} onClick={() => append(copyObject(experience, ['id']))}>
+                        <MenuItem className="py-2" key={experience.id} onClick={() => append(newWorkExperience)}>
                             {experience.job_title}
                             <p className="text-sm text-muted-foreground flex gap-1">
                                 <span>{experience.company_name}</span>
@@ -97,7 +86,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(defaultWorkExperience)}
+                    onClick={() => append(getDefaultExperience())}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>
@@ -115,4 +104,15 @@ export function WorkExperienceSection({ session }: { session: Session }) {
             />
         </section >
     )
+}
+
+function generateNewExperience(experience: WorkExperience): WorkExperience {
+    const id = uuid();
+    const highlights = experience.highlights?.map(x => {
+        x.id = uuid()
+        x.work_experience_id = id
+        return x
+    }).filter(x => x)
+
+    return { ...experience, id, highlights }
 }

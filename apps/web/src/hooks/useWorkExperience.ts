@@ -1,4 +1,3 @@
-import { setEntityId } from '@components/utils';
 import { type Database } from '@lib/database.types';
 import { type Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
@@ -8,6 +7,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { fetchWorkExperience } from 'src/pages/profile/setup';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
+import { setEntityId } from '@utils/set-entity-id';
 
 export function useWorkExperience() {
     const client = useSupabaseClient<Database>()
@@ -29,24 +29,16 @@ export function useWorkExperience() {
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
             if (!session) return
+            const highlights: Highlight[] = []
 
-            // first delete the highlights marked for delete
             try {
-                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
-                if (result.error) throw new Error(result.error.message)
-
-                const highlights = values.map(work => work.highlights).flat().filter(x => x?.work_experience_id) as Highlight[]
-                const preparedHighlights = highlights.map(highlight => setEntityId<Highlight>(highlight))
-
-                const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
-                if (highlightsError) throw new Error(highlightsError.message);
-
                 const preparedValues = values.map(work => {
                     if (!work.id) {
                         work.id = uuid()
                     }
 
                     if (work.highlights) {
+                        highlights.push(...work.highlights)
                         delete work.highlights
                     }
 
@@ -58,6 +50,17 @@ export function useWorkExperience() {
 
                 const { data, error } = await client.from('work_experience').upsert(preparedValues).select();
                 if (error) throw new Error(error.message)
+
+                if (highlightsToDelete.length > 0) {
+                    const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+                    if (result.error) throw new Error(result.error.message)
+                }
+
+                const preparedHighlights = highlights.filter(x => x.work_experience_id).map(highlight => setEntityId<Highlight>(highlight))
+
+                const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+                if (highlightsError) throw new Error(highlightsError.message);
+
                 return data
             } catch (error) {
                 throw error
@@ -99,12 +102,13 @@ export async function deleteExperience(id: string, client: SupabaseClient<Databa
  * @returns default experience object
  */
 export function getDefaultExperience() {
+    const id = uuid()
     const experience = {
-        id: uuid(),
+        id,
         company_name: '',
         job_title: '',
         location: '',
-        highlights: [{}],
+        highlights: [{ work_experience_id: id }],
     } as unknown as WorkExperience
 
     return experience

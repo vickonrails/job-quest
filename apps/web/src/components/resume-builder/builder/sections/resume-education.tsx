@@ -26,11 +26,12 @@ export function EducationSection({ session }: { session: Session }) {
         queryKey: ['educationTemplates'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('education').select().filter('resume_id', 'is', null)
+            const { data, error } = await client.from('education').select('*, highlights ( * )').filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }
     })
+
     const {
         showDeleteDialog,
         onCancel,
@@ -42,14 +43,8 @@ export function EducationSection({ session }: { session: Session }) {
         onDelete: async (id: string) => { await deleteEducation(id, client) }
     });
 
+    // TODO: do I need to show the modal for unsaved items?
     const handleDeleteClick = (education: Education, idx: number) => {
-        // if it already has an id, show a prompt to confirm deletion
-        // if not, just remove from the array
-
-        if (!education.id) {
-            remove(idx);
-            return;
-        }
         setRemoveIdx(idx);
         if (!education.id) return
         showDeleteDialog({ ...education, id: education.id });
@@ -82,8 +77,10 @@ export function EducationSection({ session }: { session: Session }) {
                 {educationTemplates?.map((education) => {
                     const { institution, field_of_study, id, start_date, end_date } = education
                     const endDate = end_date ? formatDate(end_date) : 'Now'
+
+                    const newWorkExperience = generateNewExperience(education)
                     return (
-                        <MenuItem className="py-2" key={id} onClick={() => append({ ...education, id: uuid() })}>
+                        <MenuItem className="py-2" key={id} onClick={() => append(newWorkExperience)}>
                             <p className="font-medium">{institution} - {field_of_study}</p>
                             <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
                         </MenuItem>
@@ -112,4 +109,15 @@ export function EducationSection({ session }: { session: Session }) {
         </section>
     )
 
+}
+
+function generateNewExperience(education: Education): Education {
+    const id = uuid();
+    const highlights = education.highlights?.map(x => {
+        x.id = uuid()
+        x.education_id = id
+        return x
+    }).filter(x => x)
+
+    return { ...education, id, highlights }
 }
