@@ -13,7 +13,7 @@ interface WorkExperienceFormProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
     fields: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>[],
     onDeleteClick: (experience: WorkExperience, index: number) => void
-    onHighlightDelete?: Dispatch<SetStateAction<string[]>>
+    onHighlightDelete: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Form ------------------ */

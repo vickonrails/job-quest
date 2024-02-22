@@ -23,6 +23,7 @@ export function ResumeForm({ session }: { session: Session }) {
     const { formState } = form
     const { toast } = useToast()
     const formRef = createRef<HTMLFormElement>()
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
     useEffect(() => {
         const form = formRef.current;
@@ -98,7 +99,13 @@ export function ResumeForm({ session }: { session: Session }) {
         const hasErrors = promiseResult.some((res) => res.error)
 
         if (!hasErrors) {
-            const preparedHighlights = highlights.map(highlight => setEntityId<Highlight>(highlight, { overwrite: true }))
+
+            if (highlightsToDelete.length > 0) {
+                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+                if (result.error) throw new Error(result.error.message)
+            }
+
+            const preparedHighlights = highlights.filter(x => !highlightsToDelete.includes(x.id)).map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
             const { error } = await client.from('highlights').upsert(preparedHighlights).select();
             if (error) throw new Error(error.message);
             toast({
@@ -130,9 +137,9 @@ export function ResumeForm({ session }: { session: Session }) {
 
                 {/* TODO: use context to avoid passing session to every component */}
                 <BasicInfoSection />
-                <WorkExperienceSection session={session} />
+                <WorkExperienceSection session={session} onHighlightDelete={setHighlightsToDelete} />
                 <ProjectsSection session={session} />
-                <EducationSection session={session} />
+                <EducationSection session={session} onHighlightDelete={setHighlightsToDelete} />
                 <Skills />
                 <Button loading={formState.isSubmitting} type="submit" className="flex items-center gap-1">
                     <Save size={18} />

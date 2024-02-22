@@ -6,7 +6,7 @@ import { type Database } from '@lib/database.types';
 import { type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteExperience, getDefaultExperience } from 'src/hooks/useWorkExperience';
@@ -16,7 +16,7 @@ import { AddSectionBtn } from '.';
 /**
  * Work Experience section in resume builder
  */
-export function WorkExperienceSection({ session }: { session: Session }) {
+export function WorkExperienceSection({ session, onHighlightDelete }: { session: Session, onHighlightDelete: Dispatch<SetStateAction<string[]>> }) {
     const client = useSupabaseClient<Database>()
     const form = useFormContext<{ workExperience: WorkExperience[] }>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
@@ -58,7 +58,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Work Experience</h3>
             <p className="mb-4 text-sm text-muted-foreground">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.</p>
-            <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
+            <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={onHighlightDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}

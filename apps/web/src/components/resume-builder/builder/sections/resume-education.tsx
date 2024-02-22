@@ -7,7 +7,7 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
@@ -17,7 +17,7 @@ import { AddSectionBtn } from '.';
 /**
  * Education section in resume builder
  */
-export function EducationSection({ session }: { session: Session }) {
+export function EducationSection({ session, onHighlightDelete }: { session: Session, onHighlightDelete: Dispatch<SetStateAction<string[]>> }) {
     const form = useFormContext<{ education: Education[] }>();
     const client = useSupabaseClient<Database>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
@@ -62,7 +62,7 @@ export function EducationSection({ session }: { session: Session }) {
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
 
-            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
+            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={onHighlightDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}
