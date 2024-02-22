@@ -104,15 +104,16 @@ export async function deleteEducation(id: string, client: SupabaseClient<Databas
  * @returns default education object
  */
 export function getDefaultEducation() {
+    const id = uuid()
     const education = {
+        id,
         degree: '',
         field_of_study: '',
-        id: uuid(),
         institution: '',
         location: '',
         end_date: '',
         start_date: '',
-        highlights: [],
+        highlights: [{ education_id: id }],
     } as unknown as Education;
 
     return education

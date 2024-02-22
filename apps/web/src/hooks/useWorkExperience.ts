@@ -74,7 +74,7 @@ export function useWorkExperience() {
     })
 
     useEffect(() => {
-        form.reset({ workExperience: queryResult.data ?? [getDefaultExperience()] })
+        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] })
     }, [queryResult.data, form])
 
     return {
