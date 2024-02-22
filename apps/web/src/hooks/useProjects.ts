@@ -84,12 +84,12 @@ export async function fetchProjects({ userId, client }: { userId?: string, clien
  */
 export function getDefaultProject() {
     const experience = {
+        id: uuid(),
         title: '',
         description: '',
         start_date: '',
         end_date: '',
-        skills: [],
-        highlights: '',
+        skills: []
     } as unknown as Project
 
     return experience

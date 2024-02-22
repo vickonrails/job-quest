@@ -40,7 +40,6 @@ export interface Database {
           degree: string | null
           end_date: string | null
           field_of_study: string | null
-          highlights: string | null
           id: string
           institution: string | null
           location: string | null
@@ -54,7 +53,6 @@ export interface Database {
           degree?: string | null
           end_date?: string | null
           field_of_study?: string | null
-          highlights?: string | null
           id?: string
           institution?: string | null
           location?: string | null
@@ -68,7 +66,6 @@ export interface Database {
           degree?: string | null
           end_date?: string | null
           field_of_study?: string | null
-          highlights?: string | null
           id?: string
           institution?: string | null
           location?: string | null
@@ -83,6 +80,55 @@ export interface Database {
             columns: ['resume_id']
             isOneToOne: false
             referencedRelation: 'resumes'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      highlights: {
+        Row: {
+          education_id: string | null
+          id: string
+          project_id: string | null
+          text: string
+          type: string | null
+          work_experience_id: string | null
+        }
+        Insert: {
+          education_id?: string | null
+          id?: string
+          project_id?: string | null
+          text: string
+          type?: string | null
+          work_experience_id?: string | null
+        }
+        Update: {
+          education_id?: string | null
+          id?: string
+          project_id?: string | null
+          text?: string
+          type?: string | null
+          work_experience_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'highlights_education_id_fkey'
+            columns: ['education_id']
+            isOneToOne: false
+            referencedRelation: 'education'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'highlights_project_id_fkey'
+            columns: ['project_id']
+            isOneToOne: false
+            referencedRelation: 'projects'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'highlights_work_experience_id_fkey'
+            columns: ['work_experience_id']
+            isOneToOne: false
+            referencedRelation: 'work_experience'
             referencedColumns: ['id']
           }
         ]
@@ -237,7 +283,6 @@ export interface Database {
           created_at: string | null
           description: string | null
           end_date: string | null
-          highlights: string | null
           id: string
           resume_id: string | null
           skills: Database['public']['CompositeTypes']['skill'][] | null
@@ -250,7 +295,6 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           end_date?: string | null
-          highlights?: string | null
           id?: string
           resume_id?: string | null
           skills?: Database['public']['CompositeTypes']['skill'][] | null
@@ -263,7 +307,6 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           end_date?: string | null
-          highlights?: string | null
           id?: string
           resume_id?: string | null
           skills?: Database['public']['CompositeTypes']['skill'][] | null
@@ -332,7 +375,6 @@ export interface Database {
           company_name: string | null
           created_at: string | null
           end_date: string | null
-          highlights: string | null
           id: string
           job_title: string | null
           location: string | null
@@ -345,7 +387,6 @@ export interface Database {
           company_name?: string | null
           created_at?: string | null
           end_date?: string | null
-          highlights?: string | null
           id?: string
           job_title?: string | null
           location?: string | null
@@ -358,7 +399,6 @@ export interface Database {
           company_name?: string | null
           created_at?: string | null
           end_date?: string | null
-          highlights?: string | null
           id?: string
           job_title?: string | null
           location?: string | null

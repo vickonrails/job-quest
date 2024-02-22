@@ -5,12 +5,12 @@ import { type Project } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
-import { type UseFieldArrayAppend } from 'react-hook-form'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
-import { Button, Spinner } from 'ui'
-import { StepContainer } from './container'
-import { ProjectForm } from './projects/project-form-item'
+import { Spinner } from 'ui'
+import { StepContainer } from '../components/container'
+import { SectionFooter } from '../components/section-footer'
+import { ProjectForm } from './project-form-item'
 
 export type Projects = { projects: Project[] }
 
@@ -87,22 +87,21 @@ export default function ProjectsView() {
 
     return (
         <>
-            <StepContainer title="Projects" data-testid="projects">
-                <p className="mb-4 text-gray-500">Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
+            <StepContainer
+                data-testid="projects"
+                title="Projects"
+                description="Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects."
+            >
                 <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
-                    {fields.map((field, index) => (
-                        <ProjectForm
-                            key={field._id}
-                            index={index}
-                            field={field}
-                            form={form}
-                            onDeleteClick={handleDeleteClick}
-                        />
-                    ))}
-                    <FormFooter
-                        append={append}
+                    <ProjectForm
+                        fields={fields}
+                        form={form}
+                        onDeleteClick={handleDeleteClick}
+                    />
+                    <SectionFooter
                         isSubmitting={formState.isSubmitting}
                         saveDisabled={fields.length <= 0}
+                        onAppendClick={() => append(getDefaultProject())}
                     />
                 </form>
             </StepContainer>
@@ -117,31 +116,5 @@ export default function ProjectsView() {
                 isProcessing={loading}
             />
         </>
-    )
-}
-
-
-
-// ---------------------- Form Footer ---------------------- // 
-
-interface FormFooterProps {
-    saveDisabled: boolean;
-    isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ projects: Project[] }, 'projects'>
-}
-
-function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
-    return (
-        <div className="flex gap-2">
-            <Button
-                className="text-primary"
-                type="button"
-                variant="outline"
-                onClick={() => append(getDefaultProject())}
-            >
-                Add Project
-            </Button>
-            <Button type="submit" loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
-        </div>
     )
 }

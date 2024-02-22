@@ -5,8 +5,8 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from 'ui'
-import { StepContainer } from './container'
-import { ErrorHint } from './error-hint'
+import { StepContainer } from './components/container'
+import { ErrorHint } from './components/error-hint'
 
 export default function ContactInformation({ profile }: { profile: Profile }) {
     const { register, handleSubmit, formState } = useForm({ defaultValues: profile })
@@ -35,12 +35,16 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer title="Contact Information" data-testid="contact-information">
-            <p className="mb-4 text-gray-500">Make it easy for employers to reach you by providing your up-to-date contact details, including your phone number, email address, and professional networking profile links.</p>
+        <StepContainer
+            data-testid="contact-information"
+            title="Contact Information"
+            description="Make it easy for employers to reach you by providing your up-to-date contact details, including your phone number, email address, and professional networking profile links."
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="p-4 border bg-white mb-8">
                     <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                         <Input
+                            autoFocus
                             data-testid="email-address"
                             type="email"
                             label="Email Address"

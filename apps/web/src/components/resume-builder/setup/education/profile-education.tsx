@@ -5,21 +5,21 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { type UseFieldArrayAppend } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
-import { Button, Spinner } from 'ui';
+import { Spinner } from 'ui';
+import { StepContainer } from '../components/container';
+import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
-import { StepContainer } from '../container';
 
 export function EducationStep() {
     const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { form, education, fieldsArr, updateEducation } = useEducation();
+    const { form, education, fieldsArr, updateEducation, setHighlightsToDelete } = useEducation();
     const { formState } = form
-    const { fields, remove } = fieldsArr
+    const { fields, remove, append } = fieldsArr
     const {
         showDeleteDialog,
         onCancel,
@@ -33,6 +33,7 @@ export function EducationStep() {
 
     const onSubmit = async (values: { education: Education[] }) => {
         try {
+            await form.trigger('education')
             await updateEducation.mutateAsync({ values: values.education });
         } catch (error) {
             toast({
@@ -66,22 +67,22 @@ export function EducationStep() {
 
     return (
         <>
-            <StepContainer title="Education" data-testid="education">
-                <p className="mb-4 text-gray-500">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
+            <StepContainer
+                data-testid="education"
+                title="Education"
+                description="List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here."
+            >
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {fields.map((field, index) => (
-                        <EducationForm
-                            key={field._id}
-                            form={form}
-                            index={index}
-                            field={field}
-                            onDeleteClick={handleDeleteClick}
-                        />
-                    ))}
-                    <FormFooter
-                        append={fieldsArr.append}
-                        saveDisabled={fields.length === 0}
+                    <EducationForm
+                        form={form}
+                        fields={fields}
+                        onDeleteClick={handleDeleteClick}
+                        setHighlightsToDelete={setHighlightsToDelete}
+                    />
+                    <SectionFooter
+                        saveDisabled={fields.length === 0 || !form.formState.isValid}
                         isSubmitting={formState.isSubmitting}
+                        onAppendClick={() => append(getDefaultEducation())}
                     />
                 </form>
             </StepContainer>
@@ -95,28 +96,5 @@ export function EducationStep() {
                 isProcessing={loading}
             />
         </>
-    )
-}
-
-// ---------------------- Form Footer ---------------------- // 
-interface FormFooterProps {
-    saveDisabled: boolean;
-    isSubmitting: boolean;
-    append: UseFieldArrayAppend<{ education: Education[] }>
-}
-
-function FormFooter({ saveDisabled, isSubmitting, append }: FormFooterProps) {
-    return (
-        <div className="flex gap-2">
-            <Button
-                className="text-primary"
-                type="button"
-                variant="outline"
-                onClick={() => append(getDefaultEducation())}
-            >
-                Add Education
-            </Button>
-            <Button loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
-        </div>
     )
 }

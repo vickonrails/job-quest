@@ -1,11 +1,11 @@
 import { type Profile } from '@lib/types'
 import { useSetupContext } from 'src/hooks/useSetupContext'
-import { BasicInformation } from './basic-info'
-import ContactInformation from './contact-information'
-import { EducationStep as Education } from './education/profile-education'
-import Projects from './profile-projects'
-import Skills from './skills'
-import { WorkExperience } from './work-experience/profile-experience'
+import { BasicInformation } from '../basic-info'
+import ContactInformation from '../contact-information'
+import { EducationStep as Education } from '../education/profile-education'
+import Projects from '../projects/profile-projects'
+import Skills from '../skills/skills'
+import { WorkExperience } from '../work-experience/profile-experience'
 
 export function Steps({ profile }: { profile: Profile }) {
     const { step } = useSetupContext();

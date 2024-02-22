@@ -25,7 +25,7 @@ export default function ResumeBuilder({ session, profile, resumes }: { session: 
             <section>
                 <header className="flex justify-between items-center mb-4">
                     <h1 className="text-xl font-medium">Resumes</h1>
-                    <Button size="sm" onClick={handleCreateNew}>
+                    <Button onClick={handleCreateNew}>
                         Create New
                     </Button>
                 </header>

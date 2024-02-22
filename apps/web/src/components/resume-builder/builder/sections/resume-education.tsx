@@ -1,3 +1,4 @@
+import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
 import { formatDate } from '@components/utils';
@@ -6,23 +7,17 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { AddSectionBtn } from '.';
-import { deleteEducation } from 'src/hooks/useEducation';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { AlertDialog } from '@components/alert-dialog';
-import { useState } from 'react';
-import { copyObject } from '@utils/copy-object';
-
-const defaultEducation = {
-    field_of_study: 'Untitled...',
-    institution: 'Untitled...',
-} as Education
+import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
+import { v4 as uuid } from 'uuid';
+import { AddSectionBtn } from '.';
 
 /**
  * Education section in resume builder
  */
-export function EducationSection({ session }: { session: Session }) {
+export function EducationSection({ session, onHighlightDelete }: { session: Session, onHighlightDelete: Dispatch<SetStateAction<string[]>> }) {
     const form = useFormContext<{ education: Education[] }>();
     const client = useSupabaseClient<Database>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
@@ -31,11 +26,12 @@ export function EducationSection({ session }: { session: Session }) {
         queryKey: ['educationTemplates'],
         queryFn: async () => {
             if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('education').select().filter('resume_id', 'is', null)
+            const { data, error } = await client.from('education').select('*, highlights ( * )').filter('resume_id', 'is', null)
             if (error) throw error;
             return data;
         }
     })
+
     const {
         showDeleteDialog,
         onCancel,
@@ -47,14 +43,8 @@ export function EducationSection({ session }: { session: Session }) {
         onDelete: async (id: string) => { await deleteEducation(id, client) }
     });
 
+    // TODO: do I need to show the modal for unsaved items?
     const handleDeleteClick = (education: Education, idx: number) => {
-        // if it already has an id, show a prompt to confirm deletion
-        // if not, just remove from the array
-
-        if (!education.id) {
-            remove(idx);
-            return;
-        }
         setRemoveIdx(idx);
         if (!education.id) return
         showDeleteDialog({ ...education, id: education.id });
@@ -71,16 +61,8 @@ export function EducationSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
-            {fields.map((field, index) => (
-                <EducationForm
-                    field={field}
-                    index={index}
-                    form={form}
-                    key={field._id}
-                    onDeleteClick={handleDeleteClick}
-                />
-            ))}
 
+            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={onHighlightDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary' }}
@@ -95,8 +77,10 @@ export function EducationSection({ session }: { session: Session }) {
                 {educationTemplates?.map((education) => {
                     const { institution, field_of_study, id, start_date, end_date } = education
                     const endDate = end_date ? formatDate(end_date) : 'Now'
+
+                    const newWorkExperience = generateNewExperience(education)
                     return (
-                        <MenuItem className="py-2" key={id} onClick={() => append(copyObject(education, ['id']))}>
+                        <MenuItem className="py-2" key={id} onClick={() => append(newWorkExperience)}>
                             <p className="font-medium">{institution} - {field_of_study}</p>
                             <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
                         </MenuItem>
@@ -106,7 +90,7 @@ export function EducationSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(defaultEducation)}
+                    onClick={() => append(getDefaultEducation())}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>
@@ -125,4 +109,15 @@ export function EducationSection({ session }: { session: Session }) {
         </section>
     )
 
+}
+
+function generateNewExperience(education: Education): Education {
+    const id = uuid();
+    const highlights = education.highlights?.map(x => {
+        x.id = uuid()
+        x.education_id = id
+        return x
+    }).filter(x => x)
+
+    return { ...education, id, highlights }
 }

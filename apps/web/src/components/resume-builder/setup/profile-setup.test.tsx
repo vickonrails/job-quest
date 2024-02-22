@@ -5,7 +5,7 @@ import { cleanup, render, waitFor } from '@testing-library/react';
 import { SetupProvider, type SetupContext } from 'src/hooks/useSetupContext';
 import { SetupSection } from 'src/pages/profile/setup';
 import { describe } from 'vitest';
-import { Steps } from './steps-renderer';
+import { Steps } from './components/steps-renderer';
 
 const createTestQueryClient = () => new QueryClient({
     defaultOptions: {
@@ -28,7 +28,6 @@ const profile = {
     avatar_url: 'https://avatars.githubusercontent.com/u/1?v=4',
     skills: [{ label: 'React' }, { label: 'Typescript' }, { label: 'Javascript' }]
 } as unknown as Profile
-
 
 describe('Profile Setup', () => {
     const testClient = createTestQueryClient();
