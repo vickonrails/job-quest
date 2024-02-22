@@ -108,7 +108,7 @@ export function getDefaultExperience() {
         company_name: '',
         job_title: '',
         location: '',
-        highlights: [{ work_experience_id: id }],
+        highlights: [{ work_experience_id: id, text: '', type: 'work_experience' }],
     } as unknown as WorkExperience
 
     return experience

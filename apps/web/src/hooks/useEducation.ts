@@ -113,7 +113,7 @@ export function getDefaultEducation() {
         location: '',
         end_date: '',
         start_date: '',
-        highlights: [{ education_id: id }],
+        highlights: [{ education_id: id, type: 'education', text: '' }],
     } as unknown as Education;
 
     return education
