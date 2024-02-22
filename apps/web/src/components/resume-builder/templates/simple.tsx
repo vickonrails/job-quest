@@ -2,7 +2,6 @@ import { formatDate } from '@components/utils';
 import { type HTMLAttributes } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';
-import { Textarea } from 'ui';
 
 export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingElement> & { title: string }) {
     if (!title) return null;

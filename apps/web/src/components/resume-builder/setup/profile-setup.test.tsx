@@ -29,7 +29,6 @@ const profile = {
     skills: [{ label: 'React' }, { label: 'Typescript' }, { label: 'Javascript' }]
 } as unknown as Profile
 
-
 describe('Profile Setup', () => {
     const testClient = createTestQueryClient();
     const setup = () => {
