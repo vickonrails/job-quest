@@ -7,10 +7,12 @@ import { Typography } from '@components/typography';
 import { formatDate } from '@components/utils';
 import { useJobs } from '@hooks';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
+import { cn } from '@utils/cn';
+import hashColors from '@utils/hash-colors';
 import { type Database } from 'lib/database.types';
 import { type Job, type Note, type Profile } from 'lib/types';
+import { ExternalLink } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { ChevronLeft } from 'react-feather';
@@ -24,7 +26,7 @@ const JobDetailsPage = ({ session, profile, job, notes }: { session: Session, pr
     if (!jobsData) return null;
 
     return (
-        <Layout session={session} profile={profile} containerClasses="p-6">
+        <Layout session={session} profile={profile} containerClasses="p-6 overflow-auto">
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />
@@ -52,17 +54,10 @@ const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
             <div className="flex bg-white gap-4">
                 <div className="flex-2 grow-0 basis-2/3">
                     <header className="mb-6">
-                        <div className="flex items-center mb-2">
-                            {job?.company_site && (
-                                <div className="mr-5">
-                                    <Image
-                                        src={`https://logo.clearbit.com/${job.company_site}`}
-                                        alt={job.company_name}
-                                        width={80}
-                                        height={80}
-                                    />
-                                </div>
-                            )}
+                        <div className="flex items-start mb-2">
+                            <div className="mr-4">
+                                <DefaultImage companyName={job.company_name} />
+                            </div>
                             <div className="flex-1">
                                 <div className="flex items-center gap-3">
                                     <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
@@ -70,28 +65,53 @@ const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                                 </div>
                                 <ul className="flex gap-6 text-light-text list-disc">
                                     <li className="list-none max-w-[200px]">
-                                        <Typography variant="body-md">{job.company_name}</Typography>
+                                        <p>{job.company_name}</p>
                                     </li>
                                     {job.location && <li>{job.location}</li>}
                                     <li>{status}</li>
                                 </ul>
+
+                                <div className="flex flex-col items-start">
+                                    {job.created_at && (
+                                        <div className="flex text-muted-foreground items-center gap-1">
+                                            Saved on {formatDate(job.created_at)}
+                                        </div>
+                                    )}
+                                    <a target="_blank" rel="noreferrer noopener" className="flex gap-1 items-center text-sm underline text-primary" href={job.link ?? ''}>
+                                        <span>Link on LinkedIn</span>
+                                        <ExternalLink size={16} />
+                                    </a>
+                                </div>
                             </div>
                             <Rating size="md" value={job.priority ?? 0} />
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <Typography variant="body-sm"><a target="_blank" rel="noreferrer noopener" className="underline" href={job.link ?? ''}>{job.link}</a></Typography>
-                            {job.created_at && <Typography variant="body-sm">Saved on {formatDate(job.created_at)}</Typography>}
-                        </div>
+
                     </header>
+
+                    <main className="mb-6">
+                        <section className="border p-3 rounded-md">
+                            <div className="text-base-col" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
+                        </section>
+                    </main>
 
                     <footer>
                         <ChipsGroup labels={labels ?? []} />
                     </footer>
                 </div>
-                <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3">
-                    <h2>Notes</h2>
-                    <NoteForm job={job} />
-                    <NotesList notes={notes} job={job} />
+                <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3 sticky top-0">
+                    <section className="border-b pb-6">
+                        <div className="mb-2">
+                            <h3 className="font-medium">Attach Resume</h3>
+                            <p className="text-sm text-muted-foreground">Pick an already created resume or create a new one.</p>
+                        </div>
+                        <Button variant="outline">Attach</Button>
+                    </section>
+
+                    <section className="flex flex-col gap-2">
+                        <h2>Notes</h2>
+                        <NoteForm job={job} />
+                        <NotesList notes={notes} job={job} />
+                    </section>
                 </div>
             </div>
             {editSheetOpen && (
@@ -103,6 +123,16 @@ const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                 />
             )}
         </>
+    )
+}
+
+function DefaultImage({ companyName }: { companyName: string }) {
+    const variants = ['bg-indigo-500', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500']
+    const backgroundColor = hashColors(companyName, variants)
+    return (
+        <div className={cn('text-white h-24 p-2 w-24 text-3xl font-bold', backgroundColor)}>
+            {companyName.slice(0, 2)}
+        </div>
     )
 }
 

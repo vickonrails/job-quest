@@ -104,16 +104,19 @@
     @apply overflow-hidden;
   }
   #__description {
-    @apply text-foreground;
+    @apply text-neutral-600;
   }
-  #__description h2 {
-    @apply text-xl font-bold text-gray-700 mb-3;
+  #__description h2,#__description h3  {
+    @apply text-base font-bold mb-3 text-foreground;
+  }
+  #__description p strong {
+    @apply text-neutral-700;
   }
   #__description p {
-    @apply mb-2 text-gray-800;
+    @apply mb-2;
   }
-  body {
-    @apply bg-background text-foreground;
+  #__description ul {
+    @apply ml-6 list-disc;
   }
   .chip_blue {
     @apply bg-chip-blue text-blue-700;
