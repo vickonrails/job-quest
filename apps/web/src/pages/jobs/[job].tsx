@@ -3,6 +3,7 @@ import { Layout } from '@components/layout';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import NoteForm from '@components/notes/note-form';
 import NotesList from '@components/notes/note-list';
+import ResumeItem from '@components/resume-builder/builder/resume-item';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { Typography } from '@components/typography';
 import { formatDate } from '@components/utils';
@@ -89,6 +90,8 @@ const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
         return router.push(`/resumes/${uuid()}`)
     }
 
+    const resume = data?.find(resume => resume.id === job.resume_id)
+
     return (
         <>
             <div className="flex bg-white gap-4">
@@ -146,12 +149,8 @@ const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                                 <p className="text-sm text-muted-foreground">Pick an already created resume or create a new one.</p>
                             </header>
 
-                            {job.resume_id && (
-                                <div className="grid h-24 w-24 p-2 border text-sm text-center text-muted-foreground">
-                                    <p className="m-auto">
-                                        {data?.find(resume => resume.id === job.resume_id)?.title}
-                                    </p>
-                                </div>
+                            {resume && (
+                                <ResumeItem resume={resume} />
                             )}
                         </div>
 
