@@ -67,10 +67,11 @@ export function ProjectsSection({ session }: { session: Session }) {
             <ProjectForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                triggerProps={{ className: 'text-primary hover:text-primary flex items-center gap-1' }}
+                triggerProps={{ className: 'text-primary hover:text-primary' }}
+                Header="From your profile"
                 trigger={(
                     <AddSectionBtn>
-                        Add Projects
+                        Add Project
                     </AddSectionBtn>
                 )}
                 onClick={e => e.stopPropagation()}

@@ -88,7 +88,6 @@ export interface Database {
         Row: {
           education_id: string | null
           id: string
-          project_id: string | null
           text: string
           type: string | null
           work_experience_id: string | null
@@ -96,7 +95,6 @@ export interface Database {
         Insert: {
           education_id?: string | null
           id?: string
-          project_id?: string | null
           text: string
           type?: string | null
           work_experience_id?: string | null
@@ -104,7 +102,6 @@ export interface Database {
         Update: {
           education_id?: string | null
           id?: string
-          project_id?: string | null
           text?: string
           type?: string | null
           work_experience_id?: string | null
@@ -115,13 +112,6 @@ export interface Database {
             columns: ['education_id']
             isOneToOne: false
             referencedRelation: 'education'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'highlights_project_id_fkey'
-            columns: ['project_id']
-            isOneToOne: false
-            referencedRelation: 'projects'
             referencedColumns: ['id']
           },
           {
@@ -146,6 +136,7 @@ export interface Database {
           order_column: number | null
           position: string
           priority: number | null
+          resume_id: string | null
           source: string | null
           source_id: string | null
           status: number
@@ -163,6 +154,7 @@ export interface Database {
           order_column?: number | null
           position: string
           priority?: number | null
+          resume_id?: string | null
           source?: string | null
           source_id?: string | null
           status: number
@@ -180,12 +172,21 @@ export interface Database {
           order_column?: number | null
           position?: string
           priority?: number | null
+          resume_id?: string | null
           source?: string | null
           source_id?: string | null
           status?: number
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'jobs_resume_id_fkey'
+            columns: ['resume_id']
+            isOneToOne: false
+            referencedRelation: 'resumes'
+            referencedColumns: ['id']
+          }
+        ]
       }
       notes: {
         Row: {

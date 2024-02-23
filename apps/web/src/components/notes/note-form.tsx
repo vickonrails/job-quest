@@ -25,11 +25,9 @@ function NoteForm({ job }: { job: Job }) {
         }
     })
 
-    const canSubmit = note.trim();
-
     const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        if (!canSubmit) return;
+        if (!note) return;
         try {
             await mutateAsync({
                 text: note,
@@ -48,9 +46,9 @@ function NoteForm({ job }: { job: Job }) {
     }
 
     return (
-        <form onSubmit={handleCreateNote} className="flex flex-col gap-4">
-            <Textarea value={note} required onChange={val => setNote(val.target.value)} />
-            <Button loading={isAddingNotes} disabled={!canSubmit}>Add notes</Button>
+        <form onSubmit={handleCreateNote} className="flex flex-col gap-4 items-start">
+            <Textarea value={note} required onChange={val => setNote(val.target.value)} containerClasses="w-full" />
+            <Button variant="outline" loading={isAddingNotes}>Add notes</Button>
         </form>
     )
 }

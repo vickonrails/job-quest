@@ -65,7 +65,7 @@ export function EducationSection({ session, onHighlightDelete }: { session: Sess
             <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={onHighlightDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                triggerProps={{ className: 'text-primary' }}
+                triggerProps={{ className: 'text-primary hover:text-primary' }}
                 Header="From your profile"
                 trigger={(
                     <AddSectionBtn>

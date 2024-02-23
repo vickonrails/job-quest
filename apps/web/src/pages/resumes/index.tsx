@@ -1,12 +1,13 @@
 import { Layout } from '@components/layout';
+import ResumeItem from '@components/resume-builder/builder/resume-item';
 import { type Database } from '@lib/database.types';
-import { type Resume, type Profile } from '@lib/types';
+import { type Profile, type Resume } from '@lib/types';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button } from 'ui';
-import { v4 as uuid } from 'uuid'
+import { v4 as uuid } from 'uuid';
 
 export default function ResumeBuilder({ session, profile, resumes }: { session: Session, profile: Profile, resumes: Resume[] }) {
     const router = useRouter()
@@ -30,9 +31,15 @@ export default function ResumeBuilder({ session, profile, resumes }: { session: 
                     </Button>
                 </header>
 
-                <main>
+                <main className="flex gap-3">
                     {resumes?.map((resume) => (
-                        <Link className="underline text-primary block" key={resume.id} href={`/resumes/${resume.id}`}>{resume.title} - {resume.created_at?.split('T')[0]}</Link>
+                        <Link
+                            key={resume.id}
+                            className="hover:text-primary"
+                            href={`/resumes/${resume.id}`}
+                        >
+                            <ResumeItem resume={resume} />
+                        </Link>
                     ))}
                 </main>
             </section>

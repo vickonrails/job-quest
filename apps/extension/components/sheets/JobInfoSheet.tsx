@@ -20,6 +20,7 @@ function getJobDetails() {
     const company = container.querySelector('.app-aware-link')
     const location = container.childNodes[3]
     const link = isFullPage ? window.location.href.split('?')[0] : window.location.href.split('&')[0];
+    const details = document.querySelector('#job-details');
 
     if (isFullPage) {
         title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
@@ -36,6 +37,7 @@ function getJobDetails() {
         status: 0,
         source: 'linkedIn',
         source_id: getJobId(),
+        description: details?.innerHTML ?? '',
         link
     }
 }

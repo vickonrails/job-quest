@@ -61,7 +61,7 @@ export function WorkExperienceSection({ session, onHighlightDelete }: { session:
             <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={onHighlightDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                triggerProps={{ className: 'text-primary' }}
+                triggerProps={{ className: 'text-primary hover:text-primary' }}
                 Header="From your profile"
                 trigger={(
                     <AddSectionBtn>
