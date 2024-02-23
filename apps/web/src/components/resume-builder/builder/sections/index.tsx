@@ -3,7 +3,8 @@ import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Highlight } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
-import { ChevronLeft, Plus, Save } from 'lucide-react';
+import { setEntityId } from '@utils/set-entity-id';
+import { ChevronDown, ChevronLeft, Save } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { createRef, forwardRef, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
@@ -14,7 +15,6 @@ import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
-import { setEntityId } from '@utils/set-entity-id';
 
 export function ResumeForm({ session }: { session: Session }) {
     const client = useSupabaseClient<Database>()
@@ -211,8 +211,8 @@ export function SkillsForm({ form }: { form: UseFormReturn<FormValues> }) {
 export const AddSectionBtn = forwardRef<HTMLButtonElement, ButtonProps>(({ children, ...props }, ref) => {
     return (
         <Button type="button" variant="ghost" {...props} ref={ref}>
-            <Plus size={18} />
-            <span className="text-sm">{children}</span>
+            <span className="text-sm text-primary hover:text-primary">{children}</span>
+            <ChevronDown size={16} />
         </Button>
     )
 })
