@@ -12,8 +12,8 @@ export function debounce<F extends (...args: any[]) => Promise<any>>(
 
         // Return a promise that resolves after the debounce wait time
         return new Promise((resolve) => {
-            timeoutId = setTimeout(async () => {
-                resolve(await func(...args));
+            timeoutId = setTimeout(() => {
+                resolve(func(...args));
             }, waitMilliseconds);
         });
     };
