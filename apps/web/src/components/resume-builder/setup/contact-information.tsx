@@ -25,7 +25,7 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
 
     const onSubmit = async (val: Profile) => {
         try {
-            await updateProfile.mutateAsync(val)
+            await updateProfile.mutateAsync({ ...val, is_profile_setup: true })
         } catch (err) {
             toast({
                 variant: 'destructive',
@@ -76,7 +76,7 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
                     </section>
                 </section>
 
-                <Button loading={formState.isSubmitting}>Save</Button>
+                <Button loading={formState.isSubmitting}>Complete Profile Setup</Button>
             </form>
         </StepContainer>
     )
