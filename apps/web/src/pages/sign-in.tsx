@@ -33,11 +33,10 @@ const SignIn: NextPage<SignInProps> = () => {
     }, [])
 
     // TODO: add tests for this
-    const handleSignIn = (ev: FormEvent<HTMLFormElement>) => {
+    const handleSignIn = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
         if (emailSent) { return; }
         setIsLoading(true);
-        // // regex to validate email
         const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         if (!isValid || !email) {
             // set error state
@@ -45,31 +44,32 @@ const SignIn: NextPage<SignInProps> = () => {
             return;
         }
 
-        //TODO: still need to fix problem with expired token
-        supabaseClient.auth.signInWithOtp({
-            email,
-            options: {
-                shouldCreateUser: true,
-                emailRedirectTo: redirectUrlRef.current
-            }
-        })
-            .then(() => {
-                setIsLoading(false);
-                setEmailSent(true);
-                toast({
-                    title: 'Email Sent',
-                    variant: 'success',
-                    description: 'Check your email for the magic link',
-                    duration: 5000
-                })
+        try {
+            //TODO: still need to fix problem with expired token
+            const { error } = await supabaseClient.auth.signInWithOtp({
+                email,
+                options: {
+                    shouldCreateUser: true,
+                    emailRedirectTo: redirectUrlRef.current
+                }
             })
-            .catch(() => {
-                setIsLoading(false);
-                toast({
-                    title: 'An error occurred',
-                    description: 'An error occurred when trying to send the magic link. Please try again later.',
-                })
-            });
+
+            if (error) throw error;
+            setEmailSent(true);
+            toast({
+                title: 'Email Sent',
+                variant: 'success',
+                description: 'Check your email for the magic link'
+            })
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred',
+                description: 'An error occurred when trying to send the magic link. Please try again.'
+            })
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const handleGoogleAuth = async () => {

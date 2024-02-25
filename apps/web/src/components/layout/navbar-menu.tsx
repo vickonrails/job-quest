@@ -48,5 +48,6 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
 }
 
 function trimText(text: string, length = 2) {
+    if (text.length <= length) return text
     return `${text.slice(0, length)}...`
 }
