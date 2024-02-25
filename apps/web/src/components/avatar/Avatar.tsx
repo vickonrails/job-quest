@@ -1,12 +1,15 @@
 import { cn } from '@utils/cn'
+import hashColors from '@utils/hash-colors'
 import { cva } from 'class-variance-authority'
 import Image, { type ImageProps } from 'next/image'
+import { type HTMLAttributes } from 'react'
 
 type IAvatarBorder = 'curved' | 'round' | 'square'
 interface AvatarProps extends Omit<ImageProps, 'src'> {
     border?: IAvatarBorder
     size?: 'xs' | 'sm' | 'md' | 'lg'
     src?: string
+    fallbackText?: string
 }
 
 const avatarVariants = cva('', {
@@ -25,9 +28,14 @@ const avatarVariants = cva('', {
     }
 });
 
-export const Avatar = ({ border = 'round', src, size, alt, className, ...rest }: AvatarProps) => {
-    // TODO: fallback to placeholder
-    if (!src) return null;
+export const Avatar = ({ border = 'round', src, size = 'md', alt, className, fallbackText, ...rest }: AvatarProps) => {
+    if (!src) return (
+        <AvatarFallback
+            size={size}
+            border={border}
+            text={fallbackText ?? ''}
+        />
+    );
 
     return (
         <Image
@@ -36,13 +44,45 @@ export const Avatar = ({ border = 'round', src, size, alt, className, ...rest }:
             height={40}
             width={40}
             className={cn(
-                avatarVariants({ size, border }),
+                avatarVariants({ border, size }),
                 className
             )}
             alt={alt ?? ''}
             {...rest}
         />
     )
+}
+
+/** -------------------------- Avatar Fallback ------------------------ */
+interface AvatarFallbackProps extends HTMLAttributes<HTMLDivElement> {
+    size?: AvatarProps['size']
+    border: AvatarProps['border']
+    text: string
+}
+
+function AvatarFallback({ size, className, border = 'round', text }: AvatarFallbackProps) {
+    const variantColors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500']
+    return (
+        <div className={cn(avatarVariants({ size, border }), 'text-white', hashColors(text, variantColors), className)}>
+            <div className="flex items-center justify-center h-full w-full uppercase">
+                {getDisplayText(text)}
+            </div>
+        </div>
+    )
+}
+
+/**
+ * returns an Avatar display text from a given string
+ * @param text text to get display text from
+ * @returns a split text
+ */
+
+function getDisplayText(text: string) {
+    if (text.split(' ').length > 1) {
+        return text.split(' ').map(word => word[0]).join('')
+    }
+
+    return text.slice(0, 2)
 }
 
 // TODO: support for image url fallback

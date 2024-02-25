@@ -230,6 +230,7 @@ export interface Database {
           full_name: string | null
           github_url: string | null
           id: string
+          is_profile_setup: boolean | null
           linkedin_url: string | null
           location: string | null
           personal_website: string | null
@@ -245,6 +246,7 @@ export interface Database {
           full_name?: string | null
           github_url?: string | null
           id: string
+          is_profile_setup?: boolean | null
           linkedin_url?: string | null
           location?: string | null
           personal_website?: string | null
@@ -260,6 +262,7 @@ export interface Database {
           full_name?: string | null
           github_url?: string | null
           id?: string
+          is_profile_setup?: boolean | null
           linkedin_url?: string | null
           location?: string | null
           personal_website?: string | null

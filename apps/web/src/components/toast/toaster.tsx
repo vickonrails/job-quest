@@ -32,7 +32,7 @@ function WarningIcon() {
 
 function DestructiveIcon() {
   return (
-    <AlertCircle className="m-auto text-destructive-foreground" />
+    <AlertCircle className="m-auto text-destructive-foreground h-6 w-6" />
   )
 }
 
@@ -49,7 +49,7 @@ export function Toaster() {
                 {title && (
                   <div className="flex items-center gap-3">
                     {TOAST_ICON_VARIANTS[props.variant ?? 'default']}
-                    <ToastTitle>
+                    <ToastTitle className="flex-1">
                       {title}
                     </ToastTitle>
                   </div>
