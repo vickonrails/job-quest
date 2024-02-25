@@ -37,28 +37,17 @@ export interface Database {
       cover_letters: {
         Row: {
           id: string
-          job_id: string
           text: string | null
         }
         Insert: {
           id?: string
-          job_id: string
           text?: string | null
         }
         Update: {
           id?: string
-          job_id?: string
           text?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'cover_letters_job_id_fkey'
-            columns: ['job_id']
-            isOneToOne: true
-            referencedRelation: 'jobs'
-            referencedColumns: ['id']
-          }
-        ]
+        Relationships: []
       }
       education: {
         Row: {
@@ -153,6 +142,7 @@ export interface Database {
         Row: {
           company_name: string
           company_site: string | null
+          cover_letter_id: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -171,6 +161,7 @@ export interface Database {
         Insert: {
           company_name: string
           company_site?: string | null
+          cover_letter_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -189,6 +180,7 @@ export interface Database {
         Update: {
           company_name?: string
           company_site?: string | null
+          cover_letter_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -205,6 +197,13 @@ export interface Database {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: 'jobs_cover_letter_id_fkey'
+            columns: ['cover_letter_id']
+            isOneToOne: false
+            referencedRelation: 'cover_letters'
+            referencedColumns: ['id']
+          },
           {
             foreignKeyName: 'jobs_resume_id_fkey'
             columns: ['resume_id']
