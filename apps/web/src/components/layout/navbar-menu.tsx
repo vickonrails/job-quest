@@ -21,14 +21,16 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
         });
     }, [client.auth, router])
 
+    const avatarDisplay = profile.full_name ?? profile.email_address ?? ''
+
     return (
         <section className="flex items-center">
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'end', className: 'w-lg w-40' }}
                 trigger={(
                     <Button variant="ghost" className="border flex items-center rounded-3xl gap-2 p-2 py-1">
-                        <Avatar src="https://avatars.githubusercontent.com/u/24235881?v=4" alt="" size="sm" />
-                        {profile?.full_name}
+                        <Avatar size="sm" alt={profile.full_name ?? ''} fallbackText={avatarDisplay} />
+                        {trimText(avatarDisplay, 10)}
                         <ChevronDown />
                     </Button>
                 )}
@@ -43,4 +45,8 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
             </MenuBar>
         </section>
     )
+}
+
+function trimText(text: string, length = 2) {
+    return `${text.slice(0, length)}...`
 }
