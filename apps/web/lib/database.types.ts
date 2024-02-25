@@ -34,6 +34,32 @@ export interface Database {
   }
   public: {
     Tables: {
+      cover_letters: {
+        Row: {
+          id: string
+          job_id: string
+          text: string | null
+        }
+        Insert: {
+          id?: string
+          job_id: string
+          text?: string | null
+        }
+        Update: {
+          id?: string
+          job_id?: string
+          text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'cover_letters_job_id_fkey'
+            columns: ['job_id']
+            isOneToOne: true
+            referencedRelation: 'jobs'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       education: {
         Row: {
           created_at: string | null
