@@ -10,7 +10,7 @@ import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useCoverLetter } from 'src/hooks/useCoverLetter'
 import { useMagicWrite } from 'src/hooks/useMagicWrite'
-import { PageProps } from 'src/pages'
+import { type PageProps } from 'src/pages'
 import { Button, Spinner } from 'ui'
 
 interface CoverLetterProps extends PageProps {
@@ -32,12 +32,19 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
             const { data: education, error: _educationError } = await client.from('education').select('institution, degree, field_of_study, highlights (text)').is('resume_id', null);
             if (_educationError) throw _educationError
 
-            const { coverLetter } = await write({ education, workExperience, jobDescription: job.description ?? '', jobTitle: job.position, skills: profile.skills?.map(skill => skill.label) })
-            setValue(coverLetter)
-            saveValue(coverLetter)
+            const { coverLetter } = await write({
+                education,
+                workExperience,
+                jobDescription: job.description ?? '',
+                jobTitle: job.position,
+                professionalExperience: profile.professional_summary ?? '',
+                skills: profile.skills?.map(skill => skill.label)
+            });
+            setValue(coverLetter);
+            await saveValue(coverLetter);
         } catch (error) {
             toast({
-                description: "Failed to generate cover letter",
+                description: 'Failed to generate cover letter',
                 title: 'Error',
                 variant: 'destructive'
             })

@@ -1,7 +1,7 @@
-import { type NextApiHandler } from 'next';
-import { OpenAI } from 'openai';
-
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { type NextApiHandler, type NextApiRequest } from 'next';
+import { OpenAI } from 'openai';
+import { type WriteProps } from 'src/hooks/useMagicWrite';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -15,7 +15,10 @@ const context = `
     The goal is to be convincing, a little proud, and straight to the point. Basically show how the candidate can be a great fit for the job.
 `;
 
-const handler: NextApiHandler = async (req, res) => {
+type Request = NextApiRequest & { body: WriteProps }
+
+const handler: NextApiHandler = async (req: Request, res) => {
+    const request = req.body as WriteProps
     if (process.env.OPENAI_API_KEY === undefined) {
         return res.status(500).json({ error: 'OpenAI key not provided' })
     }
@@ -29,7 +32,7 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(401).json({ error: 'You are not authorized to perform this action' });
     }
 
-    const { jobDescription, education, workExperience, skills, jobTitle, professionalSummary } = req.body
+    const { jobDescription, education, workExperience, skills, jobTitle, professionalExperience } = request
 
     const input = {
         jobDescription,
@@ -38,7 +41,7 @@ const handler: NextApiHandler = async (req, res) => {
             education,
             workExperience,
             skills,
-            professionalSummary
+            professionalExperience
         }
     }
 
@@ -51,7 +54,7 @@ const handler: NextApiHandler = async (req, res) => {
             ]
         });
 
-        let response = completion?.choices?.[0]?.message.content;
+        const response = completion?.choices?.[0]?.message.content;
         return res.status(200).json({ coverLetter: response });
     } catch {
         return res.status(500).json({ error: 'An error occurred' });
