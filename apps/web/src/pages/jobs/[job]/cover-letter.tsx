@@ -5,11 +5,11 @@ import { type Database } from '@lib/database.types'
 import { type CoverLetter, type Job } from '@lib/types'
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { debounce } from '@utils/debounce'
 import { Save, Wand2 } from 'lucide-react'
 import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCoverLetter } from 'src/hooks/useCoverLetter'
+import { useMagicWrite } from 'src/hooks/useMagicWrite'
 import { PageProps } from 'src/pages'
 import { Button, Spinner } from 'ui'
 
@@ -20,68 +20,27 @@ interface CoverLetterProps extends PageProps {
 
 export default function CoverLetter({ session, profile, job, coverLetter }: CoverLetterProps) {
     const router = useRouter()
-    const [value, setValue] = useState(coverLetter.text ?? '')
     const client = useSupabaseClient<Database>()
-    const [loading, setLoading] = useState(false)
-    const [magicWriteLoading, setMagicWriteLoading] = useState(false)
+    const { value, saving, onChange, setValue, saveValue } = useCoverLetter(job, coverLetter);
+    const { writing, write } = useMagicWrite();
     const { toast } = useToast()
-
-    const debouncedSendInputToServer = useCallback(
-        debounce(async (text: string) => {
-            if (!job.cover_letter_id) return
-            const { error } = await client.from('cover_letters').upsert({
-                id: job.cover_letter_id,
-                text
-            });
-
-            if (error) throw error;
-        }, 1500),
-        [setLoading, job.cover_letter_id, client]
-    );
-
-    const handleInputChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(event.target.value);
-        try {
-            setLoading(true);
-            await debouncedSendInputToServer(event.target.value);
-        } catch {
-            toast({
-                title: 'Error',
-                description: 'Failed to save cover letter',
-                variant: 'destructive'
-            })
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleMagicWriteClick = async () => {
         try {
-            setMagicWriteLoading(true)
             const { data: workExperience, error: _workExperienceError } = await client.from('work_experience').select('company_name, job_title, location, highlights (text)').is('resume_id', null);
             if (_workExperienceError) throw _workExperienceError
-            const { data: education, error: _educationError } = await client.from('education').select('institution, degree, field_of_study, location, highlights (text)').is('resume_id', null);
+            const { data: education, error: _educationError } = await client.from('education').select('institution, degree, field_of_study, highlights (text)').is('resume_id', null);
             if (_educationError) throw _educationError
 
-            const coverLetter = await fetch('/api/cover-letter/generate-cover-letter', {
-                method: 'POST',
-                body: JSON.stringify({ jobDescription: job.description, jobTitle: job.position, skills: profile.skills, workExperience, education }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            const { coverLetter: response } = await coverLetter.json()
-            setValue(response);
-            await debouncedSendInputToServer(response);
+            const { coverLetter } = await write({ education, workExperience, jobDescription: job.description ?? '', jobTitle: job.position, skills: profile.skills?.map(skill => skill.label) })
+            setValue(coverLetter)
+            saveValue(coverLetter)
         } catch (error) {
             toast({
                 description: "Failed to generate cover letter",
                 title: 'Error',
                 variant: 'destructive'
             })
-        } finally {
-            setMagicWriteLoading(false)
         }
     }
 
@@ -99,22 +58,22 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
             <div className="flex h-full gap-1">
                 <form className="flex flex-col items-start h-full p-1 flex-1 w-3/5 pb-6">
                     <textarea
-                        onChange={handleInputChange}
+                        onChange={onChange}
                         placeholder="Write your cover letter here"
                         rows={20}
                         value={value}
-                        disabled={magicWriteLoading}
+                        disabled={writing}
                         className="w-full p-4 pb-0 flex-1 text-accent-foreground mb-2 border"
                         autoFocus
                     />
                     <div className="flex gap-2 w-full justify-end items-center">
-                        {loading && (
+                        {saving && (
                             <div className="flex-1">
                                 <Spinner className="h-6 w-6" />
                             </div>
                         )}
 
-                        <Button type="button" variant="outline" className="flex gap-1" onClick={handleMagicWriteClick} loading={magicWriteLoading}>
+                        <Button type="button" variant="outline" className="flex gap-1" onClick={handleMagicWriteClick} loading={writing}>
                             <Wand2 size={18} />
                             <span>Magic Write</span>
                         </Button>
