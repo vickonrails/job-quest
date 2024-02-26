@@ -1,35 +1,45 @@
+import { Chip } from '@components/chips/Chip';
 import NoteForm from '@components/notes/note-form';
 import NotesList from '@components/notes/note-list';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
+import { useToast } from '@components/toast/use-toast';
+import { Typography } from '@components/typography';
+import { formatDate } from '@components/utils';
 import { type Job, type Note } from '@lib/types';
 import { cn } from '@utils/cn';
 import hashColors from '@utils/hash-colors';
-import { useMemo } from 'react';
+import { ExternalLink, Wand2 } from 'lucide-react';
+import { useEditSheet } from 'src/hooks/useEditModal';
+import { useJobKeywords } from 'src/hooks/useJobKeywords';
 import { Button, Rating, Status_Lookup } from 'ui';
 import { CoverLetterSection } from './cover-letter-section';
 import { ResumeSection } from './resume-section';
-import { ChipsGroup } from '@components/chips/Chip';
-import { ExternalLink } from 'lucide-react';
-import { formatDate } from '@components/utils';
-import { Typography } from '@components/typography';
-import { useEditSheet } from 'src/hooks/useEditModal';
 
 export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
-    const labels = useMemo(() => {
-        return job?.labels?.map(label => ({ label }))
-    }, [job?.labels])
+    const { loading, generateKeywords } = useJobKeywords(job)
+    const { toast } = useToast()
 
     if (!job) return;
 
     const status = Status_Lookup.find((x, idx) => idx === job.status)
+    const handleGenerateClick = async () => {
+        try {
+            await generateKeywords({ description: job.description ?? '' });
+        } catch {
+            toast({
+                variant: 'destructive',
+                title: 'Failed to generate keywords',
+            })
+        }
+    }
 
     return (
         <>
             <div className="flex bg-white gap-4">
                 <div className="flex-2 grow-0 basis-2/3">
-                    <header className="mb-6">
-                        <div className="flex items-start mb-2">
+                    <header className="mb-4">
+                        <div className="flex items-start mb-4">
                             <div className="mr-4">
                                 <DefaultImage companyName={job.company_name} />
                             </div>
@@ -61,6 +71,23 @@ export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                             <Rating size="md" value={job.priority ?? 0} />
                         </div>
 
+                        <section className="p-4 border flex flex-col items-start gap-2">
+                            <div>
+                                <h3 className="font-medium">Relevant Keywords</h3>
+                                <p className="text-muted-foreground">Certain keywords, when added to your resume & cover letter can help your application rank higher in automated systems like ATS (Applicant Tracking Systems).</p>
+                            </div>
+                            {job.keywords ? <Keywords keywords={job.keywords} /> : (
+                                <Button
+                                    variant="outline"
+                                    className="gap-2 items-center"
+                                    onClick={handleGenerateClick}
+                                    loading={loading}
+                                >
+                                    <Wand2 size={18} />
+                                    <span>Generate Keywords</span>
+                                </Button>
+                            )}
+                        </section>
                     </header>
 
                     <main className="mb-6">
@@ -68,10 +95,6 @@ export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                             <div className="text-base-col" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
                         </section>
                     </main>
-
-                    <footer>
-                        <ChipsGroup labels={labels ?? []} />
-                    </footer>
                 </div>
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3 sticky top-0">
                     <ResumeSection job={job} />
@@ -92,6 +115,14 @@ export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                 />
             )}
         </>
+    )
+}
+
+function Keywords({ keywords }: { keywords: string[] }) {
+    return (
+        <ul>
+            {keywords.map((keyword, idx) => (<Chip key={`${keyword}-${idx}`} label={keyword} />))}
+        </ul>
     )
 }
 

@@ -7,7 +7,7 @@ import { type Database } from 'lib/database.types';
 import { type Job, type Note } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { PageProps } from 'src/pages';
+import { type PageProps } from 'src/pages';
 
 interface JobDetailsPageProps extends PageProps {
     job: Job
