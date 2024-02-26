@@ -10,8 +10,8 @@ import { Save, Wand2 } from 'lucide-react'
 import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
+import { PageProps } from 'src/pages'
 import { Button, Spinner } from 'ui'
-import { type PageProps } from '..'
 
 interface CoverLetterProps extends PageProps {
     job: Job
@@ -21,9 +21,10 @@ interface CoverLetterProps extends PageProps {
 export default function CoverLetter({ session, profile, job, coverLetter }: CoverLetterProps) {
     const router = useRouter()
     const [value, setValue] = useState(coverLetter.text ?? '')
-    const client = useSupabaseClient<Database>();
+    const client = useSupabaseClient<Database>()
     const [loading, setLoading] = useState(false)
-    const { toast } = useToast();
+    const [magicWriteLoading, setMagicWriteLoading] = useState(false)
+    const { toast } = useToast()
 
     const debouncedSendInputToServer = useCallback(
         debounce(async (text: string) => {
@@ -35,7 +36,7 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
 
             if (error) throw error;
         }, 1500),
-        [setLoading, job.cover_letter_id, toast, client]
+        [setLoading, job.cover_letter_id, client]
     );
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -53,6 +54,36 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
             setLoading(false);
         }
     };
+
+    const handleMagicWriteClick = async () => {
+        try {
+            setMagicWriteLoading(true)
+            const { data: workExperience, error: _workExperienceError } = await client.from('work_experience').select('company_name, job_title, location, highlights (text)').is('resume_id', null);
+            if (_workExperienceError) throw _workExperienceError
+            const { data: education, error: _educationError } = await client.from('education').select('institution, degree, field_of_study, location, highlights (text)').is('resume_id', null);
+            if (_educationError) throw _educationError
+
+            const coverLetter = await fetch('/api/cover-letter/generate-cover-letter', {
+                method: 'POST',
+                body: JSON.stringify({ jobDescription: job.description, jobTitle: job.position, skills: profile.skills, workExperience, education }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            const { coverLetter: response } = await coverLetter.json()
+            setValue(response);
+            await debouncedSendInputToServer(response);
+        } catch (error) {
+            toast({
+                description: "Failed to generate cover letter",
+                title: 'Error',
+                variant: 'destructive'
+            })
+        } finally {
+            setMagicWriteLoading(false)
+        }
+    }
 
     return (
         <Layout
@@ -72,6 +103,7 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
                         placeholder="Write your cover letter here"
                         rows={20}
                         value={value}
+                        disabled={magicWriteLoading}
                         className="w-full p-4 pb-0 flex-1 text-accent-foreground mb-2 border"
                         autoFocus
                     />
@@ -82,7 +114,7 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
                             </div>
                         )}
 
-                        <Button type="button" variant="outline" className="flex gap-1">
+                        <Button type="button" variant="outline" className="flex gap-1" onClick={handleMagicWriteClick} loading={magicWriteLoading}>
                             <Wand2 size={18} />
                             <span>Magic Write</span>
                         </Button>
@@ -104,7 +136,7 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
-    const jobId = context.query?.['job-id'] as string;
+    const jobId = context.params?.['job'] as string;
 
     if (!session) {
         return {

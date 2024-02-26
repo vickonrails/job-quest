@@ -1,14 +1,13 @@
 import { type Job } from '@lib/types'
 import { useRouter } from 'next/router'
 import { Button } from 'ui'
-import { v4 as uuid } from 'uuid'
 
 export function CoverLetterSection({ job }: { job: Job }) {
     const router = useRouter()
     const coverLetterId = job.cover_letter_id
 
     const navigateToCoverletter = () => {
-        const url = `/cover-letters/${coverLetterId ?? uuid()}?job-id=${job.id}`
+        const url = `/jobs/${job.id}/cover-letter`
         return router.push(url)
     }
 
