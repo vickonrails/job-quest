@@ -16,3 +16,4 @@ export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experie
 export type Education = Database['public']['Tables']['education']['Row'] & { highlights?: Highlight[] };
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];
+export type CoverLetter = Database['public']['Tables']['cover_letters']['Row'];
