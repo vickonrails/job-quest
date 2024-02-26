@@ -1,10 +1,11 @@
+import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Highlight } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { setEntityId } from '@utils/set-entity-id';
-import { ChevronDown, ChevronLeft, Save } from 'lucide-react';
+import { ChevronDown, Save } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { createRef, forwardRef, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
@@ -123,11 +124,7 @@ export function ResumeForm({ session }: { session: Session }) {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
             <section className="max-w-xl mx-auto">
-                <Button variant="link" type="button" className="pl-0" onClick={() => router.back()}>
-                    <ChevronLeft />
-                    <span>Back</span>
-                </Button>
-
+                <BackButton onClick={() => router.back()} />
                 <header>
                     <h3 className="font-medium text-lg">Personal Information</h3>
                     <p className="mb-4 text-sm text-muted-foreground">
