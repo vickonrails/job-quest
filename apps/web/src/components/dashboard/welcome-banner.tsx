@@ -1,30 +1,84 @@
+import { cn } from '@utils/cn';
 import clsx from 'clsx';
 import { type Profile } from 'lib/types';
+import { ArrowDownAZ, FolderHeart, type LucideIcon, Timer, ListStart } from 'lucide-react';
+import Link, { type LinkProps as NextLinkProps } from 'next/link';
 import { type HTMLAttributes } from 'react';
 
 interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
     profile: Profile
 }
 
-export function WelcomeBanner({ className, profile, ...rest }: WelcomeBannerProps) {
+export function JobsSummaryCards({ className, profile, ...rest }: WelcomeBannerProps) {
     return (
         <section
-            className={clsx('w-full rounded-xl bg-primary min-h-[120px] p-4 text-white relative overflow-hidden', className)}
+            className={clsx('', className)}
             {...rest}
         >
-            <h2 className="w-full text-2xl font-medium mb-2">Welcome {profile?.full_name}</h2>
-            <p className="text-sm max-w-md text-gray-200">“It may be necessary to encounter defeats, so you can know who you are, what you can rise from, how you can still come out of it.” —Maya Angelou</p>
-            <Artefacts />
+            <h2 className="w-full text-3xl font-bold my-6">Welcome {profile?.full_name?.split(' ')[0]}</h2>
+            <main className="flex gap-4 h-60 items-stretch">
+                <SummaryCard title="Recently Added" href="" type={SummaryCardType.RECENTLY_ADDED} icon={Timer} count={20} />
+                <SummaryCard title="Recently Applied" href="" type={SummaryCardType.RECENTLY_APPLIED} icon={ArrowDownAZ} count={15} />
+                <SummaryCard href="" title="Favorites" type={SummaryCardType.FAVORITES} icon={FolderHeart} count={12} />
+                <SummaryCard href="" title="Next in Line" type={SummaryCardType.NEXT_IN_LINE} icon={ListStart} />
+            </main>
         </section>
     )
 }
 
-export function Artefacts() {
+enum SummaryCardType {
+    RECENTLY_ADDED,
+    RECENTLY_APPLIED,
+    FAVORITES,
+    NEXT_IN_LINE
+}
+
+export interface LinkProps extends NextLinkProps {
+    className?: string
+    disabled?: boolean
+    title?: string
+    type: SummaryCardType
+    icon: LucideIcon
+    count?: number
+}
+
+function getTypeGradient(type: SummaryCardType) {
+    switch (type) {
+        case SummaryCardType.RECENTLY_ADDED:
+            return 'from-neutral-950 to-neutral-600'
+        case SummaryCardType.RECENTLY_APPLIED:
+            return 'from-indigo-900 to-indigo-600'
+        case SummaryCardType.FAVORITES:
+            return ' from-rose-900 to-rose-600'
+        case SummaryCardType.NEXT_IN_LINE:
+            return 'from-purple-900 to-purple-600'
+    }
+}
+
+function SummaryCard({ title, type, className, icon: Icon, count = 10, ...rest }: LinkProps) {
+    const gradientClasses = getTypeGradient(type)
+
     return (
-        <div className="absolute top-1/3 right-0">
-            <span className="absolute border-[35px] rounded-full border-white/50 h-40 w-40 block right-20 -bottom-5" />
-            <span className="absolute border-[40px] rounded-full border-white/50 h-52 w-52 block right-5 top-0" />
-            <span className="absolute rounded-full h-14 w-14 block bg-white/30 -top-10 right-0" />
-        </div>
+        <Link
+            className={cn(
+                'p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full bg-gradient-to-tr',
+                gradientClasses,
+                className
+            )}
+            {...rest}
+        >
+            <span className="bg-white h-6 w-6 rounded-full text-xs font-bold text-black text-center flex self-end justify-center">
+                <span className="m-auto">
+                    {count}
+                </span>
+            </span>
+            {Icon && (
+                <div className="flex-1 grid">
+                    <Icon className="m-auto" size={50} />
+                </div>
+            )}
+            <h3 className="text-xl text-center font-medium">{title}</h3>
+        </Link>
     )
 }
+

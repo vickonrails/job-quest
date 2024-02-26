@@ -1,6 +1,5 @@
-import { SummaryCard } from '@components/dashboard';
 import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
-import { WelcomeBanner } from '@components/dashboard/welcome-banner';
+import { JobsSummaryCards } from '@components/dashboard/welcome-banner';
 import { Layout } from '@components/layout';
 import { Table, type Column, type TableActions } from '@components/table';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
@@ -25,15 +24,11 @@ const Index = ({ session, profile, jobs }: PageProps & { jobs: Job[] }) => {
         <Layout
             session={session}
             profile={profile}
-            containerClasses="p-6"
+            containerClasses="p-6 overflow-auto"
         >
             <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">
-                    <WelcomeBanner className="mb-4" profile={profile} />
-                    <div className="flex w-full gap-4 mb-4">
-                        <SummaryCard title="10" description="Bookmarked applications" />
-                        <SummaryCard title="20" description="High priority applications" />
-                    </div>
+                    <JobsSummaryCards className="mb-4" profile={profile} />
                     <RecentlyAdded jobs={jobs} />
                 </section>
                 <DashboardSidebar className="basis-1/4" />
