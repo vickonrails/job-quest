@@ -65,10 +65,12 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
 }
 
 function isActive(path: string, href: string) {
-    if (href === '/') {
+    if (path === '/dashboard-details' && href === '/') {
+        return true;
+    } else if (href === '/') {
         return path === href
-    } else {
-        // apply second rule
+    }
+    else {
         return path.startsWith(href)
     }
 }

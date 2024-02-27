@@ -1,7 +1,7 @@
+import { Avatar } from '@components/avatar';
 import { Typography } from '@components/typography';
 import { formatDate } from '@components/utils';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { type HTMLAttributes } from 'react';
 import { Rating } from 'ui';
 
@@ -61,8 +61,8 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const { src, text: logoText } = value as LogoWithTextCellType<T>
             return (
                 <td className={classNames} {...rest}>
-                    <div className="flex items-center">
-                        {!!src && <Image src={src ?? ''} className="rounded-md mr-2" alt="" width={24} height={24} />}
+                    <div className="flex items-center gap-1">
+                        <Avatar alt="" size="sm" fallbackText={logoText} src={src} />
                         <Typography variant="body-sm">
                             {logoText}
                         </Typography>

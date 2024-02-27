@@ -1,7 +1,7 @@
 import { cn } from '@utils/cn';
 import clsx from 'clsx';
 import { type Profile } from 'lib/types';
-import { ArrowDownAZ, FolderHeart, type LucideIcon, Timer, ListStart } from 'lucide-react';
+import { Building, FolderHeart, ListStart, Timer, type LucideIcon } from 'lucide-react';
 import Link, { type LinkProps as NextLinkProps } from 'next/link';
 import { type HTMLAttributes } from 'react';
 
@@ -17,10 +17,34 @@ export function JobsSummaryCards({ className, profile, ...rest }: WelcomeBannerP
         >
             <h2 className="w-full text-3xl font-bold my-6">Welcome {profile?.full_name?.split(' ')[0]}</h2>
             <main className="flex gap-4 h-60 items-stretch">
-                <SummaryCard title="Recently Added" href="" type={SummaryCardType.RECENTLY_ADDED} icon={Timer} count={20} />
-                <SummaryCard title="Recently Applied" href="" type={SummaryCardType.RECENTLY_APPLIED} icon={ArrowDownAZ} count={15} />
-                <SummaryCard href="" title="Favorites" type={SummaryCardType.FAVORITES} icon={FolderHeart} count={12} />
-                <SummaryCard href="" title="Next in Line" type={SummaryCardType.NEXT_IN_LINE} icon={ListStart} />
+                <SummaryCard
+                    title="Recently Added"
+                    href="/dashboard-details?card=recently_added"
+                    type={SummaryCardType.RECENTLY_ADDED}
+                    icon={Timer}
+                    count={20}
+                />
+
+                <SummaryCard
+                    title="Upcoming Interviews"
+                    href="/dashboard-details?card=upcoming_interviews"
+                    type={SummaryCardType.UPCOMING_INTERVIEWS}
+                    icon={Building}
+                    count={15}
+                />
+                <SummaryCard
+                    href="/dashboard-details?card=favorites"
+                    title="Favorites"
+                    type={SummaryCardType.FAVORITES}
+                    icon={FolderHeart}
+                    count={12}
+                />
+                <SummaryCard
+                    href="/dashboard-details?card=next_in_line"
+                    title="Next in Line"
+                    type={SummaryCardType.NEXT_IN_LINE}
+                    icon={ListStart}
+                />
             </main>
         </section>
     )
@@ -28,7 +52,7 @@ export function JobsSummaryCards({ className, profile, ...rest }: WelcomeBannerP
 
 enum SummaryCardType {
     RECENTLY_ADDED,
-    RECENTLY_APPLIED,
+    UPCOMING_INTERVIEWS,
     FAVORITES,
     NEXT_IN_LINE
 }
@@ -46,7 +70,7 @@ function getTypeGradient(type: SummaryCardType) {
     switch (type) {
         case SummaryCardType.RECENTLY_ADDED:
             return 'from-neutral-950 to-neutral-600'
-        case SummaryCardType.RECENTLY_APPLIED:
+        case SummaryCardType.UPCOMING_INTERVIEWS:
             return 'from-indigo-900 to-indigo-600'
         case SummaryCardType.FAVORITES:
             return ' from-rose-900 to-rose-600'
@@ -61,23 +85,23 @@ function SummaryCard({ title, type, className, icon: Icon, count = 10, ...rest }
     return (
         <Link
             className={cn(
-                'p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full bg-gradient-to-tr',
+                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full opacity-95 bg-gradient-to-tr group hover:opacity-100',
                 gradientClasses,
                 className
             )}
             {...rest}
         >
-            <span className="bg-white h-6 w-6 rounded-full text-xs font-bold text-black text-center flex self-end justify-center">
+            <span className="transition-transform bg-white h-6 w-6 rounded-full text-xs font-bold text-black text-center flex self-end justify-center group-hover:scale-125 group-focus-within:scale-125">
                 <span className="m-auto">
                     {count}
                 </span>
             </span>
             {Icon && (
                 <div className="flex-1 grid">
-                    <Icon className="m-auto" size={50} />
+                    <Icon className="transition-transform m-auto group-hover:scale-125 group-focus-within:scale-125" size={50} />
                 </div>
             )}
-            <h3 className="text-xl text-center font-medium">{title}</h3>
+            <h3 className="transition-transform text-xl text-center font-medium group-hover:-translate-y-4 group-focus-within:-translate-y-4">{title}</h3>
         </Link>
     )
 }

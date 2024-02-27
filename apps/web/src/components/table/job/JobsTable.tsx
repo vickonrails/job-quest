@@ -9,12 +9,9 @@ export const columns: Column<Job> = [
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
     { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ src: item.company_site ? `https://logo.clearbit.com/${item.company_site}` : '', text: item.company_name }) },
     {
-        // TODO: refactor
         header: 'Status', type: 'text', renderValue: (item) => {
-            if (!item.status) return { text: '' };
             const status = Status_Lookup.find((x, idx) => idx === item.status)
-            const text = status?.[1] ?? ''
-            return { text }
+            return { text: status ?? '' }
         }
     },
     { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: item.priority ?? 0 }) },
@@ -23,7 +20,7 @@ export const columns: Column<Job> = [
 
 // TODO: I want the filtering to work in a very simple way - Just provide sorting buttons on the head of the table columns. Once clicked, it'll sort descending, clicking again will sort ascending and clicking again will remove the sort.
 // Then for filtering, I want to have a button that will add selects to the top of the table. These selects will be for the available filtering and will control them.
-const JobsTable = ({ jobs }: { jobs: Job[] }) => {
+const JobsTable = ({ jobs, hideActions }: { jobs: Job[], hideActions?: boolean }) => {
     const client = useSupabaseClient<Database>();
     const router = useRouter();
 
@@ -50,6 +47,7 @@ const JobsTable = ({ jobs }: { jobs: Job[] }) => {
             columns={columns}
             data={jobs}
             actions={actions}
+            hideActions={hideActions}
         />
     )
 }
