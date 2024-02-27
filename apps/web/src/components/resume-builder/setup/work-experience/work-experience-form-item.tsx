@@ -8,9 +8,9 @@ import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 
 import { Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { WorkExperienceHighlights } from './work-experience-highlights'
-import { type AutoFocusProps } from '../education/education-form-item'
+import { type BaseFormItemProps } from '../education/education-form-item'
 
-interface WorkExperienceFormProps extends AutoFocusProps {
+interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
     fields: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>[],
     onDeleteClick: (experience: WorkExperience, index: number) => void
@@ -18,9 +18,10 @@ interface WorkExperienceFormProps extends AutoFocusProps {
 }
 
 /** ------------------ Work Experience Form ------------------ */
-export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete, ...rest }: WorkExperienceFormProps) {
+export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete, defaultOpen, ...rest }: WorkExperienceFormProps) {
+    const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+        <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
             {fields.map((field, index) => (
                 <FormItem
                     form={form}
@@ -36,7 +37,7 @@ export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDel
     )
 }
 
-interface FormItemProps extends AutoFocusProps {
+interface FormItemProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
     index: number,
     field: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>,

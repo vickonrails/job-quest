@@ -9,11 +9,12 @@ import { Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
 
-export interface AutoFocusProps {
+export interface BaseFormItemProps {
     autofocus?: boolean
+    defaultOpen?: boolean
 }
 
-interface EducationFormProps extends AutoFocusProps {
+interface EducationFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ education: Education[] }, 'education'>
     fields: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>[],
     onDeleteClick: (education: Education, index: number) => void
@@ -39,9 +40,10 @@ function Header({ form, index }: { form: UseFormReturn<{ education: Education[] 
     )
 }
 
-export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete, ...rest }: EducationFormProps) {
+export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete, defaultOpen, ...rest }: EducationFormProps) {
+    const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+        <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
             {fields.map((field, index) =>
                 <FormItem
                     form={form}
@@ -57,7 +59,7 @@ export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDele
     )
 }
 
-interface FormItemProps extends AutoFocusProps {
+interface FormItemProps extends BaseFormItemProps {
     form: UseFormReturn<{ education: Education[] }>
     index: number,
     field: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>,

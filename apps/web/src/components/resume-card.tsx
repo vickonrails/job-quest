@@ -8,7 +8,7 @@ import { formatDate } from './utils';
  * Component for rendering a preview card for a resume
  */
 
-export function ResumePreviewCard({ resume, className }: { resume: Resume, className: string }) {
+export function ResumePreviewCard({ resume, className }: { resume: Resume, className?: string }) {
     return (
         <Link href={`/resumes/${resume.id}`} className={cn('w-[32%] border rounded-md p-4 group hover:border-primary', className)}>
             <article className="bg-white rounded-lg flex gap-2 items-center">

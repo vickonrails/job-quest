@@ -98,6 +98,7 @@ export default function ProjectsView() {
                         form={form}
                         onDeleteClick={handleDeleteClick}
                         autofocus
+                        defaultOpen
                     />
                     <SectionFooter
                         isSubmitting={formState.isSubmitting}

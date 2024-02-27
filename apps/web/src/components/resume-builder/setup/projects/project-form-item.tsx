@@ -8,14 +8,13 @@ import { createRef, useEffect, useState, type ChangeEvent } from 'react'
 import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
-import { type AutoFocusProps } from '../education/education-form-item'
+import { type BaseFormItemProps } from '../education/education-form-item'
 
-interface ProjectsFieldsProps extends AutoFocusProps {
+interface ProjectsFieldsProps extends BaseFormItemProps {
     form: UseFormReturn<{ projects: Project[] }, 'projects'>
     fields: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>[],
     onDeleteClick: (project: Project, index: number) => void
 }
-
 
 /** ------------------ Work Experience Header ------------------ */
 function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 'projects'>, index: number }) {
@@ -38,9 +37,10 @@ function Header({ form, index }: { form: UseFormReturn<{ projects: Project[] }, 
     )
 }
 
-export function ProjectForm({ form, fields, onDeleteClick, ...rest }: ProjectsFieldsProps) {
+export function ProjectForm({ form, fields, onDeleteClick, defaultOpen, ...rest }: ProjectsFieldsProps) {
+    const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+        <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
             {fields.map((field, index) => (
                 <FormItem
                     key={field.id}
@@ -55,7 +55,7 @@ export function ProjectForm({ form, fields, onDeleteClick, ...rest }: ProjectsFi
     )
 }
 
-interface FormItemProps extends AutoFocusProps {
+interface FormItemProps extends BaseFormItemProps {
     form: UseFormReturn<{ projects: Project[] }>
     index: number,
     field: FieldArrayWithId<{ projects: Project[] }, 'projects', '_id'>,

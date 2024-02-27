@@ -79,6 +79,7 @@ export function EducationStep() {
                         onDeleteClick={handleDeleteClick}
                         setHighlightsToDelete={setHighlightsToDelete}
                         autofocus
+                        defaultOpen
                     />
                     <SectionFooter
                         saveDisabled={fields.length === 0 || !form.formState.isValid}
