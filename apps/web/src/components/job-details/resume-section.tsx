@@ -1,5 +1,5 @@
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import ResumeItem from '@components/resume-builder/builder/resume-item';
+import { ResumePreviewCard } from '@components/resume-card';
 import { type Database } from '@lib/database.types';
 import { type Job } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -58,7 +58,10 @@ export function ResumeSection({ job }: { job: Job }) {
                 </header>
 
                 {resume && (
-                    <ResumeItem resume={resume} />
+                    <ResumePreviewCard
+                        resume={resume}
+                        className="w-full"
+                    />
                 )}
             </div>
 

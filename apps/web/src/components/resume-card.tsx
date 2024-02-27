@@ -8,9 +8,9 @@ import { formatDate } from './utils';
  * Component for rendering a preview card for a resume
  */
 
-export function ResumePreviewCard({ resume }: { resume: Resume }) {
+export function ResumePreviewCard({ resume, className }: { resume: Resume, className: string }) {
     return (
-        <Link href={`/resumes/${resume.id}`} className="w-[32%] border rounded-md p-4 group hover:border-primary">
+        <Link href={`/resumes/${resume.id}`} className={cn('w-[32%] border rounded-md p-4 group hover:border-primary', className)}>
             <article className="bg-white rounded-lg flex gap-2 items-center">
                 <div className={cn('transition-colors text-white h-24 p-2 w-1/3 text-3xl bg-neutral-300 font-bold grid')} >
                     <GanttChartSquare size={40} className="transition-transform m-auto group-hover:scale-125" />

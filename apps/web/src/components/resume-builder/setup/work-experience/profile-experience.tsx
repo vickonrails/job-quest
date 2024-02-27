@@ -77,6 +77,7 @@ export function WorkExperience() {
                         fields={fields}
                         onDeleteClick={handleDeleteClick}
                         onHighlightDelete={setHighlightsToDelete}
+                        autofocus
                     />
                     <SectionFooter
                         saveDisabled={fields.length <= 0 || !form.formState.isValid}
