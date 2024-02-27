@@ -146,6 +146,7 @@ export interface Database {
           created_at: string | null
           description: string | null
           id: string
+          keywords: string[] | null
           labels: string[] | null
           link: string | null
           location: string | null
@@ -165,6 +166,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           id?: string
+          keywords?: string[] | null
           labels?: string[] | null
           link?: string | null
           location?: string | null
@@ -184,6 +186,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           id?: string
+          keywords?: string[] | null
           labels?: string[] | null
           link?: string | null
           location?: string | null
