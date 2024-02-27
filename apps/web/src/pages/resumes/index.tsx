@@ -1,10 +1,9 @@
 import { Layout } from '@components/layout';
-import ResumeItem from '@components/resume-builder/builder/resume-item';
+import { ResumePreviewCard } from '@components/resume-card';
 import { type Database } from '@lib/database.types';
 import { type Profile, type Resume } from '@lib/types';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button } from 'ui';
 import { v4 as uuid } from 'uuid';
@@ -22,26 +21,23 @@ export default function ResumeBuilder({ session, profile, resumes }: { session: 
             session={session}
             profile={profile}
             containerClasses="p-6"
+            pageTitle="Resumes"
         >
             <section>
-                <header className="flex justify-between items-center mb-4">
-                    <h1 className="text-xl font-medium">Resumes</h1>
+                <header className="flex justify-end items-center mb-4">
                     <Button onClick={handleCreateNew}>
                         Create New
                     </Button>
                 </header>
 
-                <main className="flex gap-3">
+                <section className="flex flex-wrap gap-4">
                     {resumes?.map((resume) => (
-                        <Link
+                        <ResumePreviewCard
                             key={resume.id}
-                            className="hover:text-primary"
-                            href={`/resumes/${resume.id}`}
-                        >
-                            <ResumeItem resume={resume} />
-                        </Link>
+                            resume={resume}
+                        />
                     ))}
-                </main>
+                </section>
             </section>
         </Layout>
     )

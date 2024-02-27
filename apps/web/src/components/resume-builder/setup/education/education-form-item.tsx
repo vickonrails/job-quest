@@ -9,7 +9,12 @@ import { Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
 
-interface EducationFormProps {
+export interface BaseFormItemProps {
+    autofocus?: boolean
+    defaultOpen?: boolean
+}
+
+interface EducationFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ education: Education[] }, 'education'>
     fields: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>[],
     onDeleteClick: (education: Education, index: number) => void
@@ -35,9 +40,10 @@ function Header({ form, index }: { form: UseFormReturn<{ education: Education[] 
     )
 }
 
-export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete }: EducationFormProps) {
+export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete, defaultOpen, ...rest }: EducationFormProps) {
+    const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+        <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
             {fields.map((field, index) =>
                 <FormItem
                     form={form}
@@ -46,13 +52,14 @@ export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDele
                     key={field.id}
                     onDeleteClick={onDeleteClick}
                     setHighlightsToDelete={setHighlightsToDelete}
+                    {...rest}
                 />
             )}
         </Accordion>
     )
 }
 
-interface FormItemProps {
+interface FormItemProps extends BaseFormItemProps {
     form: UseFormReturn<{ education: Education[] }>
     index: number,
     field: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>,
@@ -60,7 +67,7 @@ interface FormItemProps {
     setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete }: FormItemProps) {
+function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.education?.[index] ?? {}
 
@@ -75,7 +82,7 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete }: 
                 <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                     <input type="hidden" {...register(`education.${index}.id`)} />
                     <Input
-                        autoFocus
+                        autoFocus={autofocus}
                         label="Institution"
                         placeholder="Institution of study..."
                         hint={<ErrorHint>{fieldErrs.institution?.message}</ErrorHint>}

@@ -8,8 +8,9 @@ import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 
 import { Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { WorkExperienceHighlights } from './work-experience-highlights'
+import { type BaseFormItemProps } from '../education/education-form-item'
 
-interface WorkExperienceFormProps {
+interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
     fields: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>[],
     onDeleteClick: (experience: WorkExperience, index: number) => void
@@ -17,9 +18,10 @@ interface WorkExperienceFormProps {
 }
 
 /** ------------------ Work Experience Form ------------------ */
-export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete }: WorkExperienceFormProps) {
+export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete, defaultOpen, ...rest }: WorkExperienceFormProps) {
+    const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
-        <Accordion type="single" collapsible defaultValue={fields[0]?.id ?? ''}>
+        <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
             {fields.map((field, index) => (
                 <FormItem
                     form={form}
@@ -28,13 +30,14 @@ export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDel
                     onDeleteClick={onDeleteClick}
                     field={field}
                     onHighlightDelete={onHighlightDelete}
+                    {...rest}
                 />
             ))}
         </Accordion>
     )
 }
 
-interface FormItemProps {
+interface FormItemProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
     index: number,
     field: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>,
@@ -43,7 +46,7 @@ interface FormItemProps {
 }
 
 /** ------------------ Work Experience Form Item ------------------ */
-function FormItem({ form, index, onDeleteClick, field, onHighlightDelete }: FormItemProps) {
+function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofocus }: FormItemProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.workExperience?.[index] ?? {}
 
@@ -58,7 +61,7 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete }: Form
                 <section className="grid grid-cols-2 gap-3 mb-4 rounded-md">
                     <input type="hidden" {...register(`workExperience.${index}.id`)} />
                     <Input
-                        autoFocus
+                        autoFocus={autofocus}
                         label="Company Name"
                         placeholder="Company name"
                         hint={<ErrorHint>{fieldErrs.company_name?.message}</ErrorHint>}
