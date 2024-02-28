@@ -15,7 +15,7 @@ const JobDetailsPage = ({ session, profile, job, notes }: { session: Session, pr
     if (!jobsData) return null;
 
     return (
-        <Layout session={session} profile={profile} containerClasses="p-6 overflow-auto">
+        <Layout session={session} profile={profile} containerClasses="p-6 overflow-auto" pageTitle="Job Details">
             <div>
                 <button className="flex text-light-text mb-4 items-center" onClick={() => router.back()}>
                     <ChevronLeft size={20} />

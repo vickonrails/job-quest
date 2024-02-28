@@ -16,7 +16,7 @@ export function CoverLetterSection({ job }: { job: Job }) {
             <div className="mb-3 flex flex-col gap-3">
                 <header>
                     <h3 className="font-medium">Add Cover Letter</h3>
-                    <p className="text-sm text-muted-foreground">Pick an already created resume or create a new one.</p>
+                    <p className="text-sm text-muted-foreground">Begin from scratch or allow magic write provide a starting point.</p>
                 </header>
             </div>
 

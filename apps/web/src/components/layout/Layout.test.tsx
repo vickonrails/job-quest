@@ -63,7 +63,7 @@ describe('Layout', () => {
     }
 
     it('renders all the correct links', () => {
-        const links = ['dashboard', 'job tracker', 'my resumes', 'notes', 'reminder', 'documents', 'contacts'];
+        const links = ['dashboard', 'job tracker', 'my resumes', 'notes', 'reminders', 'documents', 'contacts'];
         const { getAllByRole } = setup({ session, profile });
         const navLinks = getAllByRole('link');
         const hasCorrectLinks = navLinks.filter((link, index) => {

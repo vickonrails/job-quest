@@ -85,11 +85,11 @@ const SignIn: NextPage<SignInProps> = () => {
             <Head>
                 <title>Sign In</title>
             </Head>
-            <AuthCard>
+            <AuthCard className="bg-blue-50">
                 <div className="p-5 py-6 max-w-sm mx-auto">
                     <div className="mb-8">
                         <h1 className="mb-3 text-3xl font-medium">Welcome to JobQuest!</h1>
-                        <Typography variant="body-md" className="text-muted-foreground">Enter you email and we’ll send you a magic link. Click the link to authenticate.</Typography>
+                        <Typography variant="body-md" className="text-muted-foreground">Enter you email to get a magic link. Click the link to authenticate.</Typography>
                     </div>
                     {emailSent && (
                         <Banner
