@@ -2,4 +2,4 @@
 
 Web application to manage job applications.
 
-![](../../.github/assets/tracking-applications-demo.gif)
+![](../../.github/assets/job-quest-demo.gif)
