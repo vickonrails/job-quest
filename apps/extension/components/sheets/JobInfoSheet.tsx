@@ -2,7 +2,7 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { Briefcase, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Rating, Spinner, Textarea } from 'ui';
+import { Banner, Button, Rating, Spinner, Textarea } from 'ui';
 import { useJob } from '~hooks/useJob';
 import { getJobId } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
@@ -61,6 +61,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     const { register, control, handleSubmit, formState: { isSubmitting }, reset } = useForm<Job>({
         defaultValues: { id: job ? job.id : '', position, company_name, location, link, ...rest }
     })
+    const [showBanner, setShowBanner] = useState({ show: false, error: false })
 
     useEffect(() => {
         if (!job) return
@@ -79,19 +80,26 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
             }
 
             if (res.success) {
-                alert('Job added')
                 refresh(res.job);
                 reset({ notes: '', ...res.job });
+                setShowBanner({ show: true, error: false })
             }
 
         } catch (error) {
-            alert('Error')
+            setShowBanner({ show: true, error: true })
         }
     }
+
+    const { show, error } = showBanner
 
     return (
         <Sheet {...props}>
             <form onSubmit={handleSubmit(onSubmit)}>
+                {show && (
+                    <Banner className='flex my-5 gap-2' variant={error ? 'error' : 'success'}>
+                        {error ? 'Could not add Job' : 'Successful'}
+                    </Banner>
+                )}
                 <input type='hidden' {...register('id')} />
                 <div className="flex flex-col gap-4">
                     <div className='m-1.5 hidden' />
