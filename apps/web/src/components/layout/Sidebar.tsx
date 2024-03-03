@@ -39,14 +39,14 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                 </NavGroup>
 
                 <NavGroup title="labels">
-                    <NavLink href="/notes">
+                    <NavLink href="/notes" disabled>
                         <FileText className="mr-2" />
                         <span>Notes</span>
                     </NavLink>
 
                     <NavLink href="/reminder" disabled>
                         <Bell className="mr-2" />
-                        <span>Reminder</span>
+                        <span>Reminders</span>
                     </NavLink>
 
                     <NavLink href="/documents" disabled>

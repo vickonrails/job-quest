@@ -27,4 +27,4 @@ Adding Job from LinkedIn browser
 
 Tracking Job Applications
 
-![](./.github/assets/tracking-applications-demo.gif)
+![](./.github/assets/job-quest-demo.gif)
