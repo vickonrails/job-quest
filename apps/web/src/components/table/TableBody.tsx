@@ -1,7 +1,7 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
-import { Edit, MoreVertical, Trash2 } from 'react-feather';
+import { Edit, MoreVertical, Trash2 } from 'lucide-react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { type BaseEntity, type Column, type TableActions } from './Table';

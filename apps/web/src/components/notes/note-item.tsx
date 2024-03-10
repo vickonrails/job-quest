@@ -6,7 +6,7 @@ import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
-import { Trash } from 'react-feather'
+import { Trash } from 'lucide-react'
 import { Button, Textarea } from 'ui'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {

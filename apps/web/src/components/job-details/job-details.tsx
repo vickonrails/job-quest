@@ -3,16 +3,15 @@ import NotesList from '@components/notes/note-list';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { Typography } from '@components/typography';
 import { formatDate } from '@components/utils';
-import { type Job, type Note } from '@lib/types';
+import { type Job } from '@lib/types';
 import { cn } from '@utils/cn';
 import hashColors from '@utils/hash-colors';
-import { ExternalLink } from 'react-feather';
+import { ExternalLink } from 'lucide-react';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { Button, Rating, Status_Lookup } from 'ui';
 import { CoverLetterSection } from './cover-letter-section';
 import { KeywordsSection } from './keywords';
 import { ResumeSection } from './resume-section';
-import { Suspense } from 'react';
 
 export const JobDetails = ({ job }: { job: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});

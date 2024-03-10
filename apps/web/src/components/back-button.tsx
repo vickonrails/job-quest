@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'react-feather'
+import { ChevronLeft } from 'lucide-react'
 import React from 'react'
 import { Button, type ButtonProps } from 'ui'
 

@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Star as FeatherStar } from 'react-feather'
+import { Star as FeatherStar } from 'lucide-react'
 
 type RatingSize = 'sm' | 'md' | 'lg'
 interface RatingProps {
