@@ -83,7 +83,7 @@ const NavLink = ({ href, ...props }: LinkProps) => {
         if (props.disabled) ev.preventDefault();
     }
 
-    const link = (
+    return (
         <Link
             onClick={handleClick}
             className={cn(
@@ -94,21 +94,6 @@ const NavLink = ({ href, ...props }: LinkProps) => {
             href={props.disabled ? '' : href}
             {...props}
         />
-    )
-
-    if (!props.disabled) return link;
-
-    return (
-        <Tooltip delayDuration={300}>
-            <TooltipTrigger asChild>
-                {link}
-            </TooltipTrigger>
-            <TooltipPortal>
-                <TooltipContent side="right">
-                    Coming soon
-                </TooltipContent>
-            </TooltipPortal>
-        </Tooltip>
     )
 }
 

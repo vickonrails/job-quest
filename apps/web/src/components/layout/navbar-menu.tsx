@@ -3,7 +3,7 @@ import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Database } from 'lib/database.types';
 import { type Profile } from 'lib/types';
-import { ChevronDown, LogOut, User } from 'lucide-react';
+import { ChevronDown, LogOut, User } from 'react-feather';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { Button } from 'ui';

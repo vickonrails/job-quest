@@ -11,10 +11,9 @@ import { type PageProps } from 'src/pages';
 
 interface JobDetailsPageProps extends PageProps {
     job: Job
-    notes: Note[]
 }
 
-const JobDetailsPage = ({ session, profile, job, notes }: JobDetailsPageProps) => {
+const JobDetailsPage = ({ session, profile, job }: JobDetailsPageProps) => {
     const { data } = useJobs({ initialData: [job] }, job.id);
     const router = useRouter()
     const selectedJob = data?.jobs[0]
@@ -27,7 +26,7 @@ const JobDetailsPage = ({ session, profile, job, notes }: JobDetailsPageProps) =
             containerClasses="p-6 overflow-auto"
         >
             <BackButton onClick={() => router.back()} />
-            <JobDetails job={selectedJob} notes={notes} />
+            <JobDetails job={selectedJob} />
         </Layout>
     )
 }
@@ -48,14 +47,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
     const { data: job } = await supabase.from('jobs').select().eq('id', jobId).single()
-    const { data: notes } = await supabase.from('notes').select().eq('job_id', jobId).order('created_at', { ascending: false });
 
     return {
         props: {
             session,
             profile,
-            job,
-            notes
+            job
         }
     }
 }

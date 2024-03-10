@@ -6,14 +6,15 @@ import { formatDate } from '@components/utils';
 import { type Job, type Note } from '@lib/types';
 import { cn } from '@utils/cn';
 import hashColors from '@utils/hash-colors';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'react-feather';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { Button, Rating, Status_Lookup } from 'ui';
 import { CoverLetterSection } from './cover-letter-section';
 import { KeywordsSection } from './keywords';
 import { ResumeSection } from './resume-section';
+import { Suspense } from 'react';
 
-export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
+export const JobDetails = ({ job }: { job: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
     if (!job) return;
 
@@ -34,7 +35,7 @@ export const JobDetails = ({ job, notes }: { job: Job, notes: Note[] }) => {
                     <section className="flex flex-col gap-2">
                         <h2>Notes</h2>
                         <NoteForm job={job} />
-                        <NotesList notes={notes} job={job} />
+                        <NotesList job={job} />
                     </section>
                 </div>
             </div>
