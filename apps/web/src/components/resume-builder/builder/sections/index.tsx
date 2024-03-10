@@ -1,14 +1,12 @@
 import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
-import { useToast } from '@components/toast/use-toast';
 import { type Database } from '@lib/database.types';
 import { type Highlight } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
-import { setEntityId } from '@utils/set-entity-id';
 import { ChevronDown, Save } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { createRef, forwardRef, useEffect, useState } from 'react';
-import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
+import { createRef, forwardRef, memo, useCallback, useEffect, useState } from 'react';
+import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { Button, Input, type ButtonProps } from 'ui';
 import { v4 as uuid } from 'uuid';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
@@ -16,32 +14,17 @@ import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
+import { debounce } from '@utils/debounce';
+import { DevTool } from '@hookform/devtools'
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
-export function ResumeForm({ session }: { session: Session }) {
+function useDebouncedSubmit() {
+    const router = useRouter();
     const client = useSupabaseClient<Database>()
-    const form = useFormContext<FormValues>();
-    const router = useRouter()
-    const { formState } = form
-    const { toast } = useToast()
-    const formRef = createRef<HTMLFormElement>()
-    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
+    // const { toast } = useToast()
 
-    useEffect(() => {
-        const form = formRef.current;
-        const handler = (ev: KeyboardEvent) => {
-            if (ev.key === 'Enter') {
-                ev.preventDefault();
-                return;
-            }
-        }
-
-        form?.addEventListener('keypress', handler);
-        return () => {
-            form?.removeEventListener('keypress', handler)
-        }
-    }, [formRef])
-
-    const onSubmit = async ({ resume, workExperience, projects, education }: FormValues) => {
+    const save = async (values: FormValues) => {
+        const { resume, workExperience, projects, education } = values
         const highlights: Highlight[] = []
         resume.id = router.query.resume as string;
         const { error } = await client.from('resumes').upsert(resume);
@@ -97,32 +80,79 @@ export function ResumeForm({ session }: { session: Session }) {
             educationUpdatePromise
         ]);
 
-        const hasErrors = promiseResult.some((res) => res.error)
+        // const hasErrors = promiseResult.some((res) => res.error)
 
-        if (!hasErrors) {
+        // if (!hasErrors) {
 
-            if (highlightsToDelete.length > 0) {
-                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
-                if (result.error) throw new Error(result.error.message)
-            }
+        //     if (highlightsToDelete.length > 0) {
+        //         const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+        //         if (result.error) throw new Error(result.error.message)
+        //     }
 
-            const preparedHighlights = highlights.filter(x => !highlightsToDelete.includes(x.id)).map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
-            const { error } = await client.from('highlights').upsert(preparedHighlights).select();
-            if (error) throw new Error(error.message);
-            toast({
-                title: 'Resume saved',
-                variant: 'success'
-            })
-        } else {
-            toast({
-                title: 'An error occured',
-                variant: 'destructive'
-            })
-        }
+        //     const preparedHighlights = highlights.filter(x => !highlightsToDelete.includes(x.id)).map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
+        //     const { error } = await client.from('highlights').upsert(preparedHighlights).select();
+        //     if (error) throw new Error(error.message);
+        //     toast({
+        //         title: 'Resume saved',
+        //         variant: 'success'
+        //     })
+        // } else {
+        //     toast({
+        //         title: 'An error occured',
+        //         variant: 'destructive'
+        //     })
+        // }
     }
 
+    return { save }
+}
+
+export const ResumeForm = memo(({ session, defaultValues }: { session: Session, defaultValues: FormValues }) => {
+    const form = useFormContext<FormValues>();
+    const router = useRouter()
+    const { formState: { isDirty } } = form
+    const formRef = createRef<HTMLFormElement>()
+    const { save } = useDebouncedSubmit()
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
+
+    const watchedData = useWatch({
+        control: form.control,
+        defaultValue: defaultValues
+    });
+
+    useEffect(() => {
+        const form = formRef.current;
+        const handler = (ev: KeyboardEvent) => {
+            if (ev.key === 'Enter') {
+                ev.preventDefault();
+                return;
+            }
+        }
+
+        form?.addEventListener('keypress', handler);
+        return () => {
+            form?.removeEventListener('keypress', handler)
+        }
+    }, [formRef])
+
+    const log = useCallback(
+        debounce(async () => {
+            await form.handleSubmit(save)()
+        }, 3000),
+        []
+    )
+
+    useDeepCompareEffect(() => {
+        if (!isDirty) return
+        log().then(() => {
+            // 
+        }).catch(() => {
+            // 
+        })
+    }, [watchedData])
+
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
+        <form className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
             <section className="max-w-xl mx-auto">
                 <BackButton onClick={() => router.back()} />
                 <header>
@@ -138,14 +168,17 @@ export function ResumeForm({ session }: { session: Session }) {
                 <ProjectsSection session={session} />
                 <EducationSection session={session} onHighlightDelete={setHighlightsToDelete} />
                 <Skills />
-                <Button loading={formState.isSubmitting} type="submit" className="flex items-center gap-1">
+                <Button type="submit" className="flex items-center gap-1">
                     <Save size={18} />
                     <span>Save</span>
                 </Button>
+                <DevTool control={form.control} />
             </section>
         </form>
     )
-}
+})
+
+ResumeForm.displayName = 'ResumeForm'
 
 function Skills() {
     const form = useFormContext<FormValues>();

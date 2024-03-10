@@ -6,14 +6,12 @@ import { createPagesServerClient, type Session } from '@supabase/auth-helpers-ne
 import { type GetServerSideProps } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ResumeForm } from '../../components/resume-builder/builder/sections';
+import { Spinner } from 'ui';
 
 interface PageProps {
     session: Session
     profile: Profile
-    resume: Resume,
-    workExperience: WorkExperience[]
-    projects: Project[]
-    education: Education[]
+    defaultValues: FormValues
 }
 
 export interface FormValues {
@@ -23,18 +21,24 @@ export interface FormValues {
     workExperience: WorkExperience[]
 }
 
-export default function ResumeBuilder({ session, profile, resume, education, projects, workExperience }: PageProps) {
-    const form = useForm<FormValues>({ defaultValues: { resume, workExperience, projects, education } });
+export default function ResumeBuilder({ session, profile, defaultValues }: PageProps) {
+    const form = useForm<FormValues>({ defaultValues });
+    const { formState: { isSubmitting } } = form
     return (
         <Layout
             session={session}
             profile={profile}
             containerClasses="overflow-hidden"
-            pageTitle="Resume Builder"
+            pageTitle={
+                <div className="flex items-center gap-2">
+                    <h1 className="text-base font-medium">Resume Builder</h1>
+                    {isSubmitting && <Spinner className="h-4 w-4" />}
+                </div>
+            }
         >
             <div className="flex w-full h-full">
                 <FormProvider {...form}>
-                    <ResumeForm session={session} />
+                    <ResumeForm session={session} defaultValues={defaultValues} />
                     <Preview />
                 </FormProvider>
             </div>
@@ -80,10 +84,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             session,
             profile,
-            workExperience,
-            projects,
-            education,
-            resume
+            defaultValues: {
+                workExperience,
+                projects,
+                education,
+                resume
+            }
         }
     }
 }
