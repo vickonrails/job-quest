@@ -33,8 +33,8 @@ function NotesList({ job, ...rest }: NoteListProps) {
 
     if (isLoading) {
         return (
-            <div className='flex'>
-                <Spinner className='m-auto mt-4' />
+            <div className="flex">
+                <Spinner className="m-auto mt-4" />
             </div>
         )
     }

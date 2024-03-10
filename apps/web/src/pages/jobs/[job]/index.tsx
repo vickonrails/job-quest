@@ -4,7 +4,7 @@ import { Layout } from '@components/layout';
 import { useJobs } from '@hooks';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type Database } from 'lib/database.types';
-import { type Job, type Note } from 'lib/types';
+import { type Job } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { type PageProps } from 'src/pages';
