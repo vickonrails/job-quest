@@ -3,7 +3,7 @@ import { type Resume } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { debounce } from '@utils/debounce';
 import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Input, Textarea } from 'ui';
 import useDeepCompareEffect from 'use-deep-compare-effect';

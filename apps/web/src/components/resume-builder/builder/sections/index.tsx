@@ -1,22 +1,66 @@
+import { AlertDialog } from '@components/alert-dialog';
 import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
+import { useToast } from '@components/toast/use-toast';
 import { DevTool } from '@hookform/devtools';
-import { type Session } from '@supabase/auth-helpers-react';
-import { ChevronDown, Save } from 'lucide-react';
+import { type Database } from '@lib/database.types';
+import { type Resume } from '@lib/types';
+import { useSupabaseClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { useQuery } from '@tanstack/react-query';
+import { ChevronDown, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { createRef, forwardRef, memo, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
-import { Button, Input, type ButtonProps } from 'ui';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { Button, Input, type ButtonProps, Spinner } from 'ui';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
 import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
 
-export const ResumeForm = memo(({ session }: { session: Session }) => {
+export async function deleteResume(id: string, client: SupabaseClient<Database>) {
+    try {
+        const { error: educationError } = await client.from('education').delete().eq('resume_id', id);
+        if (educationError) throw educationError;
+        const { error: projectsError } = await client.from('projects').delete().eq('resume_id', id);
+        if (projectsError) throw projectsError;
+        const { error: experienceError } = await client.from('work_experience').delete().eq('resume_id', id);
+        if (experienceError) throw experienceError;
+
+        const { data, error: jobsError } = await client.from('jobs').select().eq('resume_id', id)
+        if (jobsError) throw jobsError;
+
+        const updatedJobs = data.map(job => {
+            job.resume_id = null
+            return job
+        })
+        const { error: updateError } = await client.from('jobs').upsert(updatedJobs)
+        if (updateError) throw updateError;
+
+        const { error } = await client.from('resumes').delete().eq('id', id)
+        if (error) throw error;
+    } catch {
+        throw new Error('Failed to delete resume')
+    }
+}
+
+export const ResumeForm = memo(({ session, resume }: { session: Session, resume: Resume }) => {
     const form = useFormContext<FormValues>();
     const router = useRouter()
     const formRef = createRef<HTMLFormElement>()
+    const client = useSupabaseClient<Database>();
+    const { toast } = useToast();
+    const {
+        showDeleteDialog,
+        onCancel,
+        handleDelete: deleteFn,
+        loading,
+        setIsOpen,
+        isOpen
+    } = useDeleteModal({
+        onDelete: async (id: string) => { await deleteResume(id, client) }
+    });
 
     useEffect(() => {
         const form = formRef.current;
@@ -32,6 +76,18 @@ export const ResumeForm = memo(({ session }: { session: Session }) => {
             form?.removeEventListener('keypress', handler)
         }
     }, [formRef])
+
+    const handleDelete = async () => {
+        try {
+            await deleteFn();
+            return router.push('/resumes')
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred'
+            })
+        }
+    }
 
     return (
         <form className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
@@ -50,17 +106,57 @@ export const ResumeForm = memo(({ session }: { session: Session }) => {
                 <ProjectsSection session={session} />
                 <EducationSection session={session} />
                 <Skills />
-                <Button type="submit" className="flex items-center gap-1">
-                    <Save size={18} />
-                    <span>Save</span>
+                <Button type="button" variant="destructive" className="flex items-center gap-1" onClick={() => showDeleteDialog(resume)}>
+                    <Trash2 size={18} />
+                    <span>Delete</span>
                 </Button>
                 <DevTool control={form.control} />
             </section>
+
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description={<DeleteDescription resumeId={resume.id} />}
+                onOk={handleDelete}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+                isProcessing={loading}
+            />
         </form>
     )
 })
 
 ResumeForm.displayName = 'ResumeForm'
+
+function DeleteDescription({ resumeId }: { resumeId: string }) {
+    const client = useSupabaseClient<Database>();
+    const { data, isLoading } = useQuery({
+        queryFn: async () => {
+            const { data, error } = await client.from('jobs').select().eq('resume_id', resumeId)
+            if (error) throw error;
+            return data;
+        },
+        queryKey: ['jobs', resumeId]
+    })
+    const usedInJobs = data && data?.length > 0;
+
+    if (isLoading) return (
+        <div className="flex mt-4">
+            <Spinner className="h-6 w-6 m-auto" />
+        </div>
+    )
+
+    return (
+        <section className="flex flex-col gap-2">
+            <p>{usedInJobs && 'This resume is used in the following Job applications. '} Are you sure you want to delete this Resume? </p>
+            <ul className="list-disc pl-4">
+                {data?.map(job => (
+                    <li key={job.id}><span className="font-medium">{job.position}</span> at {job.company_name}</li>
+                ))}
+            </ul>
+        </section>
+    )
+}
 
 function Skills() {
     const form = useFormContext<FormValues>();

@@ -5,8 +5,8 @@ import { type Education, type Profile, type Project, type Resume, type WorkExper
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ResumeForm } from '../../components/resume-builder/builder/sections';
 import { Spinner } from 'ui';
+import { ResumeForm } from '../../components/resume-builder/builder/sections';
 
 interface PageProps {
     session: Session
@@ -39,7 +39,7 @@ export default function ResumeBuilder({ session, profile, defaultValues }: PageP
         >
             <div className="flex w-full h-full">
                 <FormProvider {...form}>
-                    <ResumeForm session={session} />
+                    <ResumeForm session={session} resume={defaultValues.resume} />
                     <Preview />
                 </FormProvider>
             </div>
@@ -71,7 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     resume = (await supabase.from('resumes').select().eq('id', resumeId).single()).data;
     if (!resume && profile) {
         const newResume = getResumeFromProfile(profile)
-        resume = (await supabase.from('resumes').insert({ id: resumeId, ...newResume })).data
+        const createQuery = supabase.from('resumes').insert({ id: resumeId, ...newResume }).select().single();
+        resume = (await createQuery).data;
     }
 
     return {
