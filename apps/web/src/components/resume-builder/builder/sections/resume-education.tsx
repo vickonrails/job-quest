@@ -3,11 +3,13 @@ import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
 import { formatDate } from '@components/utils';
 import { type Database } from '@lib/database.types';
-import { type Education } from '@lib/types';
+import { type Highlight, type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { debounce } from '@utils/debounce';
+import { setEntityId } from '@utils/set-entity-id';
+import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
@@ -16,17 +18,16 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
 
-function saveFn({ education }: { education: Education[] }) {
-    return Promise.resolve(education);
-}
 
 /**
  * Education section in resume builder
- */
+*/
 export function EducationSection({ session }: { session: Session }) {
     const form = useFormContext<{ education: Education[] }>();
     const { formState: { isDirty } } = form
     const client = useSupabaseClient<Database>();
+    const router = useRouter();
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, remove, append } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
     const { data: educationTemplates } = useQuery({
@@ -50,6 +51,42 @@ export function EducationSection({ session }: { session: Session }) {
         onDelete: async (id: string) => { await deleteEducation(id, client) }
     });
 
+    const saveFn = useCallback(async ({ education }: { education: Education[] }) => {
+        const highlightsToDeleteArr: string[] = [...highlightsToDelete];
+        const highlights: Education['highlights'] = [];
+        const preparedEducation = education.map((education) => {
+            education.resume_id = router.query.resume as string;
+            if (education.highlights) {
+                highlights.push(...education.highlights)
+                delete education.highlights
+            }
+
+            // TODO: figure out this
+            // if ((education.still_studying_here && education.end_date) || !education.end_date) {
+            //     education.end_date = null
+            // }
+            return education
+        })
+
+        if (highlightsToDeleteArr.length > 0) {
+            const result = await client.from('highlights').delete().in('id', highlightsToDeleteArr);
+            if (result.error) throw new Error(result.error.message)
+        }
+
+        const preparedHighlights = highlights.filter(x => !highlightsToDeleteArr.includes(x.id) && x.text)
+            .map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
+
+        try {
+            const { error } = await client.from('education').upsert(preparedEducation);
+            if (error) throw error;
+
+            const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+            if (highlightsError) throw highlightsError
+        } catch {
+
+        }
+    }, [highlightsToDelete, router, client])
+
     // TODO: do I need to show the modal for unsaved items?
     const handleDeleteClick = (education: Education, idx: number) => {
         setRemoveIdx(idx);
@@ -70,19 +107,17 @@ export function EducationSection({ session }: { session: Session }) {
         defaultValue: form.getValues('education')
     });
 
-    console.log({ EducationWatchedData: watchedData })
-
     const handleSubmit = useCallback(
         debounce(async () => {
             await form.handleSubmit(saveFn)()
-        }, 3000),
-        []
+        }, 2000),
+        [highlightsToDelete]
     )
 
     useDeepCompareEffect(() => {
         if (!form.getFieldState('education').isDirty) return;
         handleSubmit().then(() => {
-            alert('Just edited the education area')
+            // alert('Just edited the education area')
         }).catch(() => {
             // 
         });
@@ -93,7 +128,7 @@ export function EducationSection({ session }: { session: Session }) {
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
 
-            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
+            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={setHighlightsToDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary hover:text-primary' }}

@@ -12,7 +12,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 /**
  * Basic Information section in resume builder
 */
-export function BasicInfoSection({ defaultValues }: { defaultValues: Resume }) {
+export function BasicInfoSection() {
     const form = useFormContext<{ resume: Resume }>();
     const client = useSupabaseClient<Database>();
     const router = useRouter();
@@ -35,7 +35,7 @@ export function BasicInfoSection({ defaultValues }: { defaultValues: Resume }) {
     const watchedData = useWatch({
         control: form.control,
         name: 'resume',
-        defaultValue: defaultValues
+        defaultValue: form.getValues('resume')
     });
 
     useDeepCompareEffect(() => {

@@ -38,7 +38,8 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         }
     })
 
-    const [deletedHighlights, setDeletedHighlights] = useState<string[]>([]);
+    // TODO: abstract this to a hook alongside the autosave functionality
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([]);
     const {
         showDeleteDialog,
         onCancel,
@@ -51,13 +52,10 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     });
 
     const saveFn = useCallback(async ({ workExperience }: { workExperience: WorkExperience[] }) => {
-        const highlightsToDelete: string[] = [...deletedHighlights];
+        const highlightsToDeleteArr: string[] = [...highlightsToDelete];
         const highlights: WorkExperience['highlights'] = [];
         const preparedWorkExperience = workExperience.map((experience) => {
             experience.resume_id = router.query.resume as string;
-            if (!experience.id) {
-                experience.id = uuid();
-            }
 
             if (experience.highlights) {
                 highlights.push(...experience.highlights);
@@ -72,26 +70,24 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         });
 
         // TODO: delete selected highlights
-        if (highlightsToDelete.length > 0) {
-            const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+        if (highlightsToDeleteArr.length > 0) {
+            const result = await client.from('highlights').delete().in('id', highlightsToDeleteArr);
             if (result.error) throw new Error(result.error.message)
         }
 
-        const preparedHighlights = highlights.filter(x => !highlightsToDelete.includes(x.id))
+        const preparedHighlights = highlights.filter(x => !highlightsToDeleteArr.includes(x.id) && x.text)
             .map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
 
         try {
-            const { data, error } = await client.from('work_experience').upsert(preparedWorkExperience)
+            const { error } = await client.from('work_experience').upsert(preparedWorkExperience).select()
             if (error) throw error;
 
-            const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights);
-            if (highlightsError) throw highlightsError;
-
-            return data;
+            const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+            if (highlightsError) throw highlightsError
         } catch {
             // TODO: handle general error
         }
-    }, [client, router, deletedHighlights])
+    }, [client, router, highlightsToDelete])
 
     const handleDeleteClick = (experience: WorkExperience, idx: number) => {
         setRemoveIdx(idx);
@@ -109,8 +105,9 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     const handleSubmit = useCallback(
         debounce(async () => {
             await form.handleSubmit(saveFn)()
-        }, 3000),
-        [deletedHighlights]
+            setHighlightsToDelete([])
+        }, 1500),
+        [highlightsToDelete]
     )
 
     const watchedData = useWatch({
@@ -119,13 +116,9 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         defaultValue: form.getValues('workExperience')
     });
 
-    console.log({ ExperienceWatchedData: watchedData })
-
     useDeepCompareEffect(() => {
         if (!form.getFieldState('workExperience').isDirty) return;
-        handleSubmit().then(() => {
-            // setDeletedHighlights([])
-        }).catch(() => {
+        handleSubmit().catch(() => {
             // 
         });
     }, [watchedData, isDirty])
@@ -134,7 +127,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Work Experience</h3>
             <p className="mb-4 text-sm text-muted-foreground">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.</p>
-            <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={setDeletedHighlights} />
+            <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={setHighlightsToDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary hover:text-primary' }}

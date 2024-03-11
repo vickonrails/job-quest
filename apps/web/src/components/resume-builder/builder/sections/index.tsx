@@ -13,7 +13,7 @@ import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
 
-export const ResumeForm = memo(({ session, defaultValues }: { session: Session, defaultValues: FormValues }) => {
+export const ResumeForm = memo(({ session }: { session: Session }) => {
     const form = useFormContext<FormValues>();
     const router = useRouter()
     const formRef = createRef<HTMLFormElement>()
