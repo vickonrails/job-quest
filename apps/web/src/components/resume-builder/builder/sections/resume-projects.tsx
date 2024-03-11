@@ -6,18 +6,25 @@ import { type Database } from '@lib/database.types';
 import { type Project } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
+import { debounce } from '@utils/debounce';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+
+async function saveFn({ projects }: { projects: Project[] }) {
+    return await Promise.resolve(projects);
+}
 
 /**
  * Projects section in resume builder
  */
 export function ProjectsSection({ session }: { session: Session }) {
     const form = useFormContext<{ projects: Project[] }>();
+    const { formState: { isDirty } } = form
     const client = useSupabaseClient<Database>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
@@ -58,6 +65,30 @@ export function ProjectsSection({ session }: { session: Session }) {
         if (!project.id) return
         showDeleteDialog({ ...project, id: project.id });
     }
+
+    const handleSubmit = useCallback(
+        debounce(async () => {
+            await form.handleSubmit(saveFn)()
+        }, 2000),
+        []
+    )
+
+    const watchedData = useWatch({
+        control: form.control,
+        name: 'projects',
+        defaultValue: form.getValues('projects')
+    });
+
+    console.log({ ProjectsWatchedData: watchedData })
+
+    useDeepCompareEffect(() => {
+        if (!form.getFieldState('projects').isDirty) return;
+        handleSubmit().then(() => {
+            alert('Just edited the projects area')
+        }).catch(() => {
+            // 
+        });
+    }, [watchedData, isDirty])
 
     return (
         <section className="mb-4">

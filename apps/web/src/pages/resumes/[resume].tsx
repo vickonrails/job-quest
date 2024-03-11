@@ -24,6 +24,7 @@ export interface FormValues {
 export default function ResumeBuilder({ session, profile, defaultValues }: PageProps) {
     const form = useForm<FormValues>({ defaultValues });
     const { formState: { isSubmitting } } = form
+
     return (
         <Layout
             session={session}

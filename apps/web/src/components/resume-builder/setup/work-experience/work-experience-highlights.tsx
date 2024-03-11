@@ -13,7 +13,7 @@ interface HighlightsProps {
 }
 
 export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
-    const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
+    const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, shouldUnregister: true, keyName: '_id' })
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]

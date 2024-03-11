@@ -68,8 +68,8 @@ interface FormItemProps extends BaseFormItemProps {
 }
 
 function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
-    const { register, formState: { errors } } = form
-    const fieldErrs = errors?.education?.[index] ?? {}
+    const { register } = form
+    const fieldErrs = form.formState.errors?.education?.[index] ?? {}
 
     return (
         <AccordionItem
@@ -137,13 +137,13 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
                     )}
                 </section>
 
-                <EducationHighlights
+                {/* <EducationHighlights
                     form={form}
                     index={index}
                     entity={field}
                     onDeleteClick={() => onDeleteClick(field, index)}
                     setHighlightsToDelete={setHighlightsToDelete}
-                />
+                /> */}
             </div>
         </AccordionItem>
     )

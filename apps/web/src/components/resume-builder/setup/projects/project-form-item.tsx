@@ -63,8 +63,8 @@ interface FormItemProps extends BaseFormItemProps {
 }
 
 function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProps) {
-    const { register, formState: { errors } } = form
-    const fieldErrs = errors?.projects?.[index] ?? {}
+    const { register, } = form
+    const fieldErrs = form.formState.errors?.projects?.[index] ?? {}
 
     return (
         <AccordionItem

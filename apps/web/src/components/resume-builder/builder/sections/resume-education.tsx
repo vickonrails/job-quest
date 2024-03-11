@@ -7,18 +7,25 @@ import { type Education } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { type Dispatch, type SetStateAction, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { debounce } from '@utils/debounce';
+import { useCallback, useState } from 'react';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
+
+function saveFn({ education }: { education: Education[] }) {
+    return Promise.resolve(education);
+}
 
 /**
  * Education section in resume builder
  */
-export function EducationSection({ session, onHighlightDelete }: { session: Session, onHighlightDelete: Dispatch<SetStateAction<string[]>> }) {
+export function EducationSection({ session }: { session: Session }) {
     const form = useFormContext<{ education: Education[] }>();
+    const { formState: { isDirty } } = form
     const client = useSupabaseClient<Database>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, remove, append } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
@@ -57,12 +64,36 @@ export function EducationSection({ session, onHighlightDelete }: { session: Sess
         // await queryClient.refetchQueries(['education']);
     }
 
+    const watchedData = useWatch({
+        control: form.control,
+        name: 'education',
+        defaultValue: form.getValues('education')
+    });
+
+    console.log({ EducationWatchedData: watchedData })
+
+    const handleSubmit = useCallback(
+        debounce(async () => {
+            await form.handleSubmit(saveFn)()
+        }, 3000),
+        []
+    )
+
+    useDeepCompareEffect(() => {
+        if (!form.getFieldState('education').isDirty) return;
+        handleSubmit().then(() => {
+            alert('Just edited the education area')
+        }).catch(() => {
+            // 
+        });
+    }, [watchedData, isDirty])
+
     return (
         <section className="mb-4">
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
 
-            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={onHighlightDelete} />
+            <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary hover:text-primary' }}
