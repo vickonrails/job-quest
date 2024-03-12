@@ -10,7 +10,7 @@ import { debounce } from '@utils/debounce';
 import { setEntityId } from '@utils/set-entity-id';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteExperience, getDefaultExperience } from 'src/hooks/useWorkExperience';
 import useDeepCompareEffect from 'use-deep-compare-effect';
@@ -22,9 +22,7 @@ import { AddSectionBtn } from '.';
  */
 export function WorkExperienceSection({ session }: { session: Session }) {
     const client = useSupabaseClient<Database>()
-    const router = useRouter();
     const form = useFormContext<{ workExperience: WorkExperience[] }>();
-    const { formState: { isDirty } } = form
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
     // TODO: abstract this
@@ -39,7 +37,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     })
 
     // TODO: abstract this to a hook alongside the autosave functionality
-    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([]);
+
     const {
         showDeleteDialog,
         onCancel,
@@ -50,44 +48,6 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     } = useDeleteModal({
         onDelete: async (id: string) => { await deleteExperience(id, client) }
     });
-
-    const saveFn = useCallback(async ({ workExperience }: { workExperience: WorkExperience[] }) => {
-        const highlightsToDeleteArr: string[] = [...highlightsToDelete];
-        const highlights: WorkExperience['highlights'] = [];
-        const preparedWorkExperience = workExperience.map((experience) => {
-            experience.resume_id = router.query.resume as string;
-
-            if (experience.highlights) {
-                highlights.push(...experience.highlights);
-                delete experience.highlights;
-            }
-
-            // TODO: look more into this (when considering the experience and end date saga)
-            // if ((experience.still_working_here && experience.end_date) || !experience.end_date) {
-            //     experience.end_date = null
-            // }
-            return experience
-        });
-
-        // TODO: delete selected highlights
-        if (highlightsToDeleteArr.length > 0) {
-            const result = await client.from('highlights').delete().in('id', highlightsToDeleteArr);
-            if (result.error) throw new Error(result.error.message)
-        }
-
-        const preparedHighlights = highlights.filter(x => !highlightsToDeleteArr.includes(x.id) && x.text)
-            .map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
-
-        try {
-            const { error } = await client.from('work_experience').upsert(preparedWorkExperience).select()
-            if (error) throw error;
-
-            const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
-            if (highlightsError) throw highlightsError
-        } catch {
-            // TODO: handle general error
-        }
-    }, [client, router, highlightsToDelete])
 
     const handleDeleteClick = (experience: WorkExperience, idx: number) => {
         setRemoveIdx(idx);
@@ -102,26 +62,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
         // await queryClient.refetchQueries(['work_experience']);
     }
 
-    const handleSubmit = useCallback(
-        debounce(async () => {
-            await form.handleSubmit(saveFn)()
-            setHighlightsToDelete([])
-        }, 1500),
-        [highlightsToDelete]
-    )
-
-    const watchedData = useWatch({
-        control: form.control,
-        name: 'workExperience',
-        defaultValue: form.getValues('workExperience')
-    });
-
-    useDeepCompareEffect(() => {
-        if (!form.getFieldState('workExperience').isDirty) return;
-        handleSubmit().catch(() => {
-            // 
-        });
-    }, [watchedData, isDirty])
+    const { setHighlightsToDelete } = useAutosave({ form });
 
     return (
         <section className="mb-4">
@@ -175,6 +116,79 @@ export function WorkExperienceSection({ session }: { session: Session }) {
     )
 }
 
+/**
+ * Autosave functionality for work experience
+ */
+function useAutosave({ form }: { form: UseFormReturn<{ workExperience: WorkExperience[] }> }) {
+    const client = useSupabaseClient<Database>()
+    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([]);
+    const router = useRouter();
+
+    const watchedData = useWatch({
+        control: form.control,
+        name: 'workExperience',
+        defaultValue: form.getValues('workExperience')
+    });
+
+    const handleSubmit = useCallback(
+        debounce(async () => {
+            await form.handleSubmit(save)()
+            setHighlightsToDelete([])
+        }, 1500),
+        [highlightsToDelete]
+    )
+
+    useDeepCompareEffect(() => {
+        if (!form.getFieldState('workExperience').isDirty) return;
+        handleSubmit().catch(() => {
+            // 
+        });
+    }, [watchedData])
+
+    const save = useCallback(async ({ workExperience }: { workExperience: WorkExperience[] }) => {
+        const highlightsToDeleteArr: string[] = [...highlightsToDelete];
+        const highlights: WorkExperience['highlights'] = [];
+        const preparedWorkExperience = workExperience.map((experience) => {
+            experience.resume_id = router.query.resume as string;
+
+            if (experience.highlights) {
+                highlights.push(...experience.highlights);
+                delete experience.highlights;
+            }
+
+            // TODO: look more into this (when considering the experience and end date saga)
+            // if ((experience.still_working_here && experience.end_date) || !experience.end_date) {
+            //     experience.end_date = null
+            // }
+            return experience
+        });
+
+        // TODO: delete selected highlights
+        if (highlightsToDeleteArr.length > 0) {
+            const result = await client.from('highlights').delete().in('id', highlightsToDeleteArr);
+            if (result.error) throw new Error(result.error.message)
+        }
+
+        const preparedHighlights = highlights.filter(x => !highlightsToDeleteArr.includes(x.id) && x.text)
+            .map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
+
+        try {
+            const { error } = await client.from('work_experience').upsert(preparedWorkExperience).select()
+            if (error) throw error;
+
+            const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+            if (highlightsError) throw highlightsError
+        } catch {
+            // TODO: handle general error
+        }
+    }, [client, router, highlightsToDelete])
+
+    return { setHighlightsToDelete }
+}
+
+/**
+ * Generate new experience
+ */
 function generateNewExperience(experience: WorkExperience): WorkExperience {
     const id = uuid();
     const highlights = experience.highlights?.map(x => {

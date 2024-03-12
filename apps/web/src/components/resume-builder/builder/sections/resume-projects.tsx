@@ -6,27 +6,62 @@ import { type Database } from '@lib/database.types';
 import { type Project } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { debounce } from '@utils/debounce';
+import { useRouter } from 'next/router';
+import { use, useCallback, useState } from 'react';
+import { type UseFormReturn, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
-import { debounce } from '@utils/debounce';
-import useDeepCompareEffect from 'use-deep-compare-effect';
-import { useRouter } from 'next/router';
 
+function useAutosave({ form }: { form: UseFormReturn<{ projects: Project[] }> }) {
+    const router = useRouter();
+    const client = useSupabaseClient<Database>();
+
+    const saveFn = async ({ projects }: { projects: Project[] }) => {
+        const preparedProjects = projects.map((project) => {
+            project.resume_id = router.query.resume as string;
+            return project
+        })
+
+        const { data, error } = await client.from('projects').upsert(preparedProjects);
+        if (error) throw error;
+        return data
+    }
+
+    const handleSubmit = useCallback(
+        debounce(async () => {
+            await form.handleSubmit(saveFn)()
+        }, 2000),
+        []
+    )
+
+    const watchedData = useWatch({
+        control: form.control,
+        name: 'projects',
+        defaultValue: form.getValues('projects')
+    });
+
+    useDeepCompareEffect(() => {
+        if (!form.getFieldState('projects').isDirty) return;
+        handleSubmit().then(() => {
+            // alert('Just edited the projects area')
+        }).catch(() => {
+            // 
+        });
+    }, [watchedData])
+}
 
 /**
  * Projects section in resume builder
 */
 export function ProjectsSection({ session }: { session: Session }) {
     const form = useFormContext<{ projects: Project[] }>();
-    const { formState: { isDirty } } = form
     const client = useSupabaseClient<Database>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
-    const router = useRouter();
     const { data: projectTemplates } = useQuery({
         queryKey: ['projectTemplates'],
         queryFn: async () => {
@@ -47,16 +82,7 @@ export function ProjectsSection({ session }: { session: Session }) {
         onDelete: async (id: string) => { await deleteProject(id, client) }
     });
 
-    const saveFn = async ({ projects }: { projects: Project[] }) => {
-        const preparedProjects = projects.map((project) => {
-            project.resume_id = router.query.resume as string;
-            return project
-        })
-
-        const { data, error } = await client.from('projects').upsert(preparedProjects);
-        if (error) throw error;
-        return data
-    }
+    useAutosave({ form });
 
     const onDeleteOk = async () => {
         await handleDelete();
@@ -76,29 +102,7 @@ export function ProjectsSection({ session }: { session: Session }) {
         showDeleteDialog({ ...project, id: project.id });
     }
 
-    const handleSubmit = useCallback(
-        debounce(async () => {
-            await form.handleSubmit(saveFn)()
-        }, 2000),
-        []
-    )
 
-    const watchedData = useWatch({
-        control: form.control,
-        name: 'projects',
-        defaultValue: form.getValues('projects')
-    });
-
-    // console.log({ ProjectsWatchedData: watchedData })
-
-    useDeepCompareEffect(() => {
-        if (!form.getFieldState('projects').isDirty) return;
-        handleSubmit().then(() => {
-            // alert('Just edited the projects area')
-        }).catch(() => {
-            // 
-        });
-    }, [watchedData, isDirty])
 
     return (
         <section className="mb-4">
