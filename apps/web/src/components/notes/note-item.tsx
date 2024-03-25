@@ -6,7 +6,7 @@ import { cn } from '@utils/cn'
 import { type Database } from 'lib/database.types'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
-import { Trash } from 'react-feather'
+import { Trash } from 'lucide-react'
 import { Button, Textarea } from 'ui'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
@@ -33,7 +33,7 @@ function NoteItem({ note, className, showDeleteDialog, ...rest }: NoteItemProps)
     return (
         <article
             key={note.id}
-            className={cn('p-3 cursor-pointer group relative', !isEditing && 'hover:bg-gray-100', className)}
+            className={cn('p-3 cursor-pointer group relative', className)}
             onClick={switchEditView}
             {...rest}
         >
@@ -51,7 +51,7 @@ function NoteItem({ note, className, showDeleteDialog, ...rest }: NoteItemProps)
 function NoteText({ note, showDeleteDialog }: { note: Note, showDeleteDialog: (note: Note) => void }) {
     return (
         <>
-            <p className="leading-tight text-sm mb-2 max-w-[17em]">{note.text}</p>
+            <p className="leading-tight text-sm mb-2" >{note.text}</p>
             {note.created_at && <p className="text-sm text-gray-400">{formatDate(note.created_at)}</p>}
             <button
                 onClick={(ev: React.MouseEvent<HTMLButtonElement>) => {

@@ -44,7 +44,7 @@ const sheetVariants = cva(
           "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
         left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
-          "right-6 top-[70px] h-[80%] w-2/5 rounded-md border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+          "right-6 top-[120px] bottom-[60px] max-h-[600px] h-[calc(100% - 180px)] w-2/5 rounded-md border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
     defaultVariants: {
@@ -65,7 +65,7 @@ const SheetContent = React.forwardRef<
     {/* <SheetOverlay /> */}
     <SheetPrimitive.Content
       ref={ref}
-      className={cn(sheetVariants({ side }), className)}
+      className={cn(sheetVariants({ side }), className, 'max-h')}
       {...props}
     >
       {children}
@@ -138,10 +138,19 @@ export type SheetProps = SheetPrimitive.DialogProps & {
 export function Sheet({ open, children, title, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
-      <SheetContent className="overflow-auto">
+      <SheetContent>
         {title && <SheetTitle className="mb-5">{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>
   )
 }
+
+
+// z-index: 99999;
+// position: fixed;
+// bottom: 20px;
+// right: 20px;
+// max-width: 420px;
+// width: calc(100% - 40px);
+// overflow: hidden;

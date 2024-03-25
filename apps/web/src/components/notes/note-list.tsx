@@ -7,15 +7,15 @@ import { type HTMLAttributes } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useNotes } from 'src/hooks/useNotes';
 import NoteItem from './note-item';
+import { Spinner } from 'ui';
 
 interface NoteListProps extends HTMLAttributes<HTMLElement> {
-    notes: Note[]
     job: Job
 }
 
-function NotesList({ notes, job, ...rest }: NoteListProps) {
+function NotesList({ job, ...rest }: NoteListProps) {
     const client = useSupabaseClient<Database>();
-    const { data, refetch } = useNotes({ initialData: notes, jobId: job.id })
+    const { data, refetch, isLoading } = useNotes({ jobId: job.id })
     const {
         showDeleteDialog,
         isOpen: deleteModalOpen,
@@ -31,13 +31,21 @@ function NotesList({ notes, job, ...rest }: NoteListProps) {
         refresh: async () => { await refetch() }
     })
 
+    if (isLoading) {
+        return (
+            <div className="flex">
+                <Spinner className="m-auto mt-4" />
+            </div>
+        )
+    }
+
     return (
-        <section {...rest} className={cn('flex flex-col', data?.length && 'border rounded-md')}>
+        <section {...rest} className={cn('flex flex-col', data?.length && 'border border-b-0 rounded-md')}>
             {data?.map((note, idx) => (
                 <NoteItem
                     note={note}
                     key={idx}
-                    className={cn(idx + 1 !== data.length && 'border-b')}
+                    className="border-b"
                     showDeleteDialog={showDeleteDialog}
                 />
             ))}

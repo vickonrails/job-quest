@@ -6,7 +6,7 @@ import {
   ToastViewport,
 } from './toast'
 import { useToast } from './use-toast'
-import { Check, AlertCircle, Info, AlertTriangle } from 'react-feather'
+import { Check, AlertCircle, Info, AlertTriangle } from 'lucide-react'
 
 type ToastVariants = { [key: string]: JSX.Element }
 const TOAST_ICON_VARIANTS: ToastVariants = {
