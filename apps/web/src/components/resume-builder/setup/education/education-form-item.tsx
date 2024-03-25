@@ -8,6 +8,7 @@ import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFor
 import { Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
+import { v4 as uuid } from 'uuid'
 
 export interface BaseFormItemProps {
     autofocus?: boolean
@@ -68,8 +69,8 @@ interface FormItemProps extends BaseFormItemProps {
 }
 
 function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
-    const { register, formState: { errors } } = form
-    const fieldErrs = errors?.education?.[index] ?? {}
+    const { register } = form
+    const fieldErrs = form.formState.errors?.education?.[index] ?? {}
 
     return (
         <AccordionItem
@@ -197,6 +198,7 @@ function getDefaultEntity(id: string): Highlight {
     return {
         text: '',
         education_id: id,
+        id: uuid(),
         type: 'education'
     } as unknown as Highlight
 } 

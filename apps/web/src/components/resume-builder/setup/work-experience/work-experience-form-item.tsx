@@ -47,8 +47,8 @@ interface FormItemProps extends BaseFormItemProps {
 
 /** ------------------ Work Experience Form Item ------------------ */
 function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofocus }: FormItemProps) {
-    const { register, formState: { errors } } = form
-    const fieldErrs = errors?.workExperience?.[index] ?? {}
+    const { register } = form
+    const fieldErrs = form.formState.errors?.workExperience?.[index] ?? {}
 
     return (
         <AccordionItem

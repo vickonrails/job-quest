@@ -3,6 +3,7 @@ import { type Dispatch, type SetStateAction } from 'react'
 import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 import { Textarea } from 'ui'
 import { HighlightFooter } from '../components/highlights-footer'
+import { v4 as uuid } from 'uuid'
 
 interface HighlightsProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -51,6 +52,7 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, o
 function getDefaultEntity(id: string): Highlight {
     return {
         text: '',
+        id: uuid(),
         work_experience_id: id,
         type: 'work_experience'
     } as unknown as Highlight

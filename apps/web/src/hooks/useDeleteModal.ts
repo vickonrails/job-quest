@@ -17,21 +17,26 @@ export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProp
         if (!entity) return
 
         setLoading(true)
-        await initialProps.onDelete?.(entity?.id).then(async () => {
-            await initialProps.refresh?.()
-            toast({
-                variant: 'success',
-                title: 'deleted'
+        try {
+            await initialProps.onDelete?.(entity?.id).then(async () => {
+                await initialProps.refresh?.()
+                toast({
+                    variant: 'success',
+                    title: 'Deleted successfully'
+                })
+                setIsOpen(false)
+            }).catch((error) => {
+                toast({
+                    variant: 'destructive',
+                    title: 'An error occurred'
+                })
+                throw error;
+            }).finally(() => {
+                setLoading(false)
             })
-            setIsOpen(false)
-        }).catch(() => {
-            toast({
-                variant: 'destructive',
-                title: 'Failed to delete'
-            })
-        }).finally(() => {
-            setLoading(false)
-        })
+        } catch {
+            throw new Error('Failed to delete')
+        }
     }, [initialProps, toast, entity])
 
     const showDeleteDialog = useCallback((item: T) => {

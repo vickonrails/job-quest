@@ -1,30 +1,66 @@
+import { AlertDialog } from '@components/alert-dialog';
 import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
+import { DevTool } from '@hookform/devtools';
 import { type Database } from '@lib/database.types';
-import { type Highlight } from '@lib/types';
-import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
-import { setEntityId } from '@utils/set-entity-id';
-import { ChevronDown, Save } from 'lucide-react';
+import { type Resume } from '@lib/types';
+import { useSupabaseClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { useQuery } from '@tanstack/react-query';
+import { ChevronDown, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { createRef, forwardRef, useEffect, useState } from 'react';
+import { createRef, forwardRef, memo, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
-import { Button, Input, type ButtonProps } from 'ui';
-import { v4 as uuid } from 'uuid';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { Button, Input, type ButtonProps, Spinner } from 'ui';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
 import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
 
-export function ResumeForm({ session }: { session: Session }) {
-    const client = useSupabaseClient<Database>()
+export async function deleteResume(id: string, client: SupabaseClient<Database>) {
+    try {
+        const { error: educationError } = await client.from('education').delete().eq('resume_id', id);
+        if (educationError) throw educationError;
+        const { error: projectsError } = await client.from('projects').delete().eq('resume_id', id);
+        if (projectsError) throw projectsError;
+        const { error: experienceError } = await client.from('work_experience').delete().eq('resume_id', id);
+        if (experienceError) throw experienceError;
+
+        const { data, error: jobsError } = await client.from('jobs').select().eq('resume_id', id)
+        if (jobsError) throw jobsError;
+
+        const updatedJobs = data.map(job => {
+            job.resume_id = null
+            return job
+        })
+        const { error: updateError } = await client.from('jobs').upsert(updatedJobs)
+        if (updateError) throw updateError;
+
+        const { error } = await client.from('resumes').delete().eq('id', id)
+        if (error) throw error;
+    } catch {
+        throw new Error('Failed to delete resume')
+    }
+}
+
+export const ResumeForm = memo(({ session, resume }: { session: Session, resume: Resume }) => {
     const form = useFormContext<FormValues>();
     const router = useRouter()
-    const { formState } = form
-    const { toast } = useToast()
     const formRef = createRef<HTMLFormElement>()
-    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
+    const client = useSupabaseClient<Database>();
+    const { toast } = useToast();
+    const {
+        showDeleteDialog,
+        onCancel,
+        handleDelete: deleteFn,
+        loading,
+        setIsOpen,
+        isOpen
+    } = useDeleteModal({
+        onDelete: async (id: string) => { await deleteResume(id, client) }
+    });
 
     useEffect(() => {
         const form = formRef.current;
@@ -41,88 +77,20 @@ export function ResumeForm({ session }: { session: Session }) {
         }
     }, [formRef])
 
-    const onSubmit = async ({ resume, workExperience, projects, education }: FormValues) => {
-        const highlights: Highlight[] = []
-        resume.id = router.query.resume as string;
-        const { error } = await client.from('resumes').upsert(resume);
-        if (error) throw error;
-
-        const preparedWorkExperience = workExperience.map((experience) => {
-            experience.resume_id = resume.id;
-            if (!experience.id) {
-                experience.id = uuid();
-            }
-
-            if (experience.highlights) {
-                highlights.push(...experience.highlights);
-                delete experience.highlights;
-            }
-
-            if ((experience.still_working_here && experience.end_date) || !experience.end_date) {
-                experience.end_date = null
-            }
-            return experience
-        });
-
-        const preparedProjects = projects.map((project) => {
-            project.resume_id = resume.id;
-            if (!project.id) {
-                project.id = uuid();
-            }
-            return project
-        })
-
-        const preparedEducation = education.map((education) => {
-            education.resume_id = resume.id;
-
-            if (!education.id) {
-                education.id = uuid();
-            }
-            if (education.highlights) {
-                highlights.push(...education.highlights)
-                delete education.highlights
-            }
-            if ((education.still_studying_here && education.end_date) || !education.end_date) {
-                education.end_date = null
-            }
-            return education
-        })
-
-        const educationUpdatePromise = client.from('education').upsert(preparedEducation);
-        const workExperienceUpdatePromise = client.from('work_experience').upsert(preparedWorkExperience);
-        const projectUpdatePromise = client.from('projects').upsert(preparedProjects);
-        const promiseResult = await Promise.all([
-            workExperienceUpdatePromise,
-            projectUpdatePromise,
-            educationUpdatePromise
-        ]);
-
-        const hasErrors = promiseResult.some((res) => res.error)
-
-        if (!hasErrors) {
-
-            if (highlightsToDelete.length > 0) {
-                const result = await client.from('highlights').delete().in('id', highlightsToDelete);
-                if (result.error) throw new Error(result.error.message)
-            }
-
-            const preparedHighlights = highlights.filter(x => !highlightsToDelete.includes(x.id)).map(highlight => setEntityId<Highlight>(highlight, { overwrite: false }))
-            const { error } = await client.from('highlights').upsert(preparedHighlights).select();
-            if (error) throw new Error(error.message);
+    const handleDelete = async () => {
+        try {
+            await deleteFn();
+            return router.push('/resumes')
+        } catch (error) {
             toast({
-                title: 'Resume saved',
-                variant: 'success'
-            })
-        } else {
-            toast({
-                title: 'An error occured',
-                variant: 'destructive'
+                variant: 'destructive',
+                title: 'An error occurred'
             })
         }
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
+        <form className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
             <section className="max-w-xl mx-auto">
                 <BackButton onClick={() => router.back()} />
                 <header>
@@ -134,16 +102,59 @@ export function ResumeForm({ session }: { session: Session }) {
 
                 {/* TODO: use context to avoid passing session to every component */}
                 <BasicInfoSection />
-                <WorkExperienceSection session={session} onHighlightDelete={setHighlightsToDelete} />
+                <WorkExperienceSection session={session} />
                 <ProjectsSection session={session} />
-                <EducationSection session={session} onHighlightDelete={setHighlightsToDelete} />
+                <EducationSection session={session} />
                 <Skills />
-                <Button loading={formState.isSubmitting} type="submit" className="flex items-center gap-1">
-                    <Save size={18} />
-                    <span>Save</span>
+                <Button type="button" variant="destructive" className="flex items-center gap-1" onClick={() => showDeleteDialog(resume)}>
+                    <Trash2 size={18} />
+                    <span>Delete</span>
                 </Button>
+                <DevTool control={form.control} />
             </section>
+
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description={<DeleteDescription resumeId={resume.id} />}
+                onOk={handleDelete}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+                isProcessing={loading}
+            />
         </form>
+    )
+})
+
+ResumeForm.displayName = 'ResumeForm'
+
+function DeleteDescription({ resumeId }: { resumeId: string }) {
+    const client = useSupabaseClient<Database>();
+    const { data, isLoading } = useQuery({
+        queryFn: async () => {
+            const { data, error } = await client.from('jobs').select().eq('resume_id', resumeId)
+            if (error) throw error;
+            return data;
+        },
+        queryKey: ['jobs', resumeId]
+    })
+    const usedInJobs = data && data?.length > 0;
+
+    if (isLoading) return (
+        <div className="flex mt-4">
+            <Spinner className="h-6 w-6 m-auto" />
+        </div>
+    )
+
+    return (
+        <section className="flex flex-col gap-2">
+            <p>{usedInJobs && 'This resume is used in the following Job applications. '} Are you sure you want to delete this Resume? </p>
+            <ul className="list-disc pl-4">
+                {data?.map(job => (
+                    <li key={job.id}><span className="font-medium">{job.position}</span> at {job.company_name}</li>
+                ))}
+            </ul>
+        </section>
     )
 }
 
