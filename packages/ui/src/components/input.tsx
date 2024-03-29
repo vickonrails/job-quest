@@ -36,7 +36,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             className={cn(
               cn(
-                'border block rounded-lg px-3.5 w-full mb-1 active:border-primary shadow-light',
+                'border block bg-inherit text-accent-foreground rounded-lg px-3.5 w-full mb-1 active:border-primary shadow-light focus-visible:outline-primary focus-visible:outline-1',
                 fullWidth && 'w-full',
                 size && getSize(size),
                 disabled && 'pointer-events-none'

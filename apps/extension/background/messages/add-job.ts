@@ -6,9 +6,8 @@ import { v4 as uuid } from 'uuid'
 const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (req, res) => {
   const { notes, ...job } = req.body
 
-  if (!job.id) {
-    job.id = uuid();
-  }
+  if (!job.id) job.id = uuid();
+  if (!job.status) job.status = 0;
 
   const { data, error } = await client.from("jobs").upsert({ ...job }).select().single();
 

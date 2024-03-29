@@ -1,7 +1,7 @@
 import { sendToBackground } from '@plasmohq/messaging';
 import { Briefcase, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, type UseFormRegister } from 'react-hook-form';
 import { Banner, Button, Input, Rating, Spinner, Textarea } from 'ui';
 import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
@@ -14,7 +14,9 @@ export interface JobInfoSheetProps extends SheetProps {
 }
 
 export function getJobDetails(): Partial<Job> {
-    if (!isLinkedIn) return {}
+    const link = window.location.href;
+
+    if (!isLinkedIn) return { link }
 
     const isFullPage = window.location.href.includes('jobs/view');
     let title: HTMLElement | ChildNode | null;
@@ -31,7 +33,6 @@ export function getJobDetails(): Partial<Job> {
     if (container) {
         const company = container.querySelector('.app-aware-link')
         const location = Boolean(container) ? container.childNodes[3] : ''
-        const link = isFullPage ? window.location.href.split('?')[0] : window.location.href.split('&')[0];
         const details = document.querySelector('#job-details');
 
         return {
@@ -63,7 +64,7 @@ export function getJobDetails(): Partial<Job> {
 }
 
 interface Job {
-    img: string
+    img?: string
     id: string
     position: string
     company_name: string
@@ -91,11 +92,13 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
         reset({ ...job })
     }, [job])
 
-    const onSubmit = async (data: Job) => {
+    // remove source because the single source of truth is the url that the job was brought in through
+    const onSubmit = async ({ img, ...data }: Job) => {
+        // first determine source of job (linkedIn etc)
         try {
             const res = await sendToBackground<Job>({
                 name: 'add-job',
-                body: { source: 'linkedIn', source_id: getJobId(), ...data }
+                body: { source: isLinkedIn ? 'linkedIn' : null, source_id: getJobId(), ...data }
             });
 
             if (res.error || !res.success) {
@@ -119,7 +122,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
         <Sheet {...props}>
             <form onSubmit={handleSubmit(onSubmit)} className='text-primary-foreground'>
                 {show && (
-                    <Banner className='flex my-5 gap-2' variant={error ? 'error' : 'success'}>
+                    <Banner className='flex my-5 gap-2 text-sm' variant={error ? 'error' : 'success'}>
                         {error ? 'Could not add Job' : 'Successful'}
                     </Banner>
                 )}
@@ -129,7 +132,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
                     {isLoading ? <SpinnerContainer /> : (
                         <>
-                            <PopupHeader jobInfo={props.jobInfo} />
+                            <PopupHeader jobInfo={props.jobInfo} register={register} />
                             <section className='flex flex-col gap-4'>
                                 <div>
                                     <div className="m-1.5 select-none text-muted-foreground text-sm">Rating</div>
@@ -165,7 +168,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     )
 }
 
-function PopupHeader({ jobInfo }: { jobInfo: Partial<Job> }) {
+function PopupHeader({ jobInfo, register }: { jobInfo: Partial<Job>, register: UseFormRegister<Job> }) {
     if (isLinkedIn) {
         const { img, position, company_name, location } = jobInfo ?? {}
         return (
@@ -197,9 +200,20 @@ function PopupHeader({ jobInfo }: { jobInfo: Partial<Job> }) {
 
     return (
         <>
-            <Input autoFocus label="Job Title" className='text-accent-foreground bg-inherit' />
-            <Input label="Company name" />
-            <Input label="Location" />
+            <Input
+                autoFocus
+                label="Job Title"
+                className='text-accent-foreground bg-inherit'
+                {...register('position')}
+            />
+            <Input
+                label="Company name"
+                {...register('company_name')}
+            />
+            <Input
+                label="Location"
+                {...register('location')}
+            />
         </>
     )
 }
