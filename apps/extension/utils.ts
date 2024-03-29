@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { isLinkedIn } from '~contents';
 import type { Job } from '~types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -32,6 +33,8 @@ export function getJobContent(): Job {
  * fetch the ID of the job from the URL
  */
 export function getJobId() {
+    if (!isLinkedIn) return ''
+
     const strPattern = /\b\d{10}\b/g;
     const url = window.location.href;
     return url.match(strPattern)[0];

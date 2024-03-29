@@ -9,6 +9,7 @@ interface JobResponse {
 /**
  * responsible for fetching the job from the background script
  */
+// TODO: fetch job with link as unique item only
 export const useJob = (id: string) => {
     const [isLoading, setIsLoading] = useState(true);
     const [job, setJob] = useState<Job>();

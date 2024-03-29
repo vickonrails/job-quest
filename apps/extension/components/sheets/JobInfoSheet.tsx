@@ -2,25 +2,25 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { Briefcase, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Banner, Button, Rating, Spinner, Textarea } from 'ui';
+import { Banner, Button, Input, Rating, Spinner, Textarea } from 'ui';
+import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
 import { getJobId } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
 
-interface JobInfoSheetProps extends SheetProps {
+export interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
+    jobInfo: Partial<Job>
 }
 
-function getJobDetails() {
+export function getJobDetails(): Partial<Job> {
+    if (!isLinkedIn) return {}
+
     const isFullPage = window.location.href.includes('jobs/view');
     let title: HTMLElement | ChildNode | null;
 
     const img = document.querySelector('.jobs-company img');
     const container = document.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
-    const company = container.querySelector('.app-aware-link')
-    const location = container.childNodes[3]
-    const link = isFullPage ? window.location.href.split('?')[0] : window.location.href.split('&')[0];
-    const details = document.querySelector('#job-details');
 
     if (isFullPage) {
         title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
@@ -28,25 +28,47 @@ function getJobDetails() {
         title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title-link');
     }
 
+    if (container) {
+        const company = container.querySelector('.app-aware-link')
+        const location = Boolean(container) ? container.childNodes[3] : ''
+        const link = isFullPage ? window.location.href.split('?')[0] : window.location.href.split('&')[0];
+        const details = document.querySelector('#job-details');
+
+        return {
+            id: '',
+            img: img?.getAttribute('src') ?? '',
+            position: title?.textContent ?? '',
+            company_name: company.textContent,
+            location: location ? location.textContent.split(' ')[1] : '',
+            priority: 1,
+            status: 0,
+            source: 'linkedIn',
+            source_id: getJobId(),
+            description: details?.innerHTML ?? '',
+            link
+        }
+    }
+
+
     return {
-        img: img?.getAttribute('src'),
+        // TODO: remove img and use initials
+        id: '',
+        img: img?.getAttribute('src') ?? '',
         position: title?.textContent ?? '',
-        company_name: company.textContent,
-        location: location.textContent.split(' ')[1],
         priority: 1,
         status: 0,
         source: 'linkedIn',
-        source_id: getJobId(),
-        description: details?.innerHTML ?? '',
-        link
+        source_id: getJobId()
     }
 }
 
 interface Job {
+    img: string
     id: string
     position: string
     company_name: string
     location: string
+    description: string
     notes?: string
     priority: number
     status?: number,
@@ -55,11 +77,12 @@ interface Job {
     source_id: string
 }
 
+// TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
-    const { img, position, company_name, location, link, ...rest } = getJobDetails()
+    // TODO: this is going to fetch the job using the link to check if its in the database
     const { isLoading, job, refresh } = useJob(getJobId())
     const { register, control, handleSubmit, formState: { isSubmitting }, reset } = useForm<Job>({
-        defaultValues: { id: job ? job.id : '', position, company_name, location, link, ...rest }
+        defaultValues: { id: job ? job.id : '', ...props.jobInfo }
     })
     const [showBanner, setShowBanner] = useState({ show: false, error: false })
 
@@ -94,7 +117,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
     return (
         <Sheet {...props}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} className='text-primary-foreground'>
                 {show && (
                     <Banner className='flex my-5 gap-2' variant={error ? 'error' : 'success'}>
                         {error ? 'Could not add Job' : 'Successful'}
@@ -103,63 +126,84 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                 <input type='hidden' {...register('id')} />
                 <div className="flex flex-col gap-4">
                     <div className='m-1.5 hidden' />
-                    <header className='flex gap-2 items-center'>
-                        <img src={img} alt="Company Logo" style={{ height: 60, width: 60 }} />
-                        <section className='flex flex-col gap-1'>
-                            {position && <h2 className="text-base font-semibold text-foreground mb-1">{position}</h2>}
-                            {company_name && (
-                                <div className='flex items-center gap-1'>
-                                    <Briefcase className='text-muted-foreground' size={16} />
-                                    <p className="text-sm text-muted-foreground">{company_name}</p>
-                                </div>
-                            )}
-                            {location && (
-                                <div className='flex gap-2'>
-                                    <div className='flex items-center gap-1'>
-                                        <MapPin className='text-muted-foreground' size={16} />
-                                        <p className="text-sm text-muted-foreground">{location}</p>
-                                    </div>
-                                    {job && (
-                                        <div className='select-none bg-green-100 text-xs text-green-800 rounded-full p-2 py-1'>Added</div>
-                                    )}
-                                </div>
-                            )}
-                        </section>
-                    </header>
 
                     {isLoading ? <SpinnerContainer /> : (
-                        <section className='flex flex-col gap-4'>
-                            <div>
-                                <div className="m-1.5 select-none text-muted-foreground text-sm">Rating</div>
-                                <Controller
-                                    name='priority'
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Rating
-                                            value={field.value}
-                                            onClick={(val) => { field.onChange(val) }}
-                                            size='md'
-                                        />
-                                    )}
-                                />
-                            </div>
+                        <>
+                            <PopupHeader jobInfo={props.jobInfo} />
+                            <section className='flex flex-col gap-4'>
+                                <div>
+                                    <div className="m-1.5 select-none text-muted-foreground text-sm">Rating</div>
+                                    <Controller
+                                        name='priority'
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Rating
+                                                value={field.value}
+                                                onClick={(val) => { field.onChange(val) }}
+                                                size='md'
+                                            />
+                                        )}
+                                    />
+                                </div>
 
-                            <Textarea autoFocus className='py-2' label='Notes' {...register('notes')} />
+                                <Textarea className='py-2' label='Notes' {...register('notes')} autoFocus={isLinkedIn || false} />
 
-                            <div>
-                                <Button className='p-3 block w-full mb-2' loading={isSubmitting}>
-                                    {job ? 'Update Job' : 'Add Job'}
-                                </Button>
+                                <div>
+                                    <Button className='p-3 block w-full mb-2' loading={isSubmitting}>
+                                        {job ? 'Update Job' : 'Add Job'}
+                                    </Button>
 
-                                {job && <a className='text-center underline block' target='_blank' rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
-                            </div>
-                        </section>
+                                    {job && <a className='text-center underline block' target='_blank' rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
+                                </div>
+
+                            </section>
+                        </>
                     )}
                 </div>
             </form>
         </Sheet>
     )
 }
+
+function PopupHeader({ jobInfo }: { jobInfo: Partial<Job> }) {
+    if (isLinkedIn) {
+        const { img, position, company_name, location } = jobInfo ?? {}
+        return (
+            <header className='flex gap-2 items-center'>
+                <img src={img} alt="Company Logo" style={{ height: 60, width: 60 }} />
+                <section className='flex flex-col gap-1'>
+                    {position && <h2 className="text-base font-semibold text-foreground mb-1">{position}</h2>}
+                    {company_name && (
+                        <div className='flex items-center gap-1'>
+                            <Briefcase className='text-muted-foreground' size={16} />
+                            <p className="text-sm text-muted-foreground">{company_name}</p>
+                        </div>
+                    )}
+                    {location && (
+                        <div className='flex gap-2'>
+                            <div className='flex items-center gap-1'>
+                                <MapPin className='text-muted-foreground' size={16} />
+                                <p className="text-sm text-muted-foreground">{location}</p>
+                            </div>
+                            {jobInfo && (
+                                <div className='select-none bg-green-100 text-xs text-green-800 rounded-full p-2 py-1'>Added</div>
+                            )}
+                        </div>
+                    )}
+                </section>
+            </header>
+        )
+    }
+
+    return (
+        <>
+            <Input autoFocus label="Job Title" className='text-accent-foreground bg-inherit' />
+            <Input label="Company name" />
+            <Input label="Location" />
+        </>
+    )
+}
+
 
 function SpinnerContainer() {
     return (

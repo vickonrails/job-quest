@@ -1,5 +1,5 @@
 import Logo from 'data-base64:~assets/logo.png';
-interface LinkedInButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface LinkedInButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     isLoading?: boolean
     added?: boolean
 }
