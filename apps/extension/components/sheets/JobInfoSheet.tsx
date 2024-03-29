@@ -91,9 +91,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
         reset({ ...job })
     }, [job])
 
-    // remove source because the single source of truth is the url that the job was brought in through
     const onSubmit = async ({ img, ...data }: Job) => {
-        // first determine source of job (linkedIn etc)
         try {
             const res = await sendToBackground<Job>({
                 name: 'add-job',

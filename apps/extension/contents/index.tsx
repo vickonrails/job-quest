@@ -6,15 +6,12 @@ import { LinkedInButton, type LinkedInButtonProps } from "~components/linkedin-b
 import { JobInfoSheet, getJobDetails } from "~components/sheets/JobInfoSheet";
 import { cn } from "~utils";
 
-// There's this button here for linkedIn
-// every other website gets some kind of floating button
-// when clicked, is still going to open job info sheets with the url of the site and the job info
-// style other webpages based on actual design, modify linkedIn.com to look like the design
 // also work on the motion of the extension popup
-// body not scrolling when modal is open
+// body not scrolling when modal is open (only on linkedin)
 // have to find some way to reload the entire extension if we encounter a page refresh
 // add additional button for adding job description (Add job description). If there's no job description on the page, we can then show some info and prompt them to go back to enter job description
 // customize the scrollbar so it can be consistent across browser and OS
+// persist info to Job quest
 
 // TODO: research how to only show the button after the page is fully loaded (check out the document.readyState property)
 
