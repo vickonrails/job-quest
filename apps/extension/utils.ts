@@ -30,12 +30,8 @@ export function getJobContent(): Job {
 }
 
 /**
- * fetch the ID of the job from the URL
+ * get the url of the current page (where the job is located)
  */
-export function getJobId() {
-    if (!isLinkedIn) return ''
-
-    const strPattern = /\b\d{10}\b/g;
-    const url = window.location.href;
-    return url.match(strPattern)[0];
+export function getJobUrl() {
+    return window.location.href;
 }

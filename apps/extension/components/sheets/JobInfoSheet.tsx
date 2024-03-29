@@ -5,7 +5,7 @@ import { Controller, useForm, type UseFormRegister } from 'react-hook-form';
 import { Banner, Button, Input, Rating, Spinner, Textarea } from 'ui';
 import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
-import { getJobId } from '~utils';
+import { getJobUrl } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
 
 export interface JobInfoSheetProps extends SheetProps {
@@ -23,6 +23,7 @@ export function getJobDetails(): Partial<Job> {
 
     const img = document.querySelector('.jobs-company img');
     const container = document.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
+    const source = isLinkedIn ? 'linkedIn' : null;
 
     if (isFullPage) {
         title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
@@ -43,8 +44,7 @@ export function getJobDetails(): Partial<Job> {
             location: location ? location.textContent.split(' ')[1] : '',
             priority: 1,
             status: 0,
-            source: 'linkedIn',
-            source_id: getJobId(),
+            source,
             description: details?.innerHTML ?? '',
             link
         }
@@ -58,8 +58,7 @@ export function getJobDetails(): Partial<Job> {
         position: title?.textContent ?? '',
         priority: 1,
         status: 0,
-        source: 'linkedIn',
-        source_id: getJobId()
+        source
     }
 }
 
@@ -81,7 +80,7 @@ interface Job {
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
     // TODO: this is going to fetch the job using the link to check if its in the database
-    const { isLoading, job, refresh } = useJob(getJobId())
+    const { isLoading, job, refresh } = useJob(getJobUrl())
     const { register, control, handleSubmit, formState: { isSubmitting }, reset } = useForm<Job>({
         defaultValues: { id: job ? job.id : '', ...props.jobInfo }
     })
@@ -98,7 +97,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
         try {
             const res = await sendToBackground<Job>({
                 name: 'add-job',
-                body: { source: isLinkedIn ? 'linkedIn' : null, source_id: getJobId(), ...data }
+                body: { source: isLinkedIn ? 'linkedIn' : null, ...data }
             });
 
             if (res.error || !res.success) {

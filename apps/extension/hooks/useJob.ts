@@ -9,18 +9,15 @@ interface JobResponse {
 /**
  * responsible for fetching the job from the background script
  */
-// TODO: fetch job with link as unique item only
-export const useJob = (id: string) => {
+export const useJob = (url: string) => {
     const [isLoading, setIsLoading] = useState(true);
     const [job, setJob] = useState<Job>();
 
     useEffect(() => {
-        // let timer;
-        sendToBackground<{ id: string }, BackgroundResponse<JobResponse>>({
+        sendToBackground<{ url: string }, BackgroundResponse<JobResponse>>({
             name: 'get-job',
-            body: { id }
+            body: { url }
         }).then((res) => {
-            // timer = setTimeout(() => {
             // TODO: refresh job once it's been added
             const { data, success } = res
             if (success) setJob(data.job);
@@ -29,11 +26,11 @@ export const useJob = (id: string) => {
         }).finally(() => {
             setIsLoading(false)
         })
-    }, [id])
+    }, [url])
 
     const refresh = useCallback((job: Job) => {
         setJob(job)
-    }, [id])
+    }, [url])
 
     return { isLoading, job, refresh }
 }
