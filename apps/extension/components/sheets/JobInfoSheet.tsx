@@ -7,7 +7,7 @@ import { useJob } from '~hooks/useJob';
 import type { Job } from '~types';
 import { getJobUrl } from '~utils';
 import { Sheet, type SheetProps } from './sheet';
-import { JobInfoTabs } from './tabs';
+import { JobInfoTabs } from './job-info-tabs';
 
 export interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
