@@ -25,6 +25,7 @@ export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, sessio
     const router = useRouter()
     const showSetupBanner = router.pathname !== '/profile/setup' && !profile?.is_profile_setup;
 
+    // FIX: Page title doesn't show when pageTitle is a react component
     const title = pageTitle ? `${typeof pageTitle === 'string' ? pageTitle : ''} - ${SITE_NAME}` : SITE_NAME
 
     return (

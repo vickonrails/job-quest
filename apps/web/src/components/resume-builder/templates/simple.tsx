@@ -1,6 +1,6 @@
 import { formatDate } from '@components/utils';
 import { type HTMLAttributes } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { type DeepPartialSkipArrayKey } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';
 
 export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingElement> & { title: string }) {
@@ -20,9 +20,10 @@ export function DateRange({ startDate, endDate }: { startDate?: string, endDate?
     )
 }
 
-export function SimpleTemplate() {
-    const { control } = useFormContext<FormValues>();
-    const { resume, workExperience, education, projects } = useWatch<FormValues>({ control: control });
+// TODO: I have to rearchitect this component to be stateless (Accept props and return JSX)
+
+export function SimpleTemplate({ values }: { values: DeepPartialSkipArrayKey<FormValues> }) {
+    const { resume, education, projects, workExperience } = values
 
     const mailTo = resume?.email_address ? `mailto:${resume?.email_address}` : '';
 
@@ -36,7 +37,6 @@ export function SimpleTemplate() {
 
                 <ul className="text-right">
                     <a href={mailTo} className="text-xs block text-primary">{resume?.email_address}</a>
-                    {/* <a href={`tel:${phoneNumber}`} className="text-xs block">{resume?.}</a> */}
                     <p className="text-xs">{resume?.location}</p>
                 </ul>
             </section>

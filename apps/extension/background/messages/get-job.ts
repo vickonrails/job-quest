@@ -5,8 +5,8 @@ import { supabase as client } from "~core/supabase"
  * handler for fetching job from the source_id
  */
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-    const sourceId = req.body.id;
-    const { data, error } = await client.from("jobs").select().eq("source", "linkedIn").eq("source_id", sourceId).maybeSingle()
+    const url = req.body.url;
+    const { data, error } = await client.from("jobs").select().eq("link", url).maybeSingle()
 
     if (error || !data) {
         res.send({

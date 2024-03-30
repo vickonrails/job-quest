@@ -33,7 +33,7 @@ const config = {
         lg: "var(--text-lg)",
       },
       maxWidth: {
-        sm: '38.4rem',
+        sm: "var(--max-w-sm)",
       },
       boxShadow: {
         outline: "inset 0 0 0 1px var(--linkedIn)",

@@ -9,30 +9,32 @@ interface JobResponse {
 /**
  * responsible for fetching the job from the background script
  */
-export const useJob = (id: string) => {
+export const useJob = (url: string, options?: { defaultData: Job }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [job, setJob] = useState<Job>();
 
     useEffect(() => {
-        // let timer;
-        sendToBackground<{ id: string }, BackgroundResponse<JobResponse>>({
+        sendToBackground<{ url: string }, BackgroundResponse<JobResponse>>({
             name: 'get-job',
-            body: { id }
+            body: { url }
         }).then((res) => {
-            // timer = setTimeout(() => {
             // TODO: refresh job once it's been added
             const { data, success } = res
-            if (success) setJob(data.job);
+            if (success) {
+                setJob({ ...data.job, img: options?.defaultData.img })
+            } else {
+                setJob({ ...options.defaultData })
+            };
         }).catch(err => {
             console.log({ err })
         }).finally(() => {
             setIsLoading(false)
         })
-    }, [id])
+    }, [url])
 
     const refresh = useCallback((job: Job) => {
         setJob(job)
-    }, [id])
+    }, [url])
 
     return { isLoading, job, refresh }
 }

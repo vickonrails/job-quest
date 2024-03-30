@@ -1,9 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
-  .page {
+  .tiptap > * + * {
+    margin-top: 0.75em;
+  }
+
+  .tiptap h1,
+  .tiptap h2,
+  .tiptap h3,
+  .tiptap h4,
+  .tiptap h5,
+  .tiptap h6 {
+    line-height: 1.1;
+  }
+  
+  html::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* TODO: put some important declarations here */
+  /* select color, background color, text color, outline color, etc. */
+   .page {
     --linkedIn: #0a66c2;
     --linkedIn-hover: rgba(112,181,249,0.2);
     --background: 0 0% 100%;
@@ -39,18 +59,22 @@
     --spacing-1_5: 0.37rem;
     --spacing-2: 0.5rem;
     --spacing-2_5: 0.625rem;
+    --spacing-3: 0.75rem;
     --spacing-3_5: 0.875rem;
     --spacing-4: 1rem;
     --spacing-5: 1.25rem;
     --spacing-6: 1.5rem;
     --spacing-10: 2.5rem;
 
+    --text-xs: 0.75rem;
     --text-sm: 0.85rem;
     --text-base: 1rem;
     --text-lg: 1.13rem;
+
+    --max-w-sm: 24rem;
   }
 
-  .page.shadowContainer {
+  .linkedIn {
     --radius: 0.8rem;
 
     --spacing-1_5: 0.6rem;
@@ -67,5 +91,7 @@
     --text-sm: 1.4rem;
     --text-base: 1.6rem;
     --text-lg: 2rem;
+    
+    --max-w-sm: 38.4rem;
   }
 }

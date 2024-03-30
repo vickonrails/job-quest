@@ -25,7 +25,7 @@ export function KeywordsSection({ job }: { job: Job }) {
     }
 
     return (
-        <section className="p-4 border flex flex-col items-start gap-2">
+        <section className="p-4 border flex flex-col items-start gap-2 mb-4">
             <div>
                 <h3 className="font-medium">Relevant Keywords</h3>
                 <p className="text-muted-foreground">Certain keywords, when added to your resume & cover letter can help your application rank higher in automated systems like ATS (Applicant Tracking Systems).</p>
