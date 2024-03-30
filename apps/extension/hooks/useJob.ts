@@ -9,7 +9,7 @@ interface JobResponse {
 /**
  * responsible for fetching the job from the background script
  */
-export const useJob = (url: string) => {
+export const useJob = (url: string, options?: { defaultData: Job }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [job, setJob] = useState<Job>();
 
@@ -20,7 +20,11 @@ export const useJob = (url: string) => {
         }).then((res) => {
             // TODO: refresh job once it's been added
             const { data, success } = res
-            if (success) setJob(data.job);
+            if (success) {
+                setJob({ ...data.job, img: options?.defaultData.img })
+            } else {
+                setJob({ ...options.defaultData })
+            };
         }).catch(err => {
             console.log({ err })
         }).finally(() => {

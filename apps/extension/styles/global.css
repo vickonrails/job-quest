@@ -1,8 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
+  .tiptap > * + * {
+    margin-top: 0.75em;
+  }
+
+  .tiptap h1,
+  .tiptap h2,
+  .tiptap h3,
+  .tiptap h4,
+  .tiptap h5,
+  .tiptap h6 {
+    line-height: 1.1;
+  }
+  
   html::selection {
     background-color: var(--primary);
     color: var(--primary-foreground);
@@ -53,6 +66,7 @@
     --spacing-6: 1.5rem;
     --spacing-10: 2.5rem;
 
+    --text-xs: 0.75rem;
     --text-sm: 0.85rem;
     --text-base: 1rem;
     --text-lg: 1.13rem;
