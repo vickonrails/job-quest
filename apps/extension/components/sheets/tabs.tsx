@@ -5,6 +5,7 @@ import { Button, Input, Rating, Spinner, Textarea } from 'ui';
 import Tiptap from '~components/tiptap';
 import { isLinkedIn } from '~contents';
 import type { Job } from '~types';
+import { cn } from '~utils';
 
 type Form = UseFormReturn<Job>
 type JobInfoTabsProps = {
@@ -13,14 +14,23 @@ type JobInfoTabsProps = {
     fetchingJob: boolean
 }
 
+function Trigger({ className, active, ...props }: RadixTabs.TabsTriggerProps & { active?: boolean }) {
+    return (
+        <RadixTabs.Trigger
+            className={cn('uppercase text-sm select-none pb-2 text-muted-foreground border-b-2 border-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary', className)}
+            {...props}
+        />
+    )
+}
+
 export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
     const { formState: { isSubmitting } } = form
     const alreadyAdded = job ? job.id : ''
     return (
         <RadixTabs.Root defaultValue='info'>
-            <RadixTabs.List>
-                <RadixTabs.Trigger value='info'>Info</RadixTabs.Trigger>
-                <RadixTabs.Trigger value='description'>Description</RadixTabs.Trigger>
+            <RadixTabs.List className='flex flex-row gap-3 border-b mb-4'>
+                <Trigger value='info'>Info</Trigger>
+                <Trigger value='description'>Description</Trigger>
             </RadixTabs.List>
             {fetchingJob ? <SpinnerContainer /> : (
                 <>
@@ -36,6 +46,7 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
                             {alreadyAdded ? 'Update Job' : 'Add Job'}
                         </Button>
 
+                        {job && <a className='text-center text-sm text-primary underline block' target='_blank' rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
                     </div>
                 </>
             )}
@@ -51,7 +62,7 @@ function BasicInfo({ form, job }: { form: Form, job: Job }) {
             <input type='hidden' {...register('id')} />
             <div className="flex flex-col gap-4">
                 <div className='m-1.5 hidden' />
-                <PopupHeader jobInfo={job} register={register} />
+                <PopupHeader job={job} register={register} />
                 <section className='flex flex-col gap-4'>
                     <div>
                         <div className="m-1.5 select-none text-muted-foreground text-sm">Rating</div>
@@ -84,6 +95,7 @@ function JobDescription({ form }: { form: Form }) {
     const { control } = form
     return (
         <div>
+            <div className='select-none text-sm mb-2 text-muted-foreground'>Description</div>
             <Controller
                 name='description'
                 control={control}
@@ -99,10 +111,10 @@ function JobDescription({ form }: { form: Form }) {
 }
 
 // TODO: just pass the whole form
-function PopupHeader({ jobInfo, register }: { jobInfo: Partial<Job>, register: UseFormRegister<Job> }) {
-    const alreadyAdded = jobInfo.id
+function PopupHeader({ job, register }: { job: Partial<Job>, register: UseFormRegister<Job> }) {
+    const alreadyAdded = job ? job.id : ''
     if (isLinkedIn) {
-        const { img, position, company_name, location } = jobInfo ?? {}
+        const { img, position, company_name, location } = job ?? {}
         return (
             <header className='flex gap-2 items-center'>
                 <img src={img} alt="Company Logo" style={{ height: 60, width: 60 }} />

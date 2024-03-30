@@ -139,18 +139,9 @@ export function Sheet({ open, children, title, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
       <SheetContent>
-        {title && <SheetTitle className="mb-5">{title}</SheetTitle>}
+        {title && <SheetTitle className="mb-3">{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>
   )
 }
-
-
-// z-index: 99999;
-// position: fixed;
-// bottom: 20px;
-// right: 20px;
-// max-width: 420px;
-// width: calc(100% - 40px);
-// overflow: hidden;
