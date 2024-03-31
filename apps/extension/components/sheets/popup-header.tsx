@@ -2,9 +2,9 @@ import { Briefcase, MapPin } from 'lucide-react';
 import type { UseFormRegister } from "react-hook-form";
 import { Input } from 'ui';
 import { isLinkedIn } from "~contents";
-import type { Job } from "~types";
+import type { JobInsertDTO } from "~types";
 
-export function PopupHeader({ job, register }: { job: Partial<Job>, register: UseFormRegister<Job> }) {
+export function PopupHeader({ job, register }: { job: Partial<JobInsertDTO>, register: UseFormRegister<JobInsertDTO> }) {
     const alreadyAdded = job ? job.id : ''
     if (isLinkedIn) {
         const { img, position, company_name, location } = job ?? {}

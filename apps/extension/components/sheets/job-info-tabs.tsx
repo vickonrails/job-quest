@@ -1,16 +1,16 @@
 import * as RadixTabs from '@radix-ui/react-tabs';
-import { Controller, type UseFormRegister, type UseFormReturn } from 'react-hook-form';
-import { Button, Input, Rating, Spinner, Textarea } from 'ui';
+import { Controller, type UseFormReturn } from 'react-hook-form';
+import { cn } from 'shared';
+import { Button, Rating, Spinner, Textarea } from 'ui';
 import Tiptap from '~components/tiptap';
 import { isLinkedIn } from '~contents';
-import type { Job } from '~types';
-import { cn } from '~utils';
+import type { JobInsertDTO } from '~types';
 import { PopupHeader } from './popup-header';
 
-type Form = UseFormReturn<Job>
+type Form = UseFormReturn<JobInsertDTO>
 type JobInfoTabsProps = {
     form: Form,
-    job: Job,
+    job: JobInsertDTO,
     fetchingJob: boolean
 }
 
@@ -56,7 +56,7 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
 };
 
 /** basic information */
-function BasicInfo({ form, job }: { form: Form, job: Job }) {
+function BasicInfo({ form, job }: { form: Form, job: JobInsertDTO }) {
     const { control, register } = form
     return (
         <>

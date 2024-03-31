@@ -1,18 +1,9 @@
+import { type Database } from 'shared/dist/types'
+
+export type Job = Database['public']['Tables']['jobs']['Row'] & { img?: string }
+export type JobInsertDTO = Database['public']['Tables']['jobs']['Insert'] & { img?: string, notes?: string }
+
 export interface BackgroundResponse<T> {
     success: boolean
     data: T
-}
-
-export interface Job {
-    id?: string
-    img?: string
-    position: string
-    company_name: string
-    location: string
-    link: string
-    description: string
-    priority?: number
-    source?: string
-    status?: number
-    notes?: string
 }

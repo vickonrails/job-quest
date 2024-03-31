@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { Banner } from 'ui';
 import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
-import type { Job } from '~types';
-import { getJobUrl } from '~utils';
+import type { Job, JobInsertDTO } from '~types';
+import { getJobUrl } from '~utils/get-job-content';
 import { Sheet, type SheetProps } from './sheet';
 import { JobInfoTabs } from './job-info-tabs';
 
@@ -14,73 +14,25 @@ export interface JobInfoSheetProps extends SheetProps {
     jobInfo: Partial<Job>
 }
 
-export function getJobDetails(): Partial<Job> {
-    const link = window.location.href;
-
-    if (!isLinkedIn) return { link }
-
-    const isFullPage = window.location.href.includes('jobs/view');
-    let title: HTMLElement | ChildNode | null;
-
-    const img = document.querySelector('.jobs-company img');
-    const container = document.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
-    const source = isLinkedIn ? 'linkedIn' : null;
-
-    if (isFullPage) {
-        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
-    } else {
-        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title-link');
-    }
-
-    if (container) {
-        const company = container.querySelector('.app-aware-link')
-        const location = Boolean(container) ? container.childNodes[3] : ''
-        const details = document.querySelector('#job-details');
-
-        return {
-            id: '',
-            img: img?.getAttribute('src') ?? '',
-            position: title?.textContent ?? '',
-            company_name: company.textContent,
-            location: location ? location.textContent.split(' ')[1] : '',
-            priority: 1,
-            status: 0,
-            source,
-            description: details?.innerHTML ?? '',
-            link
-        }
-    }
-
-
-    return {
-        // TODO: remove img and use initials
-        id: '',
-        img: img?.getAttribute('src') ?? '',
-        position: title?.textContent ?? '',
-        priority: 1,
-        status: 0,
-        source
-    }
-}
-
-const getDefaultJobData = (jobInfo: Partial<Job>): Job => {
+const getDefaultJobData = (jobInfo: Partial<Job>): JobInsertDTO => {
     return {
         ...jobInfo,
         position: jobInfo.position ?? '',
         location: jobInfo.location ?? '',
         company_name: jobInfo.company_name ?? '',
         description: jobInfo.description ?? '',
-        link: jobInfo.link ?? ''
+        link: jobInfo.link ?? '',
+        company_site: jobInfo.company_site ?? '',
+        status: 0
     }
 }
-
 
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
     const { jobInfo } = props
     // TODO: this is going to fetch the job using the link to check if its in the database
     const { isLoading, job, refresh } = useJob(getJobUrl(), { defaultData: getDefaultJobData(jobInfo) })
-    const form = useForm<Job>({
+    const form = useForm<JobInsertDTO>({
         defaultValues: { id: job ? job.id : '', ...props.jobInfo }
     })
     const [showBanner, setShowBanner] = useState({ show: false, error: false })

@@ -2,9 +2,10 @@ import cssText from "data-text:../styles/global.css";
 import uiCSS from 'data-text:ui/dist/styles.css';
 import type { PlasmoCSUIProps } from "plasmo";
 import { useState, type FC } from "react";
+import { cn } from "shared";
 import { LinkedInButton, type LinkedInButtonProps } from "~components/linkedin-button";
-import { JobInfoSheet, getJobDetails } from "~components/sheets/JobInfoSheet";
-import { cn } from "~utils";
+import { JobInfoSheet } from "~components/sheets/JobInfoSheet";
+import { getJobDetails } from "~utils/get-job-content";
 
 // also work on the motion of the extension popup
 // body not scrolling when modal is open (only on linkedin)

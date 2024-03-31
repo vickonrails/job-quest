@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "plasmo dev",
     "package": "plasmo package",
+    "build": "plasmo build",
     "clean": "rm -rf build && rm -rf .plasmo & plasmo dev"
   },
   "dependencies": {
@@ -28,7 +29,8 @@
     "react-dom": "18.2.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "ui": "*"
+    "ui": "*",
+    "shared": "*"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.0",
