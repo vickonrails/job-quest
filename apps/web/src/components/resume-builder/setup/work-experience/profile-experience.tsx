@@ -1,6 +1,6 @@
 import { AlertDialog } from '@components/alert-dialog'
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from '@lib/database.types'
+import { type Database } from 'shared'
 import { type WorkExperience as IWorkExperience } from '@lib/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'

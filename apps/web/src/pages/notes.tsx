@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout } from '@components/layout'
-import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
-import { type Database } from 'lib/database.types'
+import { type Session, createPagesServerClient } from '@supabase/auth-helpers-nextjs'
+import { type Database } from 'shared'
 import { type Profile } from 'lib/types'
 import { type GetServerSideProps } from 'next'
 import { useNotes } from 'src/hooks/useNotes'
@@ -24,7 +24,7 @@ const Notes = ({ session, profile }: { session: Session, profile: Profile }) => 
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
+    const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {

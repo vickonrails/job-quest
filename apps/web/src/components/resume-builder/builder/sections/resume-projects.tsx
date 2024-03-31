@@ -1,7 +1,7 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { ProjectForm } from '@components/resume-builder/setup/projects/project-form-item';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Project } from '@lib/types';
 import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';

@@ -1,12 +1,11 @@
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { ResumePreviewCard } from '@components/resume-card';
-import { type Database } from '@lib/database.types';
 import { type Job } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { cn } from 'shared';
+import { type Database, cn } from 'shared';
 import { Button, Spinner } from 'ui';
 import { v4 as uuid } from 'uuid';
 

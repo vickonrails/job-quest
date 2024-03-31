@@ -1,5 +1,5 @@
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from '../../lib/database.types';
+import { type Database } from 'shared';
 import { type Job } from '../../lib/types';
 import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 

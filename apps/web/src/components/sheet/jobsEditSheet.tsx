@@ -2,7 +2,7 @@ import { ErrorHint } from '@components/resume-builder/setup/components/error-hin
 import { useToast } from '@components/toast/use-toast';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Rating, Select } from 'ui';

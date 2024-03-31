@@ -2,7 +2,7 @@ import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, type Session } from '@supabase/auth-helpers-react'
 import { type AppProps } from 'next/app'
 import { useState } from 'react'
-import { type Database } from '../../lib/database.types'
+import { type Database } from 'shared'
 
 import 'ui/dist/styles.css'
 import '../styles/globals.css'

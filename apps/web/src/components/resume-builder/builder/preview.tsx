@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';
 import { Button } from 'ui';
-import { SimpleTemplate } from '../templates/simple'
+import { Simple } from 'resume-templates'
 
 /**
  * 
@@ -37,7 +37,7 @@ async function fetchPDF(html: string): Promise<Blob> {
  * @returns {Promise<string>} - a URL blob from the pdf buffer
  */
 const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>): Promise<string> => {
-    const html = renderToStaticMarkup(<SimpleTemplate values={values} />)
+    const html = renderToStaticMarkup(<Simple values={values} />)
     const pdfBlob = await fetchPDF(html)
     return window.URL.createObjectURL(pdfBlob)
 }
@@ -66,7 +66,7 @@ export function Preview() {
                 {downloading ? 'Exporting...' : 'Export'}
             </Button>
             <div className="bg-white p-6">
-                <SimpleTemplate values={values} />
+                <Simple values={values} />
             </div>
         </section>
     )

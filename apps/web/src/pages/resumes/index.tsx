@@ -1,6 +1,6 @@
 import { Layout } from '@components/layout';
 import { ResumePreviewCard } from '@components/resume-card';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Profile, type Resume } from '@lib/types';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';

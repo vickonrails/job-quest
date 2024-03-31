@@ -1,7 +1,7 @@
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { type Note } from 'lib/types';
-import { type Database } from '../../lib/database.types';
+import { type Database } from 'shared';
 
 async function getNotes(client: SupabaseClient<Database>, jobId?: string) {
     if (!jobId) throw new Error('Job ID is required');

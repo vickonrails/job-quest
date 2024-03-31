@@ -1,8 +1,19 @@
+import { Database, formatDate } from 'shared';
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { formatDate } from 'shared';
-import { type FormValues } from 'src/pages/resumes/[resume]';
-import '../../../styles/globals.css';
+
+export type Highlight = Database['public']['Tables']['highlights']['Row'];
+export type Resume = Database['public']['Tables']['resumes']['Row'];
+export type Project = Database['public']['Tables']['projects']['Row'];
+export type Education = Database['public']['Tables']['education']['Row'] & { highlights?: Highlight[] };
+export type WorkExperience = Database['public']['Tables']['work_experience']['Row'] & { highlights?: Highlight[] };
+
+export interface FormValues {
+    resume: Resume,
+    projects: Project[],
+    education: Education[]
+    workExperience: WorkExperience[]
+}
 
 export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingElement> & { title: string }) {
     if (!title) return null;
@@ -23,7 +34,7 @@ export function DateRange({ startDate, endDate }: { startDate?: string, endDate?
 
 // TODO: I have to rearchitect this component to be stateless (Accept props and return JSX)
 
-export function SimpleTemplate({ values }: { values: DeepPartialSkipArrayKey<FormValues> }) {
+export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues> }) {
     const { resume, education, projects, workExperience } = values
 
     const mailTo = resume?.email_address ? `mailto:${resume?.email_address}` : '';

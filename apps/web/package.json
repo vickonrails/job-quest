@@ -12,8 +12,7 @@
     "types:gen": "npx supabase gen types typescript --local > ../../packages/types/database.types.ts",
     "db:seed": "bun run ./src/utils/seed.ts",
     "test:coverage": "vitest --coverage",
-    "migration:add": "npx supabase db diff -f",
-    "build:templates": "npx tailwindcss -c tailwind.pdf.config.ts -o lib/templates.css"
+    "migration:add": "npx supabase db diff -f"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.5.0",
@@ -41,13 +40,14 @@
     "openai": "^4.28.0",
     "qs": "^6.11.2",
     "react-hook-form": "^7.49.3",
-    "shared": "*",
-    "ui": "*",
     "supabase": "^1.106.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "uuid": "^9.0.1",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "shared": "*",
+    "ui": "*",
+    "resume-templates": "*"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",

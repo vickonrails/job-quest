@@ -1,6 +1,6 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type Job, type Note } from 'lib/types';
 import { type HTMLAttributes } from 'react';
 import { cn } from 'shared';

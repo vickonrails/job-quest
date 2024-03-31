@@ -3,7 +3,7 @@ import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
 import { DevTool } from '@hookform/devtools';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Resume } from '@lib/types';
 import { useSupabaseClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';

@@ -1,7 +1,7 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Education, type Highlight } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type Session } from '@supabase/supabase-js';

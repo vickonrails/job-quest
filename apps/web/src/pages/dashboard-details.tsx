@@ -1,7 +1,7 @@
 import BackButton from '@components/back-button';
 import { Layout } from '@components/layout';
 import JobsTable from '@components/table/job/JobsTable';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Job, type Profile } from '@lib/types';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';

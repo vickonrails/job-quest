@@ -2,7 +2,7 @@ import { type Profile } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 
 async function fetchProfile(client: SupabaseClient<Database>, userId: string) {
     if (!userId) throw new Error('User is not logged in');

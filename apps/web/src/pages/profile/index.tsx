@@ -1,5 +1,5 @@
 import { Layout } from '@components/layout';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { type PageProps } from '..';

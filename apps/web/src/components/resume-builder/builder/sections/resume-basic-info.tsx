@@ -1,4 +1,4 @@
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Resume } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { debounce } from '@utils/debounce';

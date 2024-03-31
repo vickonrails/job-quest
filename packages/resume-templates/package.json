@@ -1,0 +1,35 @@
+{
+  "name": "resume-templates",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/out/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p build:ui build:tailwind",
+    "build:tailwind": "npx tailwindcss -o ./dist/styles.css",
+    "build:ui": "tsc && vite build"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.274.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7",
+    "shared": "*"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.3"
+  }
+}

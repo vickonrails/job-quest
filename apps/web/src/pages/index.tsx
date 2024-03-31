@@ -4,7 +4,7 @@ import { Layout } from '@components/layout';
 import { ResumePreviewCard } from '@components/resume-card';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type Session } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type Profile, type Resume } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 

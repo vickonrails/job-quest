@@ -1,7 +1,7 @@
 import { useToast } from '@components/toast/use-toast'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { type Database } from 'lib/database.types'
+import { type Database } from 'shared'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import { Trash } from 'lucide-react'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'

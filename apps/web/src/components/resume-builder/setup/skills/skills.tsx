@@ -1,6 +1,6 @@
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Profile } from '@lib/types';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

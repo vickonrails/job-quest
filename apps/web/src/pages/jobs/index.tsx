@@ -5,7 +5,7 @@ import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { useJobs } from '@hooks';
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type Job, type Profile } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
