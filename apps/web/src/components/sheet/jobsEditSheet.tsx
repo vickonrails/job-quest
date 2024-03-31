@@ -5,9 +5,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Database } from 'lib/database.types';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Input, Rating, Select, Status_Lookup } from 'ui';
+import { Button, Input, Rating, Select } from 'ui';
 import { v4 as uuid } from 'uuid';
 import { Sheet, type SheetProps } from './sheet';
+import { Status_Lookup } from 'shared'
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T

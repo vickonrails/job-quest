@@ -1,4 +1,4 @@
-import { formatDate } from '@components/utils';
+import { formatDate } from 'shared';
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';

@@ -1,6 +1,6 @@
 
 import { type FC, type HTMLAttributes } from 'react'
-import { cn } from '../utils'
+import { cn } from 'shared'
 import { cva } from 'class-variance-authority'
 import { Info } from 'lucide-react'
 import { AlertTriangle, CheckCircle } from 'lucide-react'

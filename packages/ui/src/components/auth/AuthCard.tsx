@@ -1,6 +1,6 @@
 
 import { type FC, type HTMLAttributes } from 'react'
-import { cn } from '../../utils'
+import { cn } from 'shared'
 import { Logo } from '../logo'
 
 type AuthCardProps = HTMLAttributes<HTMLElement>

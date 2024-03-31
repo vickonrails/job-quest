@@ -1,4 +1,4 @@
-import { cn } from '@/utils'
+import { cn } from 'shared'
 import * as React from 'react'
 
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string, containerClasses?: string }

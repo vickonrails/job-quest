@@ -1,4 +1,4 @@
-import { formatDate } from '@components/utils';
+import { formatDate } from 'shared';
 
 /**
  * render the date depending on the available start & end dates

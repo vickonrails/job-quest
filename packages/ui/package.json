@@ -20,7 +20,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "shared": "*"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",

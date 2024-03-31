@@ -1,6 +1,6 @@
 import { Avatar } from '@components/avatar';
 import { Typography } from '@components/typography';
-import { formatDate } from '@components/utils';
+import { formatDate } from 'shared';
 import clsx from 'clsx';
 import { type HTMLAttributes } from 'react';
 import { Rating } from 'ui';

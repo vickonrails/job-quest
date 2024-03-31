@@ -1,7 +1,8 @@
-import { formatDate } from '@components/utils';
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
+import { formatDate } from 'shared';
 import { type FormValues } from 'src/pages/resumes/[resume]';
+import '../../../styles/globals.css';
 
 export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingElement> & { title: string }) {
     if (!title) return null;
@@ -28,7 +29,7 @@ export function SimpleTemplate({ values }: { values: DeepPartialSkipArrayKey<For
     const mailTo = resume?.email_address ? `mailto:${resume?.email_address}` : '';
 
     return (
-        <section className="py-3 px-1 flex flex-col max-w-xl bg-white mx-auto my-4">
+        <section className="py-3 px-1 flex flex-col max-w-2xl bg-white mx-auto my-4">
             <section className="flex justify-between mb-6">
                 <div>
                     <h1 className="font-bold">{resume?.full_name}</h1>

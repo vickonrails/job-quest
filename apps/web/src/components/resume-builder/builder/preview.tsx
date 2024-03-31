@@ -3,9 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
 import { type FormValues } from 'src/pages/resumes/[resume]';
 import { Button } from 'ui';
-import { SimpleTemplate } from '../templates/simple';
-
-const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
+import { SimpleTemplate } from '../templates/simple'
 
 /**
  * 
@@ -13,10 +11,13 @@ const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
  * @returns {Promise<Blob>} - pdf buffer blob
  */
 async function fetchPDF(html: string): Promise<Blob> {
+    // read the generated css file for the templates
+    // compose a new html file
+
     try {
-        const response = await fetch(`${apiServiceURL}/api/resume-export`, {
+        const response = await fetch('/api/export-resume', {
             method: 'POST',
-            body: JSON.stringify({ html, template: 'lora' }),
+            body: JSON.stringify({ html }),
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -24,6 +25,7 @@ async function fetchPDF(html: string): Promise<Blob> {
         if (!response.ok) {
             throw new Error(`An error occurred ${response.status}`)
         }
+
         return await response.blob()
     } catch (e) {
         throw e;
