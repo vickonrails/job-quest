@@ -1,9 +1,9 @@
 import { Link, type LinkProps } from '@components/link';
-import { cn } from '@utils/cn';
 import clsx from 'clsx';
 import { Bell, Clipboard, File, FileText, Folder, Grid, User } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useMemo, type FC, type HTMLAttributes } from 'react';
+import { cn } from 'shared';
 import { Logo } from 'ui';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;

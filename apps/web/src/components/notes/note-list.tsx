@@ -1,13 +1,13 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { cn } from '@utils/cn';
 import { type Database } from 'lib/database.types';
 import { type Job, type Note } from 'lib/types';
 import { type HTMLAttributes } from 'react';
+import { cn } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useNotes } from 'src/hooks/useNotes';
-import NoteItem from './note-item';
 import { Spinner } from 'ui';
+import NoteItem from './note-item';
 
 interface NoteListProps extends HTMLAttributes<HTMLElement> {
     job: Job

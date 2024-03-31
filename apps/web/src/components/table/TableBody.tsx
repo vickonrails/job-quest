@@ -2,11 +2,11 @@ import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { Edit, MoreVertical, Trash2 } from 'lucide-react';
+import { cn } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { type BaseEntity, type Column, type TableActions } from './Table';
 import { TableCellRender } from './TableCellRender';
-import { cn } from '@utils/cn';
 
 interface TableBody<T> {
     items: T[]

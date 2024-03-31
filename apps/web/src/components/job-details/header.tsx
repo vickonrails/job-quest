@@ -1,11 +1,9 @@
 import { Typography } from '@components/typography'
-import { formatDate } from 'shared'
 import { type Job } from '@lib/types'
-import { cn } from '@utils/cn'
 import hashColors from '@utils/hash-colors'
 import { ExternalLink } from 'lucide-react'
+import { Status_Lookup, cn, formatDate } from 'shared'
 import { Button, Rating } from 'ui'
-import { Status_Lookup } from 'shared'
 
 export function Header({ job, onEditClick }: { job: Job, onEditClick: (job: Job) => void }) {
     const status = Status_Lookup.find((x, idx) => idx === job.status)

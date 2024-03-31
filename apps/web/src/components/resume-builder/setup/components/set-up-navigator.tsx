@@ -1,5 +1,5 @@
-import { cn } from '@utils/cn'
 import Link from 'next/link'
+import { cn } from 'shared'
 import { useSetupContext } from 'src/hooks/useSetupContext'
 
 export function SetupNavigator(props: React.AllHTMLAttributes<HTMLAnchorElement> & { step: number }) {

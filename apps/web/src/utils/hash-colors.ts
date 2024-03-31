@@ -1,4 +1,4 @@
-import { djb2Hash } from '@components/utils'
+import { djb2Hash } from 'shared'
 
 // TODO: find better variant names
 const defaultVariants = ['blue', 'purple', 'green', 'gold', 'orange']

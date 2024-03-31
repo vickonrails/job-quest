@@ -1,14 +1,14 @@
 import { type Session } from '@supabase/supabase-js';
-import { cn } from '@utils/cn';
 import { ChevronRight } from 'lucide-react';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, type FC, type HTMLAttributes, type ReactNode } from 'react';
+import { cn } from 'shared';
 import { Banner } from 'ui';
 import { type Profile } from '../../../lib/types';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
-import Head from 'next/head'
 
 // TODO: Error handling in this component is not good
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {

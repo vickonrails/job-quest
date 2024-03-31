@@ -1,5 +1,5 @@
-import { cn } from '@utils/cn'
-import React, { type HTMLAttributes } from 'react'
+import { type HTMLAttributes } from 'react'
+import { cn } from 'shared'
 
 export function ErrorHint({ className, ...rest }: HTMLAttributes<HTMLParagraphElement>) {
     return (

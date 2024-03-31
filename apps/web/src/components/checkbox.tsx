@@ -1,7 +1,6 @@
-import React from 'react'
-import { Root, Indicator, type CheckboxProps } from '@radix-ui/react-checkbox'
+import { Indicator, Root, type CheckboxProps } from '@radix-ui/react-checkbox'
 import { Check } from 'lucide-react'
-import { cn } from '@utils/cn'
+import { cn } from 'shared'
 
 export function Checkbox({ label, className, checked, id, ...rest }: CheckboxProps & { label: string }) {
     return (
