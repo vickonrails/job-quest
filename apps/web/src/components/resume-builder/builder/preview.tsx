@@ -2,10 +2,9 @@ import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { Complex } from 'resume-templates';
+import { Complex, Simple } from 'resume-templates';
 import { type FormValues } from 'src/pages/resumes/[resume]';
 import { Button, Select } from 'ui';
-
 
 /**
  * 
@@ -38,8 +37,8 @@ async function fetchPDF(html: string): Promise<Blob> {
  * @param values - form values
  * @returns {Promise<string>} - a URL blob from the pdf buffer
  */
-const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>): Promise<string> => {
-    const html = renderToStaticMarkup(<Complex values={values} />)
+const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>, resumeTemplate: Template = 'simple'): Promise<string> => {
+    const html = renderToStaticMarkup(<ResumeTemplate values={values} template={resumeTemplate} />)
     const pdfBlob = await fetchPDF(html)
     return window.URL.createObjectURL(pdfBlob)
 }
@@ -51,10 +50,11 @@ export function Preview() {
     const { control } = useFormContext<FormValues>();
     const values = useWatch<FormValues>({ control: control });
     const [downloading, setDownloading] = useState(false)
+    const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
 
     const handleExport = () => {
         setDownloading(true)
-        getObjectURL(values).then(res => {
+        getObjectURL(values, resumeTemplate).then(res => {
             window.open(res)
         }).catch(err => {
             // 
@@ -67,17 +67,37 @@ export function Preview() {
                 <Select
                     options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
                     trigger="Select template"
+                    defaultValue="simple"
+                    onValueChange={val => {
+                        setResumeTemplate(val === 'simple' ? 'simple' : 'complex')
+                    }}
                 />
                 <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
-                    <Share className="text-xs h-5 w-5" />
+                    <Share className="text-xs h-4 w-4" />
                     {downloading ? 'Exporting...' : 'Export'}
                 </Button>
             </header>
 
             {/* TODO: fix button loading states for all variants */}
             <div className="bg-white w-full">
-                <Complex values={values} />
+                <ResumeTemplate
+                    values={values}
+                    template={resumeTemplate}
+                />
             </div>
         </section>
     )
+}
+
+type Template = 'simple' | 'complex'
+
+function ResumeTemplate({ template, values }: { template?: Template, values: DeepPartialSkipArrayKey<FormValues> }) {
+    switch (template) {
+        case 'simple':
+        default:
+            return <Simple values={values} />
+
+        case 'complex':
+            return <Complex values={values} />
+    }
 }

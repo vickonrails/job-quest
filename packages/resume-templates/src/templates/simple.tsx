@@ -1,6 +1,6 @@
-import { Database, formatDate } from 'shared';
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
+import { Database, formatDate } from 'shared';
 
 export type Highlight = Database['public']['Tables']['highlights']['Row'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];
@@ -38,7 +38,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
     const mailTo = resume?.email_address ? `mailto:${resume?.email_address}` : '';
 
     return (
-        <section className="py-3 px-1 flex flex-col max-w-2xl bg-white mx-auto my-4">
+        <section className="py-3 flex flex-col max-w-2xl bg-white mx-auto my-4 px-6">
             <section className="flex justify-between mb-6">
                 <div>
                     <h1 className="font-bold">{resume?.full_name}</h1>
