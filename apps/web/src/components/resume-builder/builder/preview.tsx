@@ -1,9 +1,11 @@
+import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
+import { Complex } from 'resume-templates';
 import { type FormValues } from 'src/pages/resumes/[resume]';
-import { Button } from 'ui';
-import { Simple } from 'resume-templates'
+import { Button, Select } from 'ui';
+
 
 /**
  * 
@@ -37,7 +39,7 @@ async function fetchPDF(html: string): Promise<Blob> {
  * @returns {Promise<string>} - a URL blob from the pdf buffer
  */
 const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>): Promise<string> => {
-    const html = renderToStaticMarkup(<Simple values={values} />)
+    const html = renderToStaticMarkup(<Complex values={values} />)
     const pdfBlob = await fetchPDF(html)
     return window.URL.createObjectURL(pdfBlob)
 }
@@ -61,12 +63,20 @@ export function Preview() {
 
     return (
         <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
+            <header className="flex justify-between w-full items-center">
+                <Select
+                    options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
+                    trigger="Select template"
+                />
+                <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
+                    <Share className="text-xs h-5 w-5" />
+                    {downloading ? 'Exporting...' : 'Export'}
+                </Button>
+            </header>
+
             {/* TODO: fix button loading states for all variants */}
-            <Button type="button" variant="ghost" onClick={handleExport} className="mb-2">
-                {downloading ? 'Exporting...' : 'Export'}
-            </Button>
-            <div className="bg-white p-6">
-                <Simple values={values} />
+            <div className="bg-white w-full">
+                <Complex values={values} />
             </div>
         </section>
     )
