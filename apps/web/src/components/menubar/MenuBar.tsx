@@ -1,8 +1,8 @@
 import * as RadixMenuBar from '@radix-ui/react-menubar';
-import { cn } from '@utils/cn';
 import { cva } from 'class-variance-authority';
 import clsx from 'clsx';
 import { type FC } from 'react';
+import { cn } from 'shared';
 
 interface MenuBarProp extends RadixMenuBar.MenubarProps {
     trigger: React.ReactNode

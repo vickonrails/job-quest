@@ -1,5 +1,5 @@
-import { cn } from '@utils/cn'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { cn } from 'shared'
 import { Select, type SelectOption } from 'ui'
 
 interface PaginationProps {

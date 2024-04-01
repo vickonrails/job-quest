@@ -1,6 +1,6 @@
-import { cn } from '@utils/cn'
 import { X } from 'lucide-react'
 import { type HTMLAttributes } from 'react'
+import { cn } from 'shared'
 
 // TODO: refactor chips not to use native CSS colors
 export type ChipVariants = 'blue' | 'purple' | 'green' | 'gold' | 'orange' | 'plain'

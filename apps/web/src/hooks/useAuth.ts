@@ -1,6 +1,6 @@
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 
 async function fetchUser(client: SupabaseClient<Database>) {
     const { data, error } = await client.auth.getUser();

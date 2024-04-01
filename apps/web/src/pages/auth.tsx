@@ -1,7 +1,7 @@
-import { type Session, createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { type Database } from 'lib/database.types';
+import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react';
+import { type Database } from 'shared';
 
 const AuthPage = ({ session }: { session: Session }) => {
     useEffect(() => {
@@ -22,7 +22,7 @@ const AuthPage = ({ session }: { session: Session }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerSupabaseClient<Database>(context);
+    const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {

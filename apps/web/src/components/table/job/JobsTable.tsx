@@ -1,8 +1,8 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { type Database } from 'lib/database.types'
+import { type Database } from 'shared'
 import { type Job } from 'lib/types'
 import { useRouter } from 'next/router'
-import { Status_Lookup } from 'ui'
+import { Status_Lookup } from 'shared'
 import { Table, type Column, type TableActions } from '../Table'
 
 export const columns: Column<Job> = [

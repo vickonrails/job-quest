@@ -1,5 +1,5 @@
-import { cn } from '@utils/cn';
 import { type HTMLAttributes } from 'react';
+import { cn } from 'shared';
 
 export function DashboardSidebar({ className, ...props }: HTMLAttributes<HTMLElement>) {
     return (

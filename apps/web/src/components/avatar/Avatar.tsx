@@ -1,8 +1,8 @@
-import { cn } from '@utils/cn'
 import hashColors from '@utils/hash-colors'
 import { cva } from 'class-variance-authority'
 import Image, { type ImageProps } from 'next/image'
 import { type HTMLAttributes } from 'react'
+import { cn } from 'shared'
 
 type IAvatarBorder = 'curved' | 'round' | 'square'
 interface AvatarProps extends Omit<ImageProps, 'src'> {

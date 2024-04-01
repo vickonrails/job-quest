@@ -1,6 +1,6 @@
 import { sendToBackground } from "@plasmohq/messaging";
 import { useCallback, useEffect, useState } from "react";
-import type { BackgroundResponse, Job } from "~types";
+import type { BackgroundResponse, Job, JobInsertDTO } from "~types";
 
 interface JobResponse {
     job: Job
@@ -9,9 +9,9 @@ interface JobResponse {
 /**
  * responsible for fetching the job from the background script
  */
-export const useJob = (url: string, options?: { defaultData: Job }) => {
+export const useJob = (url: string, options?: { defaultData: JobInsertDTO }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [job, setJob] = useState<Job>();
+    const [job, setJob] = useState<JobInsertDTO>();
 
     useEffect(() => {
         sendToBackground<{ url: string }, BackgroundResponse<JobResponse>>({

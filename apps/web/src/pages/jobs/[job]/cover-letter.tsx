@@ -1,7 +1,7 @@
 import BackButton from '@components/back-button'
 import { Layout } from '@components/layout'
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from '@lib/database.types'
+import { type Database } from 'shared'
 import { type CoverLetter, type Job } from '@lib/types'
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'

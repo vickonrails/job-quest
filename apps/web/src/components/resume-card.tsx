@@ -1,8 +1,7 @@
 import { type Resume } from '@lib/types';
-import { cn } from '@utils/cn';
 import { GanttChartSquare } from 'lucide-react';
 import Link from 'next/link';
-import { formatDate } from './utils';
+import { cn, formatDate } from 'shared';
 
 /** 
  * Component for rendering a preview card for a resume

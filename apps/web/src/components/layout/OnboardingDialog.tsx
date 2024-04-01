@@ -4,7 +4,7 @@ import { Typography } from '@components/typography';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type User } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type FormEvent, useState } from 'react';
 import { Button, Input } from 'ui';
 import { type Profile, type ProfileInsertDTO } from '../../../lib/types';

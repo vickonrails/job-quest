@@ -1,9 +1,9 @@
-import { cn } from '@utils/cn';
 import clsx from 'clsx';
 import { type Profile } from 'lib/types';
 import { Building, FolderHeart, ListStart, Timer, type LucideIcon } from 'lucide-react';
 import Link, { type LinkProps as NextLinkProps } from 'next/link';
 import { type HTMLAttributes } from 'react';
+import { cn } from 'shared';
 
 interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
     profile: Profile

@@ -1,7 +1,7 @@
-import React, { type ReactNode } from 'react'
-import * as RdxDialog from '@radix-ui/react-dialog'
 import { Typography } from '@components/typography'
-import { cn } from '@utils/cn'
+import * as RdxDialog from '@radix-ui/react-dialog'
+import { type ReactNode } from 'react'
+import { cn } from 'shared'
 
 export interface DialogProps extends RdxDialog.DialogProps {
     /**

@@ -1,7 +1,7 @@
 import { Avatar } from '@components/avatar';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'lib/database.types';
+import { type Database } from 'shared';
 import { type Profile } from 'lib/types';
 import { ChevronDown, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/router';

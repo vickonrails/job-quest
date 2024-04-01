@@ -45,7 +45,8 @@
     "next.config.mjs",
     "next-env.d.ts",
     "vitest/setup.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "tailwind.pdf.config.ts"
   ],
   "exclude": [
     "node_modules"

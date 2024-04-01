@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import { cn, getSize } from "../utils";
-
-export type Size = 'xs' | 'sm' | 'md' | 'lg';
+import { Size, cn, getSize } from "shared";
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'size'> {

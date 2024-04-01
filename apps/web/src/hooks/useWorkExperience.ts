@@ -1,4 +1,4 @@
-import { type Database } from '@lib/database.types';
+import { type Database } from 'shared';
 import { type Highlight, type WorkExperience } from '@lib/types';
 import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

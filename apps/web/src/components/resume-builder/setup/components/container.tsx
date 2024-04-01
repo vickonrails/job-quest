@@ -1,5 +1,5 @@
-import { cn } from '@utils/cn'
 import { ChevronLeftIcon } from 'lucide-react'
+import { cn } from 'shared'
 import { useSetupContext } from 'src/hooks/useSetupContext'
 
 interface StepContainer extends React.HTMLAttributes<HTMLDivElement> {

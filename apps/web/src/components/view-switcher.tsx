@@ -1,6 +1,6 @@
-import { cn } from '@utils/cn';
 import { AlignStartHorizontal, TableIcon } from 'lucide-react';
 import { type HTMLAttributes } from 'react';
+import { cn } from 'shared';
 
 type View = 'kanban' | 'table';
 

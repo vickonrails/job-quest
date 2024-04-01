@@ -1,7 +1,7 @@
 import { Droppable } from '@hello-pangea/dnd';
 import { type Job } from '@lib/types';
-import { cn } from '@utils/cn';
 import { type KanbanColumn } from '@utils/transform-to-column';
+import { cn } from 'shared';
 import { getColumnHeaderProps } from './core/getHeaderProperties';
 import { KanbanCard as DefaultKanbanCard } from './kanban-card';
 

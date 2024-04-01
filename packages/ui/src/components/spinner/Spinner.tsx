@@ -1,4 +1,4 @@
-import { cn } from '@/utils';
+import { cn } from 'shared';
 import { type FC, type HTMLAttributes } from 'react';
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {

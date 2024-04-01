@@ -1,11 +1,10 @@
+import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
+import { Complex, Simple } from 'resume-templates';
 import { type FormValues } from 'src/pages/resumes/[resume]';
-import { Button } from 'ui';
-import { SimpleTemplate } from '../templates/simple';
-
-const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
+import { Button, Select } from 'ui';
 
 /**
  * 
@@ -13,10 +12,13 @@ const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
  * @returns {Promise<Blob>} - pdf buffer blob
  */
 async function fetchPDF(html: string): Promise<Blob> {
+    // read the generated css file for the templates
+    // compose a new html file
+
     try {
-        const response = await fetch(`${apiServiceURL}/api/resume-export`, {
+        const response = await fetch('/api/export-resume', {
             method: 'POST',
-            body: JSON.stringify({ html, template: 'lora' }),
+            body: JSON.stringify({ html }),
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -24,6 +26,7 @@ async function fetchPDF(html: string): Promise<Blob> {
         if (!response.ok) {
             throw new Error(`An error occurred ${response.status}`)
         }
+
         return await response.blob()
     } catch (e) {
         throw e;
@@ -34,8 +37,8 @@ async function fetchPDF(html: string): Promise<Blob> {
  * @param values - form values
  * @returns {Promise<string>} - a URL blob from the pdf buffer
  */
-const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>): Promise<string> => {
-    const html = renderToStaticMarkup(<SimpleTemplate values={values} />)
+const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>, resumeTemplate: Template = 'simple'): Promise<string> => {
+    const html = renderToStaticMarkup(<ResumeTemplate values={values} template={resumeTemplate} />)
     const pdfBlob = await fetchPDF(html)
     return window.URL.createObjectURL(pdfBlob)
 }
@@ -47,10 +50,11 @@ export function Preview() {
     const { control } = useFormContext<FormValues>();
     const values = useWatch<FormValues>({ control: control });
     const [downloading, setDownloading] = useState(false)
+    const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
 
     const handleExport = () => {
         setDownloading(true)
-        getObjectURL(values).then(res => {
+        getObjectURL(values, resumeTemplate).then(res => {
             window.open(res)
         }).catch(err => {
             // 
@@ -59,13 +63,41 @@ export function Preview() {
 
     return (
         <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
+            <header className="flex justify-between w-full items-center">
+                <Select
+                    options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
+                    trigger="Select template"
+                    defaultValue="simple"
+                    onValueChange={val => {
+                        setResumeTemplate(val === 'simple' ? 'simple' : 'complex')
+                    }}
+                />
+                <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
+                    <Share className="text-xs h-4 w-4" />
+                    {downloading ? 'Exporting...' : 'Export'}
+                </Button>
+            </header>
+
             {/* TODO: fix button loading states for all variants */}
-            <Button type="button" variant="ghost" onClick={handleExport} className="mb-2">
-                {downloading ? 'Exporting...' : 'Export'}
-            </Button>
-            <div className="bg-white p-6">
-                <SimpleTemplate values={values} />
+            <div className="bg-white w-full">
+                <ResumeTemplate
+                    values={values}
+                    template={resumeTemplate}
+                />
             </div>
         </section>
     )
+}
+
+type Template = 'simple' | 'complex'
+
+function ResumeTemplate({ template, values }: { template?: Template, values: DeepPartialSkipArrayKey<FormValues> }) {
+    switch (template) {
+        case 'simple':
+        default:
+            return <Simple values={values} />
+
+        case 'complex':
+            return <Complex values={values} />
+    }
 }

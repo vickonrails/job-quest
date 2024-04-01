@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
-import { type Database } from '../../lib/database.types.ts'
+import { type Database } from 'shared'
 import jobs from './jobs.ts'
 import { reportError } from './reportError.ts';
 

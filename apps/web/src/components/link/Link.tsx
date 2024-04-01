@@ -1,6 +1,6 @@
-import { cn } from '@utils/cn'
 import NextLink, { type LinkProps as NextLinkProps } from 'next/link'
-import { type ReactNode, type FC } from 'react'
+import { type FC, type ReactNode } from 'react'
+import { cn } from 'shared'
 
 export interface LinkProps extends NextLinkProps {
     children: ReactNode
