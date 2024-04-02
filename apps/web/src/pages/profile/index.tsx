@@ -2,7 +2,7 @@ import { Layout } from '@components/layout';
 import { type Database } from 'shared';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
-import { type PageProps } from '..';
+import { type PageProps } from '../index-page';
 import Link from 'next/link';
 
 export default function Profile({ session, profile }: PageProps) {

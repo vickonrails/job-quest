@@ -23,6 +23,9 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./src/*"
+      ],
       "@components/*": [
         "./src/components/*"
       ],
@@ -34,8 +37,13 @@
       ],
       "@lib/*": [
         "./lib/*"
-      ],
-    }
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "src/**/*.tsx",
@@ -46,7 +54,8 @@
     "next-env.d.ts",
     "vitest/setup.ts",
     "tailwind.config.ts",
-    "tailwind.pdf.config.ts"
+    "tailwind.pdf.config.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

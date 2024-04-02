@@ -1,8 +1,6 @@
-import baseConfig from 'ui/tailwind.config'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config = {
-  ...baseConfig,
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',

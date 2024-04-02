@@ -9,7 +9,7 @@ import { type GetServerSideProps } from 'next';
 import { useMemo, useState } from 'react';
 import { useProfile } from 'src/hooks/useProfile';
 import { SetupProvider } from 'src/hooks/useSetupContext';
-import { type PageProps } from '..';
+import { type PageProps } from '../index-page';
 
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
