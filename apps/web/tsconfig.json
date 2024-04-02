@@ -55,6 +55,7 @@
     "vitest/setup.ts",
     "tailwind.config.ts",
     "tailwind.pdf.config.ts",
+    "src/middleware.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

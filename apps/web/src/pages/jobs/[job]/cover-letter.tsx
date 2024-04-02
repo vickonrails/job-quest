@@ -10,7 +10,7 @@ import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useCoverLetter } from 'src/hooks/useCoverLetter'
 import { useMagicWrite } from 'src/hooks/useMagicWrite'
-import { type PageProps } from '@/pages/index-page'
+import { type PageProps } from '@/pages'
 import { Button, Spinner } from 'ui'
 
 interface CoverLetterProps extends PageProps {

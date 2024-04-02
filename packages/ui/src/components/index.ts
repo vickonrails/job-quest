@@ -3,7 +3,7 @@
 export * from './button'
 export * from './input'
 export * from './rating'
-export * from './select'
+// export * from './select'
 export * from './banner'
 export * from './auth'
 export * from './logo'

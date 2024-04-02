@@ -51,6 +51,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createPagesServerClient<Database>(context);
     const { data: { session } } = await supabase.auth.getSession()
 
+    console.log({ session })
+
     if (!session) {
         await supabase.auth.signOut();
         return {
