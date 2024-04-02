@@ -1,6 +1,6 @@
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { Database, formatDate } from 'shared';
+import { type Database, formatDate } from 'shared';
 
 export type Highlight = Database['public']['Tables']['highlights']['Row'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];
@@ -70,9 +70,9 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                     return (
                         <article key={idx} className="flex mb-4">
                             <div className="flex-1">
-                                <div className='mb-2'>
+                                <div className="mb-2">
                                     {(company_name && job_title) && (
-                                        <div className='flex gap-2 items-center justify-between'>
+                                        <div className="flex gap-2 items-center justify-between">
                                             <h2 className="font-bold text-xs">{job_title} - {company_name}</h2>
                                             <DateRange startDate={start_date} endDate={end_date ?? 'Till Date'} />
                                         </div>
@@ -131,7 +131,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                 <section>
                                     {!(skills?.length === 0) && (
                                         <p className="text-xs">
-                                            <span className='font-medium'>Tech Stack</span>: <span className="text-muted-foreground">{skills?.map(x => x.label).join(', ')}</span>
+                                            <span className="font-medium">Tech Stack</span>: <span className="text-muted-foreground">{skills?.map(x => x.label).join(', ')}</span>
                                         </p>
                                     )}
                                 </section>

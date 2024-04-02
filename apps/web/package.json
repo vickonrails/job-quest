@@ -7,7 +7,7 @@
     "dev": "next dev",
     "test": "NODE_ENV=test vitest",
     "build": "next build",
-    "lint": "next lint",
+    "lint": "eslint .",
     "start": "next start",
     "types:gen": "npx supabase gen types typescript --local > ../../packages/shared/src/types/database.types.ts",
     "db:seed": "bun run ./src/utils/seed.ts",

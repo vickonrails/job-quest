@@ -43,7 +43,7 @@ export function Complex({ values }: { values: DeepPartialSkipArrayKey<FormValues
                 <div className="mx-auto max-w-2xl px-6">
                     <h1 className="font-bold text-xl uppercase">{resume?.full_name}</h1>
                     <p className="text-xs">{resume?.title}</p>
-                    <div className='flex text-xs gap-4'>
+                    <div className="flex text-xs gap-4">
                         <a href={mailTo}>{resume?.email_address}</a>
                         <p>{resume?.location}</p>
                     </div>
@@ -99,7 +99,7 @@ export function Complex({ values }: { values: DeepPartialSkipArrayKey<FormValues
                         ))}
                     </section>
 
-                    <section className='mb-3'>
+                    <section className="mb-3">
                         <Heading>Skills</Heading>
                         <p className="text-xs">{resume?.skills?.map(x => x.label).join(' | ')}</p>
                     </section>
