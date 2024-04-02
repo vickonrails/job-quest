@@ -12,7 +12,8 @@
     "types:gen": "npx supabase gen types typescript --local > ../../packages/shared/src/types/database.types.ts",
     "db:seed": "bun run ./src/utils/seed.ts",
     "test:coverage": "vitest --coverage",
-    "migration:add": "npx supabase db diff -f"
+    "migration:add": "npx supabase db diff -f",
+    "build:templates": "npx tailwindcss -i ./src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.5.0",

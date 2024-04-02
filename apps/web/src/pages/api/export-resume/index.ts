@@ -1,5 +1,4 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { getMonorepoRoot } from '@utils/find-mono-repo-root';
 import { readFileSync } from 'fs';
 import { type NextApiHandler } from 'next';
 import path from 'path';
@@ -13,7 +12,6 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(500).json({ error: 'OpenAI key not provided' })
     }
 
-    const monorepoRoot = getMonorepoRoot()
     const supabase = createPagesServerClient({ req, res })
     const { data, error } = await supabase.auth.getSession();
     if (error) return res.status(500).json({ error: 'An error occurred' })
@@ -22,7 +20,7 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(401).json({ error: 'You are not authorized to perform this action' });
     }
 
-    const cssFilePath = path.join(monorepoRoot, 'packages/resume-templates/dist/styles.css');
+    const cssFilePath = path.join(process.cwd(), 'src/styles/resume-templates.css');
     const cssString = readFileSync(cssFilePath, 'utf8');
     try {
         const endpoint = `${apiServiceURL}/api/resume-export`
