@@ -3,13 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/out/index.js",
-  "scripts": {
-    "dev": "vite",
-    "build": "run-p build:ui build:tailwind",
-    "build:tailwind": "npx tailwindcss -i ./src/styles/global.css -o ./dist/styles.css",
-    "build:ui": "tsc && vite build"
-  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
