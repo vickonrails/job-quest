@@ -2,7 +2,6 @@ import React, { useState, type FormEvent } from 'react'
 import { supabase as client } from "~core/supabase"
 import { Button, Input, AuthCard, Banner } from 'ui'
 
-import 'ui/dist/styles.css'
 import './styles/global.css'
 
 const Options = () => {
