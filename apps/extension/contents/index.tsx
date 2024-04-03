@@ -1,5 +1,4 @@
 import cssText from "data-text:../styles/global.css";
-import uiCSS from 'data-text:ui/dist/styles.css';
 import type { PlasmoCSUIProps } from "plasmo";
 import { useState, type FC } from "react";
 import { cn } from "shared";
@@ -25,7 +24,7 @@ export const getInlineAnchor = () => {
 
 export function getStyle() {
     const style = document.createElement('style');
-    style.textContent = uiCSS + cssText;
+    style.textContent = cssText;
     return style;
 }
 

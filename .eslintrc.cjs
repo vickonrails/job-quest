@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require('path');
+const path = require('path')
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
@@ -15,15 +14,14 @@ const config = {
       '@typescript-eslint/restrict-template-expressions': 'warn',
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
       '@typescript-eslint/restrict-plus-operands': 'warn',
+      '@typescript-eslint/no-var-requires': 'warn'
     },
     parserOptions: {
       project: path.join(__dirname, 'tsconfig.json')
     }
   }],
+  root: true,
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: path.join(__dirname, 'tsconfig.json')
-  },
   plugins: ['@typescript-eslint'],
   extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended'],
   rules: {
@@ -42,6 +40,17 @@ const config = {
         'attributes': false
       }
     }]
-  }
+  },
+  parserOptions: {
+    ecmaVersion: 'latest',
+    tsconfigRootDir: __dirname,
+    project: path.join(__dirname, 'tsconfig.json')
+  },
+  settings: {
+    web: {
+      rootDir: ['apps/web'],
+    },
+  },
 };
+
 module.exports = config;

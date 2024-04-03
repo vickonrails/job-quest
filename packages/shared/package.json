@@ -2,14 +2,13 @@
   "name": "shared",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build"
+    "lint": "eslint ."
   },
   "dependencies": {
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.2",
-    "vite-plugin-dts": "^3.8.1"
+    "tailwind-merge": "^2.2.2"
   }
 }

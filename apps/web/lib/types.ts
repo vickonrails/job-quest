@@ -1,4 +1,4 @@
-import { type Database } from 'shared/dist';
+import { type Database } from 'shared';
 
 export type Job = Database['public']['Tables']['jobs']['Row']
 export type JobInsertDTO = Database['public']['Tables']['jobs']['Insert']

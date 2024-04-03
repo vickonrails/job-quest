@@ -1,13 +1,13 @@
-import baseConfig from 'ui/tailwind.config'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config = {
-  ...baseConfig,
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
+    '../../packages/ui/src/**/*.{ts,tsx}',
+    '../../packages/resume-templates/src/**/*.{ts,tsx}',
   ],
   theme: {
     container: {

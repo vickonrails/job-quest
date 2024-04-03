@@ -1,4 +1,3 @@
-// I can make another package for just the configuration
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -26,5 +25,10 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    ".eslintrc.cjs",
+    "packages/**/*",
+    "apps/**/*",
   ]
 }

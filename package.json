@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "docs",
     "apps/*",
     "packages/*"
   ],

@@ -91,11 +91,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "education_resume_id_fkey"
-            columns: ["resume_id"]
+            foreignKeyName: 'education_resume_id_fkey'
+            columns: ['resume_id']
             isOneToOne: false
-            referencedRelation: "resumes"
-            referencedColumns: ["id"]
+            referencedRelation: 'resumes'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -123,18 +123,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "highlights_education_id_fkey"
-            columns: ["education_id"]
+            foreignKeyName: 'highlights_education_id_fkey'
+            columns: ['education_id']
             isOneToOne: false
-            referencedRelation: "education"
-            referencedColumns: ["id"]
+            referencedRelation: 'education'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "highlights_work_experience_id_fkey"
-            columns: ["work_experience_id"]
+            foreignKeyName: 'highlights_work_experience_id_fkey'
+            columns: ['work_experience_id']
             isOneToOne: false
-            referencedRelation: "work_experience"
-            referencedColumns: ["id"]
+            referencedRelation: 'work_experience'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -198,18 +198,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "jobs_cover_letter_id_fkey"
-            columns: ["cover_letter_id"]
+            foreignKeyName: 'jobs_cover_letter_id_fkey'
+            columns: ['cover_letter_id']
             isOneToOne: false
-            referencedRelation: "cover_letters"
-            referencedColumns: ["id"]
+            referencedRelation: 'cover_letters'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "jobs_resume_id_fkey"
-            columns: ["resume_id"]
+            foreignKeyName: 'jobs_resume_id_fkey'
+            columns: ['resume_id']
             isOneToOne: false
-            referencedRelation: "resumes"
-            referencedColumns: ["id"]
+            referencedRelation: 'resumes'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -240,11 +240,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "notes_job_id_fkey"
-            columns: ["job_id"]
+            foreignKeyName: 'notes_job_id_fkey'
+            columns: ['job_id']
             isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
+            referencedRelation: 'jobs'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -260,7 +260,7 @@ export interface Database {
           location: string | null
           personal_website: string | null
           professional_summary: string | null
-          skills: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills: Database['public']['CompositeTypes']['skill'][] | null
           title: string | null
           updated_at: string | null
           username: string | null
@@ -276,7 +276,7 @@ export interface Database {
           location?: string | null
           personal_website?: string | null
           professional_summary?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
           username?: string | null
@@ -292,18 +292,18 @@ export interface Database {
           location?: string | null
           personal_website?: string | null
           professional_summary?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
           username?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
+            foreignKeyName: 'profiles_id_fkey'
+            columns: ['id']
             isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -314,7 +314,7 @@ export interface Database {
           end_date: string | null
           id: string
           resume_id: string | null
-          skills: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills: Database['public']['CompositeTypes']['skill'][] | null
           start_date: string | null
           title: string | null
           updated_at: string | null
@@ -326,7 +326,7 @@ export interface Database {
           end_date?: string | null
           id?: string
           resume_id?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           start_date?: string | null
           title?: string | null
           updated_at?: string | null
@@ -338,7 +338,7 @@ export interface Database {
           end_date?: string | null
           id?: string
           resume_id?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           start_date?: string | null
           title?: string | null
           updated_at?: string | null
@@ -346,11 +346,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "projects_resume_id_fkey"
-            columns: ["resume_id"]
+            foreignKeyName: 'projects_resume_id_fkey'
+            columns: ['resume_id']
             isOneToOne: false
-            referencedRelation: "resumes"
-            referencedColumns: ["id"]
+            referencedRelation: 'resumes'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -365,7 +365,7 @@ export interface Database {
           location: string | null
           personal_website: string | null
           professional_summary: string | null
-          skills: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills: Database['public']['CompositeTypes']['skill'][] | null
           title: string | null
           updated_at: string | null
         }
@@ -379,7 +379,7 @@ export interface Database {
           location?: string | null
           personal_website?: string | null
           professional_summary?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
         }
@@ -393,7 +393,7 @@ export interface Database {
           location?: string | null
           personal_website?: string | null
           professional_summary?: string | null
-          skills?: Database["public"]["CompositeTypes"]["skill"][] | null
+          skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
         }
@@ -438,11 +438,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "work_experience_resume_id_fkey"
-            columns: ["resume_id"]
+            foreignKeyName: 'work_experience_resume_id_fkey'
+            columns: ['resume_id']
             isOneToOne: false
-            referencedRelation: "resumes"
-            referencedColumns: ["id"]
+            referencedRelation: 'resumes'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -566,11 +566,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
+            foreignKeyName: 'objects_bucketId_fkey'
+            columns: ['bucket_id']
             isOneToOne: false
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
+            referencedRelation: 'buckets'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -645,81 +645,81 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
-    | { schema: keyof Database },
+  | keyof (Database['public']['Tables'] & Database['public']['Views'])
+  | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+  ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+    Database[PublicTableNameOrOptions['schema']]['Views'])
+  : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+    Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
-    ? R
-    : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+  ? R
+  : never
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+    Database['public']['Views'])
+  ? (Database['public']['Tables'] &
+    Database['public']['Views'])[PublicTableNameOrOptions] extends {
       Row: infer R
     }
-    ? R
-    : never
+  ? R
+  : never
   : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
-    | { schema: keyof Database },
+  | keyof Database['public']['Tables']
+  | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+  ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+  : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+    Insert: infer I
+  }
+  ? I
+  : never
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+    Insert: infer I
+  }
+  ? I
+  : never
   : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
-    | { schema: keyof Database },
+  | keyof Database['public']['Tables']
+  | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+  ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+  : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
-    : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
-    : never
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+    Update: infer U
+  }
+  ? U
+  : never
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+    Update: infer U
+  }
+  ? U
+  : never
   : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
-    | { schema: keyof Database },
+  | keyof Database['public']['Enums']
+  | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+  ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+  : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
+  ? Database['public']['Enums'][PublicEnumNameOrOptions]
   : never
 
