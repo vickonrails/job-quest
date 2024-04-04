@@ -4,16 +4,16 @@ import { Layout } from '@components/layout';
 import { ResumePreviewCard } from '@components/resume-card';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { type Session } from '@supabase/auth-helpers-react';
-import { type Database } from 'shared';
-import { type Profile, type Resume } from 'lib/types';
+import { type DashboardSummary, type Profile, type Resume } from 'lib/types';
 import { type GetServerSideProps } from 'next';
+import { type Database } from 'shared';
 
 export interface PageProps {
     session: Session,
     profile: Profile
 }
 
-const Index = ({ session, profile, resumes }: PageProps & { resumes: Resume[] }) => {
+const Index = ({ session, profile, resumes, dashboardSummary }: PageProps & { resumes: Resume[], dashboardSummary: DashboardSummary[] }) => {
     return (
         <Layout
             session={session}
@@ -23,7 +23,7 @@ const Index = ({ session, profile, resumes }: PageProps & { resumes: Resume[] })
         >
             <section className="flex w-full flex-1 gap-4">
                 <section className="flex-1">
-                    <JobsSummaryCards className="mb-4" profile={profile} />
+                    <JobsSummaryCards className="mb-4" profile={profile} dashboardSummary={dashboardSummary} />
                     <hr />
                     <RecentResume resumes={resumes} />
                 </section>
@@ -63,12 +63,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
     const { data: resumes } = await supabase.from('resumes').select().order('updated_at', { ascending: false }).limit(5)
+    const { data: dashboardSummary } = await supabase.from('jobs_dashboard_v').select();
 
     return {
         props: {
             session,
             profile,
-            resumes
+            resumes,
+            dashboardSummary
         }
     }
 }

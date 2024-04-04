@@ -1,25 +1,59 @@
-import { type HTMLAttributes } from 'react';
+import { type LucideIcon } from 'lucide-react';
+import Link, { type LinkProps as NextLinkProps } from 'next/link';
+import { cn } from 'shared';
 
-interface SummaryCardProps extends HTMLAttributes<HTMLElement> {
-    title: string;
-    description?: string
+export enum SummaryCardType {
+    RECENTLY_ADDED = 0,
+    APPLYING = 1,
+    INTERVIEWING = 4,
+    FAVORITES
 }
 
-export function SummaryCard({ title, description, ...rest }: SummaryCardProps) {
+interface LinkProps extends NextLinkProps {
+    className?: string
+    disabled?: boolean
+    title?: string
+    type: SummaryCardType
+    icon: LucideIcon
+    count?: number
+}
+
+export function SummaryCard({ title, type, className, icon: Icon, count = 0, ...rest }: LinkProps) {
+    const gradientClasses = getTypeGradient(type)
+
     return (
-        <article className="bg-white w-full rounded-lg p-4 relative overflow-hidden border" {...rest}>
-            <h2 className="text-2xl mb-2 font-medium">{title}</h2>
-            <p className="text-gray-500">{description}</p>
-            <Artefact />
-        </article>
+        <Link
+            className={cn(
+                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full opacity-95 bg-gradient-to-tr group hover:opacity-100',
+                gradientClasses,
+                className
+            )}
+            {...rest}
+        >
+            <span className="transition-transform bg-white h-6 w-6 rounded-full text-xs font-bold text-black text-center flex self-end justify-center group-hover:scale-125 group-focus-within:scale-125">
+                <span className="m-auto">
+                    {count}
+                </span>
+            </span>
+            {Icon && (
+                <div className="flex-1 grid">
+                    <Icon className="transition-transform m-auto group-hover:scale-125 group-focus-within:scale-125" size={50} />
+                </div>
+            )}
+            <h3 className="transition-transform text-xl text-center font-medium group-hover:-translate-y-4 group-focus-within:-translate-y-4">{title}</h3>
+        </Link>
     )
 }
 
-function Artefact() {
-    return (
-        <div className="absolute top-1/3 right-0">
-            <span className="absolute border-[20px] rounded-full border-primary/5 h-20 w-20 block right-5 top-4" />
-            <span className="absolute rounded-full bg-primary/10 h-5 w-5 block right-12 top-12" />
-        </div>
-    )
+function getTypeGradient(type: SummaryCardType) {
+    switch (type) {
+        case SummaryCardType.RECENTLY_ADDED:
+            return 'from-neutral-950 to-neutral-600'
+        case SummaryCardType.APPLYING:
+            return 'from-indigo-900 to-indigo-600'
+        case SummaryCardType.FAVORITES:
+            return ' from-rose-900 to-rose-600'
+        case SummaryCardType.INTERVIEWING:
+            return 'from-purple-900 to-purple-600'
+    }
 }

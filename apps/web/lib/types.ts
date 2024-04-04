@@ -17,3 +17,4 @@ export type Education = Database['public']['Tables']['education']['Row'] & { hig
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];
 export type CoverLetter = Database['public']['Tables']['cover_letters']['Row'];
+export type DashboardSummary = Database['public']['Views']['jobs_dashboard_v']['Row']

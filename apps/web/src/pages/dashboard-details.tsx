@@ -23,7 +23,7 @@ function DashboarDetails({ profile, session, jobs }: { profile: Profile, session
             <BackButton onClick={() => router.back()}>
                 Back to Dashboard
             </BackButton>
-            <h1 className="my-4 font-bold uppercase">{viewLookup[view].title}</h1>
+            <h1 className="my-4 font-bold uppercase">{viewLookup[view].title} ({jobs.length})</h1>
             <JobsTable jobs={jobs} hideActions />
         </Layout>
     )
@@ -36,12 +36,17 @@ type QueryProps = {
     },
     status?: number
     limit?: number
+    gte?: {
+        field: string,
+        value: number
+    }
 }
 
 type ParsedResult = {
     order_by: string,
     limit: string,
     status: string
+    gte: string
 }
 
 const defaultQuery: QueryProps = {
@@ -75,15 +80,22 @@ function parseQuery(query: string): QueryProps {
     if (parts.status) {
         parsedQuery.status = parseInt(parts.status);
     }
+    if (parts.gte) {
+        const [field, gte] = parts.gte.split('.') as [string, string];
+        parsedQuery.gte = {
+            field,
+            value: parseInt(gte)
+        }
+    }
 
     return parsedQuery
 }
 
 const viewLookup = {
-    recently_added: { query: 'order_by=created_at.desc&limit=10', title: 'Recently Added' },
-    upcoming_interviews: { query: 'status=3&limit=10', title: 'Upcoming Interviews' },
-    favorites: { query: 'order_by=priority.desc&limit=10', title: 'Favorites' },
-    next_in_line: { query: 'status=1&limit=10', title: 'Next in Line' }
+    recently_added: { query: 'order_by=created_at.desc&limit=20', title: 'Recently Added' },
+    applying: { query: 'status=1', title: 'Applying' },
+    favorites: { query: 'order_by=priority.desc&limit=20&gte=priority.4', title: 'Favorites' },
+    interviewing: { query: 'status=3', title: 'Interviewing' }
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -92,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const query = context.query as unknown as string
     const { card } = qs.parse(query) as unknown as { card: keyof typeof viewLookup };
     const parsedQuery = parseQuery(viewLookup[card].query);
-    const { limit, orderBy, status } = parsedQuery;
+    const { limit, orderBy, status, gte } = parsedQuery;
 
     if (!session) {
         return {
@@ -116,6 +128,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (status) {
         jobsQuery = jobsQuery.eq('status', status);
+    }
+
+    if (gte) {
+        jobsQuery = jobsQuery.gte(gte.field, gte.value);
     }
 
     const { data: jobs } = await jobsQuery;
