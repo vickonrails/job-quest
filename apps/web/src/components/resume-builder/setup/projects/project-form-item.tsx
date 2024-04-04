@@ -169,7 +169,7 @@ function ProjectSkills({ index, form }: { index: number, form: UseFormReturn<{ p
                 ref={inputRef}
             />
             {fields.map((field, idx) => (
-                <Chip key={field._id} label={field.label} onCloseClick={() => remove(idx)} />
+                <Chip key={field._id} label={field.label ?? ''} onCloseClick={() => remove(idx)} />
             ))}
         </section>
     )
