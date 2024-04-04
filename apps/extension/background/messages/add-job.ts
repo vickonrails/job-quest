@@ -15,7 +15,7 @@ const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (
       .from('jobs')
       .select('*')
       .order('order_column', { ascending: false }).eq('status', job.status)
-      .limit(1).returns<Job>()
+      .limit(1)
       .single();
 
     const maxColumn = count?.order_column;
