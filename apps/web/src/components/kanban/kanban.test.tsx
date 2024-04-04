@@ -95,11 +95,11 @@ describe('Kanban', () => {
 
     describe('getMovingItemData', () => {
 
-        it('return moving item with new order_column', () => {
+        it('same column - return moving item with new order_column', () => {
             // the test is simulating moving the first item in the Applied column to the second position
-            // we expect the new moving item to have an order_column of 2.5
-            // because beforeItem has order_column of 2 and afterItem has order_column of 3
-            // finding the average of the next 2 items 2 + 3 / 2 = 2.5
+            // we expect the new moving item to have an order_column of 35
+            // because beforeItem has order_column of 40 and afterItem has order_column of 30
+            // finding the average of the next 2 items 40 + 30 / 2 = 35
             const result: DropResult = {
                 combine: null,
                 destination: { droppableId: '29746c2a-98e3-4045-9911-b68af838c8bd', index: 1 },
@@ -114,7 +114,7 @@ describe('Kanban', () => {
             const movingItemData = getMovingItemData(result, involvedColumns);
             const movingItem = movingItemData?.movingItem;
 
-            expect(movingItem?.order_column).toBe(2.5);
+            expect(movingItem?.order_column).toBe(35);
         })
 
         // moving from applying (index: 0) to interviewing (index: 1)
@@ -138,8 +138,8 @@ describe('Kanban', () => {
             // the destination column contains the newly moved item
             // the seed data had just 7 items in the interviewing column
             expect(movingItemData?.destinationJobs).toHaveLength(8);
-            // the order_column of the new item is 1.5
-            expect(movingItem?.order_column).toBe(1.5);
+            // the order_column of the new item is 65
+            expect(movingItem?.order_column).toBe(65);
         })
     });
 
