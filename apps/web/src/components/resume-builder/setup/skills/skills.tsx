@@ -112,7 +112,7 @@ function SkillsForm({ form }: { form: UseFormReturn<Profile> }) {
                 ref={inputRef}
             />
             {fields.map((field, idx) => (
-                <Chip key={field._id} label={field.label} onCloseClick={() => remove(idx)} />
+                <Chip key={field._id} label={field.label ?? ''} onCloseClick={() => remove(idx)} />
             ))}
         </section>
     )

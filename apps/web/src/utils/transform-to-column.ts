@@ -25,7 +25,7 @@ export function sortByOrder(a: Job, b: Job) {
     const orderA = Number(a.order_column);
     const orderB = Number(b.order_column);
 
-    return orderA - orderB;
+    return orderB - orderA;
 }
 
 

@@ -30,8 +30,19 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const updateMutation = useMutation({
         mutationFn: async (data: { job: Job }) => {
             const { job } = data
+            const isNew = !Boolean(job.id)
             if (!job.id) {
                 job.id = uuid()
+            }
+            if (isNew) {
+                const { data: count } = await client
+                    .from('jobs')
+                    .select('*')
+                    .order('order_column', { ascending: false }).eq('status', job.status)
+                    .limit(1).single();
+
+                const maxColumn = count?.order_column;
+                job.order_column = maxColumn ? maxColumn + 10 : 10;
             }
             return await client.from('jobs').upsert(job).eq('id', job.id)
         },

@@ -10,7 +10,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 1,
-    order_column: 1
+    order_column: 10
   },
   {
     'position': 'Frontend Engineer',
@@ -21,7 +21,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
-    order_column: 1,
+    order_column: 10,
     labels: ['Frontend', 'Javascript'],
   },
   {
@@ -33,7 +33,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 4,
-    order_column: 2,
+    order_column: 20,
     labels: ['Frontend', 'NodeJs'],
   },
   {
@@ -46,7 +46,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 5,
-    order_column: 1,
+    order_column: 10,
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
@@ -58,7 +58,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
     status: 3,
     priority: 1,
-    order_column: 3,
+    order_column: 30,
     labels: ['NodeJs']
   },
   {
@@ -70,7 +70,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
     status: 3,
     priority: 1,
-    order_column: 4,
+    order_column: 40,
     labels: ['Frontend', 'NodeJs']
   },
   {
@@ -82,7 +82,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 1,
     priority: 2,
-    order_column: 1,
+    order_column: 10,
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
@@ -94,7 +94,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
-    order_column: 2,
+    order_column: 20,
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
@@ -106,7 +106,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 2,
-    order_column: 2,
+    order_column: 20,
     labels: ['Frontend', 'Beckend']
   },
   {
@@ -118,7 +118,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 2,
-    order_column: 5,
+    order_column: 50,
     labels: ['Frontend', 'VueJs']
   },
   {
@@ -130,7 +130,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 4,
     priority: 2,
-    order_column: 3,
+    order_column: 30,
     labels: ['Frontend', 'Tailwind']
   },
   {
@@ -142,7 +142,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 2,
     priority: 2,
-    order_column: 3,
+    order_column: 30,
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
@@ -154,7 +154,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3624101533',
     status: 4,
     priority: 2,
-    order_column: 4,
+    order_column: 40,
     labels: ['Frontend', 'Javascript']
   },
   {
@@ -166,7 +166,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 2,
     priority: 5,
-    order_column: 4,
+    order_column: 40,
     labels: ['Frontend', 'NodeJs']
   },
   {
@@ -178,7 +178,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 3,
     priority: 3,
-    order_column: 6,
+    order_column: 60,
     labels: ['Frontend', 'Tailwindcss']
   },
   {
@@ -190,7 +190,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 3,
     priority: 2,
-    order_column: 7,
+    order_column: 70,
     labels: ['Frontend', 'Typescript']
   },
   {
@@ -202,7 +202,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 4,
     priority: 2,
-    order_column: 5,
+    order_column: 50,
     labels: ['Frontend', 'backend']
   },
   {
@@ -227,7 +227,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3629794436',
     status: 1,
     priority: 2,
-    order_column: 2,
+    order_column: 20,
     labels: ['Javascript', 'NodeJs']
   },
   {
@@ -239,7 +239,7 @@ const jobs: JobInsertDTO[] = [
     'link': 'https://www.linkedin.com/jobs/view/3581028408/',
     status: 2,
     priority: 2,
-    order_column: 5,
+    order_column: 50,
     labels: ['Frontend', 'Javascript']
   }
 ]

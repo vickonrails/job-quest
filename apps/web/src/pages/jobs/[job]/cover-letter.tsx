@@ -38,7 +38,7 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
                 jobDescription: job.description ?? '',
                 jobTitle: job.position,
                 professionalExperience: profile.professional_summary ?? '',
-                skills: profile.skills?.map(skill => skill.label)
+                skills: profile.skills?.map(skill => skill.label ?? '')
             });
             setValue(coverLetter);
             await saveValue(coverLetter);
