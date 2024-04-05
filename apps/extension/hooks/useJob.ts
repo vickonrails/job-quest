@@ -1,6 +1,6 @@
-import { sendToBackground } from "@plasmohq/messaging";
-import { useCallback, useEffect, useState } from "react";
-import type { BackgroundResponse, Job, JobInsertDTO } from "~types";
+import { sendToBackground } from '@plasmohq/messaging';
+import { useCallback, useEffect, useState } from 'react';
+import type { BackgroundResponse, Job, JobInsertDTO } from '~types';
 
 interface JobResponse {
     job: Job
@@ -24,7 +24,7 @@ export const useJob = (url: string, options?: { defaultData: JobInsertDTO }) => 
                 setJob({ ...data.job, img: options?.defaultData.img })
             } else {
                 setJob({ ...options.defaultData })
-            };
+            }
         }).catch(err => {
             console.log({ err })
         }).finally(() => {
