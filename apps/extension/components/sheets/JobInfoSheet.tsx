@@ -68,10 +68,10 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
     return (
         <Sheet {...props}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='text-accent-foreground'>
-                <div className='tiptap hidden'></div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
+                <div className="tiptap hidden"></div>
                 {show && (
-                    <Banner className='flex my-5 gap-2 text-sm' variant={error ? 'error' : 'success'}>
+                    <Banner className="flex my-5 gap-2 text-sm" variant={error ? 'error' : 'success'}>
                         {error ? 'Could not add Job' : 'Successful'}
                     </Banner>
                 )}
