@@ -1,6 +1,6 @@
-import React, { useState, type FormEvent } from 'react'
-import { AuthCard, Button, Input } from 'ui'
-import { supabase as client } from '~core/supabase'
+import { useState, type FormEvent } from 'react';
+import { AuthCard, Button, Input } from 'ui';
+import { supabase as client } from '~core/supabase';
 import '../styles/global.css';
 
 export default function Auth() {

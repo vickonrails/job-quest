@@ -17,7 +17,7 @@ import { getJobDetails } from '~utils/get-job-content';
 
 export const getInlineAnchor = () => {
     if (isLinkedIn) {
-        return document.querySelector('.job-view-layout .jobs-unified-top-card .jobs-save-button')
+        return document.querySelector('.job-details-jobs-unified-top-card__container--two-pane .jobs-save-button')
     }
     return document.body;
 }
@@ -36,7 +36,7 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
         setJobInfo(null);
     }
 
-    const handleClick = async () => {
+    const handleClick = () => {
         setJobInfo(getJobDetails());
     }
 

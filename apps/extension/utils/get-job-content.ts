@@ -19,7 +19,7 @@ export function getJobDetails(): Partial<Job> {
     if (isFullPage) {
         title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
     } else {
-        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title-link');
+        title = document.querySelector('.job-details-jobs-unified-top-card__job-title');
     }
 
     if (container) {
@@ -30,7 +30,7 @@ export function getJobDetails(): Partial<Job> {
         return {
             id: '',
             img: img?.getAttribute('src') ?? '',
-            position: title?.textContent ?? '',
+            position: title?.textContent.trim() ?? '',
             company_name: company.textContent,
             location: location ? location.textContent.split(' ')[1] : '',
             priority: 1,
