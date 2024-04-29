@@ -6,8 +6,8 @@ import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
 import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
-import { Sheet, type SheetProps } from './sheet';
 import { JobInfoTabs } from './job-info-tabs';
+import { Sheet, type SheetProps } from './sheet';
 
 export interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
@@ -40,7 +40,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     useEffect(() => {
         if (!job) return
         form.reset({ ...job })
-    }, [job])
+    }, [job, form])
 
     const onSubmit = async ({ img, ...data }: Job) => {
         try {
@@ -54,7 +54,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
             }
 
             if (res.success) {
-                refresh(res.job);
+                refresh({ ...res.job, img });
                 form.reset({ notes: '', ...res.job });
                 setShowBanner({ show: true, error: false })
             }
