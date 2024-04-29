@@ -26,9 +26,9 @@ export function NavbarMenu({ profile }: { profile: Profile }) {
     return (
         <section className="flex items-center">
             <MenuBar
-                contentProps={{ side: 'bottom', align: 'end', className: 'w-lg w-40' }}
+                contentProps={{ side: 'bottom', sideOffset: 10, align: 'end', className: 'w-lg w-40' }}
                 trigger={(
-                    <Button variant="ghost" className="border flex items-center rounded-3xl gap-2 p-2 py-1">
+                    <Button variant="ghost" className="flex items-center rounded-3xl gap-2 p-2 py-1">
                         <Avatar size="sm" alt={profile.full_name ?? ''} fallbackText={avatarDisplay} />
                         {trimText(avatarDisplay, 10)}
                         <ChevronDown />

@@ -130,7 +130,7 @@ export function Select({ options, label, trigger, size = 'md', ...props }: Selec
 
     return (
         <SelectPrimitive.Root {...props}>
-            <label className="mb-2">
+            <label>
                 <span className="block m-1.5 text-sm text-gray-600 select-none">{label}</span>
                 <SelectTrigger className={SIZE_MAP[size]}>
                     <SelectValue placeholder={selectedOption?.label ?? trigger ?? 'Select an option'} />
