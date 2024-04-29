@@ -1,3 +1,4 @@
+import { FeedbackButton } from '@components/feedback-widget';
 import { type Session } from '@supabase/supabase-js';
 import { type Profile } from 'lib/types';
 import { PanelLeftClose } from 'lucide-react';
@@ -29,12 +30,13 @@ const Navbar: FC<NavbarProps> = ({ profile, pageTitle, toggleSidebar, ...props }
                         <span>{pageTitle}</span>
                     )}
                 </section>
-                <NavbarMenu profile={profile} />
+                <div className="flex items-center gap-2">
+                    <FeedbackButton />
+                    <NavbarMenu profile={profile} />
+                </div>
             </section>
         </nav>
     )
 }
-
-
 
 export { Navbar };

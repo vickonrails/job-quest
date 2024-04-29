@@ -11,6 +11,17 @@ interface MenuBarProp extends RadixMenuBar.MenubarProps {
     contentProps?: RadixMenuBar.MenubarContentProps
 }
 
+function MenubarHeader({ Header }: { Header: React.ReactNode }) {
+    const HeaderCmp = typeof Header === 'string' ? (
+        <>
+            <div className="text-sm font-semibold p-2 px-4 select-none">{Header}</div>
+            <Separator />
+        </>
+    ) : Header
+
+    return HeaderCmp
+}
+
 // TODO: fix z index
 // TODO: I might just need to export the containing Content & Trigger to avoid taking children props on the parent
 function MenuBar({ trigger, triggerProps, children, contentProps, Header, ...rest }: MenuBarProp) {
@@ -32,10 +43,8 @@ function MenuBar({ trigger, triggerProps, children, contentProps, Header, ...res
                             contentClasses
                         )} {...restContentProps}
                     >
-                        {typeof Header === 'string' ? (
-                            <div className="text-sm font-semibold p-2 px-4 select-none">{Header}</div>
-                        ) : Header}
-                        <Separator />
+                        {Header && <MenubarHeader Header={Header} />}
+
                         {children}
                     </RadixMenuBar.Content>
                 </RadixMenuBar.Portal>
