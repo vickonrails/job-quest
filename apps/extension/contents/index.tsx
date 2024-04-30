@@ -6,6 +6,7 @@ import cssText from 'data-text:../styles/global.css';
 import type { PlasmoCSUIProps } from 'plasmo';
 import { useEffect, useState, type FC } from 'react';
 import { cn } from 'shared';
+import { Spinner } from 'ui';
 import { LinkedInButton, type LinkedInButtonProps } from '~components/linkedin-button';
 import { JobInfoSheet } from '~components/sheets/JobInfoSheet';
 import { supabase as client } from '~core/supabase';
@@ -58,7 +59,6 @@ const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
 
     useEffect(() => {
         client.auth.onAuthStateChange((user) => {
-            console.log(user);
             //   setIsLoading(false)
             //   setUser(user)
         })
@@ -152,7 +152,7 @@ export function AuthGuard({ children: Cmp }: AuthGuardProps) {
     const { session, loading } = useAuth();
 
     if (loading) {
-        return <p>Loading...</p>
+        return <Spinner variant="primary" className="m-auto mt-4" />
     }
 
     if (!session) {
