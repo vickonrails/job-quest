@@ -2,7 +2,8 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Banner } from 'ui';
-import { AuthGuard, isLinkedIn } from '~contents';
+import { AuthGuard } from '~components/auth-guard';
+import { isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
 import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
@@ -27,6 +28,12 @@ const getDefaultJobData = (jobInfo: Partial<Job>): JobInsertDTO => {
     }
 }
 
+interface AddJobResponse {
+    success: boolean,
+    error: string,
+    job?: Job
+}
+
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
     const { jobInfo } = props
@@ -44,9 +51,13 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
     const onSubmit = async ({ img, ...data }: Job) => {
         try {
-            const res = await sendToBackground<Job>({
+            const job = {
+                source: isLinkedIn ? 'linkedIn' : null,
+                ...data
+            }
+            const res = await sendToBackground<Job, AddJobResponse>({
                 name: 'add-job',
-                body: { source: isLinkedIn ? 'linkedIn' : null, ...data }
+                body: job
             });
 
             if (res.error || !res.success) {

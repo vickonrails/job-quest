@@ -1,12 +1,11 @@
 import { sendToBackground } from '@plasmohq/messaging';
-import { type NextApiHandler } from 'next';
 import { useEffect, useState } from 'react';
 
 import { Spinner } from 'ui';
 import '../styles/global.css';
 
 type AuthState = 'loading' | 'success' | 'error'
-const Handler: NextApiHandler = () => {
+function CallbackHandler() {
     const [state, setState] = useState<AuthState>('loading');
 
     useEffect(() => {
@@ -64,4 +63,4 @@ function Error() {
     )
 }
 
-export default Handler
+export default CallbackHandler
