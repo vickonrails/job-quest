@@ -95,6 +95,21 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                     />
                 </form>
             </AuthGuard>
+            <AuthGuard>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
+                    <div className="tiptap hidden"></div>
+                    {show && (
+                        <Banner className="flex my-5 gap-2 text-sm" variant={error ? 'error' : 'success'}>
+                            {error ? 'Could not add Job' : 'Successful'}
+                        </Banner>
+                    )}
+                    <JobInfoTabs
+                        fetchingJob={isLoading}
+                        job={job}
+                        form={form}
+                    />
+                </form>
+            </AuthGuard>
         </Sheet>
     )
 }
