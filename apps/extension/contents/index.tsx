@@ -1,14 +1,10 @@
-import { sendToBackground } from '@plasmohq/messaging';
-import { useStorage } from '@plasmohq/storage/hook';
-import type { Session } from '@supabase/supabase-js';
+
 import cssText from 'data-text:../styles/global.css';
 import type { PlasmoCSUIProps } from 'plasmo';
-import { useEffect, useState, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { cn } from 'shared';
-import { Spinner } from 'ui';
 import { LinkedInButton, type LinkedInButtonProps } from '~components/linkedin-button';
 import { JobInfoSheet } from '~components/sheets/JobInfoSheet';
-import { supabase as client } from '~core/supabase';
 import { getJobDetails } from '~utils/get-job-content';
 
 // also work on the motion of the extension popup
@@ -37,37 +33,14 @@ export const isLinkedIn = window.location.href.includes('linkedin.com');
 
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
     const [jobInfo, setJobInfo] = useState(null);
-    const [loadingUser, setLoadingUser] = useState(false)
     const close = () => {
         setJobInfo(null);
     }
-
-    useEffect(() => {
-        async function init() {
-            // const { data, error } = await client.auth.getSession();
-            // console.log({ data, error })
-            // first check if there's 
-        }
-
-        init().then(() => {
-            // 
-        }).catch(() => {
-            // 
-        })
-    }, [])
-
-    useEffect(() => {
-        client.auth.onAuthStateChange((user) => {
-            //   setIsLoading(false)
-            //   setUser(user)
-        })
-    }, [])
 
     const handleClick = () => {
         setJobInfo(getJobDetails());
     }
 
-    if (loadingUser) return <p>Loading...</p>
     const isOpen = Boolean(jobInfo)
 
     return (
@@ -101,66 +74,6 @@ function CompanionBtn({ isOpen, ...props }: LinkedInButtonProps & { isOpen?: boo
                 <span className="m-auto">JQ</span>
             </div>
         </button>
-    )
-}
-
-function useAuth() {
-    const [session] = useStorage<Session>('session')
-    const [firstRender, setFirstRender] = useState(true)
-
-    // This useEffect is a hack to solve the bug in useStorage that makes the first render value undefined.
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setFirstRender(false);
-        }, 1000)
-
-        return () => {
-            clearTimeout(timer)
-        }
-    }, []);
-
-    useEffect(() => {
-        if (firstRender) return;
-
-        if (!session) {
-            navigateToAuth()
-        }
-
-    }, [firstRender, session])
-
-    return { session, loading: firstRender }
-}
-
-type AuthGuardProps = React.HTMLAttributes<HTMLDivElement>
-
-function navigateToAuth() {
-    sendToBackground({
-        name: 'auth',
-        body: {
-            action: 'navigate-to-auth'
-        }
-    }).then(() => {
-        // 
-    }).catch(() => {
-        // 
-    })
-}
-
-export function AuthGuard({ children: Cmp }: AuthGuardProps) {
-    const { session, loading } = useAuth();
-
-    if (loading) {
-        return <Spinner variant="primary" className="m-auto mt-4" />
-    }
-
-    if (!session) {
-        return (
-            <p>You are not authenticated</p>
-        )
-    }
-
-    return (
-        <section>{Cmp}</section>
     )
 }
 
