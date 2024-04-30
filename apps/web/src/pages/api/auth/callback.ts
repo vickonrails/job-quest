@@ -1,6 +1,7 @@
 import { createClient } from '@lib/supabase/api'
 import { type NextApiHandler } from 'next'
 
+// TODO: is there suppose to be any type of error handling here?
 const handler: NextApiHandler = async (req, res) => {
     const { code } = req.query
 
