@@ -6,6 +6,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './tabs/**/*.{ts,tsx}',
     './options.tsx',
+    './popup.tsx',
     '../../packages/ui/src/**/*.{ts,tsx}'
   ],
   theme: {

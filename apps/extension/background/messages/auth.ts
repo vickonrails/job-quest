@@ -22,7 +22,7 @@ const handler: PlasmoMessaging.MessageHandler<RequestBody> = async (req, res) =>
             const { code } = body
             try {
                 const session = await client.auth.exchangeCodeForSession(String(code));
-                await storage.set('session', session)
+                await storage.set('session', session.data)
                 res.send({
                     success: true
                 })
