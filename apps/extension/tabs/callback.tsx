@@ -2,6 +2,9 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { type NextApiHandler } from 'next';
 import { useEffect, useState } from 'react';
 
+import { Spinner } from 'ui';
+import '../styles/global.css';
+
 type AuthState = 'loading' | 'success' | 'error'
 const Handler: NextApiHandler = () => {
     const [state, setState] = useState<AuthState>('loading');
@@ -20,6 +23,9 @@ const Handler: NextApiHandler = () => {
                 }
             }).then(_ => {
                 setState('success')
+                setTimeout(() => {
+                    window.close();
+                }, 2000)
             }).catch(_ => {
                 setState('error')
             })
@@ -28,14 +34,33 @@ const Handler: NextApiHandler = () => {
 
     switch (state) {
         case 'error':
-            return <p>An error occurred</p>
+            return <Error />
 
         case 'success':
-            return <p>You can now close this page</p>
+            return <Success />
     }
 
     return (
         <p>Loading...</p>
+    )
+}
+
+// TODO: return to the last page after the authentication process.
+function Success() {
+    return (
+        <div className="page flex items-center gap-2 flex-col py-6">
+            <Spinner variant="primary" />
+            <h1 className="text-center text-xl font-medium">Authentication Successful</h1>
+            <p className="text-center text-lg text-muted-foreground">Page will close soon</p>
+        </div>
+    )
+}
+
+function Error() {
+    return (
+        <div className="page">
+            <p>An error occurred</p>
+        </div>
     )
 }
 
