@@ -1,14 +1,42 @@
-import React from 'react'
+import { sendToBackground } from '@plasmohq/messaging';
+import { type NextApiHandler } from 'next';
+import { useEffect, useState } from 'react';
 
-const Callback = () => {
-    // const urlFragment = new URL(window.location.toString()).hash;
-    // const params = new URLSearchParams(urlFragment.slice(1));
+type AuthState = 'loading' | 'success' | 'error'
+const Handler: NextApiHandler = () => {
+    const [state, setState] = useState<AuthState>('loading');
+
+    useEffect(() => {
+        const currentURL = new URL(window.location.href);
+        const searchParams = currentURL.searchParams;
+        const code = searchParams.get('code');
+
+        if (code) {
+            sendToBackground({
+                name: 'auth',
+                body: {
+                    action: 'exchange-code-for-session',
+                    code
+                }
+            }).then(_ => {
+                setState('success')
+            }).catch(_ => {
+                setState('error')
+            })
+        }
+    }, [])
+
+    switch (state) {
+        case 'error':
+            return <p>An error occurred</p>
+
+        case 'success':
+            return <p>You can now close this page</p>
+    }
 
     return (
-        <div>
-            It&apos;s done
-        </div>
+        <p>Loading...</p>
     )
 }
 
-export default Callback
+export default Handler

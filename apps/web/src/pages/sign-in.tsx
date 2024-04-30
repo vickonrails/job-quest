@@ -3,14 +3,13 @@ import { useToast } from '@components/toast/use-toast'
 import { Typography } from '@components/typography'
 import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { type Database } from 'shared'
 import { type GetServerSideProps, type NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState, type ChangeEvent, type FormEvent, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { type Database } from 'shared'
 import { AuthCard, Button, Input } from 'ui'
 import GoogleLogo from '../../public/google-logo.png'
-
 
 interface SignInProps {
     session: Session

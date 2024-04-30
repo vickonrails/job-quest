@@ -2,7 +2,7 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Banner } from 'ui';
-import { isLinkedIn } from '~contents';
+import { AuthGuard, isLinkedIn } from '~contents';
 import { useJob } from '~hooks/useJob';
 import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
@@ -68,19 +68,21 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
 
     return (
         <Sheet {...props}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
-                <div className="tiptap hidden"></div>
-                {show && (
-                    <Banner className="flex my-5 gap-2 text-sm" variant={error ? 'error' : 'success'}>
-                        {error ? 'Could not add Job' : 'Successful'}
-                    </Banner>
-                )}
-                <JobInfoTabs
-                    fetchingJob={isLoading}
-                    job={job}
-                    form={form}
-                />
-            </form>
+            <AuthGuard>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
+                    <div className="tiptap hidden"></div>
+                    {show && (
+                        <Banner className="flex my-5 gap-2 text-sm" variant={error ? 'error' : 'success'}>
+                            {error ? 'Could not add Job' : 'Successful'}
+                        </Banner>
+                    )}
+                    <JobInfoTabs
+                        fetchingJob={isLoading}
+                        job={job}
+                        form={form}
+                    />
+                </form>
+            </AuthGuard>
         </Sheet>
     )
 }
