@@ -8,10 +8,6 @@ const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
 const handler: NextApiHandler = async (req, res) => {
     const { html } = req.body as { html: string }
 
-    if (process.env.OPENAI_API_KEY === undefined) {
-        return res.status(500).json({ error: 'OpenAI key not provided' })
-    }
-
     const supabase = createPagesServerClient({ req, res })
     const { data, error } = await supabase.auth.getSession();
     if (error) return res.status(500).json({ error: 'An error occurred' })

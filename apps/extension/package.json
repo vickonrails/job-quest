@@ -51,7 +51,7 @@
     "web_accessible_resources": [
       {
         "resources": [
-          "options.html"
+          "tabs/callback.html"
         ],
         "matches": [
           "<all_urls>"

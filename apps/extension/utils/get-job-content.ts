@@ -13,24 +13,24 @@ export function getJobDetails(): Partial<Job> {
     let title: HTMLElement | ChildNode | null;
 
     const img = document.querySelector('.jobs-company img');
-    const container = document.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
+    const container = document.querySelector('.job-details-jobs-unified-top-card__container--two-pane')
     const source = isLinkedIn ? 'linkedIn' : null;
 
     if (isFullPage) {
-        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title').childNodes[0];
+        title = document.querySelector('.job-details-jobs-unified-top-card__job-title');
     } else {
-        title = document.querySelector('.jobs-unified-top-card .job-details-jobs-unified-top-card__job-title-link');
+        title = document.querySelector('.job-details-jobs-unified-top-card__job-title');
     }
 
     if (container) {
-        const company = container.querySelector('.app-aware-link')
+        const company = container.querySelector('.job-details-jobs-unified-top-card__company-name')
         const location = Boolean(container) ? container.childNodes[3] : ''
-        const details = document.querySelector('#job-details');
+        const details = document.querySelector('.jobs-description__container');
 
         return {
             id: '',
             img: img?.getAttribute('src') ?? '',
-            position: title?.textContent ?? '',
+            position: title?.textContent.trim() ?? '',
             company_name: company.textContent,
             location: location ? location.textContent.split(' ')[1] : '',
             priority: 1,
@@ -41,12 +41,10 @@ export function getJobDetails(): Partial<Job> {
         }
     }
 
-
     return {
-        // TODO: remove img and use initials
         id: '',
         img: img?.getAttribute('src') ?? '',
-        position: title?.textContent ?? '',
+        position: title?.textContent.trim() ?? '',
         priority: 1,
         status: 0,
         source

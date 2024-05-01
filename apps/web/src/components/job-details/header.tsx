@@ -1,3 +1,4 @@
+import { getDisplayText } from '@components/avatar/Avatar'
 import { Typography } from '@components/typography'
 import { type Job } from '@lib/types'
 import hashColors from '@utils/hash-colors'
@@ -49,7 +50,7 @@ function DefaultImage({ companyName }: { companyName: string }) {
     const backgroundColor = hashColors(companyName, variants)
     return (
         <div className={cn('text-white h-24 p-2 w-24 text-3xl font-bold', backgroundColor)}>
-            {companyName.slice(0, 2)}
+            {getDisplayText(companyName)}
         </div>
     )
 }

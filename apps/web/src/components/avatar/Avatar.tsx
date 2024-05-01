@@ -79,7 +79,7 @@ function AvatarFallback({ size, className, border = 'round', text }: AvatarFallb
  * @returns a split text
  */
 
-function getDisplayText(text: string) {
+export function getDisplayText(text: string) {
     if (text.split(' ').length > 1) {
         return text.split(' ').map(word => word[0]).join('')
     }
