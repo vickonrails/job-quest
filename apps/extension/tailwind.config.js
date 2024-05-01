@@ -5,7 +5,6 @@ const config = {
     './contents/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './tabs/**/*.{ts,tsx}',
-    './options.tsx',
     './popup.tsx',
     '../../packages/ui/src/**/*.{ts,tsx}'
   ],
