@@ -8,7 +8,6 @@ import { NavbarMenu } from './navbar-menu';
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
     toggleSidebar: () => void
     profile: Profile
-    session: Session
     pageTitle?: ReactNode
 }
 

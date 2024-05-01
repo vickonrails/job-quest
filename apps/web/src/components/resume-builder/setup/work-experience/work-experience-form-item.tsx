@@ -60,6 +60,7 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
             <div className="p-4 pt-0">
                 <section className="grid grid-cols-2 gap-3 mb-4 rounded-md">
                     <input type="hidden" {...register(`workExperience.${index}.id`)} />
+                    <input type="hidden" {...register(`workExperience.${index}.user_id`)} />
                     <Input
                         autoFocus={autofocus}
                         label="Company Name"

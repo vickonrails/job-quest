@@ -2,6 +2,7 @@ import { type JobInsertDTO } from 'lib/types';
 
 const jobs: JobInsertDTO[] = [
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Google',
     company_site: 'google.com',
@@ -13,6 +14,7 @@ const jobs: JobInsertDTO[] = [
     order_column: 10
   },
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Twitter',
     company_site: 'twitter.com',
@@ -25,6 +27,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript'],
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Twitter',
     company_site: 'twitter.com',
@@ -37,6 +40,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'NodeJs'],
   },
   {
+    user_id: '',
     id: '156e6eee-d897-49d4-80f9-7c1aedc714ad',
     'position': 'Fullstack Engineer',
     company_name: 'Google',
@@ -50,6 +54,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -62,6 +67,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['NodeJs']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Google',
     company_site: 'google.com',
@@ -74,6 +80,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Apple',
     company_site: 'apple.com',
@@ -86,6 +93,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -98,6 +106,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -110,6 +119,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Beckend']
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -122,6 +132,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'VueJs']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Google',
     company_site: 'google.com',
@@ -134,6 +145,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Tailwind']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Google',
     company_site: 'google.com',
@@ -146,6 +158,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -158,6 +171,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Javascript']
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Twitter',
     company_site: 'twitter.com',
@@ -170,6 +184,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',
@@ -182,6 +197,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Tailwindcss']
   },
   {
+    user_id: '',
     'position': 'Frontend Engineer',
     company_name: 'Apple',
     company_site: 'apple.com',
@@ -194,6 +210,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'Typescript']
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Twitter',
     company_site: 'twitter.com',
@@ -206,6 +223,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'backend']
   },
   {
+    user_id: '',
     id: '9bd9387d-f0b1-4550-9222-253686641ae3',
     'position': 'Software Engineer',
     company_name: 'Microsoft',
@@ -219,6 +237,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Frontend', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Software Engineer',
     company_name: 'Apple',
     company_site: 'apple.com',
@@ -231,6 +250,7 @@ const jobs: JobInsertDTO[] = [
     labels: ['Javascript', 'NodeJs']
   },
   {
+    user_id: '',
     'position': 'Fullstack Engineer',
     company_name: 'Microsoft',
     company_site: 'microsoft.com',

@@ -1,6 +1,5 @@
 import { AlertDialog } from '@components/alert-dialog';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Job, type Note } from 'lib/types';
 import { type HTMLAttributes } from 'react';
 import { cn } from 'shared';
@@ -14,7 +13,7 @@ interface NoteListProps extends HTMLAttributes<HTMLElement> {
 }
 
 function NotesList({ job, ...rest }: NoteListProps) {
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const { data, refetch, isLoading } = useNotes({ jobId: job.id })
     const {
         showDeleteDialog,

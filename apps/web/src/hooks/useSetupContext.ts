@@ -1,4 +1,4 @@
-import { type Session } from '@supabase/supabase-js'
+import { type User } from '@supabase/supabase-js'
 import { createContext, useContext } from 'react'
 
 export interface SetupContext {
@@ -7,7 +7,7 @@ export interface SetupContext {
     prev: () => void,
     canMoveNext: boolean,
     canMovePrev: boolean,
-    session?: Session
+    user?: User
 }
 
 // TODO: use context

@@ -1,7 +1,6 @@
 import { useToast } from '@components/toast/use-toast'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { createClient } from '@lib/supabase/component'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { type Database } from 'shared'
 import { type Note, type NoteUpdateDTO } from 'lib/types'
 import { Trash } from 'lucide-react'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
@@ -70,7 +69,7 @@ function NoteText({ note, showDeleteDialog }: { note: Note, showDeleteDialog: (n
 function NoteForm({ note, onCancel }: { note: Note, onCancel: () => void }) {
     const [text, setText] = useState(note.text);
     const queryClient = useQueryClient();
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const { toast } = useToast()
 
     // TODO: extract this into a separate hook

@@ -1,5 +1,5 @@
 import { type Profile } from '@lib/types';
-import { type Session } from '@supabase/auth-helpers-react';
+import { type User } from '@supabase/auth-helpers-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import { SetupProvider, type SetupContext } from 'src/hooks/useSetupContext';
@@ -15,12 +15,11 @@ const createTestQueryClient = () => new QueryClient({
     }
 })
 
-const session = {
-    user: {
-        email: 'johnDoe@gmail.com',
-        id: '9bd9387d-f0b1-4550-9222-253686641ae3'
-    }
-} as Session
+
+const user = {
+    email: 'johnDoe@gmail.com',
+    id: '9bd9387d-f0b1-4550-9222-253686641ae3'
+} as User
 
 const profile = {
     username: 'John Doe',
@@ -35,7 +34,7 @@ describe('Profile Setup', () => {
         return render(
             <QueryClientProvider client={testClient}>
                 <SetupSection
-                    session={session}
+                    user={user}
                     profile={profile}
                 />
             </QueryClientProvider>
@@ -66,7 +65,7 @@ describe('Profile Setup', () => {
 describe('Steps', () => {
     const testClient = createTestQueryClient();
     const setup = ({ step }: { step: number }) => {
-        const setupCtxVal = { step, session } as SetupContext
+        const setupCtxVal = { step, user } as SetupContext
         return render(
             <QueryClientProvider client={testClient}>
                 <SetupProvider value={setupCtxVal}>

@@ -3,16 +3,17 @@ import BackButton from '@components/back-button';
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
 import { DevTool } from '@hookform/devtools';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Resume } from '@lib/types';
-import { useSupabaseClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { createRef, forwardRef, memo, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
+import { type Database } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { Button, Input, type ButtonProps, Spinner } from 'ui';
+import { Button, Input, Spinner, type ButtonProps } from 'ui';
 import { type FormValues } from '../../../../pages/resumes/[resume]';
 import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
@@ -45,11 +46,11 @@ export async function deleteResume(id: string, client: SupabaseClient<Database>)
     }
 }
 
-export const ResumeForm = memo(({ session, resume }: { session: Session, resume: Resume }) => {
+export const ResumeForm = memo(({ resume }: { resume: Resume }) => {
     const form = useFormContext<FormValues>();
     const router = useRouter()
     const formRef = createRef<HTMLFormElement>()
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const { toast } = useToast();
     const {
         showDeleteDialog,
@@ -102,9 +103,9 @@ export const ResumeForm = memo(({ session, resume }: { session: Session, resume:
 
                 {/* TODO: use context to avoid passing session to every component */}
                 <BasicInfoSection />
-                <WorkExperienceSection session={session} />
-                <ProjectsSection session={session} />
-                <EducationSection session={session} />
+                <WorkExperienceSection />
+                <ProjectsSection />
+                <EducationSection />
                 <Skills />
                 <Button type="button" variant="destructive" className="flex items-center gap-1" onClick={() => showDeleteDialog(resume)}>
                     <Trash2 size={18} />
@@ -129,7 +130,7 @@ export const ResumeForm = memo(({ session, resume }: { session: Session, resume:
 ResumeForm.displayName = 'ResumeForm'
 
 function DeleteDescription({ resumeId }: { resumeId: string }) {
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const { data, isLoading } = useQuery({
         queryFn: async () => {
             const { data, error } = await client.from('jobs').select().eq('resume_id', resumeId)

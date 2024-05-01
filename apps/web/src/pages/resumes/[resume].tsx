@@ -1,15 +1,13 @@
 import { Layout } from '@components/layout';
 import { Preview } from '@components/resume-builder/builder/preview';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/server-prop';
 import { type Education, type Profile, type Project, type Resume, type WorkExperience } from '@lib/types';
-import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Spinner } from 'ui';
 import { ResumeForm } from '../../components/resume-builder/builder/sections';
 
 interface PageProps {
-    session: Session
     profile: Profile
     defaultValues: FormValues
 }
@@ -21,13 +19,12 @@ export interface FormValues {
     workExperience: WorkExperience[]
 }
 
-export default function ResumeBuilder({ session, profile, defaultValues }: PageProps) {
+export default function ResumeBuilder({ profile, defaultValues }: PageProps) {
     const form = useForm<FormValues>({ defaultValues });
     const { formState: { isSubmitting } } = form
 
     return (
         <Layout
-            session={session}
             profile={profile}
             containerClasses="overflow-hidden"
             pageTitle={
@@ -39,7 +36,7 @@ export default function ResumeBuilder({ session, profile, defaultValues }: PageP
         >
             <div className="flex w-full h-full">
                 <FormProvider {...form}>
-                    <ResumeForm session={session} resume={defaultValues.resume} />
+                    <ResumeForm resume={defaultValues.resume} />
                     <Preview />
                 </FormProvider>
             </div>
@@ -48,11 +45,11 @@ export default function ResumeBuilder({ session, profile, defaultValues }: PageP
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession()
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser()
     const resumeId = context.query.resume as string
 
-    if (!session) {
+    if (!user) {
         await supabase.auth.signOut();
         return {
             redirect: {
@@ -62,22 +59,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: education } = await supabase.from('education').select('*, highlights ( * )').eq('resume_id', resumeId);
-    const { data: workExperience } = await supabase.from('work_experience').select('*, highlights ( * )').eq('resume_id', resumeId);
-    const { data: projects } = await supabase.from('projects').select().eq('resume_id', resumeId);
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
+    const { data: education } = await supabase.from('education').select('*, highlights ( * )').eq('resume_id', resumeId).eq('user_id', user.id);
+    const { data: workExperience } = await supabase.from('work_experience').select('*, highlights ( * )').eq('resume_id', resumeId).eq('user_id', user.id);
+    const { data: projects } = await supabase.from('projects').select().eq('resume_id', resumeId).eq('user_id', user.id);
 
     let resume: Resume | null;
     resume = (await supabase.from('resumes').select().eq('id', resumeId).single()).data;
     if (!resume && profile) {
         const newResume = getResumeFromProfile(profile)
-        const createQuery = supabase.from('resumes').insert({ id: resumeId, ...newResume }).select().single();
+        const createQuery = supabase.from('resumes').insert({ id: resumeId, user_id: user.id, ...newResume }).select().single();
         resume = (await createQuery).data;
     }
 
     return {
         props: {
-            session,
             profile,
             defaultValues: {
                 workExperience,

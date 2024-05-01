@@ -1,7 +1,6 @@
 import { useToast } from '@components/toast/use-toast';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Profile } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
@@ -9,8 +8,8 @@ import { Button, Input, Textarea } from 'ui';
 import { StepContainer } from './components/container';
 
 export function BasicInformation({ profile }: { profile: Profile }) {
-    const { next, session } = useSetupContext()
-    const client = useSupabaseClient<Database>()
+    const { next, user } = useSetupContext()
+    const client = createClient()
     const { toast } = useToast()
     const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<Profile>({
         defaultValues: {
@@ -30,10 +29,10 @@ export function BasicInformation({ profile }: { profile: Profile }) {
 
     // TODO: add validation
     const onSubmit = async (values: Profile) => {
-        if (!session) return;
+        if (!user) return;
 
         try {
-            await updateBasicInfo.mutateAsync({ values, userId: session?.user?.id });
+            await updateBasicInfo.mutateAsync({ values, userId: user?.id });
             next();
         } catch (error) {
             toast({

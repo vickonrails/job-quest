@@ -3,9 +3,9 @@ import JobsKanban from '@components/kanban/kanban-container';
 import { Layout } from '@components/layout';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { useJobs } from '@hooks';
-import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'shared';
+import { createClient as createBrowserClient } from '@lib/supabase/component';
+import { createClient } from '@lib/supabase/server-prop';
+import { type User } from '@supabase/auth-helpers-nextjs';
 import { type Job, type Profile } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { Button, Spinner } from 'ui';
+import { useUserContext } from '../_app';
 
 const deleteTextWarning = `
     Are you sure you want to delete this job? 
@@ -21,11 +22,11 @@ const deleteTextWarning = `
     This action cannot be undone.
 `
 
-const Tracker = ({ session, profile, jobs }: {
-    session: Session, profile: Profile, jobs: Job[]
+const Tracker = ({ user, profile, jobs }: {
+    user: User, profile: Profile, jobs: Job[]
 }) => {
-    const { data, refetch } = useJobs({ initialData: jobs });
-    const client = useSupabaseClient<Database>();
+    const { data, refetch } = useJobs(user.id, { initialData: jobs },);
+    const client = createBrowserClient();
     const [isUpdating, setIsUpdating] = useState(false)
     const {
         showDeleteDialog,
@@ -50,7 +51,7 @@ const Tracker = ({ session, profile, jobs }: {
     }
 
     return (
-        <Layout session={session} profile={profile} pageTitle="Jobs" containerClasses="flex flex-col mt-4 overflow-auto">
+        <Layout profile={profile} pageTitle="Jobs" containerClasses="flex flex-col mt-4 overflow-auto">
             <section className="flex justify-between items-center mb-3 px-4">
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}
@@ -102,10 +103,10 @@ const FullViewButton = ({ job }: { job?: Job }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
         return {
             redirect: {
                 destination: '/sign-in',
@@ -114,12 +115,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
     const { data: jobs } = await supabase.from('jobs').select();
 
     return {
         props: {
-            session,
+            user,
             profile,
             jobs
         }

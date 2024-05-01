@@ -2,8 +2,7 @@ import BackButton from '@components/back-button';
 import { JobDetails } from '@components/job-details/job-details';
 import { Layout } from '@components/layout';
 import { useJobs } from '@hooks';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/server-prop';
 import { type Job } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -13,15 +12,14 @@ interface JobDetailsPageProps extends PageProps {
     job: Job
 }
 
-const JobDetailsPage = ({ session, profile, job }: JobDetailsPageProps) => {
-    const { data } = useJobs({ initialData: [job] }, job.id);
+const JobDetailsPage = ({ user, profile, job }: JobDetailsPageProps) => {
+    const { data } = useJobs(user.id, { initialData: [job] }, job.id);
     const router = useRouter()
     const selectedJob = data?.jobs[0]
     if (!selectedJob) return null;
 
     return (
         <Layout
-            session={session}
             profile={profile}
             containerClasses="p-6 overflow-auto"
         >
@@ -32,11 +30,11 @@ const JobDetailsPage = ({ session, profile, job }: JobDetailsPageProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser();
     const jobId = context.query.job as string
 
-    if (!session) {
+    if (!user) {
         return {
             redirect: {
                 destination: '/sign-in',
@@ -45,12 +43,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
     const { data: job } = await supabase.from('jobs').select().eq('id', jobId).single()
 
     return {
         props: {
-            session,
+            user,
             profile,
             job
         }

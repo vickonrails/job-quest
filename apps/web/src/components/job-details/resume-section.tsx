@@ -1,17 +1,17 @@
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { ResumePreviewCard } from '@components/resume-card';
+import { createClient } from '@lib/supabase/component';
 import { type Job } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { type Database, cn } from 'shared';
+import { cn } from 'shared';
 import { Button, Spinner } from 'ui';
 import { v4 as uuid } from 'uuid';
 
 export function ResumeSection({ job }: { job: Job }) {
     const queryClient = useQueryClient();
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const router = useRouter()
     const navigateToNew = () => {
         return router.push(`/resumes/${uuid()}`)

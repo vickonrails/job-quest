@@ -1,7 +1,6 @@
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from 'shared'
+import { createClient } from '@lib/supabase/component'
 import { type Profile } from '@lib/types'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from 'ui'
@@ -10,7 +9,7 @@ import { ErrorHint } from './components/error-hint'
 
 export default function ContactInformation({ profile }: { profile: Profile }) {
     const { register, handleSubmit, formState } = useForm({ defaultValues: profile })
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const queryClient = useQueryClient()
     const { toast } = useToast()
 

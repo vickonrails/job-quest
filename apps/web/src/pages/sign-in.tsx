@@ -1,24 +1,18 @@
 import { Banner } from '@components/banner'
 import { useToast } from '@components/toast/use-toast'
 import { Typography } from '@components/typography'
-import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { type Database } from 'shared'
-import { type GetServerSideProps, type NextPage } from 'next'
+import { createClient } from '@lib/supabase/component'
+import { createClient as createServerClient } from '@lib/supabase/server-prop'
+import { type GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState, type ChangeEvent, type FormEvent, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { AuthCard, Button, Input } from 'ui'
 import GoogleLogo from '../../public/google-logo.png'
 
-
-interface SignInProps {
-    session: Session
-}
-
 // TODO: handle sign in error or expired token
-const SignIn: NextPage<SignInProps> = () => {
-    const supabaseClient = useSupabaseClient<Database>();
+function SignIn() {
+    const client = createClient()
     const [email, setEmail] = useState('')
     const [emailSent, setEmailSent] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +40,7 @@ const SignIn: NextPage<SignInProps> = () => {
 
         try {
             //TODO: still need to fix problem with expired token
-            const { error } = await supabaseClient.auth.signInWithOtp({
+            const { error } = await client.auth.signInWithOtp({
                 email,
                 options: {
                     shouldCreateUser: true,
@@ -73,7 +67,7 @@ const SignIn: NextPage<SignInProps> = () => {
     }
 
     const handleGoogleAuth = async () => {
-        await supabaseClient.auth.signInWithOAuth({
+        await client.auth.signInWithOAuth({
             provider: 'google',
             options: { redirectTo: redirectUrlRef.current }
         })
@@ -113,10 +107,10 @@ const SignIn: NextPage<SignInProps> = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = createServerClient(context);
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (session) {
+    if (user) {
         return {
             redirect: {
                 destination: '/',
@@ -126,12 +120,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     return {
-        props: {
-            session
-        }
+        props: {}
     }
 }
-
-
 
 export default SignIn

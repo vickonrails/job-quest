@@ -14,7 +14,7 @@ const config = {
       '@typescript-eslint/restrict-template-expressions': 'warn',
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
       '@typescript-eslint/restrict-plus-operands': 'warn',
-      '@typescript-eslint/no-var-requires': 'warn'
+      '@typescript-eslint/no-var-requires': 'error'
     },
     parserOptions: {
       project: path.join(__dirname, 'tsconfig.json')

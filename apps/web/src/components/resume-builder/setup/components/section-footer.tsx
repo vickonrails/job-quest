@@ -5,9 +5,10 @@ interface SectionFooterProps {
     saveDisabled: boolean;
     isSubmitting: boolean;
     onAppendClick: () => void;
+    addText?: string
 }
 
-export function SectionFooter({ saveDisabled, isSubmitting, onAppendClick }: SectionFooterProps) {
+export function SectionFooter({ addText, saveDisabled, isSubmitting, onAppendClick }: SectionFooterProps) {
     return (
         <div className="flex gap-2">
             <Button
@@ -16,7 +17,7 @@ export function SectionFooter({ saveDisabled, isSubmitting, onAppendClick }: Sec
                 variant="outline"
                 onClick={onAppendClick}
             >
-                Add Education
+                {addText ?? 'Add'}
             </Button>
             <Button loading={isSubmitting} disabled={saveDisabled}>Save & Proceed</Button>
         </div>

@@ -5,10 +5,11 @@ import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { type Education, type Highlight } from '@lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { useUserContext } from 'src/pages/_app'
 import { Input, Textarea } from 'ui'
+import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
-import { v4 as uuid } from 'uuid'
 
 export interface BaseFormItemProps {
     autofocus?: boolean
@@ -82,6 +83,7 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
             <div className="p-4 pt-0">
                 <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                     <input type="hidden" {...register(`education.${index}.id`)} />
+                    <input type="hidden" {...register(`education.${index}.user_id`)} />
                     <Input
                         autoFocus={autofocus}
                         label="Institution"
@@ -160,6 +162,7 @@ interface HighlightsProps {
 
 export function EducationHighlights({ form, index, onDeleteClick, entity, setHighlightsToDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `education.${index}.highlights`, control: form.control, keyName: '_id' })
+    const user = useUserContext()
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]
@@ -188,17 +191,18 @@ export function EducationHighlights({ form, index, onDeleteClick, entity, setHig
 
             <HighlightFooter
                 onDeleteClick={onDeleteClick}
-                addHighlight={() => append(getDefaultEntity(entity.id))}
+                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: user?.id }))}
             />
         </>
     )
 }
 
-function getDefaultEntity(id: string): Highlight {
+function getDefaultEntity({ id, userId }: { id: string, userId?: string }): Highlight {
     return {
         text: '',
         education_id: id,
         id: uuid(),
+        user_id: userId,
         type: 'education'
     } as unknown as Highlight
 } 

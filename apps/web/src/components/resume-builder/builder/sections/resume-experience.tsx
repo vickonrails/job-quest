@@ -2,9 +2,8 @@ import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { DateRenderer } from '@components/resume-builder/date-renderer';
 import { WorkExperienceForm } from '@components/resume-builder/setup/work-experience/work-experience-form-item';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Highlight, type WorkExperience } from '@lib/types';
-import { useSupabaseClient, type Session } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { debounce } from '@utils/debounce';
 import { setEntityId } from '@utils/set-entity-id';
@@ -13,6 +12,7 @@ import { useCallback, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteExperience, getDefaultExperience } from 'src/hooks/useWorkExperience';
+import { useUserContext } from 'src/pages/_app';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
@@ -20,17 +20,22 @@ import { AddSectionBtn } from '.';
 /**
  * Work Experience section in resume builder
  */
-export function WorkExperienceSection({ session }: { session: Session }) {
-    const client = useSupabaseClient<Database>()
+export function WorkExperienceSection() {
+    const client = createClient()
+    const user = useUserContext()
     const form = useFormContext<{ workExperience: WorkExperience[] }>();
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
+
     // TODO: abstract this
     const { data: templateWorkExperience } = useQuery({
         queryKey: ['workExperienceTemplate'],
         queryFn: async () => {
-            if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null)
+            if (!user?.id) throw new Error('User not logged in');
+            const { data, error } = await client.from('work_experience')
+                .select('*, highlights ( * )')
+                .filter('resume_id', 'is', null)
+                .eq('user_id', user.id)
             if (error) throw error;
             return data;
         }
@@ -96,7 +101,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(getDefaultExperience())}
+                    onClick={() => append(getDefaultExperience({ userId: user?.id }))}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>
@@ -120,7 +125,7 @@ export function WorkExperienceSection({ session }: { session: Session }) {
  * Autosave functionality for work experience
  */
 function useAutosave({ form }: { form: UseFormReturn<{ workExperience: WorkExperience[] }> }) {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([]);
     const router = useRouter();
 

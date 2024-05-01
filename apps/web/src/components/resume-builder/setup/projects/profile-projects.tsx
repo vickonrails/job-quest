@@ -1,12 +1,12 @@
 import { AlertDialog } from '@components/alert-dialog'
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from 'shared'
+import { createClient } from '@lib/supabase/component'
 import { type Project } from '@lib/types'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
+import { useUserContext } from 'src/pages/_app'
 import { Spinner } from 'ui'
 import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
@@ -15,11 +15,12 @@ import { ProjectForm } from './project-form-item'
 export type Projects = { projects: Project[] }
 
 export default function ProjectsView() {
-    const client = useSupabaseClient<Database>()
     const queryClient = useQueryClient()
+    const client = createClient()
+    const user = useUserContext()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { projects, form, fieldsArr, updateProjects } = useProjects();
+    const { projects, form, fieldsArr, updateProjects } = useProjects({ userId: user?.id });
     const { append, fields, remove } = fieldsArr
     const { formState } = form
     const {
@@ -101,9 +102,10 @@ export default function ProjectsView() {
                         defaultOpen
                     />
                     <SectionFooter
+                        addText="Add Project"
                         isSubmitting={formState.isSubmitting}
                         saveDisabled={fields.length <= 0}
-                        onAppendClick={() => append(getDefaultProject())}
+                        onAppendClick={() => append(getDefaultProject({ userId: user?.id }))}
                     />
                 </form>
             </StepContainer>

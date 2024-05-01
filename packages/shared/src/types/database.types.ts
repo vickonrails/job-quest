@@ -38,16 +38,27 @@ export type Database = {
         Row: {
           id: string
           text: string | null
+          user_id: string
         }
         Insert: {
           id?: string
           text?: string | null
+          user_id: string
         }
         Update: {
           id?: string
           text?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'public_cover_letters_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
       }
       education: {
         Row: {
@@ -62,6 +73,7 @@ export type Database = {
           start_date: string
           still_studying_here: boolean | null
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
@@ -75,6 +87,7 @@ export type Database = {
           start_date: string
           still_studying_here?: boolean | null
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
@@ -88,6 +101,7 @@ export type Database = {
           start_date?: string
           still_studying_here?: boolean | null
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -95,6 +109,13 @@ export type Database = {
             columns: ['resume_id']
             isOneToOne: false
             referencedRelation: 'resumes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'public_education_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -105,6 +126,7 @@ export type Database = {
           id: string
           text: string
           type: string | null
+          user_id: string
           work_experience_id: string | null
         }
         Insert: {
@@ -112,6 +134,7 @@ export type Database = {
           id?: string
           text: string
           type?: string | null
+          user_id: string
           work_experience_id?: string | null
         }
         Update: {
@@ -119,6 +142,7 @@ export type Database = {
           id?: string
           text?: string
           type?: string | null
+          user_id?: string
           work_experience_id?: string | null
         }
         Relationships: [
@@ -134,6 +158,13 @@ export type Database = {
             columns: ['work_experience_id']
             isOneToOne: false
             referencedRelation: 'work_experience'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'public_highlights_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -157,6 +188,7 @@ export type Database = {
           source: string | null
           status: number
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           company_name: string
@@ -176,6 +208,7 @@ export type Database = {
           source?: string | null
           status: number
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           company_name?: string
@@ -195,6 +228,7 @@ export type Database = {
           source?: string | null
           status?: number
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -211,6 +245,13 @@ export type Database = {
             referencedRelation: 'resumes'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'public_jobs_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       notes: {
@@ -221,6 +262,7 @@ export type Database = {
           status: number
           text: string
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
@@ -229,6 +271,7 @@ export type Database = {
           status: number
           text: string
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
@@ -237,6 +280,7 @@ export type Database = {
           status?: number
           text?: string
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -244,6 +288,13 @@ export type Database = {
             columns: ['job_id']
             isOneToOne: false
             referencedRelation: 'jobs'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'public_notes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -319,6 +370,7 @@ export type Database = {
           title: string | null
           updated_at: string | null
           url: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
@@ -331,6 +383,7 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           url?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
@@ -343,6 +396,7 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           url?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -350,6 +404,13 @@ export type Database = {
             columns: ['resume_id']
             isOneToOne: false
             referencedRelation: 'resumes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'public_projects_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -368,6 +429,7 @@ export type Database = {
           skills: Database['public']['CompositeTypes']['skill'][] | null
           title: string | null
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
@@ -382,6 +444,7 @@ export type Database = {
           skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
@@ -396,8 +459,17 @@ export type Database = {
           skills?: Database['public']['CompositeTypes']['skill'][] | null
           title?: string | null
           updated_at?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'public_resumes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
       }
       work_experience: {
         Row: {
@@ -411,6 +483,7 @@ export type Database = {
           start_date: string
           still_working_here: boolean | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           company_name?: string | null
@@ -423,6 +496,7 @@ export type Database = {
           start_date: string
           still_working_here?: boolean | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           company_name?: string | null
@@ -435,8 +509,16 @@ export type Database = {
           start_date?: string
           still_working_here?: boolean | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: 'public_work_experience_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
           {
             foreignKeyName: 'work_experience_resume_id_fkey'
             columns: ['resume_id']

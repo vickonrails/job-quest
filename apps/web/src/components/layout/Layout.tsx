@@ -1,4 +1,3 @@
-import { type Session } from '@supabase/supabase-js';
 import { ChevronRight } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -12,7 +11,6 @@ import { Sidebar } from './Sidebar';
 
 // TODO: Error handling in this component is not good
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {
-    session: Session;
     profile: Profile;
     containerClasses?: string
     pageTitle?: ReactNode
@@ -20,7 +18,7 @@ export interface LayoutProps extends HTMLAttributes<HTMLElement> {
 
 const SITE_NAME = 'JobQuest'
 
-export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, session, profile: profile, containerClasses, ...rest }) => {
+export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, profile: profile, containerClasses, ...rest }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const router = useRouter()
     const showSetupBanner = router.pathname !== '/profile/setup' && !profile?.is_profile_setup;
@@ -36,7 +34,7 @@ export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, sessio
             <div className={cn('flex h-full max-w-screen-2xl m-auto', className)} {...rest}>
                 {sidebarOpen && <Sidebar className="basis-60" />}
                 <main className="flex-1 overflow-hidden flex flex-col">
-                    <Navbar profile={profile} session={session} pageTitle={pageTitle} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                    <Navbar profile={profile} pageTitle={pageTitle} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
                     {showSetupBanner && (
                         <Banner variant="info" className="absolute shadow-md left-1/2 m-auto -translate-x-1/2 top-4 flex gap-2 select-none items-center">
                             <span>Your profile needs to be setup to properly use JobQuest.</span>

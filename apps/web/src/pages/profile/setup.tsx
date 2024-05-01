@@ -1,12 +1,13 @@
 import { Layout } from '@components/layout';
-import { Steps } from '@components/resume-builder/setup/components/steps-renderer';
 import { SetupNavigator } from '@components/resume-builder/setup/components/set-up-navigator';
-import { type Database } from 'shared';
+import { Steps } from '@components/resume-builder/setup/components/steps-renderer';
+import { createClient } from '@lib/supabase/server-prop';
 import { type Profile } from '@lib/types';
-import { createPagesServerClient, type Session, type SupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { type SupabaseClient, type User } from '@supabase/auth-helpers-nextjs';
 import { Briefcase, Construction, Contact2, GraduationCap, Library, Zap } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { useMemo, useState } from 'react';
+import { type Database } from 'shared';
 import { useProfile } from 'src/hooks/useProfile';
 import { SetupProvider } from 'src/hooks/useSetupContext';
 import { type PageProps } from '..';
@@ -14,26 +15,26 @@ import { type PageProps } from '..';
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null)).data;
+    const experiences = await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)
+    return experiences.data
 }
 
 // TODO: fetch the initial values from the database and instantiate the form with it 
 // TODO: the steps should be available to navigate to from the UI
-export default function Setup({ profile: initialProfile, session }: PageProps) {
-    const { data: profile } = useProfile(session.user.id, initialProfile)
+export default function Setup({ profile: initialProfile, user }: PageProps) {
+    const { data: profile } = useProfile(user.id, initialProfile)
     return (
         <Layout
             pageTitle="Setup Profile"
             containerClasses="flex bg-gray-50 overflow-auto"
-            session={session}
             profile={profile}
         >
-            <SetupSection profile={profile} session={session} />
+            <SetupSection profile={profile} user={user} />
         </Layout >
     )
 }
 
-export function SetupSection({ profile, session }: { profile: Profile, session: Session }) {
+export function SetupSection({ profile, user }: { profile: Profile, user: User }) {
     const [step, setStep] = useState(1);
     const canMoveNext = step < 6
     const canMovePrev = useMemo(() => step > 1, [step])
@@ -48,7 +49,7 @@ export function SetupSection({ profile, session }: { profile: Profile, session: 
     }
 
     return (
-        <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, session }}>
+        <SetupProvider value={{ step, next, prev, canMoveNext, canMovePrev, user }}>
             <aside className="w-1/5 border-r sticky top-0 px-3 py-6">
                 <ul className="text-sm flex flex-col">
                     <SetupNavigator step={1} onClick={() => setStep(1)}>
@@ -85,10 +86,10 @@ export function SetupSection({ profile, session }: { profile: Profile, session: 
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession()
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
         await supabase.auth.signOut();
         return {
             redirect: {
@@ -98,12 +99,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
     const { data: workExperience } = await supabase.from('work_experience').select();
 
     return {
         props: {
-            session,
+            user,
             profile,
             workExperience
         }

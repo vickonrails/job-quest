@@ -2,21 +2,19 @@ import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
 import { JobsSummaryCards } from '@components/dashboard/welcome-banner';
 import { Layout } from '@components/layout';
 import { ResumePreviewCard } from '@components/resume-card';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { type Session } from '@supabase/auth-helpers-react';
+import { createClient } from '@lib/supabase/server-prop';
+import { type User, type Session } from '@supabase/auth-helpers-react';
 import { type DashboardSummary, type Profile, type Resume } from 'lib/types';
 import { type GetServerSideProps } from 'next';
-import { type Database } from 'shared';
 
 export interface PageProps {
-    session: Session,
+    user: User,
     profile: Profile
 }
 
-const Index = ({ session, profile, resumes, dashboardSummary }: PageProps & { resumes: Resume[], dashboardSummary: DashboardSummary[] }) => {
+const Index = ({ profile, resumes, dashboardSummary }: PageProps & { resumes: Resume[], dashboardSummary: DashboardSummary[] }) => {
     return (
         <Layout
-            session={session}
             profile={profile}
             containerClasses="p-6 overflow-auto"
             pageTitle="Dashboard"
@@ -48,10 +46,10 @@ function RecentResume({ resumes }: { resumes: Resume[] }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession()
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
         await supabase.auth.signOut();
         return {
             redirect: {
@@ -61,13 +59,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
-    const { data: resumes } = await supabase.from('resumes').select().order('updated_at', { ascending: false }).limit(5)
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
+    const { data: resumes } = await supabase.from('resumes').select().eq('user_id', user.id).order('updated_at', { ascending: false }).limit(5)
     const { data: dashboardSummary } = await supabase.from('jobs_dashboard_v').select();
 
     return {
         props: {
-            session,
             profile,
             resumes,
             dashboardSummary

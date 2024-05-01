@@ -1,5 +1,5 @@
+import { createClient } from '@lib/supabase/component';
 import { type Profile } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { type Database } from 'shared';
@@ -12,6 +12,6 @@ async function fetchProfile(client: SupabaseClient<Database>, userId: string) {
 }
 
 export function useProfile(userId: string, initialData: Profile) {
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     return useQuery(['profile'], () => fetchProfile(client, userId), { initialData })
 }

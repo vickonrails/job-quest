@@ -1,11 +1,11 @@
 import { Dialog } from '@components/dialog';
 import { type DialogProps } from '@components/dialog/Dialog';
 import { Typography } from '@components/typography';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+
+import { createClient } from '@lib/supabase/component';
 import { type User } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';
-import { type Database } from 'shared';
-import { type FormEvent, useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Button, Input } from 'ui';
 import { type Profile, type ProfileInsertDTO } from '../../../lib/types';
 
@@ -16,7 +16,7 @@ interface OnboardingDialogProps extends Omit<DialogProps, 'title' | 'children'> 
 
 function OnboardingDialog({ open, user, setProfile, onOpenChange }: OnboardingDialogProps) {
     const [fullname, setFullname] = useState('');
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
 
     const updateProfile = useMutation({
         mutationFn: async (data: ProfileInsertDTO) => {

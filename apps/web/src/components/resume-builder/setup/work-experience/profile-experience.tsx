@@ -1,8 +1,7 @@
 import { AlertDialog } from '@components/alert-dialog'
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from 'shared'
+import { createClient } from '@lib/supabase/component'
 import { type WorkExperience as IWorkExperience } from '@lib/types'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
@@ -11,13 +10,15 @@ import { Spinner } from 'ui'
 import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { WorkExperienceForm } from './work-experience-form-item'
+import { useUserContext } from 'src/pages/_app'
 
 export function WorkExperience() {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const queryClient = useQueryClient()
+    const user = useUserContext();
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience();
+    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience({ userId: user?.id });
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,
@@ -81,9 +82,10 @@ export function WorkExperience() {
                         defaultOpen
                     />
                     <SectionFooter
+                        addText="Add Education"
                         saveDisabled={fields.length <= 0 || !form.formState.isValid}
                         isSubmitting={form.formState.isSubmitting}
-                        onAppendClick={() => append(getDefaultExperience())}
+                        onAppendClick={() => append(getDefaultExperience({ userId: user?.id }))}
                     />
                 </form>
             </StepContainer>
