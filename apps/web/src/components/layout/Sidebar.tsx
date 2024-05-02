@@ -1,6 +1,6 @@
 import { Link, type LinkProps } from '@components/link';
 import clsx from 'clsx';
-import { Bell, Clipboard, File, FileText, Folder, Grid, User } from 'lucide-react';
+import { Bell, Clipboard, Folder, FolderCog, Grid, ScrollText, User } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useMemo, type FC, type HTMLAttributes } from 'react';
 import { cn } from 'shared';
@@ -32,14 +32,14 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                     </NavLink>
 
                     <NavLink href="/resumes">
-                        <File className="mr-2" />
+                        <FolderCog className="mr-2" />
                         <span>My Resumes</span>
                     </NavLink>
                 </NavGroup>
 
                 <NavGroup title="labels">
                     <NavLink href="/notes" disabled>
-                        <FileText className="mr-2" />
+                        <ScrollText className="mr-2" />
                         <span>Notes</span>
                     </NavLink>
 

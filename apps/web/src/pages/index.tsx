@@ -3,7 +3,7 @@ import { JobsSummaryCards } from '@components/dashboard/welcome-banner';
 import { Layout } from '@components/layout';
 import { ResumePreviewCard } from '@components/resume-card';
 import { createClient } from '@lib/supabase/server-prop';
-import { type User, type Session } from '@supabase/auth-helpers-react';
+import { type User } from '@supabase/auth-helpers-react';
 import { type DashboardSummary, type Profile, type Resume } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 

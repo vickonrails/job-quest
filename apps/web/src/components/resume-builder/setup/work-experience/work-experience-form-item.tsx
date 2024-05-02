@@ -3,12 +3,15 @@ import { Checkbox } from '@components/checkbox'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { type WorkExperience } from '@lib/types'
-import { type Dispatch, type SetStateAction } from 'react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Input } from 'ui'
+import { Input, InputProps } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { WorkExperienceHighlights } from './work-experience-highlights'
 import { type BaseFormItemProps } from '../education/education-form-item'
+import { DayPicker as DefaultDayPicker, DayPickerDefaultProps, DayClickEventHandler } from 'react-day-picker'
+import { Calendar } from 'lucide-react'
+import { Popover } from '@components/popover'
 
 interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
@@ -79,6 +82,19 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                         placeholder="Location..."
                         {...register(`workExperience.${index}.location`)}
                     />
+
+                    <Controller
+                        control={form.control}
+                        name={`workExperience.${index}.still_working_here`}
+                        render={({ field }) => (
+                            <DayPicker
+                                label='Start Date'
+                                onChange={(x) => field.onChange(x)}
+                                selected={field.value ?? new Date()}
+                            />
+                        )}
+                    />
+
                     <Input
                         type="date"
                         label="Start Date"
@@ -141,5 +157,49 @@ function Header({ form, index }: { form: UseFormReturn<{ workExperience: WorkExp
 
             <AccordionExpandIcon />
         </header>
+    )
+}
+
+interface DayPickerProps extends DayPickerDefaultProps {
+    label?: string
+    hint?: string
+    defaultValue?: Date
+    onChange?: (date: Date) => void
+}
+
+function DayPicker({ label, hint, onChange, defaultValue, ...rest }: DayPickerProps) {
+    const [selected, setSelected] = useState<Date | null>(null);
+    const [open, setOpen] = useState(false);
+    const handleDateChange: DayClickEventHandler = (day) => {
+        // @ts-ignore
+        const isInvalidDate = isNaN(new Date(day))
+        console.log(isInvalidDate)
+        if (isInvalidDate) {
+            return;
+        }
+        const todayDate = new Date(day);
+        onChange?.(todayDate)
+        setSelected(todayDate)
+        setOpen(false);
+    }
+
+    const formattedSelected = selected?.toLocaleDateString('en-CA');
+
+    return (
+        <label>
+            <span className="block m-1.5 text-sm text-gray-500 select-none">{label}</span>
+            <input value={formattedSelected} onChange={(ev) => handleDateChange(new Date(ev.target.value), {}, ev)} className='date' type="" />
+            {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
+            <Popover
+                open={open}
+                Trigger={
+                    <button>
+                        <Calendar />
+                    </button>
+                }
+            >
+                <DefaultDayPicker selected={selected ?? undefined} onDayClick={handleDateChange} {...rest} />
+            </Popover>
+        </label>
     )
 }
