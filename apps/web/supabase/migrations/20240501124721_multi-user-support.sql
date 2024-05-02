@@ -1,6 +1,6 @@
-alter table "_realtime"."tenants" drop column "enable_authorization";
+-- alter table "_realtime"."tenants" drop column "enable_authorization";
 
-alter table "_realtime"."tenants" drop column "jwt_jwks";
+-- alter table "_realtime"."tenants" drop column "jwt_jwks";
 
 
 alter table "public"."cover_letters" add column "user_id" uuid not null;

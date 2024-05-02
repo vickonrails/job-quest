@@ -18,6 +18,7 @@ export interface JobInfoSheetProps extends SheetProps {
 const getDefaultJobData = (jobInfo: Partial<Job>): JobInsertDTO => {
     return {
         ...jobInfo,
+        user_id: '',
         position: jobInfo.position ?? '',
         location: jobInfo.location ?? '',
         company_name: jobInfo.company_name ?? '',
