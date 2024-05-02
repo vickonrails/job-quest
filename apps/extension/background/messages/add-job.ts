@@ -22,7 +22,7 @@ const handler: PlasmoMessaging.MessageHandler<Job & { notes: string }> = async (
       .limit(1)
       .single();
 
-    const maxColumn = count?.order_column;
+    const maxColumn = !count ? 0 : count?.order_column;
     job.order_column = maxColumn ? maxColumn + 10 : 10;
   }
 

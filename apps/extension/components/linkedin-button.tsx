@@ -9,7 +9,7 @@ function getBtnContent(isLoading: boolean, added: boolean) {
     if (added) return 'Already Added';
     return (
         <span className="flex items-center">
-            <img src={Logo} className="h-5 w-5" />
+            <img src={Logo} alt="" className="h-5 w-5" />
             <span className="ml-2">Add</span>
         </span>
     );
