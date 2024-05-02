@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { Button, Spinner } from 'ui';
-import { useUserContext } from '../_app';
 
 const deleteTextWarning = `
     Are you sure you want to delete this job? 

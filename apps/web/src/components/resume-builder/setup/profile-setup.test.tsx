@@ -15,7 +15,6 @@ const createTestQueryClient = () => new QueryClient({
     }
 })
 
-
 const user = {
     email: 'johnDoe@gmail.com',
     id: '9bd9387d-f0b1-4550-9222-253686641ae3'

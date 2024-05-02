@@ -15,7 +15,7 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
 
     const updateProfile = useMutation({
         mutationFn: async (values: Profile) => {
-            return client.from('profiles').update(values).eq('id', profile.id)
+            return await client.from('profiles').update(values).eq('id', profile.id)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['profile'] })

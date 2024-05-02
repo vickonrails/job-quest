@@ -9,4 +9,10 @@ const ResizeObserverMock = vi.fn(() => ({
 
 vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 
+vi.mock('@supabase/ssr', () => ({
+    createBrowserClient: vi.fn(() => ({
+        auth: {}
+    }))
+}))
+
 expect.extend(matchers);
