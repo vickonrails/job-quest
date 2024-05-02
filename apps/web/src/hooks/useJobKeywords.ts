@@ -1,6 +1,5 @@
-import { type Database } from 'shared'
+import { createClient } from '@lib/supabase/component'
 import { type Job } from '@lib/types'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -10,7 +9,7 @@ import { useState } from 'react'
  * @returns 
  */
 export function useJobKeywords(job: Job) {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const [loading, setLoading] = useState(false)
     const queryClient = useQueryClient()
 

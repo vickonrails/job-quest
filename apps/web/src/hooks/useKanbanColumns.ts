@@ -1,16 +1,15 @@
 
 import { type InvolvedColumns } from '@components/kanban/core/getInvolvedColumns';
 import { type getMovingItemData } from '@components/kanban/core/getMovingItemData';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Job } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sortByOrder, type KanbanColumn } from '@utils/transform-to-column';
 import isEqual from 'fast-deep-equal';
 import { useEffect, useRef, useState } from 'react';
 
 export function useKanbanColumns(jobs: KanbanColumn[]) {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const queryClient = useQueryClient();
     const [columns, setColumns] = useState(jobs);
     const columnRef = useRef(jobs);

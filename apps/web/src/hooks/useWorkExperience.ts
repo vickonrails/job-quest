@@ -1,21 +1,22 @@
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Highlight, type WorkExperience } from '@lib/types';
-import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { setEntityId } from '@utils/set-entity-id';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { type Database } from 'shared';
 import { fetchWorkExperience } from 'src/pages/profile/setup';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
-import { setEntityId } from '@utils/set-entity-id';
 
-export function useWorkExperience() {
-    const client = useSupabaseClient<Database>()
+export function useWorkExperience({ userId }: { userId?: string }) {
+    const client = createClient()
     const queryClient = useQueryClient()
-    const { next, session } = useSetupContext()
-    const queryResult = useQuery(['work_experience'], () => fetchWorkExperience({ userId: session?.user.id, client }));
+    const { next } = useSetupContext()
+    const queryResult = useQuery(['work_experience'], () => fetchWorkExperience({ userId, client }));
     const form = useForm<{ workExperience: WorkExperience[] }>({
-        defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] }
+        defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId })] }
     })
     const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
@@ -28,7 +29,7 @@ export function useWorkExperience() {
     // TODO: I think I should do error handling inside of here.
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
-            if (!session) return
+            if (!userId) return
             const highlights: Highlight[] = []
 
             try {
@@ -74,7 +75,7 @@ export function useWorkExperience() {
     })
 
     useEffect(() => {
-        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience()] })
+        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId })] })
     }, [queryResult.data, form])
 
     return {
@@ -101,14 +102,15 @@ export async function deleteExperience(id: string, client: SupabaseClient<Databa
  * 
  * @returns default experience object
  */
-export function getDefaultExperience() {
+export function getDefaultExperience({ userId }: { userId?: string }) {
     const id = uuid()
     const experience = {
         id,
         company_name: '',
         job_title: '',
         location: '',
-        highlights: [{ work_experience_id: id, text: '', type: 'work_experience' }],
+        user_id: userId,
+        highlights: [{ work_experience_id: id, user_id: userId, text: '', type: 'work_experience' }],
     } as unknown as WorkExperience
 
     return experience

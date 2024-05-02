@@ -1,19 +1,22 @@
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Project } from '@lib/types';
-import { useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
+import { useUserContext } from 'src/pages/_app';
 
-export function useProjects() {
-    const client = useSupabaseClient<Database>()
+export function useProjects({ userId }: { userId?: string }) {
+    const client = createClient()
     const queryClient = useQueryClient()
-    const { next, session } = useSetupContext()
-    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: session?.user.id, client }));
+    const { next } = useSetupContext()
+    const user = useUserContext()
+    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: userId, client }));
     const form = useForm<{ projects: Project[] }>({
-        defaultValues: { projects: queryResult.data?.length ? queryResult.data : [getDefaultProject()] }
+        defaultValues: { projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] }
     })
 
     const fieldsArr = useFieldArray({
@@ -25,7 +28,7 @@ export function useProjects() {
     // TODO: I think I should do error handling inside of here.
     const updateProjects = useMutation({
         mutationFn: async ({ values }: { values: Project[] }) => {
-            if (!session) return
+            if (!userId) return
             const preparedValues = values.map(project => {
                 if (!project.id) {
                     project.id = uuid()
@@ -48,7 +51,7 @@ export function useProjects() {
     })
 
     useEffect(() => {
-        form.reset({ projects: queryResult.data?.length ? queryResult.data : [getDefaultProject()] })
+        form.reset({ projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] })
     }, [queryResult.data, form])
 
     return {
@@ -75,20 +78,22 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
-    return (await client.from('projects').select('*').filter('resume_id', 'is', null)).data
+    const projects = await client.from('projects').select('*').filter('resume_id', 'is', null).eq('user_id', userId)
+    return projects.data
 }
 
 /**
  * 
  * @returns default experience object
  */
-export function getDefaultProject() {
+export function getDefaultProject({ userId }: { userId?: string }) {
     const experience = {
         id: uuid(),
         title: '',
         description: '',
         start_date: '',
         end_date: '',
+        user_id: userId,
         skills: []
     } as unknown as Project
 

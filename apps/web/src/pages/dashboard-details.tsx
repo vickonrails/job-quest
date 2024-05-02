@@ -1,21 +1,20 @@
 import BackButton from '@components/back-button';
 import { Layout } from '@components/layout';
 import JobsTable from '@components/table/job/JobsTable';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/server-prop';
 import { type Job, type Profile } from '@lib/types';
-import { createPagesServerClient, type Session } from '@supabase/auth-helpers-nextjs';
+import { type Session } from '@supabase/auth-helpers-nextjs';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 
 type ViewType = keyof typeof viewLookup
-function DashboarDetails({ profile, session, jobs }: { profile: Profile, session: Session, jobs: Job[] }) {
+function DashboarDetails({ profile, jobs }: { profile: Profile, jobs: Job[] }) {
     const router = useRouter()
     const view = router.query.card as ViewType;
 
     return (
         <Layout
-            session={session}
             profile={profile}
             containerClasses="p-6 overflow-auto"
             pageTitle="Dashboard Details"
@@ -99,14 +98,14 @@ const viewLookup = {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser();
     const query = context.query as unknown as string
     const { card } = qs.parse(query) as unknown as { card: keyof typeof viewLookup };
     const parsedQuery = parseQuery(viewLookup[card].query);
     const { limit, orderBy, status, gte } = parsedQuery;
 
-    if (!session) {
+    if (!user) {
         return {
             redirect: {
                 destination: '/sign-in',
@@ -115,8 +114,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
-    let jobsQuery = supabase.from('jobs').select();
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
+    let jobsQuery = supabase.from('jobs').select().eq('user_id', user.id);
 
     if (orderBy) {
         jobsQuery = jobsQuery.order(orderBy.field, { ascending: orderBy.direction === 'asc' })
@@ -138,7 +137,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            session,
             profile,
             jobs
         }

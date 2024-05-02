@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
 import { Storage } from '@plasmohq/storage'
+import type { Database } from 'shared'
 
 const storage = new Storage({
   area: 'local'
 })
 
-export const supabase = createClient(
+export const supabase = createClient<Database>(
   process.env.PLASMO_PUBLIC_SUPABASE_URL,
   process.env.PLASMO_PUBLIC_SUPABASE_KEY,
   {

@@ -1,16 +1,9 @@
 import { TooltipProvider } from '@components/tooltip';
-import { type Session } from '@supabase/supabase-js';
 import { cleanup, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { type Profile } from '../../../lib/types';
 import { Layout, type LayoutProps } from './Layout';
 import { Navbar, type NavbarProps } from './Navbar';
-
-const session = {
-    user: {
-        email: 'johnDoe@gmail.com'
-    }
-} as unknown as Session
 
 const profile = {
     id: '',
@@ -31,7 +24,7 @@ describe('Navbar', () => {
     }
 
     it('render correct user profile details', () => {
-        const { getByText } = setup({ session, profile, toggleSidebar: () => { /** */ } });
+        const { getByText } = setup({ profile, toggleSidebar: () => { /** */ } });
         expect(getByText('John Doe')).toBeTruthy();
     });
 });
@@ -64,7 +57,7 @@ describe('Layout', () => {
 
     it('renders all the correct links', () => {
         const links = ['dashboard', 'job tracker', 'my resumes', 'notes', 'reminders', 'documents', 'contacts'];
-        const { getAllByRole } = setup({ session, profile });
+        const { getAllByRole } = setup({ profile });
         const navLinks = getAllByRole('link');
         const hasCorrectLinks = navLinks.filter((link, index) => {
             return link.textContent?.toLowerCase() === links[index];
@@ -73,13 +66,13 @@ describe('Layout', () => {
     });
 
     it('renders navbar and sidebar', () => {
-        const { getByTestId } = setup({ session, profile });
+        const { getByTestId } = setup({ profile });
         expect(getByTestId('navbar')).toBeInTheDocument();
         expect(getByTestId('sidebar')).toBeInTheDocument();
     });
 
     it('renders children element correct', () => {
-        const { getByText } = setup({ profile, session, children: <div>Hello World</div> })
+        const { getByText } = setup({ profile, children: <div>Hello World</div> })
         expect(getByText('Hello World')).toBeTruthy();
     });
 });

@@ -1,10 +1,8 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
 import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Education, type Highlight } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { debounce } from '@utils/debounce';
 import { setEntityId } from '@utils/set-entity-id';
@@ -14,6 +12,7 @@ import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'rea
 import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
+import { useUserContext } from 'src/pages/_app';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
@@ -21,16 +20,19 @@ import { AddSectionBtn } from '.';
 /**
  * Education section in resume builder
 */
-export function EducationSection({ session }: { session: Session }) {
+export function EducationSection() {
     const form = useFormContext<{ education: Education[] }>();
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
+    const user = useUserContext()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, remove, append } = useFieldArray<{ education: Education[] }, 'education', '_id'>({ control: form.control, name: 'education', keyName: '_id' });
     const { data: educationTemplates } = useQuery({
         queryKey: ['educationTemplates'],
         queryFn: async () => {
-            if (!session?.user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('education').select('*, highlights ( * )').filter('resume_id', 'is', null)
+            if (!user?.id) throw new Error('User not logged in');
+            const { data, error } = await client.from('education')
+                .select('*, highlights ( * )')
+                .filter('resume_id', 'is', null);
             if (error) throw error;
             return data;
         }
@@ -67,7 +69,6 @@ export function EducationSection({ session }: { session: Session }) {
         <section className="mb-4">
             <h3 className="font-medium text-lg">Education</h3>
             <p className="mb-4 text-sm text-muted-foreground">List your academic background, including degrees earned, institutions attended, and any honors or awards received. Relevant coursework can also be included here.</p>
-
             <EducationForm fields={fields} form={form} onDeleteClick={handleDeleteClick} setHighlightsToDelete={setHighlightsToDelete} />
             <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
@@ -96,7 +97,7 @@ export function EducationSection({ session }: { session: Session }) {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(getDefaultEducation())}
+                    onClick={() => append(getDefaultEducation({ userId: user?.id }))}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>
@@ -121,7 +122,7 @@ export function EducationSection({ session }: { session: Session }) {
  */
 function useAutosave({ form }: { form: UseFormReturn<{ education: Education[] }> }) {
     const router = useRouter();
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
     const saveFn = useCallback(async ({ education }: { education: Education[] }) => {

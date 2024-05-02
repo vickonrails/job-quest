@@ -7,10 +7,10 @@ interface RequestBody {
     code?: string
 }
 
+export const authStorage = new Storage()
+
 const handler: PlasmoMessaging.MessageHandler<RequestBody> = async (req, res) => {
     const { body } = req;
-
-    const storage = new Storage()
     switch (body.action) {
         case 'navigate-to-auth':
             await chrome.tabs.create({
@@ -22,7 +22,7 @@ const handler: PlasmoMessaging.MessageHandler<RequestBody> = async (req, res) =>
             const { code } = body
             try {
                 const session = await client.auth.exchangeCodeForSession(String(code));
-                await storage.set('session', session.data)
+                await authStorage.set('session', session.data)
                 res.send({
                     success: true
                 })

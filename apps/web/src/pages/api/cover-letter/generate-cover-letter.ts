@@ -1,4 +1,4 @@
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@lib/supabase/api';
 import { type NextApiHandler, type NextApiRequest } from 'next';
 import { OpenAI } from 'openai';
 import { type WriteProps } from 'src/hooks/useMagicWrite';
@@ -23,12 +23,12 @@ const handler: NextApiHandler = async (req: Request, res) => {
         return res.status(500).json({ error: 'OpenAI key not provided' })
     }
 
-    const supabase = createPagesServerClient({ req, res })
-    const { data, error } = await supabase.auth.getSession();
+    const supabase = createClient(req, res)
+    const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error) return res.status(500).json({ error: 'An error occurred' })
 
-    if (!data.session) {
+    if (!user) {
         return res.status(401).json({ error: 'You are not authorized to perform this action' });
     }
 

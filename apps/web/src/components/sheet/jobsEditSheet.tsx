@@ -1,14 +1,14 @@
 import { ErrorHint } from '@components/resume-builder/setup/components/error-hint';
 import { useToast } from '@components/toast/use-toast';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createClient } from '@lib/supabase/component';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type Database } from 'shared';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
+import { Status_Lookup } from 'shared';
+import { useUserContext } from 'src/pages/_app';
 import { Button, Input, Rating, Select } from 'ui';
 import { v4 as uuid } from 'uuid';
 import { Sheet, type SheetProps } from './sheet';
-import { Status_Lookup } from 'shared'
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -21,30 +21,35 @@ interface JobEditSheetProps<T> extends SheetProps {
 export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const queryClient = useQueryClient();
     // TODO: abstract this away
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
-    const { toast } = useToast()
     const { handleSubmit, reset, register, control, formState: { errors } } = useForm({ defaultValues: entity })
+    const { toast } = useToast()
+    const user = useUserContext()
 
     const updateMutation = useMutation({
-        mutationFn: async (data: { job: Job }) => {
-            const { job } = data
+        mutationFn: async (data: { job: Job, userId: string }) => {
+            const { job, userId } = data
             const isNew = !Boolean(job.id)
             if (!job.id) {
                 job.id = uuid()
             }
+
             if (isNew) {
                 const { data: count } = await client
                     .from('jobs')
                     .select('*')
-                    .order('order_column', { ascending: false }).eq('status', job.status)
+                    .order('order_column', { ascending: false })
+                    .eq('status', job.status ?? 0)
+                    .eq('user_id', userId)
                     .limit(1).single();
 
-                const maxColumn = count?.order_column;
+                const maxColumn = !count ? 0 : count?.order_column;
                 job.order_column = maxColumn ? maxColumn + 10 : 10;
             }
-            return await client.from('jobs').upsert(job).eq('id', job.id)
+            // turns out this fails if there are no jobs in the database
+            return await client.from('jobs').upsert({ ...job, user_id: userId }).eq('id', job.id)
         },
         // TODO: we're currently invalidating the cache now, but we can use setQueryData to just replace the job in the cache
         onSuccess: async () => {
@@ -55,7 +60,8 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
 
     const onSubmit = async (job: Job) => {
         try {
-            const { error } = await updateMutation.mutateAsync({ job });
+            if (!user?.id) throw new Error('Not Authenticated')
+            const { error } = await updateMutation.mutateAsync({ job, userId: user?.id });
             if (error) {
                 throw error
             }

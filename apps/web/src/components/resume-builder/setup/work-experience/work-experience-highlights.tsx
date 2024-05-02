@@ -4,6 +4,7 @@ import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 import { Textarea } from 'ui'
 import { HighlightFooter } from '../components/highlights-footer'
 import { v4 as uuid } from 'uuid'
+import { useUserContext } from 'src/pages/_app'
 
 interface HighlightsProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -15,6 +16,7 @@ interface HighlightsProps {
 
 export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
+    const user = useUserContext();
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]
@@ -43,17 +45,18 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, o
 
             <HighlightFooter
                 onDeleteClick={onDeleteClick}
-                addHighlight={() => append(getDefaultEntity(entity.id))}
+                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: user?.id }))}
             />
         </>
     )
 }
 
-function getDefaultEntity(id: string): Highlight {
+function getDefaultEntity({ id, userId }: { id: string, userId?: string }): Highlight {
     return {
         text: '',
         id: uuid(),
         work_experience_id: id,
+        user_id: userId,
         type: 'work_experience'
     } as unknown as Highlight
 } 

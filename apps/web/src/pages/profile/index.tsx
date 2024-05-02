@@ -1,15 +1,13 @@
 import { Layout } from '@components/layout';
-import { type Database } from 'shared';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@lib/supabase/server-prop';
 import { type GetServerSideProps } from 'next';
-import { type PageProps } from '..';
 import Link from 'next/link';
+import { type PageProps } from '..';
 
-export default function Profile({ session, profile }: PageProps) {
+export default function Profile({ user, profile }: PageProps) {
     return (
         <Layout
             pageTitle="Profile"
-            session={session}
             profile={profile}
             containerClasses="p-6"
         >
@@ -22,10 +20,10 @@ export default function Profile({ session, profile }: PageProps) {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession()
+    const supabase = createClient(context);
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (!session) {
+    if (!user) {
         await supabase.auth.signOut();
         return {
             redirect: {
@@ -35,11 +33,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
 
     return {
         props: {
-            session,
+            user,
             profile
         }
     }

@@ -1,8 +1,7 @@
 import { AlertDialog } from '@components/alert-dialog';
 import { useToast } from '@components/toast/use-toast';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Education } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
@@ -11,15 +10,25 @@ import { Spinner } from 'ui';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
+import { useUserContext } from 'src/pages/_app';
 
 export function EducationStep() {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const queryClient = useQueryClient()
+    const user = useUserContext();
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { form, education, fieldsArr, updateEducation, setHighlightsToDelete } = useEducation();
+    const {
+        form,
+        education,
+        fieldsArr,
+        updateEducation,
+        setHighlightsToDelete
+    } = useEducation({ userId: user?.id });
+
     const { formState } = form
     const { fields, remove, append } = fieldsArr
+
     const {
         showDeleteDialog,
         onCancel,
@@ -82,9 +91,10 @@ export function EducationStep() {
                         defaultOpen
                     />
                     <SectionFooter
+                        addText="Add Education"
                         saveDisabled={fields.length === 0 || !form.formState.isValid}
                         isSubmitting={formState.isSubmitting}
-                        onAppendClick={() => append(getDefaultEducation())}
+                        onAppendClick={() => append(getDefaultEducation({ userId: user?.id }))}
                     />
                 </form>
             </StepContainer>

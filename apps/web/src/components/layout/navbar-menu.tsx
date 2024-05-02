@@ -1,7 +1,6 @@
 import { Avatar } from '@components/avatar';
 import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Profile } from 'lib/types';
 import { ChevronDown, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/router';
@@ -9,7 +8,7 @@ import { useCallback } from 'react';
 import { Button } from 'ui';
 
 export function NavbarMenu({ profile }: { profile: Profile }) {
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const router = useRouter()
 
     const handleLogout = useCallback(() => {

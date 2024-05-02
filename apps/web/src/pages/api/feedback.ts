@@ -1,5 +1,4 @@
-
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient as createApiClient } from '@lib/supabase/api';
 import { createClient } from '@supabase/supabase-js';
 import { type FeedbackFormValues } from '@utils/create-feedback';
 import { type NextApiHandler } from 'next';
@@ -13,7 +12,7 @@ const handler: NextApiHandler = async (req, res) => {
         env.FEEDBACK_ANON_KEY
     );
 
-    const appClient = createPagesServerClient({ req, res })
+    const appClient = createApiClient(req, res)
     try {
         const { data: { user }, error: authError } = await appClient.auth.getUser();
         if (authError) {

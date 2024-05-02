@@ -1,21 +1,21 @@
-import { type Database } from 'shared';
-import { type Highlight, type Education } from '@lib/types';
-import { useSession, useSupabaseClient, type SupabaseClient } from '@supabase/auth-helpers-react';
+import { createClient } from '@lib/supabase/component';
+import { type Education, type Highlight } from '@lib/types';
+import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { setEntityId } from '@utils/set-entity-id';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
-import { setEntityId } from '@utils/set-entity-id';
 
-export function useEducation() {
-    const client = useSupabaseClient<Database>()
+export function useEducation({ userId }: { userId?: string }) {
+    const client = createClient()
     const queryClient = useQueryClient()
-    const { next } = useSetupContext()
-    const session = useSession();
-    const queryResult = useQuery(['education'], () => fetchEducation({ userId: session?.user.id, client }));
+    const { next, user } = useSetupContext()
+    const queryResult = useQuery(['education'], () => fetchEducation({ userId, client }));
     const form = useForm<{ education: Education[] }>({
-        defaultValues: { education: queryResult.data?.length ? queryResult.data : [getDefaultEducation()] },
+        defaultValues: { education: queryResult.data?.length ? queryResult.data : [getDefaultEducation({ userId: user?.id })] },
         shouldUnregister: false
     })
 
@@ -30,7 +30,7 @@ export function useEducation() {
     // TODO: I think I should do error handling inside of here.
     const updateEducation = useMutation({
         mutationFn: async ({ values }: { values: Education[] }) => {
-            if (!session) return
+            if (!userId) return
             const highlights: Highlight[] = []
 
             try {
@@ -76,7 +76,7 @@ export function useEducation() {
     })
 
     useEffect(() => {
-        form.reset({ education: queryResult.data?.length ? queryResult.data : [getDefaultEducation()] })
+        form.reset({ education: queryResult.data?.length ? queryResult.data : [getDefaultEducation({ userId: user?.id })] })
     }, [queryResult.data, form])
 
     return {
@@ -103,7 +103,7 @@ export async function deleteEducation(id: string, client: SupabaseClient<Databas
  * 
  * @returns default education object
  */
-export function getDefaultEducation() {
+export function getDefaultEducation({ userId }: { userId?: string }) {
     const id = uuid()
     const education = {
         id,
@@ -113,7 +113,8 @@ export function getDefaultEducation() {
         location: '',
         end_date: '',
         start_date: '',
-        highlights: [{ education_id: id, type: 'education', text: '' }],
+        user_id: userId,
+        highlights: [{ education_id: id, user_id: userId, type: 'education', text: '' }],
     } as unknown as Education;
 
     return education
@@ -122,5 +123,10 @@ export function getDefaultEducation() {
 export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
     // TODO: error handling
-    return (await client.from('education').select('*, highlights ( * )').filter('resume_id', 'is', null)).data;
+    const { data } = await client.from('education')
+        .select('*, highlights ( * )')
+        .filter('resume_id', 'is', null)
+        .eq('user_id', userId)
+
+    return data
 }

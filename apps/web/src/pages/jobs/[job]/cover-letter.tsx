@@ -1,10 +1,9 @@
 import BackButton from '@components/back-button'
 import { Layout } from '@components/layout'
 import { useToast } from '@components/toast/use-toast'
-import { type Database } from 'shared'
+import { createClient } from '@lib/supabase/component'
+import { createClient as createServerClient } from '@lib/supabase/server-prop'
 import { type CoverLetter, type Job } from '@lib/types'
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { Save, Wand2 } from 'lucide-react'
 import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
@@ -18,10 +17,10 @@ interface CoverLetterProps extends PageProps {
     coverLetter: CoverLetter
 }
 
-export default function CoverLetter({ session, profile, job, coverLetter }: CoverLetterProps) {
+export default function CoverLetter({ user, profile, job, coverLetter }: CoverLetterProps) {
     const router = useRouter()
-    const client = useSupabaseClient<Database>()
-    const { value, saving, onChange, setValue, saveValue } = useCoverLetter(job, coverLetter);
+    const client = createClient()
+    const { value, saving, onChange, setValue, saveValue } = useCoverLetter({ job, coverLetter, user });
     const { writing, write } = useMagicWrite();
     const { toast } = useToast()
 
@@ -53,7 +52,6 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
 
     return (
         <Layout
-            session={session}
             profile={profile}
             containerClasses="p-6 overflow-hidden"
             pageTitle="Create Cover Letter"
@@ -100,11 +98,11 @@ export default function CoverLetter({ session, profile, job, coverLetter }: Cove
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createPagesServerClient<Database>(context);
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = createServerClient(context);
+    const { data: { user } } = await supabase.auth.getUser();
     const jobId = context.params?.['job'] as string;
 
-    if (!session) {
+    if (!user) {
         return {
             redirect: {
                 destination: '/sign-in',
@@ -113,7 +111,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
-    const { data: profile } = await supabase.from('profiles').select().eq('id', session?.user.id).single()
+    const { data: profile } = await supabase.from('profiles').select().eq('id', user.id).single()
     const { data: job } = await supabase.from('jobs').select().eq('id', jobId).single();
 
     if (!job) {
@@ -126,13 +124,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     if (!job.cover_letter_id) {
-        const { data } = await supabase.from('cover_letters').insert({ text: '' }).select().single()
+        const { data } = await supabase.from('cover_letters').insert({ user_id: user.id, text: '' }).select().single()
         job.cover_letter_id = data?.id ?? '';
         await supabase.from('jobs').upsert({ ...job });
 
         return {
             props: {
-                session,
                 profile,
                 job,
                 coverLetter: data
@@ -144,7 +141,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            session,
             profile,
             job,
             coverLetter

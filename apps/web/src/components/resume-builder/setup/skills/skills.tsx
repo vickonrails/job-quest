@@ -1,8 +1,7 @@
 import { Chip } from '@components/chips';
 import { useToast } from '@components/toast/use-toast';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Profile } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
@@ -11,17 +10,17 @@ import { Button, Input } from 'ui';
 import { StepContainer } from '../components/container';
 
 export default function Skills({ profile }: { profile: Profile }) {
-    const client = useSupabaseClient<Database>()
+    const client = createClient()
     const queryClient = useQueryClient();
-    const { session, next } = useSetupContext()
+    const { next, user } = useSetupContext()
     const form = useForm<Profile>({ defaultValues: { skills: profile.skills ?? [] } })
     const formRef = createRef<HTMLFormElement>()
     const { toast } = useToast()
 
     const handleSkillsUpdate = useMutation({
         mutationFn: async (skills: Pick<Profile, 'skills'>) => {
-            if (!session) return
-            const { data, error } = await client.from('profiles').update(skills).eq('id', session.user.id).select('*').single();
+            if (!user) return
+            const { data, error } = await client.from('profiles').update(skills).eq('id', user.id).select('*').single();
             if (error) throw error;
             return data;
         },

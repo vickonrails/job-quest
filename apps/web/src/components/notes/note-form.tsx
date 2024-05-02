@@ -1,16 +1,17 @@
 import { useToast } from '@components/toast/use-toast';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createClient } from '@lib/supabase/component';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type Database } from 'shared';
 import { type Job, type NoteInsertDTO } from 'lib/types';
 import { useState } from 'react';
+import { useUserContext } from 'src/pages/_app';
 import { Button, Textarea } from 'ui';
 
 function NoteForm({ job }: { job: Job }) {
     const [note, setNote] = useState('')
     const { toast } = useToast()
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const queryClient = useQueryClient()
+    const user = useUserContext();
 
     // TODO: error handling
     const { mutateAsync, isLoading: isAddingNotes } = useMutation({
@@ -27,9 +28,10 @@ function NoteForm({ job }: { job: Job }) {
 
     const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-        if (!note) return;
+        if (!note || !user) return;
         try {
             await mutateAsync({
+                user_id: user.id,
                 text: note,
                 job_id: job.id,
                 status: job.status

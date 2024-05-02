@@ -1,9 +1,8 @@
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type Resume } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { debounce } from '@utils/debounce';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Input, Textarea } from 'ui';
 import useDeepCompareEffect from 'use-deep-compare-effect';
@@ -14,7 +13,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 */
 export function BasicInfoSection() {
     const form = useFormContext<{ resume: Resume }>();
-    const client = useSupabaseClient<Database>();
+    const client = createClient();
     const router = useRouter();
     const { formState: { errors }, register } = form;
 

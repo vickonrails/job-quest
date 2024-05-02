@@ -1,7 +1,7 @@
 import { useToast } from '@components/toast/use-toast';
-import { type Database } from 'shared';
+import { createClient } from '@lib/supabase/component';
 import { type CoverLetter, type Job } from '@lib/types';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { type User } from '@supabase/supabase-js';
 import { debounce } from '@utils/debounce';
 import { useCallback, useState } from 'react';
 
@@ -11,8 +11,8 @@ import { useCallback, useState } from 'react';
  * @param coverLetter 
  * @returns 
  */
-export function useCoverLetter(job: Job, coverLetter: CoverLetter) {
-    const client = useSupabaseClient<Database>()
+export function useCoverLetter({ job, coverLetter, user }: { job: Job, coverLetter: CoverLetter, user: User }) {
+    const client = createClient()
     const [value, setValue] = useState(coverLetter.text ?? '')
     const [saving, setSaving] = useState(false)
     const { toast } = useToast()
@@ -23,6 +23,7 @@ export function useCoverLetter(job: Job, coverLetter: CoverLetter) {
             if (!job.cover_letter_id) return
             const { error } = await client.from('cover_letters').upsert({
                 id: job.cover_letter_id,
+                user_id: user.id,
                 text
             });
 
