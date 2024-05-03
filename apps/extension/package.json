@@ -1,9 +1,9 @@
 {
-  "name": "extension",
-  "displayName": "Extension",
+  "name": "JobQuest",
+  "displayName": "Job Quest",
   "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
-  "author": "Plasmo Corp. <foss@plasmo.com>",
+  "description": "Job description grabber for getjobquest.com. Operating system for your job search",
+  "author": "Victor Ofoegbu. <victor@getjobquest.com>",
   "scripts": {
     "dev": "plasmo dev",
     "package": "plasmo package",

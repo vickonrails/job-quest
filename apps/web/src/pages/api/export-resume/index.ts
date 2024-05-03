@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { type NextApiHandler } from 'next';
 import path from 'path';
 
-const apiServiceURL = process.env.NEXT_PUBLIC_API_SERVICE_URL as string;
+const apiServiceURL = process.env.API_SERVICE_URL as string;
 
 const handler: NextApiHandler = async (req, res) => {
     const { html } = req.body as { html: string }
