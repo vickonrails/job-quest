@@ -3,14 +3,14 @@ import React from 'react';
 import { cn } from 'shared';
 
 interface PopoverProps extends RadixPopover.PopoverProps {
-    Trigger: React.ReactNode
+    Trigger?: React.ReactNode
     contentProps?: RadixPopover.PopoverContentTypeProps
 }
 
-export function Popover({ Trigger, children, contentProps }: PopoverProps) {
+export function Popover({ Trigger, children, contentProps, ...rest }: PopoverProps) {
     const { className: contentClasses, ...restContentProps } = contentProps ?? {}
     return (
-        <RadixPopover.Root>
+        <RadixPopover.Root {...rest}>
             <RadixPopover.Trigger asChild>
                 {Trigger}
             </RadixPopover.Trigger>
@@ -20,9 +20,6 @@ export function Popover({ Trigger, children, contentProps }: PopoverProps) {
                     {...restContentProps}
                 >
                     {children}
-                    {/* <RadixPopover.Close className="PopoverClose" aria-label="Close">
-                        <X />
-                    </RadixPopover.Close> */}
                     <RadixPopover.Arrow className="PopoverArrow" />
                 </RadixPopover.Content>
             </RadixPopover.Portal>

@@ -1,17 +1,16 @@
 import { Accordion, AccordionItem } from '@components/accordion'
-import { Checkbox } from '@components/checkbox'
+import { DatePicker } from '@components/date-picker'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@components/resume-builder/date-renderer'
 import { type WorkExperience } from '@lib/types'
-import { useState, type Dispatch, type SetStateAction } from 'react'
-import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Input, InputProps } from 'ui'
+import { isValid } from 'date-fns'
+import { type Dispatch, type SetStateAction } from 'react'
+import { Controller, type ControllerRenderProps, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
-import { WorkExperienceHighlights } from './work-experience-highlights'
 import { type BaseFormItemProps } from '../education/education-form-item'
-import { DayPicker as DefaultDayPicker, DayPickerDefaultProps, DayClickEventHandler } from 'react-day-picker'
-import { Calendar } from 'lucide-react'
-import { Popover } from '@components/popover'
+import { WorkExperienceHighlights } from './work-experience-highlights'
+import { Checkbox } from '@components/checkbox'
 
 interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
@@ -50,8 +49,9 @@ interface FormItemProps extends BaseFormItemProps {
 
 /** ------------------ Work Experience Form Item ------------------ */
 function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofocus }: FormItemProps) {
-    const { register } = form
+    const { register, watch } = form
     const fieldErrs = form.formState.errors?.workExperience?.[index] ?? {}
+    const still_working_here = watch(`workExperience.${index}.still_working_here`)
 
     return (
         <AccordionItem
@@ -85,22 +85,8 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
 
                     <Controller
                         control={form.control}
-                        name={`workExperience.${index}.still_working_here`}
-                        render={({ field }) => (
-                            <DayPicker
-                                label='Start Date'
-                                onChange={(x) => field.onChange(x)}
-                                selected={field.value ?? new Date()}
-                            />
-                        )}
-                    />
-
-                    <Input
-                        type="date"
-                        label="Start Date"
-                        placeholder="Start Date..."
-                        hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
-                        {...register(`workExperience.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
+                        name={`workExperience.${index}.start_date`}
+                        render={({ field }) => <DatePickerFormControl label="End Date (DD-MM-YYYY)" field={field} />}
                     />
 
                     <Controller
@@ -117,14 +103,12 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                         )}
                     />
 
-                    {!field.still_working_here && (
-                        <Input
-                            type="date"
-                            label="End Date"
-                            placeholder="End Date..."
-                            hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
-                            disabled={Boolean(field.still_working_here)}
-                            {...register(`workExperience.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
+                    {!still_working_here && (
+                        <Controller
+                            control={form.control}
+                            name={`workExperience.${index}.end_date`}
+                            rules={{ validate: value => isValid(value) || 'Please enter a valid number' }}
+                            render={({ field }) => <DatePickerFormControl label="End Date (DD-MM-YYYY)" field={field} />}
                         />
                     )}
                 </section>
@@ -160,46 +144,19 @@ function Header({ form, index }: { form: UseFormReturn<{ workExperience: WorkExp
     )
 }
 
-interface DayPickerProps extends DayPickerDefaultProps {
-    label?: string
-    hint?: string
-    defaultValue?: Date
-    onChange?: (date: Date) => void
-}
+type DatePickerFormControlProps = ControllerRenderProps<{
+    workExperience: WorkExperience[];
+}, `workExperience.${number}.end_date` | `workExperience.${number}.start_date`>
 
-function DayPicker({ label, hint, onChange, defaultValue, ...rest }: DayPickerProps) {
-    const [selected, setSelected] = useState<Date | null>(null);
-    const [open, setOpen] = useState(false);
-    const handleDateChange: DayClickEventHandler = (day) => {
-        // @ts-ignore
-        const isInvalidDate = isNaN(new Date(day))
-        console.log(isInvalidDate)
-        if (isInvalidDate) {
-            return;
-        }
-        const todayDate = new Date(day);
-        onChange?.(todayDate)
-        setSelected(todayDate)
-        setOpen(false);
-    }
-
-    const formattedSelected = selected?.toLocaleDateString('en-CA');
-
+function DatePickerFormControl({ field, label }: { field: DatePickerFormControlProps, label: string }) {
+    const { value } = field
     return (
-        <label>
-            <span className="block m-1.5 text-sm text-gray-500 select-none">{label}</span>
-            <input value={formattedSelected} onChange={(ev) => handleDateChange(new Date(ev.target.value), {}, ev)} className='date' type="" />
-            {hint && <span className="text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
-            <Popover
-                open={open}
-                Trigger={
-                    <button>
-                        <Calendar />
-                    </button>
-                }
-            >
-                <DefaultDayPicker selected={selected ?? undefined} onDayClick={handleDateChange} {...rest} />
-            </Popover>
-        </label>
+        <DatePicker
+            placeholder="Select a date"
+            // hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+            label={label}
+            onChange={(x) => field.onChange(x)}
+            value={value ? new Date(value) : undefined}
+        />
     )
 }

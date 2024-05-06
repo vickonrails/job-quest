@@ -55,10 +55,11 @@
   }
 
   input[type="date"]::-webkit-inner-spin-button,
-    input[type="date"]::-webkit-calendar-picker-indicator {
+  input[type="date"]::-webkit-calendar-picker-indicator {
       display: none;
       -webkit-appearance: none;
-    } 
+      visibility: hidden;
+  } 
 }
  
 @layer components {
@@ -95,6 +96,16 @@
   }
 
   .accordion[data-state='closed'] .close-icon {
+    @apply hidden;
+  }
+
+  .date-picker-wrapper .today {
+    @apply bg-blue-200 text-blue-800 hover:bg-blue-200 hover:text-blue-800;
+  }
+  .date-picker-wrapper .selected {
+    @apply bg-primary text-white hover:bg-primary hover:text-white;
+  }
+  .date-picker-wrapper > select[name="year"] {
     @apply hidden;
   }
 }
