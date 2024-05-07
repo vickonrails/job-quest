@@ -3,7 +3,7 @@ import { createClient } from '@lib/supabase/component';
 import { type CoverLetter, type Job } from '@lib/types';
 import { type User } from '@supabase/supabase-js';
 import { debounce } from '@utils/debounce';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * Hook for providing cover letter functionality
@@ -13,7 +13,7 @@ import { useCallback, useState } from 'react';
  */
 export function useCoverLetter({ job, coverLetter, user }: { job: Job, coverLetter: CoverLetter, user: User }) {
     const client = createClient()
-    const [value, setValue] = useState(coverLetter.text ?? '')
+    const [value, setValue] = useState<string>(coverLetter.text ?? '')
     const [saving, setSaving] = useState(false)
     const { toast } = useToast()
 
@@ -26,28 +26,25 @@ export function useCoverLetter({ job, coverLetter, user }: { job: Job, coverLett
                 user_id: user.id,
                 text
             });
-
             if (error) throw error;
         }, 1500),
         [job.cover_letter_id, client]
     );
 
-    /** handle cover letter change event */
-    const onChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(event.target.value);
-        try {
-            setSaving(true);
-            await saveValue(event.target.value);
-        } catch {
+    useEffect(() => {
+        setSaving(true)
+        saveValue(value).then(res => {
+            // 
+        }).catch(err => {
             toast({
                 title: 'Error',
                 description: 'Failed to save cover letter',
                 variant: 'destructive'
             })
-        } finally {
-            setSaving(false);
-        }
-    };
+        }).finally(() => {
+            setSaving(false)
+        })
+    }, [value, saveValue, toast])
 
-    return { value, saving, onChange, setValue, saveValue }
+    return { value, saving, setValue }
 }

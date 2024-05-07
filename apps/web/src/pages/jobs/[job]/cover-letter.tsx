@@ -20,7 +20,7 @@ interface CoverLetterProps extends PageProps {
 export default function CoverLetter({ user, profile, job, coverLetter }: CoverLetterProps) {
     const router = useRouter()
     const client = createClient()
-    const { value, saving, onChange, setValue, saveValue } = useCoverLetter({ job, coverLetter, user });
+    const { value, saving, setValue } = useCoverLetter({ job, coverLetter, user });
     const { writing, write } = useMagicWrite();
     const { toast } = useToast()
 
@@ -40,7 +40,6 @@ export default function CoverLetter({ user, profile, job, coverLetter }: CoverLe
                 skills: profile.skills?.map(skill => skill.label ?? '')
             });
             setValue(coverLetter);
-            await saveValue(coverLetter);
         } catch (error) {
             toast({
                 description: 'Failed to generate cover letter',
@@ -63,7 +62,7 @@ export default function CoverLetter({ user, profile, job, coverLetter }: CoverLe
             <div className="flex h-full gap-1">
                 <form className="flex flex-col items-start h-full p-1 flex-1 w-3/5 pb-6">
                     <textarea
-                        onChange={onChange}
+                        onChange={ev => setValue(ev.target.value)}
                         placeholder="Write your cover letter here"
                         rows={20}
                         value={value}
@@ -130,6 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         return {
             props: {
+                user,
                 profile,
                 job,
                 coverLetter: data
@@ -142,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props: {
             profile,
+            user,
             job,
             coverLetter
         }
