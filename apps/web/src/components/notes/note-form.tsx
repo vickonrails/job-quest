@@ -6,12 +6,12 @@ import { useState } from 'react';
 import { useUserContext } from 'src/pages/_app';
 import { Button, Textarea } from 'ui';
 
-function NoteForm({ job }: { job: Job }) {
+export function NoteForm({ job }: { job: Job }) {
     const [note, setNote] = useState('')
     const { toast } = useToast()
-    const client = createClient();
+    const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
+    const user = useUserContext()
 
     // TODO: error handling
     const { mutateAsync, isLoading: isAddingNotes } = useMutation({
@@ -48,9 +48,9 @@ function NoteForm({ job }: { job: Job }) {
     }
 
     return (
-        <form onSubmit={handleCreateNote} className="flex flex-col gap-4 items-start">
+        <form onSubmit={handleCreateNote} data-testid="note-form" className="flex flex-col gap-4 items-start">
             <Textarea value={note} required onChange={val => setNote(val.target.value)} containerClasses="w-full" />
-            <Button variant="outline" loading={isAddingNotes}>Add notes</Button>
+            <Button variant="outline" disabled={!note} loading={isAddingNotes}>Add notes</Button>
         </form>
     )
 }

@@ -14,7 +14,7 @@ interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     showDeleteDialog: (note: Note) => void
 }
 
-function NoteItem({ note, className, showDeleteDialog, ...rest }: NoteItemProps) {
+export function NoteItem({ note, className, showDeleteDialog, ...rest }: NoteItemProps) {
     const [isEditing, setIsEditing] = useState(false)
 
     /** function for exiting editing mode */

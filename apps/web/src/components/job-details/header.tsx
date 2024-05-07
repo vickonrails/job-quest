@@ -1,4 +1,4 @@
-import { getDisplayText } from '@components/avatar/Avatar'
+import { getDisplayText } from '@components/avatar'
 import { Typography } from '@components/typography'
 import { type Job } from '@lib/types'
 import hashColors from '@utils/hash-colors'

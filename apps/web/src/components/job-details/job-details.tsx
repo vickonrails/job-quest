@@ -2,7 +2,6 @@ import NoteForm from '@components/notes/note-form';
 import NotesList from '@components/notes/note-list';
 import { JobEditSheet } from '@components/sheet/jobsEditSheet';
 import { type Job } from '@lib/types';
-import { User } from '@supabase/supabase-js';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { CoverLetterSection } from './cover-letter-section';
 import { JobDescription } from './description-body';

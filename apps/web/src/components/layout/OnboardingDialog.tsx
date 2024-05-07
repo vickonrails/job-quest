@@ -1,5 +1,5 @@
 import { Dialog } from '@components/dialog';
-import { type DialogProps } from '@components/dialog/Dialog';
+import { type DialogProps } from '@components/dialog';
 import { Typography } from '@components/typography';
 
 import { createClient } from '@lib/supabase/component';

@@ -1,6 +1,6 @@
 import { AlertDialog } from '@components/alert-dialog';
 import BackButton from '@components/back-button';
-import { Chip } from '@components/chips';
+import { Chip } from '@components/chip';
 import { useToast } from '@components/toast/use-toast';
 import { DevTool } from '@hookform/devtools';
 import { createClient } from '@lib/supabase/component';

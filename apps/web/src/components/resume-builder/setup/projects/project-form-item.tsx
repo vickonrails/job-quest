@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem } from '@components/accordion'
-import { Chip } from '@components/chips'
+import { Chip } from '@components/chip'
 import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
 import { type Project } from '@lib/types'
 import { Trash2 } from 'lucide-react'

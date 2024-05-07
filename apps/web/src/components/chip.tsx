@@ -29,7 +29,7 @@ const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: Ch
             </span>
 
             {showCloseBtn && (
-                <button type="button" onClick={onCloseClick}>
+                <button type="button" onClick={onCloseClick} aria-label="Remove">
                     <X size={16} className="text-gray-500" />
                 </button>
             )}

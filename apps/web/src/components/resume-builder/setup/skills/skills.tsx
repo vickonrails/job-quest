@@ -1,4 +1,4 @@
-import { Chip } from '@components/chips';
+import { Chip } from '@components/chip';
 import { useToast } from '@components/toast/use-toast';
 import { createClient } from '@lib/supabase/component';
 import { type Profile } from '@lib/types';

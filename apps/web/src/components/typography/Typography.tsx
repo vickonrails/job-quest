@@ -1,6 +1,7 @@
 import { type FC, type HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
+// TODO: remove this component entirely
 type TypeVariant = 'display-xl-bold' | 'display-xl-md' | 'display-xl' | 'display-lg-bold' |
     'display-lg-md' | 'display-lg' | 'display-md-bold' | 'display-md-md' | 'display-md' | 'display-sm-bold' |
     'display-sm-md' | 'display-sm' | 'display-xs-bold' | 'display-xs-md' | 'display-xs' | 'body-xl-bold' |

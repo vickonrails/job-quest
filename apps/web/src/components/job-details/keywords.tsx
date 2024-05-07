@@ -1,4 +1,4 @@
-import { Chip } from '@components/chips';
+import { Chip } from '@components/chip';
 import { useToast } from '@components/toast/use-toast';
 import { type Job } from '@lib/types';
 import { ChevronDown, ChevronUp, Wand2 } from 'lucide-react';

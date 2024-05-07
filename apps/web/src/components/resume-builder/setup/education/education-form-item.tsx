@@ -69,7 +69,7 @@ interface FormItemProps extends BaseFormItemProps {
     setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
+export function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
     const { register } = form
     const fieldErrs = form.formState.errors?.education?.[index] ?? {}
 

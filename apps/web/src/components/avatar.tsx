@@ -5,7 +5,7 @@ import { type HTMLAttributes } from 'react'
 import { cn } from 'shared'
 
 type IAvatarBorder = 'curved' | 'round' | 'square'
-interface AvatarProps extends Omit<ImageProps, 'src'> {
+export interface AvatarProps extends Omit<ImageProps, 'src'> {
     border?: IAvatarBorder
     size?: 'xs' | 'sm' | 'md' | 'lg'
     src?: string
