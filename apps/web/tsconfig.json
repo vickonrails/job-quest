@@ -39,6 +39,8 @@
     }
   },
   "include": [
+    "test/**/*.test.tsx",
+    "test/*.test.tsx",
     "src/**/*.tsx",
     "src/**/*.ts",
     "lib/**/*.{ts}",
@@ -47,7 +49,10 @@
     "next-env.d.ts",
     "vitest/setup.ts",
     "tailwind.config.ts",
-    "tailwind.pdf.config.ts"
+    "tailwind.pdf.config.ts",
+    "tests/profile-setup.test.tsx",
+    "tests/Layout.test.tsx",
+    "tests/kanban.test.tsx"
   ],
   "exclude": [
     "node_modules"

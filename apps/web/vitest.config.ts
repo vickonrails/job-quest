@@ -15,7 +15,7 @@ export default defineConfig({
         coverage: {
             all: true,
             include: ['src/**/*.{ts,tsx}'],
-            exclude: ['src/**/*.test.{ts,tsx}', 'src/**/index.{ts,tsx}'],
+            exclude: ['src/**/*.test.{ts,tsx}', 'src/**/index.{ts,tsx}', 'src/pages/api/**/*.ts'],
         },
         globals: true,
         setupFiles: ['./vitest/setup.ts'],
