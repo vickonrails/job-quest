@@ -1,24 +1,24 @@
-import { AlertDialog } from '@components/alert-dialog';
-import BackButton from '@components/back-button';
-import { Chip } from '@components/chips';
-import { useToast } from '@components/toast/use-toast';
+import { AlertDialog } from '@/components/alert-dialog';
+import BackButton from '@/components/back-button';
+import { Chip } from '@/components/chips';
+import { useToast } from '@/components/toast/use-toast';
 import { DevTool } from '@hookform/devtools';
-import { createClient } from '@lib/supabase/component';
-import { type Resume } from '@lib/types';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { createRef, forwardRef, memo, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, type UseFormReturn } from 'react-hook-form';
 import { type Database } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { Button, Input, Spinner, type ButtonProps } from 'ui';
-import { type FormValues } from '../../../../pages/resumes/[resume]';
+import { type FormValues } from '../../../../pages/resumes-archive/[resume]';
 import { BasicInfoSection } from './resume-basic-info';
 import { EducationSection } from './resume-education';
 import { WorkExperienceSection } from './resume-experience';
 import { ProjectsSection } from './resume-projects';
+import { createClient } from '@/utils/supabase/client';
+import { type Resume } from 'lib/types';
 
 export async function deleteResume(id: string, client: SupabaseClient<Database>) {
     try {

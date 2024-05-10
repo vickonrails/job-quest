@@ -1,4 +1,4 @@
-import { Typography } from '@components/typography'
+import { Typography } from '@/components/typography'
 import { Content, Description, Overlay, Portal, Root, type DialogProps } from '@radix-ui/react-alert-dialog'
 import { type FC, type ReactNode } from 'react'
 import { Button } from 'ui'

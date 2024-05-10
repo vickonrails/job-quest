@@ -1,7 +1,7 @@
-// import { DashboardSidebar } from '@components/dashboard/dashboard-siderbar';
-// import { JobsSummaryCards } from '@components/dashboard/welcome-banner';
+// import { DashboardSidebar } from '@/components/dashboard/dashboard-siderbar';
+// import { JobsSummaryCards } from '@/components/dashboard/welcome-banner';
 import { Layout } from '@/components/layout';
-// import { ResumePreviewCard } from '@components/resume-card';
+// import { ResumePreviewCard } from '@/components/resume-card';
 import { type User, type Session } from '@supabase/auth-helpers-react';
 import { type DashboardSummary, type Profile, type Resume } from 'lib/types';
 import { type GetServerSideProps } from 'next';

@@ -1,6 +1,8 @@
-import { Chip } from '@components/chips';
-import { useToast } from '@components/toast/use-toast';
-import { type Job } from '@lib/types';
+'use client'
+
+import { Chip } from '@/components/chips';
+import { useToast } from '@/components/toast/use-toast';
+import { type Job } from 'lib/types';
 import { ChevronDown, ChevronUp, Wand2 } from 'lucide-react';
 import { useState } from 'react';
 import { useJobKeywords } from 'src/hooks/useJobKeywords';

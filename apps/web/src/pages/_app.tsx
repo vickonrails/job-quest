@@ -3,8 +3,8 @@ import { type AppProps } from 'next/app'
 
 import '../styles/globals.css'
 
-import { Toaster } from '@components/toast'
-import { TooltipProvider } from '@components/tooltip'
+import { Toaster } from '@/components/toast'
+import { TooltipProvider } from '@/components/tooltip'
 import { ToastProvider } from '@radix-ui/react-toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createContext, useContext } from 'react'

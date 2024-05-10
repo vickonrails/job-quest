@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
 import { Complex, Simple } from 'resume-templates';
-import { type FormValues } from 'src/pages/resumes/[resume]';
+import { type FormValues } from '@/pages/resumes-archive/[resume]';
 import { Button, Select } from 'ui';
 
 /**
@@ -63,7 +63,7 @@ export function Preview() {
 
     return (
         <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
-            <header className="flex justify-between w-full items-center">
+            <header className="flex justify-between w-full items-center mb-2">
                 <Select
                     options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
                     trigger="Select template"

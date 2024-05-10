@@ -1,5 +1,7 @@
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
+'use client'
+
+import { useToast } from '@/components/toast/use-toast';
+import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Job, type NoteInsertDTO } from 'lib/types';
 import { useState } from 'react';

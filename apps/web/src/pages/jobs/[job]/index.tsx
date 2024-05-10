@@ -1,6 +1,6 @@
-import BackButton from '@components/back-button';
-import { JobDetails } from '@components/job-details/job-details';
-import { Layout } from '@components/layout';
+import BackButton from '@/components/back-button';
+import { JobDetails } from '@/components/job-details/job-details';
+import { Layout } from '@/components/layout';
 import { useJobs } from '@hooks';
 import { createClient } from '@lib/supabase/server-prop';
 import { type Job } from 'lib/types';

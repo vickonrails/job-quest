@@ -41,7 +41,7 @@ export const fetchUserQuery = async (client: Client) => {
 /**
  * 
  */
-const getUser = async () => {
+export const getUser = async () => {
     const client = createClient();
     return await fetchUserQuery(client)
 

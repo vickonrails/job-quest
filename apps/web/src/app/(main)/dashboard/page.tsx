@@ -21,10 +21,8 @@ export default async function DashboardPage() {
     const { data } = await getDashboardSummary()
     const resumes = await getResumes()
 
-
-
     return (
-        <section className="flex w-full flex-1 gap-4">
+        <section className="flex w-full flex-1 gap-4 p-6">
             <section className="flex-1">
                 <JobsSummaryCards className="mb-4" dashboardSummary={data ?? []} />
                 <hr />
@@ -34,7 +32,6 @@ export default async function DashboardPage() {
         </section>
     )
 }
-
 
 function RecentResume({ resumes }: { resumes: Resume[] }) {
     return (

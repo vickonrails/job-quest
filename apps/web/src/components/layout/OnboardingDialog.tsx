@@ -1,6 +1,6 @@
-import { Dialog } from '@components/dialog';
-import { type DialogProps } from '@components/dialog/Dialog';
-import { Typography } from '@components/typography';
+import { Dialog } from '@/components/dialog';
+import { type DialogProps } from '@/components/dialog/Dialog';
+import { Typography } from '@/components/typography';
 
 import { createClient } from '@lib/supabase/component';
 import { type User } from '@supabase/supabase-js';

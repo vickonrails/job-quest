@@ -2,7 +2,7 @@ import { updateSession } from '@/utils/supabase/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 import { createClient } from './utils/supabase/server';
 
-const protectedRoutes = ['/dashboard', '/job-tracker']
+const protectedRoutes = ['/dashboard', '/job-tracker', '/resumes', 'profile']
 
 export async function middleware(request: NextRequest) {
     const url = new URL(request.url)

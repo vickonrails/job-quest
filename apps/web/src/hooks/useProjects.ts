@@ -1,13 +1,13 @@
-import { createClient } from '@lib/supabase/component';
-import { type Project } from '@lib/types';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type Project } from 'lib/types';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
+import { useUserContext } from 'src/pages/_app';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
-import { useUserContext } from 'src/pages/_app';
 
 export function useProjects({ userId }: { userId?: string }) {
     const client = createClient()

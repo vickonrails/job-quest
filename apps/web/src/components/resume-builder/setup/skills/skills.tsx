@@ -1,13 +1,15 @@
-import { Chip } from '@components/chips';
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
-import { type Profile } from '@lib/types';
+'use client'
+
+import { Chip } from '@/components/chips';
+import { useToast } from '@/components/toast/use-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input } from 'ui';
 import { StepContainer } from '../components/container';
+import { type Profile } from 'lib/types';
+import { createClient } from '@/utils/supabase/client';
 
 export default function Skills({ profile }: { profile: Profile }) {
     const client = createClient()

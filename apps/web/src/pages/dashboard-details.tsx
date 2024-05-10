@@ -1,6 +1,6 @@
-import BackButton from '@components/back-button';
-import { Layout } from '@components/layout';
-import JobsTable from '@components/table/job/JobsTable';
+import BackButton from '@/components/back-button';
+import { Layout } from '@/components/layout';
+import JobsTable from '@/components/table/job/JobsTable';
 import { createClient } from '@lib/supabase/server-prop';
 import { type Job, type Profile } from '@lib/types';
 import { type Session } from '@supabase/auth-helpers-nextjs';
@@ -55,7 +55,7 @@ const defaultQuery: QueryProps = {
     },
 }
 
-function parseQuery(query: string): QueryProps {
+export function parseQuery(query: string): QueryProps {
     const parts = qs.parse(query) as ParsedResult;
     const parsedQuery: QueryProps = { ...defaultQuery };
 

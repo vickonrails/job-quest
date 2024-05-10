@@ -1,3 +1,4 @@
+'use client'
 import React, { type HTMLAttributes } from 'react'
 import { TableHeader } from './TableHeader';
 

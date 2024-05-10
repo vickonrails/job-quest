@@ -5,11 +5,12 @@ import { Avatar } from '@/components/avatar';
 import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { type Profile } from 'lib/types';
 import { ChevronDown, LogOut, User } from 'lucide-react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from 'ui';
 
 export function NavbarMenu({ profile }: { profile?: Profile | null }) {
     const avatarDisplay = profile?.full_name ?? profile?.email_address ?? ''
+    const router = useRouter()
 
     return (
         <section className="flex items-center">

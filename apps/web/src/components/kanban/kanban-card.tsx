@@ -1,9 +1,11 @@
-import { MenuBar, MenuItem, Separator } from '@components/menubar'
+'use client'
+
+import { MenuBar, MenuItem, Separator } from '@/components/menubar'
 import { Draggable } from '@hello-pangea/dnd'
 import { type Job } from 'lib/types'
 import { FileText, PanelRightClose, Trash2 } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { MoreVertical } from 'lucide-react'
 import { Rating } from 'ui'
 import { type KanbanCardProps } from './kanban-column'

@@ -1,8 +1,9 @@
+
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { type Database } from 'shared';
 import { type Job } from '../../lib/types';
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
-import { createClient } from '@lib/supabase/component'
+import { createClient } from '@/utils/supabase/client';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -40,7 +41,7 @@ async function getJobs(client: SupabaseClient<Database>, userId: string, options
     const { count, data: jobs, error } = await query;
 
     if (error) throw error;
-    return { jobs, count };
+    return { jobs, count }
 }
 
 type JobsResponse = {
@@ -53,12 +54,12 @@ type JobsResponse = {
 // also research possible ways to add react query in here too
 // TODO: write this hook to handle all querying info - search, pagination, ordering, etc
 export function useJobs(userId: string, options?: Options, jobId?: string): UseQueryResult<JobsResponse> {
-    const client = createClient();
+    const client = createClient()
     const { initialData } = options ?? {}
 
-    return useQuery(
-        ['jobs', jobId ?? ''],
-        () => getJobs(client, userId, { ...options, jobId } ?? {}),
-        { initialData: { jobs: initialData ?? [], count: initialData?.length ?? 0 } }
-    )
+    // return useQuery(
+    //     ['jobs', jobId ?? ''],
+    // () => getJobs(client, userId, { ...options, jobId } ?? {}),
+    // { initialData: { jobs: initialData ?? [], count: initialData?.length ?? 0 } }
+    // )
 }

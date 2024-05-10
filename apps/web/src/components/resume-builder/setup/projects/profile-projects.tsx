@@ -1,7 +1,7 @@
-import { AlertDialog } from '@components/alert-dialog'
-import { useToast } from '@components/toast/use-toast'
-import { createClient } from '@lib/supabase/component'
-import { type Project } from '@lib/types'
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog'
+import { useToast } from '@/components/toast/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
@@ -11,6 +11,8 @@ import { Spinner } from 'ui'
 import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { ProjectForm } from './project-form-item'
+import { type Project } from 'lib/types'
+import { createClient } from '@/utils/supabase/client'
 
 export type Projects = { projects: Project[] }
 

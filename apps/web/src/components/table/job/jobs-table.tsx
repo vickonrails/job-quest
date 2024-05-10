@@ -1,6 +1,8 @@
-import { createClient } from '@lib/supabase/component'
+'use client'
+
+import { createClient } from 'lib/supabase/component'
 import { type Job } from 'lib/types'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Status_Lookup } from 'shared'
 import { Table, type Column, type TableActions } from '../Table'
 
@@ -29,11 +31,7 @@ const JobsTable = ({ jobs, hideActions }: { jobs: Job[], hideActions?: boolean }
     }
 
     const onRowClick = (id: string) => {
-        router.push(`/jobs/${id}`).then(() => {
-            // 
-        }).catch(() => {
-            // 
-        })
+        router.push(`/jobs-tracker/${id}`)
     }
 
     const actions: TableActions = {

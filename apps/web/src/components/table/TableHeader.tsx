@@ -1,4 +1,4 @@
-import { Typography } from '@components/typography'
+import { Typography } from '@/components/typography'
 import { type Column } from './Table'
 
 export function TableHeader<T>({ columns, hideActions }: { columns: Column<T>, hideActions?: boolean }) {

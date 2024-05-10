@@ -1,13 +1,13 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { EducationForm } from '@components/resume-builder/setup/education/education-form-item';
-import { createClient } from '@lib/supabase/component';
-import { type Education, type Highlight } from '@lib/types';
+import { AlertDialog } from '@/components/alert-dialog';
+import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { EducationForm } from '@/components/resume-builder/setup/education/education-form-item';
+import { debounce } from '@/utils/debounce';
+import { setEntityId } from '@/utils/set-entity-id';
+import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { debounce } from '@utils/debounce';
-import { setEntityId } from '@utils/set-entity-id';
-import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { type Education, type Highlight } from 'lib/types';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
@@ -174,7 +174,8 @@ function useAutosave({ form }: { form: UseFormReturn<{ education: Education[] }>
         [highlightsToDelete]
     )
 
-    useDeepCompareEffect(() => {
+    useEffect(() => {
+        // useDeepCompareEffect(() => {
         if (!form.getFieldState('education').isDirty) return;
         handleSubmit().then(() => {
             // alert('Just edited the education area')

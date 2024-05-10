@@ -3,7 +3,7 @@ import { type User } from '@supabase/auth-helpers-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import { SetupProvider, type SetupContext } from 'src/hooks/useSetupContext';
-import { SetupSection } from 'src/pages/profile/setup';
+import { SetupSection } from '@/pages/profile/setup-archive';
 import { describe } from 'vitest';
 import { Steps } from './components/steps-renderer';
 

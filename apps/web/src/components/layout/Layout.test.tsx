@@ -1,4 +1,4 @@
-import { TooltipProvider } from '@components/tooltip';
+import { TooltipProvider } from '@/components/tooltip';
 import { cleanup, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { type Profile } from '../../../lib/types';

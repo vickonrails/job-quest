@@ -1,4 +1,6 @@
-import { type Profile } from '@lib/types'
+'use client'
+
+import { type Profile } from 'lib/types'
 import { useSetupContext } from 'src/hooks/useSetupContext'
 import { BasicInformation } from '../basic-info'
 import ContactInformation from '../contact-information'

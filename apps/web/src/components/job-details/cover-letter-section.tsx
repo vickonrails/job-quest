@@ -1,5 +1,8 @@
-import { type Job } from '@lib/types'
-import { useRouter } from 'next/router'
+
+'use client'
+
+import { type Job } from 'lib/types'
+import { useRouter } from 'next/navigation'
 import { Button } from 'ui'
 
 export function CoverLetterSection({ job }: { job: Job }) {
@@ -7,7 +10,7 @@ export function CoverLetterSection({ job }: { job: Job }) {
     const coverLetterId = job.cover_letter_id
 
     const navigateToCoverletter = () => {
-        const url = `/jobs/${job.id}/cover-letter`
+        const url = `/jobs-tracker/${job.id}/cover-letter`
         return router.push(url)
     }
 

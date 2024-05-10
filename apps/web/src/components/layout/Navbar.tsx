@@ -1,8 +1,8 @@
-import { type Profile } from 'lib/types';
+import { getUserProfile } from '@/queries/auth';
 import { PanelLeftClose } from 'lucide-react';
 import { type FC, type HTMLAttributes, type ReactNode } from 'react';
+import { FeedbackButton } from '../feedback-widget';
 import { NavbarMenu } from './navbar-menu';
-import { getUserProfile } from '@/queries/auth';
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
     toggleSidebar?: () => void
@@ -31,7 +31,7 @@ const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) =
                     )}
                 </section>
                 <div className="flex items-center gap-2">
-                    {/* <FeedbackButton /> */}
+                    <FeedbackButton />
                     <NavbarMenu profile={profile} />
                 </div>
             </section>

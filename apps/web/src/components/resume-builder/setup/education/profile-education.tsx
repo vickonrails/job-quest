@@ -1,16 +1,18 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
-import { type Education } from '@lib/types';
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog';
+import { useToast } from '@/components/toast/use-toast';
+import { createClient } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
+import { type Education } from 'lib/types';
 import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
+import { useUserContext } from 'src/pages/_app';
 import { Spinner } from 'ui';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
-import { useUserContext } from 'src/pages/_app';
 
 export function EducationStep() {
     const client = createClient()

@@ -1,8 +1,8 @@
-import { createClient } from '@lib/supabase/component';
-import { type Education, type Highlight } from '@lib/types';
+import { setEntityId } from '@/utils/set-entity-id';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setEntityId } from '@utils/set-entity-id';
+import { type Highlight, type Education } from 'lib/types';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';

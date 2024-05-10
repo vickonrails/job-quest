@@ -1,14 +1,11 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { DateRenderer } from '@components/resume-builder/date-renderer';
-import { WorkExperienceForm } from '@components/resume-builder/setup/work-experience/work-experience-form-item';
-import { createClient } from '@lib/supabase/component';
-import { type Highlight, type WorkExperience } from '@lib/types';
+import { AlertDialog } from '@/components/alert-dialog';
+import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { DateRenderer } from '@/components/resume-builder/date-renderer';
+import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useQuery } from '@tanstack/react-query';
-import { debounce } from '@utils/debounce';
-import { setEntityId } from '@utils/set-entity-id';
-import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { setEntityId } from '@/utils/set-entity-id';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteExperience, getDefaultExperience } from 'src/hooks/useWorkExperience';
@@ -16,6 +13,9 @@ import { useUserContext } from 'src/pages/_app';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
+import { type Highlight, type WorkExperience } from 'lib/types';
+import { createClient } from '@/utils/supabase/client';
+import { debounce } from '@/utils/debounce';
 
 /**
  * Work Experience section in resume builder
@@ -143,7 +143,8 @@ function useAutosave({ form }: { form: UseFormReturn<{ workExperience: WorkExper
         [highlightsToDelete]
     )
 
-    useDeepCompareEffect(() => {
+    // useDeepCompareEffect(() => {
+    useEffect(() => {
         if (!form.getFieldState('workExperience').isDirty) return;
         handleSubmit().catch(() => {
             // 

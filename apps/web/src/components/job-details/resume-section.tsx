@@ -1,10 +1,12 @@
-import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { ResumePreviewCard } from '@components/resume-card';
-import { createClient } from '@lib/supabase/component';
-import { type Job } from '@lib/types';
+'use client'
+
+import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { ResumePreviewCard } from '@/components/resume-card';
+import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type Job } from 'lib/types';
 import { ChevronDown } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { cn } from 'shared';
 import { Button, Spinner } from 'ui';
 import { v4 as uuid } from 'uuid';

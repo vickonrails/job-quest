@@ -1,4 +1,4 @@
-import { Layout } from '@components/layout';
+import { Layout } from '@/components/layout';
 import { createClient } from '@lib/supabase/server-prop';
 import { type GetServerSideProps } from 'next';
 import Link from 'next/link';

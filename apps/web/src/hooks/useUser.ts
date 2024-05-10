@@ -1,4 +1,4 @@
-import { createClient } from '@lib/supabase/component';
+import { createClient } from '@/utils/supabase/client';
 import { type User } from '@supabase/auth-helpers-react';
 import { type AuthChangeEvent } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';

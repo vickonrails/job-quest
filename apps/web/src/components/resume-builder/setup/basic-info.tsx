@@ -1,7 +1,9 @@
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
-import { type Profile } from '@lib/types';
+'use client'
+
+import { useToast } from '@/components/toast/use-toast';
+import { createClient } from '@/utils/supabase/client';
 import { useMutation } from '@tanstack/react-query';
+import { type Profile } from 'lib/types';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input, Textarea } from 'ui';

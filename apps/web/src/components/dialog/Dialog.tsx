@@ -1,4 +1,4 @@
-import { Typography } from '@components/typography'
+import { Typography } from '@/components/typography'
 import * as RdxDialog from '@radix-ui/react-dialog'
 import { type ReactNode } from 'react'
 import { cn } from 'shared'

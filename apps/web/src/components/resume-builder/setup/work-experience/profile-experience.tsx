@@ -1,7 +1,7 @@
-import { AlertDialog } from '@components/alert-dialog'
-import { useToast } from '@components/toast/use-toast'
-import { createClient } from '@lib/supabase/component'
-import { type WorkExperience as IWorkExperience } from '@lib/types'
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog'
+import { useToast } from '@/components/toast/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
@@ -11,6 +11,8 @@ import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { WorkExperienceForm } from './work-experience-form-item'
 import { useUserContext } from 'src/pages/_app'
+import { createClient } from '@/utils/supabase/client'
+import { type WorkExperience as IWorkExperience } from 'lib/types'
 
 export function WorkExperience() {
     const client = createClient()

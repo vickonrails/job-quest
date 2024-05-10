@@ -1,10 +1,8 @@
 import { AlertDialog } from '@/components/alert-dialog';
 import JobsKanban from '@/components/kanban/kanban-container';
-import { Layout } from '@/components/layout';
+// import { Layout } from '@/components/layout';
 import { JobEditSheet } from '@/components/sheet/jobsEditSheet';
 import { useJobs } from '@/hooks';
-import { createClient as createBrowserClient } from '../../../lib/supabase/component';
-import { createClient } from '../../../lib/supabase/server-prop';
 import { type User } from '@supabase/auth-helpers-nextjs';
 import { type Job, type Profile } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
@@ -14,6 +12,8 @@ import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { Button, Spinner } from 'ui';
+import { createClient as createBrowserClient } from '../../../lib/supabase/component';
+import { createClient } from '../../../lib/supabase/server-prop';
 
 const deleteTextWarning = `
     Are you sure you want to delete this job? 

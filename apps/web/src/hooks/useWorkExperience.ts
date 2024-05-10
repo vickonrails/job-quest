@@ -1,14 +1,20 @@
-import { createClient } from '@lib/supabase/component';
-import { type Highlight, type WorkExperience } from '@lib/types';
+import { setEntityId } from '@/utils/set-entity-id';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setEntityId } from '@utils/set-entity-id';
+import { type Highlight, type WorkExperience } from 'lib/types';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
-import { fetchWorkExperience } from 'src/pages/profile/setup';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
+
+export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
+    if (!userId) return;
+    // TODO: error handling
+    const experiences = await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)
+    return experiences.data
+}
 
 export function useWorkExperience({ userId }: { userId?: string }) {
     const client = createClient()

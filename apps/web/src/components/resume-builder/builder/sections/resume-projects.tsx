@@ -1,12 +1,12 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { ProjectForm } from '@components/resume-builder/setup/projects/project-form-item';
-import { createClient } from '@lib/supabase/component';
-import { type Project } from '@lib/types';
+import { AlertDialog } from '@/components/alert-dialog';
+import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
+import { debounce } from '@/utils/debounce';
+import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { debounce } from '@utils/debounce';
-import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { type Project } from 'lib/types';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
 import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
@@ -44,7 +44,8 @@ function useAutosave({ form }: { form: UseFormReturn<{ projects: Project[] }> })
         defaultValue: form.getValues('projects')
     });
 
-    useDeepCompareEffect(() => {
+    // useDeepCompareEffect(() => {
+    useEffect(() => {
         if (!form.getFieldState('projects').isDirty) return;
         handleSubmit().then(() => {
             // alert('Just edited the projects area')

@@ -1,4 +1,4 @@
-import { Layout } from '@components/layout'
+import { Layout } from '@/components/layout'
 import { createClient } from '@lib/supabase/server-prop'
 import { type Profile } from 'lib/types'
 import { type GetServerSideProps } from 'next'

@@ -1,5 +1,5 @@
-import { type BaseEntity } from '@components/table'
-import { useToast } from '@components/toast/use-toast'
+import { type BaseEntity } from '@/components/table'
+import { useToast } from '@/components/toast/use-toast'
 import { useCallback, useState } from 'react'
 
 interface UseDeleteProps {

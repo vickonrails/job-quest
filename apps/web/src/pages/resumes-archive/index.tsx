@@ -1,5 +1,5 @@
-import { Layout } from '@components/layout';
-import { ResumePreviewCard } from '@components/resume-card';
+import { Layout } from '@/components/layout';
+import { ResumePreviewCard } from '@/components/resume-card';
 import { createClient } from '@lib/supabase/server-prop';
 import { type Profile, type Resume } from '@lib/types';
 import { type GetServerSideProps } from 'next';

@@ -1,5 +1,6 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { createClient } from '@lib/supabase/component';
+'use client'
+import { AlertDialog } from '@/components/alert-dialog';
+import { createClient } from '@/utils/supabase/client';
 import { type Job, type Note } from 'lib/types';
 import { type HTMLAttributes } from 'react';
 import { cn } from 'shared';

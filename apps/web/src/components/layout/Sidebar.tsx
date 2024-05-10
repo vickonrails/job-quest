@@ -23,7 +23,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <span>Dashboard</span>
                     </NavLink>
 
-                    <NavLink href="/job-tracker">
+                    <NavLink href="/jobs-tracker">
                         <Folder className="mr-2" />
                         <span>Job Tracker</span>
                     </NavLink>

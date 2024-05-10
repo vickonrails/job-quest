@@ -1,7 +1,8 @@
-import { createClient } from '@lib/supabase/component';
-import { type Resume } from '@lib/types';
-import { debounce } from '@utils/debounce';
-import { useRouter } from 'next/router';
+
+import { debounce } from '@/utils/debounce';
+import { createClient } from '@/utils/supabase/client';
+import { type Resume } from 'lib/types';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { Input, Textarea } from 'ui';
