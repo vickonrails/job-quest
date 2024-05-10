@@ -3,8 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "exports": {
+    "./button": "./src/components/button.tsx",
+    "./auth-card": "./src/components/auth-card.tsx",
+    "./logo": "./src/components/logo.tsx",
+    ".": "./src/index.ts"
+  },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",

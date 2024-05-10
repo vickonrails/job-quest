@@ -2,7 +2,7 @@ import { Layout } from '@components/layout';
 import { createClient } from '@lib/supabase/server-prop';
 import { type GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { type PageProps } from '..';
+import { type PageProps } from '../archive-index';
 
 export default function Profile({ user, profile }: PageProps) {
     return (
@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         await supabase.auth.signOut();
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth',
                 permanent: false
             }
         }

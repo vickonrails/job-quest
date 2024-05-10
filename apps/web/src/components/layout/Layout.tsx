@@ -7,7 +7,7 @@ import { cn } from 'shared';
 import { Banner } from 'ui';
 import { type Profile } from '../../../lib/types';
 import { Navbar } from './Navbar';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from './sidebar';
 
 // TODO: Error handling in this component is not good
 export interface LayoutProps extends HTMLAttributes<HTMLElement> {
@@ -53,3 +53,4 @@ export const Layout: FC<LayoutProps> = ({ children, pageTitle, className, profil
 
     )
 }
+

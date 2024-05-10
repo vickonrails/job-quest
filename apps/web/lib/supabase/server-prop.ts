@@ -9,6 +9,7 @@ export function createClient(context: GetServerSidePropsContext) {
         {
             cookies: {
                 get(name: string) {
+                    console.log(context.req.cookies[name])
                     return context.req.cookies[name]
                 },
                 set(name: string, value: string, options: CookieOptions) {

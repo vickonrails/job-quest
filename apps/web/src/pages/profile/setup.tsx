@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react';
 import { type Database } from 'shared';
 import { useProfile } from 'src/hooks/useProfile';
 import { SetupProvider } from 'src/hooks/useSetupContext';
-import { type PageProps } from '..';
+import { type PageProps } from '../archive-index';
 
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
     if (!userId) return;
@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         await supabase.auth.signOut();
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth',
                 permanent: false
             }
         }

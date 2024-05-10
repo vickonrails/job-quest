@@ -1,5 +1,5 @@
 import GoogleAuthBtn from '@/components/google-auth-button'
-import { AuthCard } from '@job.quest/ui/auth-card'
+import { AuthCard } from 'ui/auth-card'
 
 export default function SignIn() {
     return (

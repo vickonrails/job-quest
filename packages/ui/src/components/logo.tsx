@@ -1,5 +1,5 @@
-import { type FC, type HTMLAttributes } from 'react'
-import clsx from 'clsx'
+import clsx from 'clsx';
+import { type FC, type HTMLAttributes } from 'react';
 
 type LogoProps = HTMLAttributes<HTMLElement>;
 
@@ -14,4 +14,4 @@ const Logo: FC<LogoProps> = ({ className, ...rest }) => {
     )
 }
 
-export { Logo }
+export { Logo };

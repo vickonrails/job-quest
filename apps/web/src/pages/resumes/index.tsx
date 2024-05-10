@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         await supabase.auth.signOut();
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth',
                 permanent: false
             }
         }

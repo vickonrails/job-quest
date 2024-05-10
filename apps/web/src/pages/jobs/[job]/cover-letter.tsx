@@ -9,7 +9,7 @@ import { type GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useCoverLetter } from 'src/hooks/useCoverLetter'
 import { useMagicWrite } from 'src/hooks/useMagicWrite'
-import { type PageProps } from 'src/pages'
+import { type PageProps } from '@/pages/archive-index'
 import { Button, Spinner } from 'ui'
 
 interface CoverLetterProps extends PageProps {
@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!user) {
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth',
                 permanent: false
             }
         }

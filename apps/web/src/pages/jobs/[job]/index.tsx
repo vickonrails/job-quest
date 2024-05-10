@@ -6,7 +6,7 @@ import { createClient } from '@lib/supabase/server-prop';
 import { type Job } from 'lib/types';
 import { type GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { type PageProps } from 'src/pages';
+import { type PageProps } from '@/pages/archive-index';
 
 interface JobDetailsPageProps extends PageProps {
     job: Job
@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!user) {
         return {
             redirect: {
-                destination: '/sign-in',
+                destination: '/auth',
                 permanent: false
             }
         }

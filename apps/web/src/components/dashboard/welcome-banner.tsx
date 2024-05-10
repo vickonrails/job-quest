@@ -5,11 +5,11 @@ import { useMemo, type HTMLAttributes } from 'react';
 import { SummaryCard, SummaryCardType } from './summary-card';
 
 interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
-    profile: Profile
+    // profile: Profile
     dashboardSummary: DashboardSummary[]
 }
 
-export function JobsSummaryCards({ className, profile, dashboardSummary, ...rest }: WelcomeBannerProps) {
+export function JobsSummaryCards({ className, dashboardSummary, ...rest }: WelcomeBannerProps) {
     const summaryCount = useMemo(() => getSummaryCount(dashboardSummary), [dashboardSummary])
 
     return (
@@ -17,7 +17,7 @@ export function JobsSummaryCards({ className, profile, dashboardSummary, ...rest
             className={clsx('', className)}
             {...rest}
         >
-            <Greeting profile={profile} />
+            {/* <Greeting profile={profile} /> */}
             <main className="flex gap-4 h-60 items-stretch">
                 <SummaryCard
                     title="Recently Added"
