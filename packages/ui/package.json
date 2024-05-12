@@ -7,6 +7,7 @@
     "./button": "./src/components/button.tsx",
     "./auth-card": "./src/components/auth-card.tsx",
     "./logo": "./src/components/logo.tsx",
+    "./spinner": "./src/components/spinner.tsx",
     ".": "./src/index.ts"
   },
   "dependencies": {

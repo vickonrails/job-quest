@@ -1,5 +1,5 @@
 import { type DropResult } from '@hello-pangea/dnd';
-import { type KanbanColumn } from '@utils/transform-to-column';
+import { type KanbanColumn } from '@/utils/transform-to-column';
 
 export type InvolvedColumns = ReturnType<typeof getInvolvedColumns>
 

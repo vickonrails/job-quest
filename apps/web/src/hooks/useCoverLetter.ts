@@ -1,8 +1,8 @@
 import { useToast } from '@/components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
-import { type CoverLetter, type Job } from '@lib/types';
+import { debounce } from '@/utils/debounce';
+import { createClient } from '@/utils/supabase/client';
 import { type User } from '@supabase/supabase-js';
-import { debounce } from '@utils/debounce';
+import { type CoverLetter, type Job } from 'lib/types';
 import { useCallback, useState } from 'react';
 
 /**

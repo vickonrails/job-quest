@@ -2,7 +2,7 @@
 
 import { type Resume } from 'lib/types'
 import { FormProvider, useForm } from 'react-hook-form'
-import { type FormValues } from 'resume-templates/src/templates/simple'
+import { type FormValues } from 'resume-templates'
 import { Preview } from './builder/preview'
 import { ResumeForm } from './builder/sections'
 

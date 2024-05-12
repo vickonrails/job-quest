@@ -1,7 +1,8 @@
 'use client'
+
 import NoteForm from '@/components/notes/note-form';
 import NotesList from '@/components/notes/note-list';
-import { JobEditSheet } from '@/components/sheet/jobsEditSheet';
+import { JobEditSheet } from '@/components/sheet/jobs-edit-sheet';
 import { type Job } from 'lib/types';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { CoverLetterSection } from './cover-letter-section';
@@ -9,7 +10,7 @@ import { JobDescription } from './description-body';
 import { Header } from './header';
 import { ResumeSection } from './resume-section';
 
-export const JobDetails = ({ job }: { job?: Job }) => {
+export const JobDetails = ({ job }: { job: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
     if (!job) return;
 

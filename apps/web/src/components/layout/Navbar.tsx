@@ -1,8 +1,8 @@
-import { getUserProfile } from '@/queries/auth';
 import { PanelLeftClose } from 'lucide-react';
 import { type FC, type HTMLAttributes, type ReactNode } from 'react';
 import { FeedbackButton } from '../feedback-widget';
 import { NavbarMenu } from './navbar-menu';
+import { getUserProfile } from '@/db/api';
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
     toggleSidebar?: () => void
@@ -15,7 +15,8 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
 
 const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) => {
     const isTitleString = typeof pageTitle === 'string';
-    const profile = await getUserProfile();
+    const { data: profile } = await getUserProfile();
+    if (!profile) return null;
 
     return (
         <nav data-testid="navbar" className="sticky top-0 border-b bg-white" {...props}>

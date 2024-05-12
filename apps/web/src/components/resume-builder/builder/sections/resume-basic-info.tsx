@@ -19,7 +19,8 @@ export function BasicInfoSection() {
     const { formState: { errors }, register } = form;
 
     const saveFn = useCallback(async ({ resume }: { resume: Resume }) => {
-        resume.id = resume.id ?? router.query.resume;
+        // TODO: this needs to be fixed
+        resume.id = resume.id ?? '';
         const { data, error } = await client.from('resumes').upsert(resume);
         if (error) throw error;
         return data;

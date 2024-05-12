@@ -1,4 +1,4 @@
-import { createClient } from '@lib/supabase/api';
+import { createClient } from '@/utils/supabase/server';
 import { readFileSync } from 'fs';
 import { type NextApiHandler } from 'next';
 import path from 'path';
@@ -7,7 +7,7 @@ const apiServiceURL = process.env.API_SERVICE_URL as string;
 
 const handler: NextApiHandler = async (req, res) => {
     const { html } = req.body as { html: string }
-    const supabase = createClient(req, res)
+    const supabase = createClient()
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) return res.status(500).json({ error: 'An error occurred' })
 

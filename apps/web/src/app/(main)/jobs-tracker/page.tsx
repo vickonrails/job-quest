@@ -1,18 +1,19 @@
 import JobsKanbanContainer from '@/components/jobs-kanban';
-import { getJobs } from '@/queries/jobs';
-import { Button } from 'ui/button';
+import { getJobs } from '@/db/queries/jobs';
+import { createClient } from '@/utils/supabase/server';
+import { Hydrate, QueryClient, dehydrate } from '@tanstack/react-query';
 
+// TODO: an optimization I can do here is to disable fetching the job description on the kanban
 export default async function JobTrackerPage() {
-    const jobs = await getJobs()
+    const queryClient = new QueryClient()
+    const client = createClient()
+    await queryClient.prefetchQuery({ queryKey: ['jobs', ''], queryFn: () => getJobs(client) })
+
     return (
         <section className="h-full py-6">
-            <section className="flex justify-between items-center mb-3 px-4">
-                {/* <h1 className="text-xl flex font-bold gap-2 items-center">
-                    {isUpdating && <Spinner />}
-                </h1> */}
-                <Button>Add New</Button>
-            </section>
-            <JobsKanbanContainer jobs={jobs ?? []} />
+            <Hydrate state={dehydrate(queryClient)}>
+                <JobsKanbanContainer />
+            </Hydrate>
         </section>
     )
 }

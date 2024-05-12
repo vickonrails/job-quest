@@ -1,12 +1,12 @@
 'use client'
 
-import { DragDropContext, type OnDragEndResponder } from '@hello-pangea/dnd';
 import { transformJobs } from '@/utils/transform-to-column';
+import { DragDropContext, type OnDragEndResponder } from '@hello-pangea/dnd';
+import { type Job } from 'lib/types';
 import { useKanbanColumns } from 'src/hooks/useKanbanColumns';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
 import KanbanCol, { type KanbanCardProps } from './kanban-column';
-import { type Job } from 'lib/types';
 
 interface KanbanContainerProps {
     jobs: Job[],

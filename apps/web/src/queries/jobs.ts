@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { type Client } from '.';
-import { getUser } from './auth';
+import { getUser } from '@/db/api';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -35,10 +35,9 @@ const defaultQuery: QueryProps = {
     },
 }
 
-
 export async function getJob(jobId: string) {
     const client = createClient()
-    const { user } = await getUser()
+    const { data: { user } } = await getUser()
     if (!user) return null;
     const { data } = await fetchJobs(client, { userId: user.id, jobId })
     return data?.[0]
@@ -46,7 +45,7 @@ export async function getJob(jobId: string) {
 
 export async function getJobs(options?: QueryProps) {
     const client = createClient()
-    const { user } = await getUser()
+    const { data: { user } } = await getUser()
     if (!user) return null;
     return (await fetchJobs(client, { queryProps: options ?? defaultQuery, userId: user.id })).data
 }
@@ -87,14 +86,14 @@ async function fetchJobs(client: Client, options: FetchJobsOptions) {
 
 export async function getResumes() {
     const client = createClient();
-    const { user } = await getUser();
+    const { data: { user } } = await getUser();
     if (!user) return null;
     return (await fetchResumes(client, user?.id)).data
 }
 
 export async function getResume(id: string) {
     const client = createClient();
-    const { user } = await getUser();
+    const { data: { user } } = await getUser();
     if (!user) return null;
     return (await fetchResume(client, { resumeId: id, userId: user.id })).data
 }

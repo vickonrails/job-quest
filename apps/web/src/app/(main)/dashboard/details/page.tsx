@@ -37,7 +37,8 @@ const defaultQuery: QueryProps = {
     },
 }
 
-export function parseQuery(query: string): QueryProps {
+// TODO: move to separate function
+function parseQuery(query: string): QueryProps {
     const parts = qs.parse(query) as ParsedResult;
     const parsedQuery: QueryProps = { ...defaultQuery };
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { createClient } from 'lib/supabase/component'
 import { type Job } from 'lib/types'
 import { useRouter } from 'next/navigation'
 import { Status_Lookup } from 'shared'
 import { Table, type Column, type TableActions } from '../Table'
+import { createClient } from '@/utils/supabase/client'
 
 export const columns: Column<Job> = [
     { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },

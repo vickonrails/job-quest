@@ -1,4 +1,4 @@
-import { createClient } from '@lib/supabase/api';
+import { createClient } from '@/utils/supabase/server';
 import { type NextApiHandler, type NextApiRequest } from 'next';
 import { OpenAI } from 'openai';
 import { type WriteProps } from 'src/hooks/useMagicWrite';
@@ -23,7 +23,7 @@ const handler: NextApiHandler = async (req: Request, res) => {
         return res.status(500).json({ error: 'OpenAI key not provided' })
     }
 
-    const supabase = createClient(req, res)
+    const supabase = createClient()
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error) return res.status(500).json({ error: 'An error occurred' })

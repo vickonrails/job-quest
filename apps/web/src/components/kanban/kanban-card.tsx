@@ -13,7 +13,7 @@ import { type KanbanCardProps } from './kanban-column'
 export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: KanbanCardProps) {
     const router = useRouter()
     const navigateToJob = (job: Job) => {
-        return router.push(`/jobs/${job.id}`);
+        return router.push(`/jobs-tracker/${job.id}`);
     }
 
     return (

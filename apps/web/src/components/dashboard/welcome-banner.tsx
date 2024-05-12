@@ -1,4 +1,4 @@
-import { getUserProfile } from '@/queries/auth';
+import { getUserProfile } from '@/db/api';
 import { type DashboardSummary, type Profile } from 'lib/types';
 import { Building, FolderHeart, ListStart, Timer } from 'lucide-react';
 import { useMemo, type HTMLAttributes } from 'react';
@@ -11,7 +11,7 @@ interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
 
 export async function JobsSummaryCards({ className, dashboardSummary, ...rest }: WelcomeBannerProps) {
     const summaryCount = useMemo(() => getSummaryCount(dashboardSummary), [dashboardSummary])
-    const profile = await getUserProfile();
+    const { data: profile } = await getUserProfile();
     return (
         <section
             className={cn('', className)}

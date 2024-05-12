@@ -2,8 +2,7 @@ import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { Complex, Simple } from 'resume-templates';
-import { type FormValues } from '@/pages/resumes-archive/[resume]';
+import { Complex, type FormValues, Simple } from 'resume-templates';
 import { Button, Select } from 'ui';
 
 /**

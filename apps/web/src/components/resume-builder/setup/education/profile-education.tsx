@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
 import { useUserContext } from 'src/pages/_app';
-import { Spinner } from 'ui';
+import { Spinner } from 'ui/spinner';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
