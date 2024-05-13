@@ -2,10 +2,10 @@ import { Accordion, AccordionItem } from '@/components/accordion'
 import { Checkbox } from '@/components/checkbox'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
+import { useSetupContext } from '@/hooks/useSetupContext'
 import { type Education } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { useUserContext } from 'src/pages/_app'
 import { Input, Textarea } from 'ui'
 import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
@@ -162,7 +162,7 @@ interface HighlightsProps {
 
 export function EducationHighlights({ form, index, onDeleteClick, entity, setHighlightsToDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `education.${index}.highlights`, control: form.control, keyName: '_id' })
-    const user = useUserContext()
+    const { user } = useSetupContext()
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]

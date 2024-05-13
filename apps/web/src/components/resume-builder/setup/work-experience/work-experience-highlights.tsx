@@ -1,10 +1,10 @@
-import { type Highlight, type WorkExperience } from '@lib/types'
+import { useSetupContext } from '@/hooks/useSetupContext'
+import { type WorkExperience } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 import { Textarea } from 'ui'
-import { HighlightFooter } from '../components/highlights-footer'
 import { v4 as uuid } from 'uuid'
-import { useUserContext } from 'src/pages/_app'
+import { HighlightFooter } from '../components/highlights-footer'
 
 interface HighlightsProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -16,7 +16,7 @@ interface HighlightsProps {
 
 export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
-    const user = useUserContext();
+    const { user } = useSetupContext();
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]

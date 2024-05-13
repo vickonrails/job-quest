@@ -31,9 +31,22 @@ export async function updateJob(job: Job, userId: string) {
         if (error) throw error
 
         revalidateTag(`jobs-${job.id}`)
+        revalidateTag('jobs')
         return { success: true }
 
     } catch (error) {
+        return { success: false }
+    }
+}
+
+export async function deleteJob(id: string) {
+    try {
+        const client = createClient()
+        const { error } = await client.from('jobs').delete().eq('id', id);
+        if (error) throw new Error()
+        revalidateTag('jobs')
+        return { success: true }
+    } catch {
         return { success: false }
     }
 }

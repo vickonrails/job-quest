@@ -10,19 +10,18 @@ import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-    if (!userId) return;
     // TODO: error handling
-    const experiences = await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)
-    return experiences.data
+    if (!userId) throw new Error('userId not provided');
+    return (await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)).data
 }
 
-export function useWorkExperience({ userId }: { userId?: string }) {
+export function useWorkExperience() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const { next } = useSetupContext()
-    const queryResult = useQuery(['work_experience'], () => fetchWorkExperience({ userId, client }));
+    const { next, user } = useSetupContext()
+    const queryResult = useQuery(['work_experience'], () => fetchWorkExperience({ userId: user?.id, client }))
     const form = useForm<{ workExperience: WorkExperience[] }>({
-        defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId })] }
+        defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId: user?.id })] }
     })
     const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
@@ -35,7 +34,7 @@ export function useWorkExperience({ userId }: { userId?: string }) {
     // TODO: I think I should do error handling inside of here.
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
-            if (!userId) return
+            if (!user?.id) return
             const highlights: Highlight[] = []
 
             try {
@@ -55,7 +54,7 @@ export function useWorkExperience({ userId }: { userId?: string }) {
                     return work
                 })
 
-                const { data, error } = await client.from('work_experience').upsert(preparedValues).select();
+                const { data, error } = await client.from('work_experience').upsert(preparedValues).select('*').returns<WorkExperience[]>();
                 if (error) throw new Error(error.message)
 
                 if (highlightsToDelete.length > 0) {
@@ -64,11 +63,14 @@ export function useWorkExperience({ userId }: { userId?: string }) {
                 }
 
                 const preparedHighlights = highlights.filter(x => x.work_experience_id).map(highlight => setEntityId<Highlight>(highlight))
-
                 const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
                 if (highlightsError) throw new Error(highlightsError.message);
 
-                return data
+                const newWorkExperience = data.map(experience => {
+                    experience.highlights = highlights.filter(x => x.work_experience_id === experience.id)
+                    return experience;
+                })
+                return newWorkExperience
             } catch (error) {
                 throw error
             }
@@ -81,8 +83,8 @@ export function useWorkExperience({ userId }: { userId?: string }) {
     })
 
     useEffect(() => {
-        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId })] })
-    }, [queryResult.data, form])
+        form.reset({ workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId: user?.id })] })
+    }, [queryResult.data, form, user?.id])
 
     return {
         experiences: queryResult,

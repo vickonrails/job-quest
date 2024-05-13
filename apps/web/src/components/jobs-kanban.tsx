@@ -1,6 +1,6 @@
 'use client'
 
-import { useJobs } from '@/hooks';
+import { deleteJob } from '@/actions/job';
 import { useDeleteModal } from '@/hooks/useDeleteModal';
 import { useEditSheet } from '@/hooks/useEditModal';
 import { createClient } from '@/utils/supabase/client';
@@ -31,9 +31,8 @@ const deleteTextWarning = `
     This action cannot be undone.
 `
 
-export default function JobsKanbanContainer() {
+export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
     const client = createClient()
-    const { data, refetch } = useJobs()
     const [isUpdating, setIsUpdating] = useState(false)
 
     const {
@@ -45,13 +44,11 @@ export default function JobsKanbanContainer() {
         loading: isDeleting
     } = useDeleteModal({
         onDelete: async (id: string) => {
-            const { error } = await client.from('jobs').delete().eq('id', id);
-            if (error) throw error;
-        },
-        refresh: async () => {
-            await refetch();
+            const { success } = await deleteJob(id)
+            if (!success) throw new Error();
         }
     })
+
     const { isOpen: editSheetOpen, showEditSheet, selectedEntity, closeEditSheet } = useEditSheet<Job>({})
     const openEditSheet = (job?: Job) => { showEditSheet(job) }
 
@@ -61,12 +58,12 @@ export default function JobsKanbanContainer() {
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}
                 </h1>
-                <Button>Add New</Button>
+                <Button onClick={() => openEditSheet()}>Add New</Button>
             </section>
             <JobsKanban
                 openEditSheet={openEditSheet}
                 openDeleteDialog={showDeleteDialog}
-                jobs={data?.jobs ?? []}
+                jobs={jobs ?? []}
                 onUpdateStart={() => setIsUpdating(true)}
                 onUpdateEnd={() => setIsUpdating(false)}
             />

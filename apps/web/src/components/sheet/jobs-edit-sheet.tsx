@@ -1,4 +1,4 @@
-import { updateJob } from '@/actions/update-job';
+import { updateJob } from '@/actions/job';
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint';
 import { useToast } from '@/components/toast/use-toast';
 import { createClient } from '@/utils/supabase/client';
@@ -29,7 +29,13 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
             if (!user?.id) throw new Error('Not Authenticated')
             const result = await updateJob(job, user.id)
             // TODO: better error message?
-            if (result.success) throw new Error('')
+            if (!result.success) throw new Error('')
+            toast({
+                variant: 'success',
+                title: 'Job updated',
+            })
+            reset()
+            props?.onOpenChange?.(false)
         } catch (err) {
             toast({
                 variant: 'destructive',

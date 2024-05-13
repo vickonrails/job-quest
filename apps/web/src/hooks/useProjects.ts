@@ -5,16 +5,14 @@ import { type Project } from 'lib/types';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
-import { useUserContext } from 'src/pages/_app';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
-export function useProjects({ userId }: { userId?: string }) {
+export function useProjects() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const { next } = useSetupContext()
-    const user = useUserContext()
-    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: userId, client }));
+    const { next, user } = useSetupContext()
+    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: user?.id, client }));
     const form = useForm<{ projects: Project[] }>({
         defaultValues: { projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] }
     })
@@ -28,7 +26,7 @@ export function useProjects({ userId }: { userId?: string }) {
     // TODO: I think I should do error handling inside of here.
     const updateProjects = useMutation({
         mutationFn: async ({ values }: { values: Project[] }) => {
-            if (!userId) return
+            if (!user?.id) return
             const preparedValues = values.map(project => {
                 if (!project.id) {
                     project.id = uuid()
@@ -52,7 +50,7 @@ export function useProjects({ userId }: { userId?: string }) {
 
     useEffect(() => {
         form.reset({ projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] })
-    }, [queryResult.data, form])
+    }, [queryResult.data, form, user?.id])
 
     return {
         projects: queryResult,

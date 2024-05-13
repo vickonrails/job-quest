@@ -1,8 +1,7 @@
 'use client'
 
+import { updateProfile } from '@/actions/profile/setup';
 import { useToast } from '@/components/toast/use-toast';
-import { createClient } from '@/utils/supabase/client';
-import { useMutation } from '@tanstack/react-query';
 import { type Profile } from 'lib/types';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
@@ -11,7 +10,6 @@ import { StepContainer } from './components/container';
 
 export function BasicInformation({ profile }: { profile: Profile }) {
     const { next, user } = useSetupContext()
-    const client = createClient()
     const { toast } = useToast()
     const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<Profile>({
         defaultValues: {
@@ -22,19 +20,13 @@ export function BasicInformation({ profile }: { profile: Profile }) {
         }
     });
 
-    const updateBasicInfo = useMutation({
-        mutationFn: async ({ values, userId }: { values: Profile, userId: string }) => {
-            const { error } = await client.from('profiles').update({ ...values, id: userId }).eq('id', userId);
-            if (error) throw error;
-        }
-    })
-
     // TODO: add validation
-    const onSubmit = async (values: Profile) => {
+    const onSubmit = async (profile: Profile) => {
         if (!user) return;
 
         try {
-            await updateBasicInfo.mutateAsync({ values, userId: user?.id });
+            const { success } = await updateProfile({ profile, userId: user.id })
+            if (!success) throw new Error();
             next();
         } catch (error) {
             toast({

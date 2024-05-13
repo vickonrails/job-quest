@@ -8,10 +8,8 @@ export default async function ProfileSetupPage() {
   if (!profile || !user) return <p>No Profile oh</p>
 
   return (
-    <main>
-      <section className="flex">
-        <ProfileSetup profile={profile} user={user} />
-      </section>
+    <main className="overflow-auto flex">
+      <ProfileSetup profile={profile} user={user} />
     </main>
   )
 }

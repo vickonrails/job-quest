@@ -23,7 +23,7 @@ export default function ProfileSetup({ profile, user }: { profile: Profile, user
     return (
         <SetupProvider value={{ step, next, setStep, prev, canMoveNext, canMovePrev, user }}>
             <SetupNav />
-            <main className="p-6 flex-1">
+            <main className="p-6 flex-1 overflow-auto">
                 <Steps profile={profile} />
             </main>
         </SetupProvider>

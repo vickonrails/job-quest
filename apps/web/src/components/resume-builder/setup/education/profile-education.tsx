@@ -26,7 +26,7 @@ export function EducationStep() {
         fieldsArr,
         updateEducation,
         setHighlightsToDelete
-    } = useEducation({ userId: user?.id });
+    } = useEducation();
 
     const { formState } = form
     const { fields, remove, append } = fieldsArr

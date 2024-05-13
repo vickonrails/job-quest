@@ -1,35 +1,20 @@
 'use client'
 
+import { updateProfile } from '@/actions/profile/setup';
 import { Chip } from '@/components/chips';
 import { useToast } from '@/components/toast/use-toast';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type Profile } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input } from 'ui';
 import { StepContainer } from '../components/container';
-import { type Profile } from 'lib/types';
-import { createClient } from '@/utils/supabase/client';
 
 export default function Skills({ profile }: { profile: Profile }) {
-    const client = createClient()
-    const queryClient = useQueryClient();
     const { next, user } = useSetupContext()
     const form = useForm<Profile>({ defaultValues: { skills: profile.skills ?? [] } })
     const formRef = createRef<HTMLFormElement>()
     const { toast } = useToast()
-
-    const handleSkillsUpdate = useMutation({
-        mutationFn: async (skills: Pick<Profile, 'skills'>) => {
-            if (!user) return
-            const { data, error } = await client.from('profiles').update(skills).eq('id', user.id).select('*').single();
-            if (error) throw error;
-            return data;
-        },
-        onSuccess: (data) => {
-            queryClient.setQueryData(['profile'], { ...data })
-        }
-    })
 
     useEffect(() => {
         const form = formRef.current;
@@ -48,9 +33,12 @@ export default function Skills({ profile }: { profile: Profile }) {
 
 
     const onSubmit = async () => {
-        const values = form.getValues('skills');
+        const skills = form.getValues('skills');
+        if (!user?.id) return;
         try {
-            await handleSkillsUpdate.mutateAsync({ skills: values })
+            const newProfile: Profile = { ...profile, skills }
+            const { success } = await updateProfile({ profile: newProfile, userId: user?.id })
+            if (!success) throw new Error()
             next();
         } catch (error) {
             toast({

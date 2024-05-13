@@ -8,6 +8,8 @@
     "./auth-card": "./src/components/auth-card.tsx",
     "./logo": "./src/components/logo.tsx",
     "./spinner": "./src/components/spinner.tsx",
+    "./input": "./src/components/input.tsx",
+    "./textarea": "./src/components/textarea.tsx",
     ".": "./src/index.ts"
   },
   "dependencies": {
