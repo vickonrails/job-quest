@@ -43,8 +43,8 @@ function MyApp({
 
 const AuthClientContext = createContext<User | null>(null)
 
-export function useUserContext() {
-  return useContext(AuthClientContext)
-}
+// export function useUserContext() {
+//   return useContext(AuthClientContext)
+// }
 
 export default MyApp

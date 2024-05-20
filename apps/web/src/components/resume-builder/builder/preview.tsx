@@ -1,8 +1,9 @@
+import { type Education, type Project, type WorkExperience, type Resume } from 'lib/types';
 import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { Complex, type FormValues, Simple } from 'resume-templates';
+import { FormProps, type DeepPartialSkipArrayKey, type UseFormReturn } from 'react-hook-form';
+import { Complex, Simple, type FormValues } from 'resume-templates';
 import { Button, Select } from 'ui';
 
 /**
@@ -42,22 +43,35 @@ const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>, resumeT
     return window.URL.createObjectURL(pdfBlob)
 }
 
+interface PreviewProps {
+    resumeForm: UseFormReturn<{ resume: Resume }>
+    workExperienceForm: UseFormReturn<{ workExperience: WorkExperience[] }>
+    projectsForm: UseFormReturn<{ projects: Project[] }>
+    educationForm: UseFormReturn<{ education: Education[] }>
+}
 /**
  * Resume Preview
  */
-export function Preview() {
-    const { control } = useFormContext<FormValues>();
-    const values = useWatch<FormValues>({ control: control });
+export function Preview({ resumeForm, workExperienceForm, projectsForm, educationForm }: PreviewProps) {
+    const { watch: watchResume } = resumeForm;
+    const { watch: watchExperience } = workExperienceForm;
+    const { watch: watchProjects } = projectsForm;
+    const { watch: watchEducation } = educationForm;
+
+    const resume = watchResume('resume');
+    const workExperience = watchExperience('workExperience');
+    const projects = watchProjects('projects');
+    const education = watchEducation('education');
     const [downloading, setDownloading] = useState(false)
     const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
 
     const handleExport = () => {
         setDownloading(true)
-        getObjectURL(values, resumeTemplate).then(res => {
-            window.open(res)
-        }).catch(err => {
-            // 
-        }).finally(() => setDownloading(false))
+        // getObjectURL(values, resumeTemplate).then(res => {
+        //     window.open(res)
+        // }).catch(err => {
+        //     // 
+        // }).finally(() => setDownloading(false))
     }
 
     return (
@@ -80,7 +94,7 @@ export function Preview() {
             {/* TODO: fix button loading states for all variants */}
             <div className="bg-white w-full">
                 <ResumeTemplate
-                    values={values}
+                    values={{ resume, workExperience, projects, education }}
                     template={resumeTemplate}
                 />
             </div>

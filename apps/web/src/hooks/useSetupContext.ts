@@ -8,7 +8,7 @@ export interface SetupContext {
     canMoveNext: boolean,
     setStep: (state: number) => void
     canMovePrev: boolean,
-    user?: User
+    user: User | null
 }
 
 // TODO: use context
@@ -18,7 +18,8 @@ const setupContextDefault: SetupContext = {
     prev: () => { /** */ },
     setStep: () => { /** */ },
     canMoveNext: false,
-    canMovePrev: false
+    canMovePrev: false,
+    user: null
 }
 
 const SetupContext = createContext(setupContextDefault)

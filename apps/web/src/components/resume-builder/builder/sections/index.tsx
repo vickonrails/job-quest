@@ -47,88 +47,77 @@ export async function deleteResume(id: string, client: SupabaseClient<Database>)
     }
 }
 
-export const ResumeForm = memo(({ resume }: { resume: Resume }) => {
-    const form = useFormContext<FormValues>();
-    const router = useRouter()
-    const formRef = createRef<HTMLFormElement>()
-    const client = createClient();
-    const { toast } = useToast();
-    const {
-        showDeleteDialog,
-        onCancel,
-        handleDelete: deleteFn,
-        loading,
-        setIsOpen,
-        isOpen
-    } = useDeleteModal({
-        onDelete: async (id: string) => { await deleteResume(id, client) }
-    });
+// export const ResumeForm = memo(({ resume }: { resume: Resume }) => {
+//     const form = useFormContext<FormValues>()
+//     const router = useRouter()
+//     const formRef = createRef<HTMLFormElement>()
+//     const client = createClient();
+//     const { toast } = useToast();
+//     const {
+//         showDeleteDialog,
+//         onCancel,
+//         handleDelete: deleteFn,
+//         loading,
+//         setIsOpen,
+//         isOpen
+//     } = useDeleteModal({
+//         onDelete: async (id: string) => { await deleteResume(id, client) }
+//     });
 
-    useEffect(() => {
-        const form = formRef.current;
-        const handler = (ev: KeyboardEvent) => {
-            if (ev.key === 'Enter') {
-                ev.preventDefault();
-                return;
-            }
-        }
+//     useEffect(() => {
+//         const form = formRef.current;
+//         const handler = (ev: KeyboardEvent) => {
+//             if (ev.key === 'Enter') {
+//                 ev.preventDefault();
+//                 return;
+//             }
+//         }
 
-        form?.addEventListener('keypress', handler);
-        return () => {
-            form?.removeEventListener('keypress', handler)
-        }
-    }, [formRef])
+//         form?.addEventListener('keypress', handler);
+//         return () => {
+//             form?.removeEventListener('keypress', handler)
+//         }
+//     }, [formRef])
 
-    const handleDelete = async () => {
-        try {
-            await deleteFn();
-            return router.push('/resumes')
-        } catch (error) {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurred'
-            })
-        }
-    }
+//     const handleDelete = async () => {
+//         try {
+//             await deleteFn();
+//             return router.push('/resumes')
+//         } catch (error) {
+//             toast({
+//                 variant: 'destructive',
+//                 title: 'An error occurred'
+//             })
+//         }
+//     }
 
-    return (
-        <form className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto" ref={formRef}>
-            <section className="max-w-xl mx-auto">
-                <BackButton onClick={() => router.back()} />
-                <header>
-                    <h3 className="font-medium text-lg">Personal Information</h3>
-                    <p className="mb-4 text-sm text-muted-foreground">
-                        Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count.
-                    </p>
-                </header>
+//     return (
+//         <>
+//             <WorkExperienceSection />
+//             <ProjectsSection />
+//             <EducationSection />
+//             <Skills />
+//             <Button type="button" variant="destructive" className="flex items-center gap-1" onClick={() => showDeleteDialog(resume)}>
+//                 <Trash2 size={18} />
+//                 <span>Delete</span>
+//             </Button>
+//             {/* <DevTool control={form.control} /> */}
 
-                {/* TODO: use context to avoid passing session to every component */}
-                <BasicInfoSection />
-                <WorkExperienceSection />
-                <ProjectsSection />
-                <EducationSection />
-                <Skills />
-                <Button type="button" variant="destructive" className="flex items-center gap-1" onClick={() => showDeleteDialog(resume)}>
-                    <Trash2 size={18} />
-                    <span>Delete</span>
-                </Button>
-                <DevTool control={form.control} />
-            </section>
 
-            <AlertDialog
-                open={isOpen}
-                title="Delete Confirmation"
-                description={<DeleteDescription resumeId={resume.id} />}
-                onOk={handleDelete}
-                onOpenChange={setIsOpen}
-                onCancel={onCancel}
-                isProcessing={loading}
-            />
-        </form>
-    )
-})
+//             <AlertDialog
+//                 open={isOpen}
+//                 title="Delete Confirmation"
+//                 description={<DeleteDescription resumeId={resume.id} />}
+//                 onOk={handleDelete}
+//                 onOpenChange={setIsOpen}
+//                 onCancel={onCancel}
+//                 isProcessing={loading}
+//             />
+//         </>
+//     )
+// })
 
-ResumeForm.displayName = 'ResumeForm'
+// ResumeForm.displayName = 'ResumeForm'
 
 function DeleteDescription({ resumeId }: { resumeId: string }) {
     const client = createClient();
@@ -160,8 +149,8 @@ function DeleteDescription({ resumeId }: { resumeId: string }) {
     )
 }
 
-function Skills() {
-    const form = useFormContext<FormValues>();
+export function Skills({ form }: { form: UseFormReturn<{ resume: Resume }> }) {
+    // const form = useFormContext<FormValues>();
     return (
         <section className="mb-4">
             <h3 className="font-medium text-lg">Skills</h3>
@@ -172,7 +161,7 @@ function Skills() {
 }
 
 // TODO: refactor to use SkillsForm from profile setup
-export function SkillsForm({ form }: { form: UseFormReturn<FormValues> }) {
+export function SkillsForm({ form }: { form: UseFormReturn<{ resume: Resume }> }) {
     const [skillValue, setSkillValue] = useState<string>('')
     const inputRef = createRef<HTMLInputElement>()
 

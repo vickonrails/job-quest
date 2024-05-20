@@ -35,7 +35,7 @@ export async function updateJob(job: Job, userId: string) {
         return { success: true }
 
     } catch (error) {
-        return { success: false }
+        return { success: false, error }
     }
 }
 
@@ -43,10 +43,10 @@ export async function deleteJob(id: string) {
     try {
         const client = createClient()
         const { error } = await client.from('jobs').delete().eq('id', id);
-        if (error) throw new Error()
+        if (error) throw error
         revalidateTag('jobs')
         return { success: true }
-    } catch {
-        return { success: false }
+    } catch (error) {
+        return { success: false, error }
     }
 }

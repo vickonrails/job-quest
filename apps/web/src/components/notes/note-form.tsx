@@ -5,15 +5,14 @@ import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Job, type NoteInsertDTO } from 'lib/types';
 import { useState } from 'react';
-import { useUserContext } from 'src/pages/_app';
-import { Button, Textarea } from 'ui';
+import { Button } from 'ui/button';
+import { Textarea } from 'ui/textarea';
 
 function NoteForm({ job }: { job: Job }) {
     const [note, setNote] = useState('')
     const { toast } = useToast()
-    const client = createClient();
+    const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
 
     // TODO: error handling
     const { mutateAsync, isLoading: isAddingNotes } = useMutation({
@@ -30,6 +29,7 @@ function NoteForm({ job }: { job: Job }) {
 
     const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
+        const { data: { user } } = await client.auth.getUser();
         if (!note || !user) return;
         try {
             await mutateAsync({

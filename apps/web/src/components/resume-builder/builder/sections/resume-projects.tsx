@@ -1,79 +1,36 @@
+import { updateProjects } from '@/actions/resume';
 import { AlertDialog } from '@/components/alert-dialog';
 import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
+import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
 import { createClient } from '@/utils/supabase/client';
-import { useQuery } from '@tanstack/react-query';
 import { type Project } from 'lib/types';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { useFieldArray, useFormContext, useWatch, type UseFormReturn } from 'react-hook-form';
+import { useParams } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
 import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
-import { useUserContext } from 'src/pages/_app';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from '.';
 
-function useAutosave({ form }: { form: UseFormReturn<{ projects: Project[] }> }) {
-    const router = useRouter();
-    const client = createClient();
-
-    const saveFn = async ({ projects }: { projects: Project[] }) => {
-        const preparedProjects = projects.map((project) => {
-            project.resume_id = router.query.resume as string;
-            return project
-        })
-
-        const { data, error } = await client.from('projects').upsert(preparedProjects);
-        if (error) throw error;
-        return data
-    }
-
-    const handleSubmit = useCallback(
-        debounce(async () => {
-            await form.handleSubmit(saveFn)()
-        }, 2000),
-        []
-    )
-
-    const watchedData = useWatch({
-        control: form.control,
-        name: 'projects',
-        defaultValue: form.getValues('projects')
-    });
-
-    // useDeepCompareEffect(() => {
-    useEffect(() => {
-        if (!form.getFieldState('projects').isDirty) return;
-        handleSubmit().then(() => {
-            // alert('Just edited the projects area')
-        }).catch(() => {
-            // 
-        });
-    }, [watchedData])
+interface ProjectsSectionProps {
+    form: UseFormReturn<{ projects: Project[] }>
+    templates: Project[]
+    userId: string
 }
-
 /**
  * Projects section in resume builder
 */
-export function ProjectsSection() {
-    const form = useFormContext<{ projects: Project[] }>();
+
+export function ProjectsSection({ form, templates, userId }: ProjectsSectionProps) {
     const client = createClient();
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const user = useUserContext()
+    const { toast } = useToast();
     const { fields, append, remove } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
-    const { data: projectTemplates } = useQuery({
-        queryKey: ['projectTemplates'],
-        queryFn: async () => {
-            if (!user?.id) throw new Error('User not logged in');
-            const { data, error } = await client.from('projects')
-                .select().filter('resume_id', 'is', null).eq('user_id', user.id)
-            if (error) throw error;
-            return data;
-        }
-    })
+    const params = useParams() as { id: string }
     const {
         showDeleteDialog,
         onCancel,
@@ -85,17 +42,37 @@ export function ProjectsSection() {
         onDelete: async (id: string) => { await deleteProject(id, client) }
     });
 
-    useAutosave({ form });
+    const watchedData = useWatch({
+        control: form.control,
+        name: 'projects',
+        defaultValue: form.getValues('projects')
+    });
+
+    const saveFn = useCallback(async ({ projects }: { projects: Project[] }) => {
+        const { success } = await updateProjects(projects, params.id)
+        if (!success) {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurreds'
+            })
+        }
+    }, [params.id, toast])
+
+    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 3000)
+    const debouncedSubmit = useCallback(debounced, [form.handleSubmit, saveFn])
+
+    useDeepCompareEffect(() => {
+        if (form.formState.isDirty) {
+            debouncedSubmit().then(() => { alert('Done') })
+        }
+    }, [watchedData, debouncedSubmit])
 
     const onDeleteOk = async () => {
         await handleDelete();
         remove(idxToRemove);
-        // TODO: might need to invalidate the query cache here
-        // await queryClient.refetchQueries(['projects']);
     }
 
     const handleDeleteClick = (project: Project, idx: number) => {
-
         if (!project.id) {
             remove(idx);
             return;
@@ -121,11 +98,11 @@ export function ProjectsSection() {
                 )}
                 onClick={e => e.stopPropagation()}
             >
-                {projectTemplates?.map((project) => {
+                {templates?.map((project) => {
                     const { title, id, start_date, end_date } = project
                     const endDate = end_date ? formatDate(end_date) : 'Now'
                     return (
-                        <MenuItem className="py-2" key={id} onClick={() => append({ ...project, id: uuid() })}>
+                        <MenuItem className="py-2" key={id} onClick={() => append({ ...project, resume_id: params.id, id: uuid() })}>
                             <p className="font-medium">{title}</p>
                             {start_date && <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>}
                         </MenuItem>
@@ -135,7 +112,7 @@ export function ProjectsSection() {
                 <Separator />
                 <MenuItem
                     className="py-2"
-                    onClick={() => append(getDefaultProject({ userId: user?.id }))}
+                    onClick={() => append(getDefaultProject({ userId }))}
                 >
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>

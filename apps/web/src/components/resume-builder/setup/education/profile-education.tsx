@@ -8,16 +8,16 @@ import { type Education } from 'lib/types';
 import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
-import { useUserContext } from 'src/pages/_app';
 import { Spinner } from 'ui/spinner';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
+import { useSetupContext } from '@/hooks/useSetupContext';
 
 export function EducationStep() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
+    const { user } = useSetupContext()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const {

@@ -1,5 +1,6 @@
 import { type Client } from '@/queries';
-import { type Job } from 'lib/types';
+import { type Resume, type ResumeInsert, type Job } from 'lib/types';
+import { getUserProfile } from '../api';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -27,31 +28,61 @@ export function fetchAllJob(client: Client, userId: string) {
     return client.from('jobs').select('id, position, priority, status, order_column, location, company_name').eq('user_id', userId).throwOnError()
 }
 
-// export async function getJobs(client: Client, options?: JobFetchOptions) {
-//     const { params, jobId } = options ?? {}
-//     const { data: { user } } = await client.auth.getUser()
-//     if (!user?.id) throw new Error('userId not provided')
+export async function fetchResume(client: Client, options: { userId: string, resumeId: string }) {
+    let resume: Resume | null = null;
+    const resumeFromDb = await client.from('resumes')
+        .select().eq('user_id', options.userId)
+        .eq('id', options.resumeId).single()
 
-//     // TODO: find a way to filter fields
-//     let query = client.from('jobs').select('*', { count: 'exact' }).eq('user_id', user?.id);
+    resume = resumeFromDb.data
 
-//     if (params?.search) {
-//         query = query.ilike('position', `%${params.search}%`)
-//     }
+    if (!resume) {
+        const { data: userProfile } = await getUserProfile()
+        if (!userProfile) return;
+        const resumeToCreate: ResumeInsert = {
+            title: userProfile?.title ?? '',
+            skills: userProfile?.skills ?? [],
+            full_name: userProfile?.full_name ?? '',
+            professional_summary: userProfile?.professional_summary ?? '',
+            linkedin_url: userProfile?.linkedin_url ?? '',
+            email_address: userProfile?.email_address ?? '',
+            personal_website: userProfile?.personal_website ?? '',
+            github_url: userProfile?.github_url ?? '',
+            location: userProfile?.location ?? '',
+            user_id: options.userId
+        }
+        const { data } = await client.from('resumes').insert(resumeToCreate).select('*').single();
+        resume = data
+    }
 
-//     if (jobId) {
-//         query = query.eq('id', jobId)
-//     }
+    return resume
+}
 
-//     if (params?.orderBy) {
-//         query = query.order(params.orderBy.field, { ascending: params.orderBy.direction === 'asc' })
-//     }
+export async function getJobs(client: Client, options?: JobFetchOptions) {
+    const { params, jobId } = options ?? {}
+    const { data: { user } } = await client.auth.getUser()
+    if (!user?.id) throw new Error('userId not provided')
 
-//     if (params?.limit) {
-//         query = query.range(params?.offset ?? 0, (params.limit - 1) + (params.offset ?? 0))
-//     }
+    // TODO: find a way to filter fields
+    let query = client.from('jobs').select('*', { count: 'exact' }).eq('user_id', user?.id);
 
-//     const { count, data: jobs, error } = await query;
-//     if (error) throw error;
-//     return { jobs, count }
-// }
+    if (params?.search) {
+        query = query.ilike('position', `%${params.search}%`)
+    }
+
+    if (jobId) {
+        query = query.eq('id', jobId)
+    }
+
+    if (params?.orderBy) {
+        query = query.order(params.orderBy.field, { ascending: params.orderBy.direction === 'asc' })
+    }
+
+    if (params?.limit) {
+        query = query.range(params?.offset ?? 0, (params.limit - 1) + (params.offset ?? 0))
+    }
+
+    const { count, data: jobs, error } = await query;
+    if (error) throw error;
+    return { jobs, count }
+}

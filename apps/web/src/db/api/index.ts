@@ -2,7 +2,24 @@ import { createClient } from '@/utils/supabase/server';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchUserProfileQuery } from '../queries/auth';
-import { fetchAllJob, fetchJob } from '../queries/jobs';
+import { fetchAllJob, fetchJob, fetchResume } from '../queries/jobs';
+import { fetchEducation, fetchProjects, fetchWorkExperience } from '../queries/resume';
+
+export async function getResume(resumeId: string) {
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser();
+    if (!user) {
+        redirect('/auth')
+    }
+    const userId = user.id
+    const tags = ['resumes', resumeId]
+
+    return unstable_cache(
+        async (resumeId, userId) => await fetchResume(client, { resumeId, userId }),
+        tags,
+        { tags: [`resumes-${resumeId}`] }
+    )(resumeId, userId)
+}
 
 export async function getJob(jobId: string) {
     const client = createClient()
@@ -26,12 +43,8 @@ export async function getJobs() {
     if (!user) {
         redirect('/auth')
     }
-    const tags = ['jobs']
-    return unstable_cache(
-        async () => await fetchAllJob(client, user.id),
-        tags,
-        { tags }
-    )()
+
+    return await fetchAllJob(client, user.id)
 }
 
 export async function getUserProfile() {
@@ -55,5 +68,44 @@ export function getUser() {
         async () => await client.auth.getUser(),
         ['user'],
         { tags: ['user'] }
+    )()
+}
+
+export async function getWorkExperience() {
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) {
+        redirect('/auth')
+    }
+    return unstable_cache(
+        async () => await fetchWorkExperience(client, user.id),
+        ['workExperiences'],
+        { tags: ['workExperiences'] }
+    )()
+}
+
+export async function getEducation() {
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) {
+        redirect('/auth')
+    }
+    return unstable_cache(
+        async () => await fetchEducation(client, user.id),
+        ['education'],
+        { tags: ['education'] }
+    )()
+}
+
+export async function getProjects() {
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) {
+        redirect('/auth')
+    }
+    return unstable_cache(
+        async () => await fetchProjects(client, user.id),
+        ['projects'],
+        { tags: ['projects'] }
     )()
 }

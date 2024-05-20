@@ -8,6 +8,7 @@ import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
+// TODO: quite specific to the profile setup wizard, refactor if needed elsewhere
 export function useProjects() {
     const client = createClient()
     const queryClient = useQueryClient()
@@ -75,7 +76,7 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  * API call to fetch projects
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-    if (!userId) return;
+    if (!userId) throw new Error('User not provided');
     const projects = await client.from('projects').select('*').filter('resume_id', 'is', null).eq('user_id', userId)
     return projects.data
 }

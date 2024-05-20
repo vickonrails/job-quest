@@ -1,6 +1,7 @@
 import { type HTMLAttributes } from 'react';
 import { type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { type Database, formatDate } from 'shared';
+import { formatDate } from 'shared';
+import { type Education, type Project, type Resume, type WorkExperience } from '../types';
 
 export interface FormValues {
     resume: Resume,

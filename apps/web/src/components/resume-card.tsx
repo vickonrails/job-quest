@@ -1,4 +1,4 @@
-import { type Resume } from '@lib/types';
+import { type Resume } from 'lib/types';
 import { GanttChartSquare } from 'lucide-react';
 import Link from 'next/link';
 import { cn, formatDate } from 'shared';

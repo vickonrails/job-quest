@@ -1,6 +1,7 @@
+import { getUser, getUserProfile } from '@/db/api';
 import { createClient } from '@/utils/supabase/server';
+import { type Resume, type ResumeInsert } from 'lib/types';
 import { type Client } from '.';
-import { getUser } from '@/db/api';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -91,16 +92,12 @@ export async function getResumes() {
     return (await fetchResumes(client, user?.id)).data
 }
 
-export async function getResume(id: string) {
-    const client = createClient();
-    const { data: { user } } = await getUser();
-    if (!user) return null;
-    return (await fetchResume(client, { resumeId: id, userId: user.id })).data
-}
-
-export async function fetchResume(client: Client, options: { userId: string, resumeId: string }) {
-    return client.from('resumes').select().eq('user_id', options.userId).eq('id', options.resumeId).single()
-}
+// export async function getResume(id: string) {
+//     const client = createClient();
+//     const { data: { user } } = await getUser();
+//     if (!user) return null;
+//     return await fetchResume(client, { resumeId: id, userId: user.id })
+// }
 
 export async function fetchResumes(client: Client, userId: string) {
     return client.from('resumes').select().eq('user_id', userId)
