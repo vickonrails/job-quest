@@ -16,11 +16,18 @@ export default function RootLayout({
         <ReactQueryClientProvider>
             <div className={cn('flex h-full max-w-screen-2xl m-auto')}>
                 <Sidebar className="basis-60" />
-                <main className="flex-1 overflow-hidden flex flex-col">
-                    <Navbar />
-                    {children}
-                </main>
+                {children}
             </div>
         </ReactQueryClientProvider>
     );
+}
+
+
+export function MainShell({ title, children }: { title: string | React.ReactNode, children: React.ReactNode }) {
+    return (
+        <main className="flex-1 overflow-hidden flex flex-col">
+            <Navbar pageTitle={title} />
+            {children}
+        </main>
+    )
 }

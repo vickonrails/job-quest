@@ -26,7 +26,7 @@ const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) =
                         <PanelLeftClose size={22} />
                     </button>
                     {isTitleString ? (
-                        <h1 className="text-base font-medium">{pageTitle}</h1>
+                        <h1 className="text-base font-medium select-none">{pageTitle}</h1>
                     ) : (
                         <span>{pageTitle}</span>
                     )}
