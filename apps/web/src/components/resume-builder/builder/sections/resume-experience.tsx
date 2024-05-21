@@ -73,7 +73,7 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
 
     useDeepCompareEffect(() => {
         if (form.formState.isDirty) {
-            debouncedSubmit().then(() => { alert('Done') })
+            debouncedSubmit().then(() => {/** */ })
         }
     }, [watchedData, debouncedSubmit])
 

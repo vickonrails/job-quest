@@ -24,7 +24,7 @@ export default async function DashboardPage() {
 
     return (
         <MainShell title="Dashboard">
-            <section className="flex w-full flex-1 gap-4 p-6">
+            <section className="flex w-full overflow-auto h-full flex-1 gap-4 p-6">
                 <section className="flex-1">
                     <JobsSummaryCards className="mb-4" dashboardSummary={data ?? []} />
                     <hr />

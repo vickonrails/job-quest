@@ -1,5 +1,5 @@
 import { type Client } from '@/queries';
-import { type Resume, type ResumeInsert, type Job } from 'lib/types';
+import { type Job, type Resume, type ResumeInsert } from 'lib/types';
 import { getUserProfile } from '../api';
 
 type SortDirection = 'asc' | 'desc'
@@ -85,4 +85,15 @@ export async function getJobs(client: Client, options?: JobFetchOptions) {
     const { count, data: jobs, error } = await query;
     if (error) throw error;
     return { jobs, count }
+}
+
+export async function fetchCoverLetter(client: Client, userId: string, jobId: string) {
+    const { data } = await client.from('cover_letters').select().eq('user_id', userId).eq('job_id', jobId).single()
+    if (!data) {
+        const { data, error } = await client.from('cover_letters').insert({ user_id: userId, job_id: jobId, text: '' }).select().single();
+        if (error) throw error
+        return data
+    }
+
+    return data
 }

@@ -63,7 +63,7 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
 
     useDeepCompareEffect(() => {
         if (form.formState.isDirty) {
-            debouncedSubmit().then(() => { alert('Done') })
+            debouncedSubmit().then(() => { /** */ })
         }
     }, [watchedData, debouncedSubmit])
 

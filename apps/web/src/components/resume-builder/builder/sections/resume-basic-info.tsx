@@ -34,9 +34,7 @@ export function BasicInfoSection({ form }: BasicInfoForm) {
 
     useDeepCompareEffect(() => {
         if (form.formState.isDirty) {
-            debouncedSubmit().then(() => {
-                alert('Done')
-            })
+            debouncedSubmit().then(() => {/** */ })
         }
     }, [watchedData, debouncedSubmit])
 

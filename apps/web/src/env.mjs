@@ -7,7 +7,8 @@ import { z } from 'zod';
 const server = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   FEEDBACK_URL: z.string(),
-  FEEDBACK_ANON_KEY: z.string()
+  FEEDBACK_ANON_KEY: z.string(),
+  PDF_EXPORT_API_SERVICE_URL: z.string()
 });
 
 /**
@@ -15,7 +16,7 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+  NEXT_PUBLIC_AI_FEATURES_ENABLED: z.string()
 });
 
 /**
@@ -27,7 +28,9 @@ const client = z.object({
 const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
   FEEDBACK_URL: process.env.FEEDBACK_URL,
-  FEEDBACK_ANON_KEY: process.env.FEEDBACK_ANON_KEY
+  FEEDBACK_ANON_KEY: process.env.FEEDBACK_ANON_KEY,
+  NEXT_PUBLIC_AI_FEATURES_ENABLED: process.env.NEXT_PUBLIC_AI_FEATURES_ENABLED,
+  PDF_EXPORT_API_SERVICE_URL: process.env.PDF_EXPORT_API_SERVICE_URL
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

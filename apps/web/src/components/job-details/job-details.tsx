@@ -23,7 +23,7 @@ export const JobDetails = ({ job }: { job: Job }) => {
                 </div>
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3 sticky top-0">
                     <ResumeSection job={job} />
-                    <CoverLetterSection job={job} />
+                    <CoverLetterSection jobId={job.id} />
                     <section className="flex flex-col gap-2">
                         <h2>Notes</h2>
                         <NoteForm job={job} />

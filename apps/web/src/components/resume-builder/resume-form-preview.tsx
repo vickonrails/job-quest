@@ -1,14 +1,14 @@
 'use client'
 
-import { type Resume, type WorkExperience, type Education, type Project } from 'lib/types'
+import { type Education, type Project, type Resume, type WorkExperience } from 'lib/types'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import BackButton from '../back-button'
 import { Preview } from './builder/preview'
-import { BasicInfoSection } from './builder/sections/resume-basic-info'
-import { WorkExperienceSection } from './builder/sections/resume-experience'
 import { Skills } from './builder/sections'
+import { BasicInfoSection } from './builder/sections/resume-basic-info'
 import { EducationSection } from './builder/sections/resume-education'
+import { WorkExperienceSection } from './builder/sections/resume-experience'
 import { ProjectsSection } from './builder/sections/resume-projects'
 
 // TODO: reduce all these to one component
@@ -42,14 +42,14 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
     const workExperienceTemplates = workExperience.filter(x => !x.resume_id)
     const educationTemplates = education.filter(x => !x.resume_id)
     const projectsTemplates = projects.filter(x => !x.resume_id)
-    // const isSubmitting = basicInfoForm.formState.isSubmitting
 
     return (
         <div className="flex w-full h-full">
-            {/* {isSubmitting && <p>Loading...</p>} */}
-            <section className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto">
+            <section className="w-1/2 border-r p-6 flex-shrink-0 mx-auto overflow-auto relative">
                 <section className="max-w-xl mx-auto">
-                    <BackButton onClick={() => router.back()} />
+                    <div className="flex items-center justify-between gap-4">
+                        <BackButton onClick={() => router.back()} />
+                    </div>
                     <BasicInfoSection form={basicInfoForm} />
                     <WorkExperienceSection
                         userId={resume.user_id}

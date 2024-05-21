@@ -1,10 +1,11 @@
-import { type Education, type Project, type WorkExperience, type Resume } from 'lib/types';
+import { type Education, type Project, type Resume, type WorkExperience } from 'lib/types';
 import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { FormProps, type DeepPartialSkipArrayKey, type UseFormReturn } from 'react-hook-form';
+import { type DeepPartialSkipArrayKey, type UseFormReturn } from 'react-hook-form';
 import { Complex, Simple, type FormValues } from 'resume-templates';
 import { Button, Select } from 'ui';
+import { Spinner } from 'ui/spinner';
 
 /**
  * 
@@ -16,7 +17,7 @@ async function fetchPDF(html: string): Promise<Blob> {
     // compose a new html file
 
     try {
-        const response = await fetch('/api/export-resume', {
+        const response = await fetch('/resumes/api/export-resume', {
             method: 'POST',
             body: JSON.stringify({ html }),
             headers: {
@@ -65,13 +66,21 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
     const [downloading, setDownloading] = useState(false)
     const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
 
+    const isSubmitting = [resumeForm, workExperienceForm, projectsForm, educationForm].some(x => x.formState.isSubmitting)
+
     const handleExport = () => {
         setDownloading(true)
-        // getObjectURL(values, resumeTemplate).then(res => {
-        //     window.open(res)
-        // }).catch(err => {
-        //     // 
-        // }).finally(() => setDownloading(false))
+        const values: FormValues = {
+            resume: resumeForm.getValues('resume'),
+            education: educationForm.getValues('education'),
+            projects: projectsForm.getValues('projects'),
+            workExperience: workExperienceForm.getValues('workExperience')
+        }
+        getObjectURL(values, resumeTemplate).then(res => {
+            window.open(res)
+        }).catch(_ => {
+            console.log('An error occurred')
+        }).finally(() => setDownloading(false))
     }
 
     return (
@@ -85,10 +94,13 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
                         setResumeTemplate(val === 'simple' ? 'simple' : 'complex')
                     }}
                 />
-                <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
-                    <Share className="text-xs h-4 w-4" />
-                    {downloading ? 'Exporting...' : 'Export'}
-                </Button>
+                <div className="flex items-center gap-4">
+                    {isSubmitting && <Spinner className="h-6 w-6" />}
+                    <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
+                        <Share className="text-xs h-4 w-4" />
+                        {downloading ? 'Exporting...' : 'Export'}
+                    </Button>
+                </div>
             </header>
 
             {/* TODO: fix button loading states for all variants */}

@@ -1,6 +1,5 @@
-import { getUser, getUserProfile } from '@/db/api';
+import { getUser } from '@/db/api';
 import { createClient } from '@/utils/supabase/server';
-import { type Resume, type ResumeInsert } from 'lib/types';
 import { type Client } from '.';
 
 type SortDirection = 'asc' | 'desc'
@@ -34,14 +33,6 @@ const defaultQuery: QueryProps = {
         direction: 'asc',
         field: 'created_at'
     },
-}
-
-export async function getJob(jobId: string) {
-    const client = createClient()
-    const { data: { user } } = await getUser()
-    if (!user) return null;
-    const { data } = await fetchJobs(client, { userId: user.id, jobId })
-    return data?.[0]
 }
 
 export async function getJobs(options?: QueryProps) {

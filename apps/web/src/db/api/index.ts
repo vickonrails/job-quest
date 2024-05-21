@@ -2,12 +2,12 @@ import { createClient } from '@/utils/supabase/server';
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchUserProfileQuery } from '../queries/auth';
-import { fetchAllJob, fetchJob, fetchResume } from '../queries/jobs';
+import { fetchAllJob, fetchCoverLetter, fetchJob, fetchResume } from '../queries/jobs';
 import { fetchEducation, fetchProjects, fetchWorkExperience } from '../queries/resume';
 
 export async function getResume(resumeId: string) {
     const client = createClient();
-    const { data: { user } } = await client.auth.getUser();
+    const { data: { user } } = await getUser();
     if (!user) {
         redirect('/auth')
     }
@@ -18,7 +18,7 @@ export async function getResume(resumeId: string) {
         async (resumeId, userId) => await fetchResume(client, { resumeId, userId }),
         tags,
         { tags: [`resumes-${resumeId}`] }
-    )(resumeId, userId)
+    )(resumeId, userId,)
 }
 
 export async function getJob(jobId: string) {
@@ -107,5 +107,18 @@ export async function getProjects() {
         async () => await fetchProjects(client, user.id),
         ['projects'],
         { tags: ['projects'] }
+    )()
+}
+
+export async function getCoverLetter(jobId: string) {
+    const client = createClient();
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) {
+        redirect('/auth')
+    }
+    return unstable_cache(
+        async () => await fetchCoverLetter(client, user.id, jobId),
+        ['cover-letters', jobId],
+        { tags: [`cover-letters-${jobId}`] }
     )()
 }
