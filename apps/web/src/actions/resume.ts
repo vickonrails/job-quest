@@ -2,7 +2,7 @@
 
 import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/server';
-import { type Education, type Project, type Highlight, type Resume, type WorkExperience } from 'lib/types';
+import { type Education, type Highlight, type Project, type Resume, type ResumeInsert, type WorkExperience } from 'lib/types';
 import { revalidateTag } from 'next/cache';
 
 export async function updateResume(resume: Resume) {
@@ -120,5 +120,46 @@ export async function deleteWorkExperience(workExperienceId: string, userId: str
         return { success: true }
     } catch (error) {
         return { success: false, error }
+    }
+}
+
+export async function createResumeFromProfile() {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
+    try {
+        if (!user) throw new Error('Not authenticated')
+        const { data: profile } = await client.from('profiles').select().eq('id', user.id).single()
+        if (!profile) throw new Error();
+        const resume: ResumeInsert = {
+            full_name: profile?.full_name,
+            email_address: profile.email_address,
+            github_url: profile.github_url,
+            professional_summary: profile.professional_summary,
+            skills: profile.skills,
+            user_id: user.id,
+            title: profile.title,
+            linkedin_url: profile.linkedin_url,
+            location: profile.location,
+            personal_website: profile.personal_website
+        }
+        const { data } = await client.from('resumes').insert(resume).select().single()
+        revalidateTag(`resumes-${user.id}`)
+        return { success: true, data }
+    } catch (error) {
+        return { success: true, error }
+    }
+}
+
+export async function deleteResume(resumeId: string) {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
+    try {
+        if (!user) throw new Error('Not authorized')
+        const { error } = await client.from('resumes').delete().eq('id', resumeId)
+        if (error) throw error
+        revalidateTag(`resumes-${user.id}`)
+        return { success: true }
+    } catch (error) {
+        return { success: true, error }
     }
 }

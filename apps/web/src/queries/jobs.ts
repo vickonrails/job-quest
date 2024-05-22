@@ -75,21 +75,3 @@ async function fetchJobs(client: Client, options: FetchJobsOptions) {
 
     return await query
 }
-
-export async function getResumes() {
-    const client = createClient();
-    const { data: { user } } = await getUser();
-    if (!user) return null;
-    return (await fetchResumes(client, user?.id)).data
-}
-
-// export async function getResume(id: string) {
-//     const client = createClient();
-//     const { data: { user } } = await getUser();
-//     if (!user) return null;
-//     return await fetchResume(client, { resumeId: id, userId: user.id })
-// }
-
-export async function fetchResumes(client: Client, userId: string) {
-    return client.from('resumes').select().eq('user_id', userId)
-}

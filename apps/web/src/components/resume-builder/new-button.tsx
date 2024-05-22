@@ -1,20 +1,33 @@
 'use client'
 
-import React from 'react'
-import { Button } from 'ui/button'
-import { v4 as uuid } from 'uuid'
+import { createResumeFromProfile } from '@/actions/resume'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { Button } from 'ui/button'
+import { useToast } from '../toast/use-toast'
 
 export default function NewButton() {
     const router = useRouter()
-    const handleCreateNew = () => {
-        const newId = uuid();
-        router.push(`/resumes/${newId}`);
+    const [creating, setCreating] = useState(false)
+    const { toast } = useToast()
+
+    const handleCreateNew = async () => {
+        setCreating(true)
+        const { success, data } = await createResumeFromProfile()
+        if (success && data) {
+            router.push(`/resumes/${data.id}`);
+        } else {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred'
+            })
+            setCreating(false)
+        }
     }
 
     return (
-        <Button onClick={handleCreateNew}>
-            Create New
+        <Button onClick={handleCreateNew} disabled={creating}>
+            {creating ? 'Creating...' : 'Create New'}
         </Button>
     )
 }

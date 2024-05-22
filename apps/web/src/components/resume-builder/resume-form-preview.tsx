@@ -1,8 +1,15 @@
 'use client'
 
+import { deleteResume } from '@/actions/resume'
+import { useDeleteModal } from '@/hooks/useDeleteModal'
+import { createClient } from '@/utils/supabase/client'
+import { useQuery } from '@tanstack/react-query'
 import { type Education, type Project, type Resume, type WorkExperience } from 'lib/types'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { Button } from 'ui/button'
+import { Spinner } from 'ui/spinner'
+import { AlertDialog } from '../alert-dialog'
 import BackButton from '../back-button'
 import { Preview } from './builder/preview'
 import { Skills } from './builder/sections'
@@ -37,6 +44,17 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
     const workExperienceForm = useForm<{ workExperience: WorkExperience[] }>({ defaultValues: { workExperience: filteredResumeExperience(resume?.id, workExperience) } });
     const educationForm = useForm<{ education: Education[] }>({ defaultValues: { education: filteredEducation(resume.id, education) } });
     const projectsForm = useForm<{ projects: Project[] }>({ defaultValues: { projects: filteredProjects(resume.id, projects) } });
+    const { showDeleteDialog, isOpen, handleDelete, setIsOpen, onCancel } = useDeleteModal({
+        onDelete: async (id) => {
+            try {
+                const { success, error } = await deleteResume(id)
+                if (!success || error) throw error
+                router.push('/resumes')
+            } catch (error) {
+                throw error
+            }
+        }
+    })
 
     // TODO: memoize
     const workExperienceTemplates = workExperience.filter(x => !x.resume_id)
@@ -67,6 +85,7 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                         templates={projectsTemplates}
                     />
                     <Skills form={basicInfoForm} />
+                    <Button variant="destructive" onClick={() => showDeleteDialog(resume)}>Delete Resume</Button>
                 </section>
             </section>
             <Preview
@@ -75,6 +94,46 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                 workExperienceForm={workExperienceForm}
                 projectsForm={projectsForm}
             />
+            <AlertDialog
+                open={isOpen}
+                title="Delete Confirmation"
+                description={<DeleteDescription resumeId={resume.id} />}
+                onOk={handleDelete}
+                onOpenChange={setIsOpen}
+                onCancel={onCancel}
+            // isProcessing={loading}
+            />
         </div>
+    )
+}
+
+
+function DeleteDescription({ resumeId }: { resumeId: string }) {
+    const client = createClient();
+    const { data, isLoading } = useQuery({
+        queryFn: async () => {
+            const { data, error } = await client.from('jobs').select().eq('resume_id', resumeId)
+            if (error) throw error;
+            return data;
+        },
+        queryKey: ['jobs', resumeId]
+    })
+    const usedInJobs = data && data?.length > 0;
+
+    if (isLoading) return (
+        <div className="flex mt-4">
+            <Spinner className="h-6 w-6 m-auto" />
+        </div>
+    )
+
+    return (
+        <section className="flex flex-col gap-2">
+            <p>{usedInJobs && 'This resume is used in the following Job applications. '} Are you sure you want to delete this Resume? </p>
+            <ul className="list-disc pl-4">
+                {data?.map(job => (
+                    <li key={job.id}><span className="font-medium">{job.position}</span> at {job.company_name}</li>
+                ))}
+            </ul>
+        </section>
     )
 }

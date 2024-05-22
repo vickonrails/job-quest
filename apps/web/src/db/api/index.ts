@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchUserProfileQuery } from '../queries/auth';
 import { fetchAllJob, fetchCoverLetter, fetchJob, fetchResume } from '../queries/jobs';
-import { fetchEducation, fetchProjects, fetchWorkExperience } from '../queries/resume';
+import { fetchEducation, fetchProjects, fetchResumes, fetchWorkExperience } from '../queries/resume';
 
 export async function getResume(resumeId: string) {
     const client = createClient();
@@ -121,4 +121,19 @@ export async function getCoverLetter(jobId: string) {
         ['cover-letters', jobId],
         { tags: [`cover-letters-${jobId}`] }
     )()
+}
+
+export async function getResumes() {
+    const client = createClient();
+    const { data: { user } } = await getUser();
+    if (!user) {
+        redirect('/auth')
+    }
+    const userId = user.id
+
+    return unstable_cache(
+        async (userId) => await fetchResumes(client, userId),
+        ['resumes', userId],
+        { tags: [`resumes-${userId}`] }
+    )(userId)
 }
