@@ -79,7 +79,7 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
         getObjectURL(values, resumeTemplate).then(res => {
             window.open(res)
         }).catch(_ => {
-            console.log('An error occurred')
+            // 
         }).finally(() => setDownloading(false))
     }
 

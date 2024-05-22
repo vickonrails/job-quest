@@ -3,7 +3,6 @@
 import { deleteJob } from '@/actions/job';
 import { useDeleteModal } from '@/hooks/useDeleteModal';
 import { useEditSheet } from '@/hooks/useEditModal';
-import { createClient } from '@/utils/supabase/client';
 import { type Job } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
@@ -32,7 +31,6 @@ const deleteTextWarning = `
 `
 
 export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
-    const client = createClient()
     const [isUpdating, setIsUpdating] = useState(false)
 
     const {

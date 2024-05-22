@@ -11,7 +11,16 @@ vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 
 vi.mock('@supabase/ssr', () => ({
     createBrowserClient: vi.fn(() => ({
-        auth: {}
+        auth: {},
+        from: vi.fn(() => ({
+            select: vi.fn(() => ({
+                filter: vi.fn(() => ({
+                    eq: vi.fn(() => ({
+                        data: []
+                    }))
+                }))
+            }))
+        }))
     }))
 }))
 

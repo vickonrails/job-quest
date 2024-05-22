@@ -49,7 +49,7 @@ export function useEducation() {
                     }
                     return education
                 })
-                const { data, error } = await client.from('education').upsert(preparedValues).select('*');
+                const { data, error } = await client.from('education').upsert(preparedValues).select('*, highlights(*)');
                 if (error) throw error;
 
                 if (highlightsToDelete.length > 0) {
