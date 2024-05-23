@@ -1,3 +1,4 @@
+import { invalidateCacheAction } from '@/actions';
 import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
@@ -77,6 +78,7 @@ export function useWorkExperience() {
         },
         onSuccess: (data) => {
             next();
+            invalidateCacheAction(['workExperiences'])
             queryClient.setQueryData(['work_experience'], data);
             form.reset({ workExperience: data });
         }
