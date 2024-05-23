@@ -1,5 +1,5 @@
 import hashColors from '@/utils/hash-colors'
-import { getDisplayText } from '@/components/avatar/Avatar'
+import { getDisplayText } from '@/components/avatar'
 import { Typography } from '@/components/typography'
 import { ExternalLink } from 'lucide-react'
 import { Status_Lookup, cn, formatDate } from 'shared'

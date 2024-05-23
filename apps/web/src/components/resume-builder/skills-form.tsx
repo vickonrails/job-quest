@@ -1,18 +1,8 @@
-import { Chip } from '@/components/chip';
 import { type Resume } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, type UseFormReturn } from 'react-hook-form';
-import { Input } from 'ui';
-
-export function Skills({ form }: { form: UseFormReturn<{ resume: Resume }> }) {
-    return (
-        <section className="mb-4">
-            <h3 className="font-medium text-lg">Skills</h3>
-            <p className="mb-4 text-sm text-muted-foreground">List relevant skills that match this job description.</p>
-            <SkillsForm form={form} />
-        </section>
-    )
-}
+import { Input } from 'ui/input';
+import { Chip } from '../chip';
 
 // TODO: refactor to use SkillsForm from profile setup
 export function SkillsForm({ form }: { form: UseFormReturn<{ resume: Resume }> }) {

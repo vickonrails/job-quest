@@ -1,5 +1,4 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
-import { Chip } from '@/components/chips'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { Trash2 } from 'lucide-react'
 import { createRef, useEffect, useState, type ChangeEvent } from 'react'
@@ -9,6 +8,7 @@ import { Button, Input, Textarea } from 'ui'
 import { ErrorHint } from '../components/error-hint'
 import { type BaseFormItemProps } from '../education/education-form-item'
 import { type Project } from 'lib/types'
+import { Chip } from '@/components/chip'
 
 interface ProjectsFieldsProps extends BaseFormItemProps {
     form: UseFormReturn<{ projects: Project[] }, 'projects'>

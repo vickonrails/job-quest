@@ -14,7 +14,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from '.';
+import { AddSectionBtn } from './add-section-button';
 
 interface EducationSectionProps {
     form: UseFormReturn<{ education: Education[] }>

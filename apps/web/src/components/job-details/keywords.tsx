@@ -1,6 +1,6 @@
 'use client'
 
-import { Chip } from '@/components/chips';
+import { Chip } from '@/components/chip';
 import { useToast } from '@/components/toast/use-toast';
 import { isAIFeatureEnabled } from '@/utils';
 import { type Job } from 'lib/types';

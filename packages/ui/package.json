@@ -10,6 +10,7 @@
     "./spinner": "./src/components/spinner.tsx",
     "./input": "./src/components/input.tsx",
     "./textarea": "./src/components/textarea.tsx",
+    "./banner": "./src/components/banner.tsx",
     ".": "./src/index.ts"
   },
   "dependencies": {

@@ -11,7 +11,7 @@ interface ChipProps extends HTMLAttributes<Omit<HTMLElement, 'children'>> {
 }
 
 /** Chip component */
-const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: ChipProps) => {
+export const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: ChipProps) => {
     const showCloseBtn = Boolean(onCloseClick);
 
     return (
@@ -30,7 +30,7 @@ const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: Ch
 
             {showCloseBtn && (
                 <button type="button" onClick={onCloseClick}>
-                    <X size={16} className="text-gray-500" />
+                    <X size={16} aria-label="Remove" className="text-gray-500" />
                 </button>
             )}
         </div>
@@ -39,7 +39,7 @@ const Chip = ({ label, variant = 'plain', onCloseClick, className, ...rest }: Ch
 
 type ChipsGroups = { labels: { label: string, onCloseClick?: () => void }[] }
 
-const ChipsGroup = ({ labels }: ChipsGroups) => {
+export const ChipsGroup = ({ labels }: ChipsGroups) => {
     return (
         <div className="flex">
             {labels.map((singleLabel, index) => {
@@ -56,5 +56,3 @@ const ChipsGroup = ({ labels }: ChipsGroups) => {
         </div>
     )
 }
-
-export { Chip, ChipsGroup }

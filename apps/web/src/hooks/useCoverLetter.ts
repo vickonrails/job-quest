@@ -1,17 +1,18 @@
-import { updateCoverLetter } from '@/actions/job';
 import { useToast } from '@/components/toast/use-toast';
+import { type Client } from '@/queries';
 import { debounce } from '@/utils/debounce';
 import { createClient } from '@/utils/supabase/client';
 import { type CoverLetter } from 'lib/types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+type OnSave = (client: Client, jobId: string, coverLetter: CoverLetter, text: string) => Promise<void>
 /**
  * Hook for providing cover letter functionality
  * @param job 
  * @param coverLetter 
  * @returns 
  */
-export function useCoverLetter({ jobId, coverLetter }: { jobId: string, coverLetter: CoverLetter }) {
+export function useCoverLetter({ jobId, coverLetter, onSave }: { jobId: string, coverLetter: CoverLetter, onSave: OnSave }) {
     const client = createClient()
     const [value, setValue] = useState(coverLetter.text ?? '')
     const [saving, setSaving] = useState(false)
@@ -20,19 +21,8 @@ export function useCoverLetter({ jobId, coverLetter }: { jobId: string, coverLet
     /** function to persist cover letter text */
     const saveValueDebounced = debounce(async (text: string) => {
         setSaving(true);
-        const { data: { user } } = await client.auth.getUser();
-        if (!user) return;
-        const { error } = await updateCoverLetter({ ...coverLetter, text }, user.id, jobId)
-        if (error) throw error;
-    }, 2000);
-
-    const saveValue = useCallback(saveValueDebounced, [client, jobId])
-
-    /** handle cover letter change event */
-    const onChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(event.target.value);
         try {
-            await saveValue(event.target.value);
+            await onSave(client, jobId, coverLetter, text)
         } catch {
             toast({
                 title: 'Error',
@@ -40,9 +30,15 @@ export function useCoverLetter({ jobId, coverLetter }: { jobId: string, coverLet
                 variant: 'destructive'
             })
         } finally {
-            setSaving(false);
+            setSaving(false)
         }
-    };
+    }, 2000);
 
-    return { value, saving, onChange, setValue, saveValue }
+    const saveValue = useCallback(saveValueDebounced, [client, jobId])
+
+    useEffect(() => {
+        saveValue(value)
+    }, [value, saveValue, toast])
+
+    return { value, saving, setValue, saveValue }
 }

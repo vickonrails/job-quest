@@ -1,7 +1,6 @@
 'use client'
 
 import { updateProfile } from '@/actions/profile/setup';
-import { Chip } from '@/components/chips';
 import { useToast } from '@/components/toast/use-toast';
 import { type Profile } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button, Input } from 'ui';
 import { StepContainer } from '../components/container';
+import { Chip } from '@/components/chip';
 
 export default function Skills({ profile }: { profile: Profile }) {
     const { next, user } = useSetupContext()

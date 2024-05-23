@@ -14,7 +14,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from '.';
+import { AddSectionBtn } from './add-section-button';
 
 interface ProjectsSectionProps {
     form: UseFormReturn<{ projects: Project[] }>

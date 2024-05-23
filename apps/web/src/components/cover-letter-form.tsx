@@ -1,6 +1,8 @@
 'use client'
 
+import { updateCoverLetter } from '@/actions/job'
 import { useCoverLetter } from '@/hooks/useCoverLetter'
+import { type Client } from '@/queries'
 import { isAIFeatureEnabled } from '@/utils'
 import { type CoverLetter, type Job } from 'lib/types'
 import { Save, Wand2 } from 'lucide-react'
@@ -8,14 +10,29 @@ import { useMemo } from 'react'
 import { Button } from 'ui/button'
 import { Spinner } from 'ui/spinner'
 
+async function onCoverLetterSave(client: Client, jobId: string, coverLetter: CoverLetter, text: string) {
+    try {
+        const { data: { user } } = await client.auth.getUser();
+        if (!user) return;
+        const { error } = await updateCoverLetter({ ...coverLetter, text }, user.id, jobId)
+        if (error) throw error;
+    } catch (error) {
+        throw error
+    }
+}
+
 export default function CoverLetterForm({ job, coverLetter }: { job: Job, coverLetter: CoverLetter }) {
     const aiFeaturesEnabled = useMemo(() => isAIFeatureEnabled(), [])
+    const { saving, value, setValue } = useCoverLetter({
+        jobId: job.id,
+        coverLetter,
+        onSave: onCoverLetterSave
+    })
 
-    const { onChange, saving, value } = useCoverLetter({ jobId: job.id, coverLetter })
     return (
         <form className="flex flex-col items-start h-full p-1 flex-1 w-3/5 pb-6">
             <textarea
-                onChange={onChange}
+                onChange={ev => setValue(ev.target.value)}
                 placeholder="Write your cover letter here"
                 rows={20}
                 value={value}

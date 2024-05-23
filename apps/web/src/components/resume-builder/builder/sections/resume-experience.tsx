@@ -13,7 +13,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { getDefaultExperience } from 'src/hooks/useWorkExperience';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from '.';
+import { AddSectionBtn } from './add-section-button';
 
 /**
  * Work Experience section in resume builder

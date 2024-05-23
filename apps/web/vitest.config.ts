@@ -10,6 +10,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
     plugins: [tsconfigPaths(), react()],
     test: {
+        env: {
+            NEXT_PUBLIC_AI_FEATURES_ENABLED: 'false'
+        },
         watch: false,
         environment: 'jsdom',
         coverage: {
