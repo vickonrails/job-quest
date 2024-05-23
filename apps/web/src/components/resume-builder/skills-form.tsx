@@ -1,3 +1,5 @@
+'use client'
+
 import { type Resume } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, type UseFormReturn } from 'react-hook-form';

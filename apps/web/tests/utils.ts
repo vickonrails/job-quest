@@ -1,7 +1,8 @@
 import { type User } from '@supabase/supabase-js';
-import { JobInsertDTO, type CoverLetter, type Job } from '../lib/types';
+import { type JobInsertDTO, type CoverLetter } from '../lib/types';
 
 export const job: JobInsertDTO = {
+    id: 'job-id',
     company_name: 'Google',
     position: 'Senior Software Engineer',
     description: 'A couple of job descriptions',

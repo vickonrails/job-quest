@@ -1,3 +1,5 @@
+'use client'
+
 import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';

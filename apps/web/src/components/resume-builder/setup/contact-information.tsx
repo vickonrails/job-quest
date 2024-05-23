@@ -1,3 +1,5 @@
+'use client'
+
 import { updateProfile } from '@/actions/profile/setup'
 import { useToast } from '@/components/toast/use-toast'
 import { type Profile } from 'lib/types'

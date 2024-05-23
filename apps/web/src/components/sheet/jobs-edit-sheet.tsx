@@ -1,3 +1,5 @@
+'use client'
+
 import { updateJob } from '@/actions/job';
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint';
 import { useToast } from '@/components/toast/use-toast';

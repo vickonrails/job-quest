@@ -1,10 +1,12 @@
+'use client'
+
 import { CheckCircle } from 'lucide-react'
 import { Controller, type UseFormReturn, useForm } from 'react-hook-form'
 import { Button, Select, Textarea, type SelectOption } from 'ui'
 import { Checkbox } from './checkbox'
 import { Popover } from './popover'
 import { useToast } from './toast/use-toast'
-import { FeedbackFormValues, createFeedback } from '@/utils/create-feedback'
+import { type FeedbackFormValues, createFeedback } from '@/utils/create-feedback'
 
 const feedbackOptions: SelectOption[] = [
     { label: 'Feature request', value: 'feature' },
