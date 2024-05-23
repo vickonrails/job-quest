@@ -1,14 +1,14 @@
-import { Accordion, AccordionItem } from '@components/accordion'
-import { Checkbox } from '@components/checkbox'
-import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
-import { DateRenderer } from '@components/resume-builder/date-renderer'
-import { type WorkExperience } from '@lib/types'
+import { Accordion, AccordionItem } from '@/components/accordion'
+import { Checkbox } from '@/components/checkbox'
+import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
+import { DateRenderer } from '@/components/resume-builder/date-renderer'
+import { type WorkExperience } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Input } from 'ui'
 import { ErrorHint } from '../components/error-hint'
-import { WorkExperienceHighlights } from './work-experience-highlights'
 import { type BaseFormItemProps } from '../education/education-form-item'
+import { WorkExperienceHighlights } from './work-experience-highlights'
 
 interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>

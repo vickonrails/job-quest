@@ -1,19 +1,21 @@
-import { createClient } from '@lib/supabase/component';
-import { type Education, type Highlight } from '@lib/types';
+'use client'
+
+import { setEntityId } from '@/utils/set-entity-id';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setEntityId } from '@utils/set-entity-id';
+import { type Education, type Highlight } from 'lib/types';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
-export function useEducation({ userId }: { userId?: string }) {
+export function useEducation() {
     const client = createClient()
     const queryClient = useQueryClient()
     const { next, user } = useSetupContext()
-    const queryResult = useQuery(['education'], () => fetchEducation({ userId, client }));
+    const queryResult = useQuery(['education'], () => fetchEducation({ userId: user?.id, client }));
     const form = useForm<{ education: Education[] }>({
         defaultValues: { education: queryResult.data?.length ? queryResult.data : [getDefaultEducation({ userId: user?.id })] },
         shouldUnregister: false
@@ -30,7 +32,7 @@ export function useEducation({ userId }: { userId?: string }) {
     // TODO: I think I should do error handling inside of here.
     const updateEducation = useMutation({
         mutationFn: async ({ values }: { values: Education[] }) => {
-            if (!userId) return
+            if (!user?.id) return
             const highlights: Highlight[] = []
 
             try {
@@ -49,7 +51,7 @@ export function useEducation({ userId }: { userId?: string }) {
                     }
                     return education
                 })
-                const { data, error } = await client.from('education').upsert(preparedValues).select('*');
+                const { data, error } = await client.from('education').upsert(preparedValues).select('*, highlights(*)');
                 if (error) throw error;
 
                 if (highlightsToDelete.length > 0) {
@@ -58,11 +60,13 @@ export function useEducation({ userId }: { userId?: string }) {
                 }
 
                 const preparedHighlights = highlights.filter(x => x.education_id).map(highlight => setEntityId<Highlight>(highlight))
-
                 const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
                 if (highlightsError) throw new Error(highlightsError.message);
-
-                return data;
+                const newEducation = data.map(education => {
+                    education.highlights = highlights.filter(x => x.education_id === education.id)
+                    return education;
+                })
+                return newEducation;
             } catch (error) {
                 throw error
             }
@@ -77,7 +81,7 @@ export function useEducation({ userId }: { userId?: string }) {
 
     useEffect(() => {
         form.reset({ education: queryResult.data?.length ? queryResult.data : [getDefaultEducation({ userId: user?.id })] })
-    }, [queryResult.data, form])
+    }, [queryResult.data, form, user?.id])
 
     return {
         education: queryResult,
@@ -121,7 +125,7 @@ export function getDefaultEducation({ userId }: { userId?: string }) {
 }
 
 export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-    if (!userId) return;
+    if (!userId) throw new Error('userId not provided');
     // TODO: error handling
     const { data } = await client.from('education')
         .select('*, highlights ( * )')

@@ -1,8 +1,11 @@
-import { Chip } from '@components/chips';
-import { useToast } from '@components/toast/use-toast';
-import { type Job } from '@lib/types';
+'use client'
+
+import { Chip } from '@/components/chip';
+import { useToast } from '@/components/toast/use-toast';
+import { isAIFeatureEnabled } from '@/utils';
+import { type Job } from 'lib/types';
 import { ChevronDown, ChevronUp, Wand2 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useJobKeywords } from 'src/hooks/useJobKeywords';
 import { Button } from 'ui';
 
@@ -12,6 +15,7 @@ import { Button } from 'ui';
 export function KeywordsSection({ job }: { job: Job }) {
     const { loading, generateKeywords } = useJobKeywords(job)
     const { toast } = useToast()
+    const aiFeaturesEnabled = useMemo(() => isAIFeatureEnabled(), [])
 
     const handleGenerateClick = async () => {
         try {
@@ -36,6 +40,7 @@ export function KeywordsSection({ job }: { job: Job }) {
                 />
             ) : (
                 <Button
+                    disabled={!aiFeaturesEnabled}
                     variant="outline"
                     className="gap-2 items-center"
                     onClick={handleGenerateClick}

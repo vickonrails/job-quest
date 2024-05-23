@@ -1,11 +1,11 @@
 
-import { type InvolvedColumns } from '@components/kanban/core/getInvolvedColumns';
-import { type getMovingItemData } from '@components/kanban/core/getMovingItemData';
-import { createClient } from '@lib/supabase/component';
-import { type Job } from '@lib/types';
+import { type InvolvedColumns } from '@/components/kanban/core/getInvolvedColumns';
+import { type getMovingItemData } from '@/components/kanban/core/getMovingItemData';
+import { createClient } from '@/utils/supabase/client';
+import { sortByOrder, type KanbanColumn } from '@/utils/transform-to-column';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { sortByOrder, type KanbanColumn } from '@utils/transform-to-column';
 import isEqual from 'fast-deep-equal';
+import { type Job } from 'lib/types';
 import { useEffect, useRef, useState } from 'react';
 
 export function useKanbanColumns(jobs: KanbanColumn[]) {

@@ -15,7 +15,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -24,30 +24,26 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@hooks": [
-        "./src/hooks"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ],
-      "@lib/*": [
-        "./lib/*"
-      ],
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "src/**/*.tsx",
-    "src/**/*.ts",
-    "lib/**/*.{ts}",
+    "src",
+    "tests",
     ".eslintrc.cjs",
     "next.config.mjs",
     "next-env.d.ts",
     "vitest/setup.ts",
     "tailwind.config.ts",
-    "tailwind.pdf.config.ts"
+    "tailwind.pdf.config.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

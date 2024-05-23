@@ -1,6 +1,8 @@
+'use client'
+
+import { transformJobs } from '@/utils/transform-to-column';
 import { DragDropContext, type OnDragEndResponder } from '@hello-pangea/dnd';
-import { type Job } from '@lib/types';
-import { transformJobs } from '@utils/transform-to-column';
+import { type Job } from 'lib/types';
 import { useKanbanColumns } from 'src/hooks/useKanbanColumns';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
@@ -30,8 +32,7 @@ export default function JobsKanban({
     const onDragEnd: OnDragEndResponder = (result) => {
         const involvedColumns = getInvolvedColumns(columns, result);
         if (!involvedColumns) return;
-        const movingItemData = getMovingItemData(result, involvedColumns);
-
+        const movingItemData = getMovingItemData(result, involvedColumns)
         onUpdateStart && onUpdateStart();
         updateMovedItem(movingItemData, involvedColumns).then(() => {
             // handle success state
@@ -44,7 +45,7 @@ export default function JobsKanban({
     }
 
     return (
-        <div className="flex px-4 flex-1 gap-2 overflow-x-auto" data-testid="kanban-container">
+        <div className="flex px-4 flex-1 h-full gap-2 overflow-x-auto" data-testid="kanban-container">
             <DragDropContext onDragEnd={onDragEnd}>
                 {columns.map((column) => (
                     <KanbanCol

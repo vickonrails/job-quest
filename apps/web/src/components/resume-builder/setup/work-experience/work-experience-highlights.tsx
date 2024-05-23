@@ -1,10 +1,9 @@
-import { type Highlight, type WorkExperience } from '@lib/types'
+import { type Highlight, type WorkExperience } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 import { Textarea } from 'ui'
-import { HighlightFooter } from '../components/highlights-footer'
 import { v4 as uuid } from 'uuid'
-import { useUserContext } from 'src/pages/_app'
+import { HighlightFooter } from '../components/highlights-footer'
 
 interface HighlightsProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }>
@@ -16,7 +15,7 @@ interface HighlightsProps {
 
 export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
-    const user = useUserContext();
+    // const { user } = useSetupContext();
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]
@@ -36,7 +35,7 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, o
                             label={idx === 0 ? 'Highlights' : ''}
                             containerClasses="w-full mb-1"
                             rows={2}
-                            {...form.register(`workExperience.${index}.highlights.${idx}.text`)}
+                            {...form.register(`workExperience.${index}.highlights.${idx}.text`, { required: true, min: 5 })}
                         />
                         <button className="text-xs" onClick={() => handleRemove(idx)}>Remove</button>
                     </section>
@@ -45,13 +44,13 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, o
 
             <HighlightFooter
                 onDeleteClick={onDeleteClick}
-                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: user?.id }))}
+                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: entity.user_id }))}
             />
         </>
     )
 }
 
-function getDefaultEntity({ id, userId }: { id: string, userId?: string }): Highlight {
+function getDefaultEntity({ id, userId }: { id: string, userId?: string | null }): Highlight {
     return {
         text: '',
         id: uuid(),

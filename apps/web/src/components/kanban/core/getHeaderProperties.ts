@@ -1,4 +1,4 @@
-import { ApplicationStatus, type KanbanColumn } from '@utils/transform-to-column'
+import { ApplicationStatus, type KanbanColumn } from '@/utils/transform-to-column'
 
 export function getColumnHeaderProps(column: KanbanColumn) {
     switch (column.columnStatus) {

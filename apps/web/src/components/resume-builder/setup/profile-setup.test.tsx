@@ -1,10 +1,11 @@
-import { type Profile } from '@lib/types';
+
 import { type User } from '@supabase/auth-helpers-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render, waitFor } from '@testing-library/react';
+import { type Profile } from 'lib/types';
 import { SetupProvider, type SetupContext } from 'src/hooks/useSetupContext';
-import { SetupSection } from 'src/pages/profile/setup';
-import { describe } from 'vitest';
+import { describe, vi } from 'vitest';
+import ProfileSetup from './components/profile-setup';
 import { Steps } from './components/steps-renderer';
 
 const createTestQueryClient = () => new QueryClient({
@@ -28,11 +29,23 @@ const profile = {
 } as unknown as Profile
 
 describe('Profile Setup', () => {
+    vi.mock('next/navigation', () => ({
+        useRouter: vi.fn(() => ({
+            pathname: '',
+            query: { mock: '' },
+            asPath: '',
+        })),
+    }));
+
+    afterAll(() => {
+        vi.clearAllMocks();
+    })
+
     const testClient = createTestQueryClient();
     const setup = () => {
         return render(
             <QueryClientProvider client={testClient}>
-                <SetupSection
+                <ProfileSetup
                     user={user}
                     profile={profile}
                 />

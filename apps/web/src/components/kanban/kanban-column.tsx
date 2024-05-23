@@ -1,6 +1,6 @@
+import { type KanbanColumn } from '@/utils/transform-to-column';
 import { Droppable } from '@hello-pangea/dnd';
-import { type Job } from '@lib/types';
-import { type KanbanColumn } from '@utils/transform-to-column';
+import { type Job } from 'lib/types';
 import { cn } from 'shared';
 import { getColumnHeaderProps } from './core/getHeaderProperties';
 import { KanbanCard as DefaultKanbanCard } from './kanban-card';
@@ -35,7 +35,7 @@ function ColumnHeaders({ column }: { column: KanbanColumn }) {
 
 export default function KanbanColumnCmp({ column, openEditSheet, openDeleteDialog, KanbanCard = DefaultKanbanCard }: KanbanColumnProps) {
     return (
-        <div className="min-w-[220px] flex-1 bg-gray-100 overflow-hidden" data-testid="kanban-column">
+        <div className="min-w-[220px] h-full flex-1 bg-gray-100 overflow-hidden" data-testid="kanban-column">
             <ColumnHeaders column={column} />
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (

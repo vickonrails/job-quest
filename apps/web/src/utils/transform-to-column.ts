@@ -1,5 +1,4 @@
-
-import { type Job } from '@lib/types';
+import { type Job } from 'lib/types';
 
 export enum ApplicationStatus {
     Bookmarked,

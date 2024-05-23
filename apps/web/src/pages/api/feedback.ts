@@ -1,6 +1,6 @@
-import { createClient as createApiClient } from '@lib/supabase/api';
+import { createClient as createApiClient } from '@/utils/supabase/server';
 import { createClient } from '@supabase/supabase-js';
-import { type FeedbackFormValues } from '@utils/create-feedback';
+import { type FeedbackFormValues } from '@/utils/create-feedback';
 import { type NextApiHandler } from 'next';
 import { env } from '../../env.mjs';
 
@@ -12,7 +12,7 @@ const handler: NextApiHandler = async (req, res) => {
         env.FEEDBACK_ANON_KEY
     );
 
-    const appClient = createApiClient(req, res)
+    const appClient = createApiClient()
     try {
         const { data: { user }, error: authError } = await appClient.auth.getUser();
         if (authError) {

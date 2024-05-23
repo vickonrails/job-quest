@@ -1,7 +1,7 @@
-import { createClient } from '@lib/supabase/component';
-import { type Profile } from '@lib/types';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
+import { type Profile } from 'lib/types';
 import { type Database } from 'shared';
 
 async function fetchProfile(client: SupabaseClient<Database>, userId: string) {

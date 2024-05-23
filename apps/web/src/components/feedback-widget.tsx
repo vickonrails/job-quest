@@ -1,10 +1,12 @@
+'use client'
+
 import { CheckCircle } from 'lucide-react'
 import { Controller, type UseFormReturn, useForm } from 'react-hook-form'
 import { Button, Select, Textarea, type SelectOption } from 'ui'
 import { Checkbox } from './checkbox'
 import { Popover } from './popover'
 import { useToast } from './toast/use-toast'
-import { type FeedbackFormValues, createFeedback } from '@utils/create-feedback'
+import { type FeedbackFormValues, createFeedback } from '@/utils/create-feedback'
 
 const feedbackOptions: SelectOption[] = [
     { label: 'Feature request', value: 'feature' },
@@ -72,10 +74,11 @@ function FeedbackForm({ form }: { form: UseFormReturn<FeedbackFormValues> }) {
         }
     }
     return (
-        <form className="flex flex-col gap-3" onSubmit={handleSubmit(handleFeedbackSend)}>
+        <form className="flex flex-col gap-3" data-testid="feedback-form" onSubmit={handleSubmit(handleFeedbackSend)}>
             <Controller
                 name="reason"
                 control={control}
+                rules={{ required: true }}
                 render={({ field }) => (
                     <Select
                         value={field.value ?? undefined}
@@ -84,7 +87,7 @@ function FeedbackForm({ form }: { form: UseFormReturn<FeedbackFormValues> }) {
                     />
                 )}
             />
-            <Textarea rows={5} {...register('content', { required: true })} />
+            <Textarea placeholder="Enter feedback here" rows={5} {...register('content', { required: true })} />
             <Controller
                 name="mailMe"
                 control={control}

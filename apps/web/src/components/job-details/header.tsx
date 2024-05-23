@@ -1,10 +1,10 @@
-import { getDisplayText } from '@components/avatar/Avatar'
-import { Typography } from '@components/typography'
-import { type Job } from '@lib/types'
-import hashColors from '@utils/hash-colors'
+import hashColors from '@/utils/hash-colors'
+import { getDisplayText } from '@/components/avatar'
+import { Typography } from '@/components/typography'
 import { ExternalLink } from 'lucide-react'
 import { Status_Lookup, cn, formatDate } from 'shared'
 import { Button, Rating } from 'ui'
+import { type Job } from 'lib/types'
 
 export function Header({ job, onEditClick }: { job: Job, onEditClick: (job: Job) => void }) {
     const status = Status_Lookup.find((x, idx) => idx === job.status)

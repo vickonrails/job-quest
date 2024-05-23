@@ -1,4 +1,4 @@
-import { ChevronLeftIcon } from 'lucide-react'
+import BackButton from '@/components/back-button'
 import { cn } from 'shared'
 import { useSetupContext } from 'src/hooks/useSetupContext'
 
@@ -11,10 +11,13 @@ export function StepContainer({ title, description, children, ...rest }: StepCon
     const { prev, canMovePrev } = useSetupContext()
     return (
         <section className="flex items-start flex-col gap-4 w-4/5 mx-auto pb-8" {...rest}>
-            <button className={cn('inline-flex hover:underline text-muted-foreground -mx-1', !canMovePrev && 'opacity-50')} onClick={prev} disabled={!canMovePrev}>
-                <ChevronLeftIcon />
-                <span>Back</span>
-            </button>
+            <BackButton
+                onClick={prev}
+                className={cn('inline-flex hover:underline -mx-1 p-0 disabled:opacity-50')}
+                disabled={!canMovePrev}
+            >
+                Go back
+            </BackButton>
 
             <section className="w-full">
                 {title && <h2 className="text-xl font-medium mb-1">{title}</h2>}

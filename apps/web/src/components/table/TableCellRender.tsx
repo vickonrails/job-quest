@@ -1,5 +1,5 @@
-import { Avatar } from '@components/avatar';
-import { Typography } from '@components/typography';
+import { Avatar } from '@/components/avatar';
+import { Typography } from '@/components/typography';
 import { formatDate } from 'shared';
 import clsx from 'clsx';
 import { type HTMLAttributes } from 'react';

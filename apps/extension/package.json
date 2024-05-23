@@ -1,5 +1,5 @@
 {
-  "name": "JobQuest",
+  "name": "extension",
   "displayName": "Job Quest",
   "version": "0.0.1",
   "description": "Job description grabber for getjobquest.com. Operating system for your job search",
@@ -41,9 +41,6 @@
   },
   "manifest": {
     "key": "$CRX_KEY",
-    "host_permissions": [
-      "https://*/*"
-    ],
     "permissions": [
       "tabs",
       "identity"

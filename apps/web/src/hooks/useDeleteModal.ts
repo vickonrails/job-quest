@@ -1,5 +1,5 @@
-import { type BaseEntity } from '@components/table'
-import { useToast } from '@components/toast/use-toast'
+import { type BaseEntity } from '@/components/table'
+import { useToast } from '@/components/toast/use-toast'
 import { useCallback, useState } from 'react'
 
 interface UseDeleteProps {
@@ -26,16 +26,16 @@ export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProp
                 })
                 setIsOpen(false)
             }).catch((error) => {
-                toast({
-                    variant: 'destructive',
-                    title: 'An error occurred'
-                })
                 throw error;
             }).finally(() => {
                 setLoading(false)
             })
-        } catch {
-            throw new Error('Failed to delete')
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred'
+            })
+            throw new Error()
         }
     }, [initialProps, toast, entity])
 

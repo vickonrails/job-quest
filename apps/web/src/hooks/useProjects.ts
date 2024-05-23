@@ -1,20 +1,19 @@
-import { createClient } from '@lib/supabase/component';
-import { type Project } from '@lib/types';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type Project } from 'lib/types';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
-import { useUserContext } from 'src/pages/_app';
 
-export function useProjects({ userId }: { userId?: string }) {
+// TODO: quite specific to the profile setup wizard, refactor if needed elsewhere
+export function useProjects() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const { next } = useSetupContext()
-    const user = useUserContext()
-    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: userId, client }));
+    const { next, user } = useSetupContext()
+    const queryResult = useQuery(['projects'], () => fetchProjects({ userId: user?.id, client }));
     const form = useForm<{ projects: Project[] }>({
         defaultValues: { projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] }
     })
@@ -28,7 +27,7 @@ export function useProjects({ userId }: { userId?: string }) {
     // TODO: I think I should do error handling inside of here.
     const updateProjects = useMutation({
         mutationFn: async ({ values }: { values: Project[] }) => {
-            if (!userId) return
+            if (!user?.id) return
             const preparedValues = values.map(project => {
                 if (!project.id) {
                     project.id = uuid()
@@ -52,7 +51,7 @@ export function useProjects({ userId }: { userId?: string }) {
 
     useEffect(() => {
         form.reset({ projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] })
-    }, [queryResult.data, form])
+    }, [queryResult.data, form, user?.id])
 
     return {
         projects: queryResult,
@@ -77,7 +76,7 @@ export async function deleteProject(id: string, client: SupabaseClient<Database>
  * API call to fetch projects
  */
 export async function fetchProjects({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-    if (!userId) return;
+    if (!userId) throw new Error('User not provided');
     const projects = await client.from('projects').select('*').filter('resume_id', 'is', null).eq('user_id', userId)
     return projects.data
 }

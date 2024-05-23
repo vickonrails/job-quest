@@ -26,7 +26,7 @@ export const useJob = (url: string, options?: { defaultData: JobInsertDTO }) => 
                 setJob({ ...options.defaultData })
             }
         }).catch(err => {
-            console.log({ err })
+            // console.log({ err })
         }).finally(() => {
             setIsLoading(false)
         })

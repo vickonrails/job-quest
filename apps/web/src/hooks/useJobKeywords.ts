@@ -1,6 +1,7 @@
-import { createClient } from '@lib/supabase/component'
-import { type Job } from '@lib/types'
+
+import { createClient } from '@/utils/supabase/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { type Job } from 'lib/types'
 import { useState } from 'react'
 
 /**

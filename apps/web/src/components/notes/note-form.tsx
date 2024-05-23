@@ -1,17 +1,18 @@
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
+'use client'
+
+import { useToast } from '@/components/toast/use-toast';
+import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Job, type NoteInsertDTO } from 'lib/types';
 import { useState } from 'react';
-import { useUserContext } from 'src/pages/_app';
-import { Button, Textarea } from 'ui';
+import { Button } from 'ui/button';
+import { Textarea } from 'ui/textarea';
 
 function NoteForm({ job }: { job: Job }) {
     const [note, setNote] = useState('')
     const { toast } = useToast()
-    const client = createClient();
+    const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
 
     // TODO: error handling
     const { mutateAsync, isLoading: isAddingNotes } = useMutation({
@@ -28,6 +29,7 @@ function NoteForm({ job }: { job: Job }) {
 
     const handleCreateNote = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
+        const { data: { user } } = await client.auth.getUser();
         if (!note || !user) return;
         try {
             await mutateAsync({
@@ -50,7 +52,7 @@ function NoteForm({ job }: { job: Job }) {
     return (
         <form onSubmit={handleCreateNote} className="flex flex-col gap-4 items-start">
             <Textarea value={note} required onChange={val => setNote(val.target.value)} containerClasses="w-full" />
-            <Button variant="outline" loading={isAddingNotes}>Add notes</Button>
+            <Button variant="outline" loading={isAddingNotes} disabled={!note}>Add notes</Button>
         </form>
     )
 }

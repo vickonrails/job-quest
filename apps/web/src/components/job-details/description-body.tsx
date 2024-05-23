@@ -1,7 +1,7 @@
-import { type Job } from '@lib/types'
 import Image from 'next/image'
 import Searching from '../../../public/searching.svg'
 import { KeywordsSection } from './keywords'
+import { type Job } from 'lib/types'
 
 export function JobDescription({ job }: { job: Job }) {
     if (!job.description) {

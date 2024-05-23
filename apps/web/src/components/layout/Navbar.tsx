@@ -1,21 +1,23 @@
-import { FeedbackButton } from '@components/feedback-widget';
-import { type Session } from '@supabase/supabase-js';
-import { type Profile } from 'lib/types';
 import { PanelLeftClose } from 'lucide-react';
 import { type FC, type HTMLAttributes, type ReactNode } from 'react';
+import { FeedbackButton } from '../feedback-widget';
 import { NavbarMenu } from './navbar-menu';
+import { getUserProfile } from '@/db/api';
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
-    toggleSidebar: () => void
-    profile: Profile
+    toggleSidebar?: () => void
     pageTitle?: ReactNode
 }
 
 // TODO: I might need to visually separate the close button from the title
 // TODO: consider putting profile inside a react query cache so we can invalidate it once an item changes (Like editing the name in profile setup)
+// TODO: Page Title lookup here
 
-const Navbar: FC<NavbarProps> = ({ profile, pageTitle, toggleSidebar, ...props }) => {
+const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) => {
     const isTitleString = typeof pageTitle === 'string';
+    const { data: profile } = await getUserProfile();
+    if (!profile) return null;
+
     return (
         <nav data-testid="navbar" className="sticky top-0 border-b bg-white" {...props}>
             <section className="p-4 py-1 flex justify-between items-center">
@@ -24,7 +26,7 @@ const Navbar: FC<NavbarProps> = ({ profile, pageTitle, toggleSidebar, ...props }
                         <PanelLeftClose size={22} />
                     </button>
                     {isTitleString ? (
-                        <h1 className="text-base font-medium">{pageTitle}</h1>
+                        <h1 className="text-base font-medium select-none">{pageTitle}</h1>
                     ) : (
                         <span>{pageTitle}</span>
                     )}

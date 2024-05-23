@@ -1,4 +1,4 @@
-import { createClient } from '@lib/supabase/component';
+import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { type Note } from 'lib/types';

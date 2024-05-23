@@ -1,13 +1,14 @@
-import { type Job } from '@lib/types'
-import { useRouter } from 'next/router'
+
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { Button } from 'ui'
 
-export function CoverLetterSection({ job }: { job: Job }) {
+export function CoverLetterSection({ jobId }: { jobId: string }) {
     const router = useRouter()
-    const coverLetterId = job.cover_letter_id
 
     const navigateToCoverletter = () => {
-        const url = `/jobs/${job.id}/cover-letter`
+        const url = `/jobs-tracker/${jobId}/cover-letter`
         return router.push(url)
     }
 
@@ -25,7 +26,7 @@ export function CoverLetterSection({ job }: { job: Job }) {
                     onClick={navigateToCoverletter}
                     variant="outline"
                 >
-                    {coverLetterId ? 'Update Cover Letter' : 'Add Cover Letter'}
+                    Update Cover Letter
                 </Button>
             </div>
         </section>

@@ -1,26 +1,28 @@
-import { AlertDialog } from '@components/alert-dialog'
-import { useToast } from '@components/toast/use-toast'
-import { createClient } from '@lib/supabase/component'
-import { type Project } from '@lib/types'
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog'
+import { useToast } from '@/components/toast/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
-import { useUserContext } from 'src/pages/_app'
-import { Spinner } from 'ui'
+import { Spinner } from 'ui/spinner'
 import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { ProjectForm } from './project-form-item'
+import { type Project } from 'lib/types'
+import { createClient } from '@/utils/supabase/client'
+import { useSetupContext } from '@/hooks/useSetupContext'
 
 export type Projects = { projects: Project[] }
 
 export default function ProjectsView() {
     const queryClient = useQueryClient()
     const client = createClient()
-    const user = useUserContext()
+    const { user } = useSetupContext()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { projects, form, fieldsArr, updateProjects } = useProjects({ userId: user?.id });
+    const { projects, form, fieldsArr, updateProjects } = useProjects();
     const { append, fields, remove } = fieldsArr
     const { formState } = form
     const {

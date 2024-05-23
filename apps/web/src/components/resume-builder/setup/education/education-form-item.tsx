@@ -1,11 +1,11 @@
-import { Accordion, AccordionItem } from '@components/accordion'
-import { Checkbox } from '@components/checkbox'
-import { AccordionExpandIcon } from '@components/resume-builder/accordion-expand-icon'
-import { DateRenderer } from '@components/resume-builder/date-renderer'
-import { type Education, type Highlight } from '@lib/types'
+import { Accordion, AccordionItem } from '@/components/accordion'
+import { Checkbox } from '@/components/checkbox'
+import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
+import { DateRenderer } from '@/components/resume-builder/date-renderer'
+import { useSetupContext } from '@/hooks/useSetupContext'
+import { type Highlight, type Education } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { useUserContext } from 'src/pages/_app'
 import { Input, Textarea } from 'ui'
 import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
@@ -162,7 +162,7 @@ interface HighlightsProps {
 
 export function EducationHighlights({ form, index, onDeleteClick, entity, setHighlightsToDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `education.${index}.highlights`, control: form.control, keyName: '_id' })
-    const user = useUserContext()
+    // const { user } = useSetupContext()
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]
@@ -191,18 +191,18 @@ export function EducationHighlights({ form, index, onDeleteClick, entity, setHig
 
             <HighlightFooter
                 onDeleteClick={onDeleteClick}
-                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: user?.id }))}
+                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: entity.user_id }))}
             />
         </>
     )
 }
 
-function getDefaultEntity({ id, userId }: { id: string, userId?: string }): Highlight {
+function getDefaultEntity({ id, userId }: { id: string, userId: string }): Highlight {
     return {
         text: '',
         education_id: id,
         id: uuid(),
         user_id: userId,
-        type: 'education'
-    } as unknown as Highlight
+        type: ''
+    } as Highlight
 } 

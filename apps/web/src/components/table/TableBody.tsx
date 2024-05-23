@@ -1,6 +1,7 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@components/menubar';
-import { JobEditSheet } from '@components/sheet/jobsEditSheet';
+'use client'
+import { AlertDialog } from '@/components/alert-dialog';
+import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { JobEditSheet } from '@/components/sheet/jobs-edit-sheet';
 import { Edit, MoreVertical, Trash2 } from 'lucide-react';
 import { cn } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';

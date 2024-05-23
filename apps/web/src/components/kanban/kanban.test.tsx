@@ -1,13 +1,13 @@
 import { type DropResult } from '@hello-pangea/dnd';
-import { type Job } from '@lib/types';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render } from '@testing-library/react';
-import jobs from '@utils/jobs';
-import { transformJobs } from '@utils/transform-to-column';
 import { vi } from 'vitest';
 import { getInvolvedColumns } from './core/getInvolvedColumns';
 import { getMovingItemData } from './core/getMovingItemData';
 import JobsKanban from './kanban-container';
+import { transformJobs } from '@/utils/transform-to-column';
+import { type Job } from 'lib/types';
+import jobs from '@/utils/jobs';
 
 const createTestQueryClient = () => new QueryClient({
     defaultOptions: {
@@ -20,7 +20,7 @@ const createTestQueryClient = () => new QueryClient({
 describe('Kanban', () => {
     // mock next/router
     // TODO: move to setup if required frequently
-    vi.mock('next/router', () => ({
+    vi.mock('next/navigation', () => ({
         useRouter: vi.fn(() => ({
             pathname: '',
             query: { mock: '' },

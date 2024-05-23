@@ -1,24 +1,26 @@
-import { AlertDialog } from '@components/alert-dialog'
-import { useToast } from '@components/toast/use-toast'
-import { createClient } from '@lib/supabase/component'
-import { type WorkExperience as IWorkExperience } from '@lib/types'
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog'
+import { useToast } from '@/components/toast/use-toast'
+import { useSetupContext } from '@/hooks/useSetupContext'
+import { createClient } from '@/utils/supabase/client'
 import { useQueryClient } from '@tanstack/react-query'
+import { type WorkExperience as IWorkExperience } from 'lib/types'
 import { useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
 import { deleteExperience, getDefaultExperience, useWorkExperience } from 'src/hooks/useWorkExperience'
-import { Spinner } from 'ui'
+import { Spinner } from 'ui/spinner'
 import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { WorkExperienceForm } from './work-experience-form-item'
-import { useUserContext } from 'src/pages/_app'
 
 export function WorkExperience() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience({ userId: user?.id });
+    const { user } = useSetupContext()
+    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience();
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,

@@ -1,10 +1,11 @@
+import { type Education, type Project, type Resume, type WorkExperience } from 'lib/types';
 import { Share } from 'lucide-react';
 import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { useFormContext, useWatch, type DeepPartialSkipArrayKey } from 'react-hook-form';
-import { Complex, Simple } from 'resume-templates';
-import { type FormValues } from 'src/pages/resumes/[resume]';
+import { type DeepPartialSkipArrayKey, type UseFormReturn } from 'react-hook-form';
+import { Complex, Simple, type FormValues } from 'resume-templates';
 import { Button, Select } from 'ui';
+import { Spinner } from 'ui/spinner';
 
 /**
  * 
@@ -16,7 +17,7 @@ async function fetchPDF(html: string): Promise<Blob> {
     // compose a new html file
 
     try {
-        const response = await fetch('/api/export-resume', {
+        const response = await fetch('/resumes/api/export-resume', {
             method: 'POST',
             body: JSON.stringify({ html }),
             headers: {
@@ -43,27 +44,48 @@ const getObjectURL = async (values: DeepPartialSkipArrayKey<FormValues>, resumeT
     return window.URL.createObjectURL(pdfBlob)
 }
 
+interface PreviewProps {
+    resumeForm: UseFormReturn<{ resume: Resume }>
+    workExperienceForm: UseFormReturn<{ workExperience: WorkExperience[] }>
+    projectsForm: UseFormReturn<{ projects: Project[] }>
+    educationForm: UseFormReturn<{ education: Education[] }>
+}
 /**
  * Resume Preview
  */
-export function Preview() {
-    const { control } = useFormContext<FormValues>();
-    const values = useWatch<FormValues>({ control: control });
+export function Preview({ resumeForm, workExperienceForm, projectsForm, educationForm }: PreviewProps) {
+    const { watch: watchResume } = resumeForm;
+    const { watch: watchExperience } = workExperienceForm;
+    const { watch: watchProjects } = projectsForm;
+    const { watch: watchEducation } = educationForm;
+
+    const resume = watchResume('resume');
+    const workExperience = watchExperience('workExperience');
+    const projects = watchProjects('projects');
+    const education = watchEducation('education');
     const [downloading, setDownloading] = useState(false)
     const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
 
+    const isSubmitting = [resumeForm, workExperienceForm, projectsForm, educationForm].some(x => x.formState.isSubmitting)
+
     const handleExport = () => {
         setDownloading(true)
+        const values: FormValues = {
+            resume: resumeForm.getValues('resume'),
+            education: educationForm.getValues('education'),
+            projects: projectsForm.getValues('projects'),
+            workExperience: workExperienceForm.getValues('workExperience')
+        }
         getObjectURL(values, resumeTemplate).then(res => {
             window.open(res)
-        }).catch(err => {
+        }).catch(_ => {
             // 
         }).finally(() => setDownloading(false))
     }
 
     return (
         <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
-            <header className="flex justify-between w-full items-center">
+            <header className="flex justify-between w-full items-center mb-2">
                 <Select
                     options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
                     trigger="Select template"
@@ -72,16 +94,19 @@ export function Preview() {
                         setResumeTemplate(val === 'simple' ? 'simple' : 'complex')
                     }}
                 />
-                <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
-                    <Share className="text-xs h-4 w-4" />
-                    {downloading ? 'Exporting...' : 'Export'}
-                </Button>
+                <div className="flex items-center gap-4">
+                    {isSubmitting && <Spinner className="h-6 w-6" />}
+                    <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
+                        <Share className="text-xs h-4 w-4" />
+                        {downloading ? 'Exporting...' : 'Export'}
+                    </Button>
+                </div>
             </header>
 
             {/* TODO: fix button loading states for all variants */}
             <div className="bg-white w-full">
                 <ResumeTemplate
-                    values={values}
+                    values={{ resume, workExperience, projects, education }}
                     template={resumeTemplate}
                 />
             </div>

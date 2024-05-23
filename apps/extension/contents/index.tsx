@@ -1,6 +1,6 @@
 
 import cssText from 'data-text:../styles/global.css';
-import type { PlasmoCSUIProps } from 'plasmo';
+import type { PlasmoCSConfig, PlasmoCSUIProps } from 'plasmo';
 import { useState, type FC } from 'react';
 import { cn } from 'shared';
 import { LinkedInButton, type LinkedInButtonProps } from '~components/linkedin-button';
@@ -15,6 +15,10 @@ import { getJobDetails } from '~utils/get-job-content';
 // persist info to Job quest
 
 // TODO: research how to only show the button after the page is fully loaded (check out the document.readyState property)
+
+export const config: PlasmoCSConfig = {
+    matches: ['https://www.linkedin.com/*']
+}
 
 export const getInlineAnchor = () => {
     if (isLinkedIn) {

@@ -1,7 +1,8 @@
-import { useToast } from '@components/toast/use-toast'
-import { createClient } from '@lib/supabase/component'
-import { type Profile } from '@lib/types'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+'use client'
+
+import { updateProfile } from '@/actions/profile/setup'
+import { useToast } from '@/components/toast/use-toast'
+import { type Profile } from 'lib/types'
 import { useForm } from 'react-hook-form'
 import { Button, Input } from 'ui'
 import { StepContainer } from './components/container'
@@ -9,22 +10,18 @@ import { ErrorHint } from './components/error-hint'
 
 export default function ContactInformation({ profile }: { profile: Profile }) {
     const { register, handleSubmit, formState } = useForm({ defaultValues: profile })
-    const client = createClient();
-    const queryClient = useQueryClient()
     const { toast } = useToast()
 
-    const updateProfile = useMutation({
-        mutationFn: async (values: Profile) => {
-            return await client.from('profiles').update(values).eq('id', profile.id)
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['profile'] })
-        },
-    })
-
-    const onSubmit = async (val: Profile) => {
+    const onSubmit = async (values: Profile) => {
         try {
-            await updateProfile.mutateAsync({ ...val, is_profile_setup: true })
+            if (!profile.id) return
+            const newProfile: Profile = { ...profile, ...values }
+            const { success } = await updateProfile({ profile: newProfile, userId: profile?.id })
+            if (!success) throw new Error()
+            toast({
+                variant: 'success',
+                title: 'Profile setup successfully',
+            })
         } catch (err) {
             toast({
                 variant: 'destructive',

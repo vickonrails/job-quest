@@ -1,21 +1,23 @@
-import { AlertDialog } from '@components/alert-dialog';
-import { useToast } from '@components/toast/use-toast';
-import { createClient } from '@lib/supabase/component';
-import { type Education } from '@lib/types';
+'use client'
+
+import { AlertDialog } from '@/components/alert-dialog';
+import { useToast } from '@/components/toast/use-toast';
+import { createClient } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
+import { type Education } from 'lib/types';
 import { useState } from 'react';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation, useEducation } from 'src/hooks/useEducation';
-import { Spinner } from 'ui';
+import { Spinner } from 'ui/spinner';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
-import { useUserContext } from 'src/pages/_app';
+import { useSetupContext } from '@/hooks/useSetupContext';
 
 export function EducationStep() {
     const client = createClient()
     const queryClient = useQueryClient()
-    const user = useUserContext();
+    const { user } = useSetupContext()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const {
@@ -24,7 +26,7 @@ export function EducationStep() {
         fieldsArr,
         updateEducation,
         setHighlightsToDelete
-    } = useEducation({ userId: user?.id });
+    } = useEducation();
 
     const { formState } = form
     const { fields, remove, append } = fieldsArr
