@@ -8,9 +8,12 @@ import { revalidateTag } from 'next/cache';
 export async function updateResume(resume: Resume) {
     try {
         const client = createClient()
+        const { data: { user } } = await client.auth.getUser()
+        if (!user) throw new Error('Not Authenticated')
         const { error } = await client.from('resumes').upsert(resume);
         if (error) throw error
         revalidateTag(`resumes-${resume.id}`)
+        revalidateTag(`resumes-${user.id}`)
         return { success: true }
     } catch (error) {
         return { success: false, error }

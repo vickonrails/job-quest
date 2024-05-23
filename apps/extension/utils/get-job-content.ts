@@ -23,8 +23,9 @@ export function getJobDetails(): Partial<Job> {
     }
 
     if (container) {
-        const company = container.querySelector('.job-details-jobs-unified-top-card__company-name')
-        const location = Boolean(container) ? container.childNodes[3] : ''
+        const info = container.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
+        const company = info.querySelector('a.app-aware-link')
+        const location = info.childNodes[3] ?? ''
         const details = document.querySelector('.jobs-description__container');
 
         return {

@@ -1,5 +1,6 @@
 'use client'
 
+import { invalidateCacheAction } from '@/actions';
 import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
@@ -73,6 +74,7 @@ export function useEducation() {
         },
         onSuccess: (data) => {
             next();
+            invalidateCacheAction(['education'])
             queryClient.setQueryData(['education'], data);
             // TODO: confirm if I truly need to reset the form here.
             form.reset({ education: data });

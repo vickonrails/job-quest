@@ -1,3 +1,4 @@
+import { invalidateCacheAction } from '@/actions';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -44,6 +45,7 @@ export function useProjects() {
         },
         onSuccess: (data) => {
             next();
+            invalidateCacheAction(['projects'])
             queryClient.setQueryData(['projects'], data);
             form.reset({ projects: data });
         }
