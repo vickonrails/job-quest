@@ -7,7 +7,7 @@ import { type Job } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button } from 'ui';
+import { Button } from 'ui/button';
 import { Spinner } from 'ui/spinner';
 import { AlertDialog } from './alert-dialog';
 import JobsKanban from './kanban/kanban-container';

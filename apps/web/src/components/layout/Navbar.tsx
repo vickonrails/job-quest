@@ -1,8 +1,9 @@
+import { getUserProfile } from '@/db/api';
 import { PanelLeftClose } from 'lucide-react';
 import { type FC, type HTMLAttributes, type ReactNode } from 'react';
-import { FeedbackButton } from '../feedback-widget';
+import { Feedback } from '../feedback/feedback-popover';
+import { ThemeSwitcher } from '../theme-switcher';
 import { NavbarMenu } from './navbar-menu';
-import { getUserProfile } from '@/db/api';
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
     toggleSidebar?: () => void
@@ -19,7 +20,7 @@ const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) =
     if (!profile) return null;
 
     return (
-        <nav data-testid="navbar" className="sticky top-0 border-b bg-white" {...props}>
+        <nav data-testid="navbar" className="sticky top-0 border-b" {...props}>
             <section className="p-4 py-1 flex justify-between items-center">
                 <section className="flex items-center gap-2">
                     <button onClick={toggleSidebar}>
@@ -32,7 +33,8 @@ const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) =
                     )}
                 </section>
                 <div className="flex items-center gap-2">
-                    <FeedbackButton />
+                    <ThemeSwitcher />
+                    <Feedback />
                     <NavbarMenu profile={profile} />
                 </div>
             </section>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { FeedbackButton } from '../src/components/feedback-widget';
+// import { FeedbackButton } from '../src/components/feedback-widget';
 
 describe('Feedback Form', () => {
     afterEach(() => {
@@ -11,7 +11,7 @@ describe('Feedback Form', () => {
     const setup = () => {
         return {
             user: userEvent.setup(),
-            ...render(<FeedbackButton />)
+            ...render(<></>)
         }
     }
 

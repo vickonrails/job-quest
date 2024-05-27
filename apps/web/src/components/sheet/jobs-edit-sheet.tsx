@@ -7,7 +7,8 @@ import { createClient } from '@/utils/supabase/client';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
 import { Status_Lookup } from 'shared';
-import { Button, Input, Rating, Select } from 'ui';
+import { Input, Rating, Select } from 'ui';
+import { Button } from 'ui/button';
 import { Sheet, type SheetProps } from './sheet';
 
 interface JobEditSheetProps<T> extends SheetProps {

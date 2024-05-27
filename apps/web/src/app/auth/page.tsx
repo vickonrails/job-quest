@@ -3,7 +3,7 @@ import { AuthCard } from 'ui/auth-card'
 
 export default function SignIn() {
     return (
-        <AuthCard className="bg-blue-50">
+        <AuthCard>
             <div className="p-5 py-6 max-w-sm mx-auto">
                 <div className="mb-8">
                     <h1 className="mb-3 text-3xl font-medium">Welcome to JobQuest!</h1>

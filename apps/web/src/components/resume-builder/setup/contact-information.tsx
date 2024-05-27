@@ -4,7 +4,8 @@ import { updateProfile } from '@/actions/profile/setup'
 import { useToast } from '@/components/toast/use-toast'
 import { type Profile } from 'lib/types'
 import { useForm } from 'react-hook-form'
-import { Button, Input } from 'ui'
+import { Input } from 'ui'
+import { Button } from 'ui/button'
 import { StepContainer } from './components/container'
 import { ErrorHint } from './components/error-hint'
 
@@ -37,7 +38,7 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
             description="Make it easy for employers to reach you by providing your up-to-date contact details, including your phone number, email address, and professional networking profile links."
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="p-4 border bg-white mb-8">
+                <section className="p-4 border mb-8">
                     <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">
                         <Input
                             autoFocus

@@ -3,10 +3,10 @@ import { type Column } from './Table'
 
 export function TableHeader<T>({ columns, hideActions }: { columns: Column<T>, hideActions?: boolean }) {
     return (
-        <thead className="rounded-sm bg-gray-50 sticky top-0 border-t">
+        <thead className="rounded-sm sticky top-0 border-t">
             <tr>
                 {!hideActions && (
-                    <th className="px-4 py-2 text-left rounded-tl-lg bg-white border-b border-x">
+                    <th className="px-4 py-2 text-left rounded-tl-lg border-b border-x">
                         <Typography variant="body-sm" className="font-normal text-accent">Actions</Typography>
                     </th>
                 )}

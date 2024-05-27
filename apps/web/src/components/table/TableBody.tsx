@@ -38,7 +38,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                 {items.map((item, index) => (
                     <tr
                         className={cn(
-                            'align-middle hover:cursor-pointer hover:bg-gray-100'
+                            'align-middle hover:cursor-pointer hover:bg-secondary'
                         )}
                         key={index}
                         onClick={_ => onRowClick?.(item.id)}

@@ -16,7 +16,7 @@ export function CoverLetterSection({ jobId }: { jobId: string }) {
         <section className="border-b pb-6">
             <div className="mb-3 flex flex-col gap-3">
                 <header>
-                    <h3 className="font-medium">Add Cover Letter</h3>
+                    <h3 className="font-medium text-secondary-foreground">Add Cover Letter</h3>
                     <p className="text-sm text-muted-foreground">Begin from scratch or allow magic write provide a starting point.</p>
                 </header>
             </div>

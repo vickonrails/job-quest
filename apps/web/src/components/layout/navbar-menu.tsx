@@ -4,9 +4,10 @@ import { signOut } from '@/actions/sign-out';
 import { Avatar } from '@/components/avatar';
 import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { type Profile } from 'lib/types';
-import { ChevronDown, LogOut, User } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from 'ui';
+import { AvatarMenu } from './avatar-menu';
 
 export function NavbarMenu({ profile }: { profile?: Profile | null }) {
     const avatarDisplay = profile?.full_name ?? profile?.email_address ?? ''
@@ -14,13 +15,12 @@ export function NavbarMenu({ profile }: { profile?: Profile | null }) {
 
     return (
         <section className="flex items-center">
-            <MenuBar
+            <AvatarMenu profile={profile} />
+            {/* <MenuBar
                 contentProps={{ side: 'bottom', sideOffset: 10, align: 'end', className: 'w-lg w-40' }}
                 trigger={(
-                    <Button variant="ghost" className="flex items-center rounded-3xl gap-2 p-2 py-1">
+                    <Button className="flex items-center rounded-3xl gap-2 p-2 py-1">
                         <Avatar size="sm" alt={profile?.full_name ?? ''} fallbackText={avatarDisplay} />
-                        {trimText(avatarDisplay, 10)}
-                        <ChevronDown />
                     </Button>
                 )}
             >
@@ -31,7 +31,7 @@ export function NavbarMenu({ profile }: { profile?: Profile | null }) {
                 <MenuItem variant="destructive" className="py-2" icon={<LogOut size={20} />} onClick={() => signOut()}>
                     Log out
                 </MenuItem>
-            </MenuBar>
+            </MenuBar> */}
         </section>
     )
 }

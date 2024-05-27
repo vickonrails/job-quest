@@ -18,7 +18,7 @@ export function JobDescription({ job }: { job: Job }) {
             <KeywordsSection job={job} />
             <main className="mb-6">
                 <section className="border p-3 rounded-md">
-                    <div className="text-base-col" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
+                    <div className="text-muted-foreground" id="__description" dangerouslySetInnerHTML={{ __html: job.description ?? '' }} />
                 </section>
             </main>
         </>

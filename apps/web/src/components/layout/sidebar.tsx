@@ -67,7 +67,7 @@ interface NavGroupProps extends HTMLAttributes<HTMLElement> {
 const NavGroup = ({ title, children, ...rest }: NavGroupProps) => {
     return (
         <div {...rest}>
-            <h4 className="mb-4 uppercase text-xs font-bold px-3 text-gray-500">{title}</h4>
+            <h4 className="mb-4 uppercase text-xs font-bold px-3">{title}</h4>
             {children}
         </div>
     )

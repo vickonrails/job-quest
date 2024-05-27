@@ -7,7 +7,7 @@ export function SetupLink(props: React.AllHTMLAttributes<HTMLAnchorElement> & { 
     const isActive = currentStep === props.step
 
     return (
-        <li data-testid="setup-navigator" className={cn('px-2 py-3 text-muted-foreground', isActive && 'bg-gray-100 border-l-4 border-primary text-primary')}>
+        <li data-testid="setup-navigator" className={cn('px-2 py-3 text-muted-foreground hover:bg-muted-foreground', isActive && 'border-l-4 border-primary text-primary')}>
             <Link href="" className="flex items-center gap-2" {...props} />
         </li>
     )

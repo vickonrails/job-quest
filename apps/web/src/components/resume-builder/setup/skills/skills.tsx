@@ -6,7 +6,8 @@ import { type Profile } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
-import { Button, Input } from 'ui';
+import { Input } from 'ui/input';
+import { Button } from 'ui/button';
 import { StepContainer } from '../components/container';
 import { Chip } from '@/components/chip';
 
@@ -55,7 +56,7 @@ export default function Skills({ profile }: { profile: Profile }) {
             description="Highlight the skills that set you apart, including technical and soft skills. Focus on those that are most relevant to the job you want."
         >
             <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
-                <section className="p-4 border bg-white mb-8">
+                <section className="p-4 border mb-8">
                     <SkillsForm form={form} />
                 </section>
                 <Button type="submit" loading={form.formState.isSubmitting}>Save & Proceed</Button>

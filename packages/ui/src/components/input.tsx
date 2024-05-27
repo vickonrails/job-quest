@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Size, cn, getSize } from "shared";
+import { type Size, cn, getSize } from 'shared';
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'size'> {
@@ -51,7 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
-Input.displayName = "Input"
+Input.displayName = 'Input'
 
 export { Input };
 

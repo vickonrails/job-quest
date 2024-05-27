@@ -3,7 +3,7 @@ import { cn } from 'shared';
 
 export function DashboardSidebar({ className, ...props }: HTMLAttributes<HTMLElement>) {
     return (
-        <aside className={cn('bg-white rounded-xl p-4 border', className)} {...props}>
+        <aside className={cn('rounded-xl p-4 border', className)} {...props}>
             <h2 className="text-lg font-medium mb-12">Upcoming reminders</h2>
             <section className="flex flex-col">
                 <div className="mx-auto mb-5">

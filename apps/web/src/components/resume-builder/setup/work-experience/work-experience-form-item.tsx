@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
-import { Checkbox } from '@/components/checkbox'
+import { Checkbox } from '@/components/checkbox-archive'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
 import { type WorkExperience } from 'lib/types'
@@ -55,7 +55,7 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
             header={<Header form={form} index={index} />}
             value={field.id}
             key={field.id}
-            className="border bg-white mb-2"
+            className="border mb-2"
         >
             <div className="p-4 pt-0">
                 <section className="grid grid-cols-2 gap-3 mb-4 rounded-md">
