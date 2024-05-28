@@ -1,4 +1,4 @@
-import { isLinkedIn } from '~contents';
+import { isLinkedIn } from '~contents/linkedin';
 import type { Job } from '~types';
 
 /**

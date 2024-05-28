@@ -67,10 +67,10 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+      {/* <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-4 w-4 text-foreground" />
         <span className="sr-only">Close</span>
-      </SheetPrimitive.Close>
+      </SheetPrimitive.Close> */}
     </SheetPrimitive.Content>
   </>
 ))
@@ -82,7 +82,7 @@ const SheetHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-2 text-center sm:text-left',
+      'flex flex-col space-y-2 text-center sm:text-left bg-black',
       className
     )}
     {...props}
@@ -106,13 +106,16 @@ SheetFooter.displayName = 'SheetFooter'
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title
-    ref={ref}
-    className={cn('text-base font-semibold text-foreground', className)}
-    {...props}
-  />
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & { onClose: () => void }
+>(({ className, onClose, ...props }, ref) => (
+  <header className="flex justify-between items-start">
+    <SheetPrimitive.Title
+      ref={ref}
+      className={cn('text-base font-semibold text-foreground', className)}
+      {...props}
+    />
+    <button onClick={onClose}><X className="w-4 h-4 text-muted-foreground" /></button>
+  </header>
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
@@ -133,11 +136,11 @@ export type SheetProps = SheetPrimitive.DialogProps & {
   title?: string
 }
 
-export function Sheet({ open, children, title, ...rest }: SheetProps) {
+export function Sheet({ open, children, title, onOpenChange, ...rest }: SheetProps) {
   return (
     <SheetRoot open={open} {...rest}>
       <SheetContent>
-        {title && <SheetTitle className="mb-3">{title}</SheetTitle>}
+        {title && <SheetTitle className="mb-3" onClose={() => onOpenChange(false)}>{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>

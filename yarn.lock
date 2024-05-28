@@ -1974,6 +1974,19 @@
     fs-extra "11.1.1"
     got "13.0.0"
 
+"@plasmohq/parcel-resolver@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@plasmohq/parcel-resolver/-/parcel-resolver-0.14.0.tgz#5d985854c4df202dba434164a5940bc3c3484a7e"
+  integrity sha512-OPGFiv2SxDEJl9sNPKfjkQ3QaqKOzSDx8E85Bq9FCOKCj+EWTPfoeUOAuMkHY/ArcvDBhWAo3Zu66f2U7iPEGQ==
+  dependencies:
+    "@parcel/core" "2.9.3"
+    "@parcel/hash" "2.9.3"
+    "@parcel/plugin" "2.9.3"
+    "@parcel/types" "2.9.3"
+    fast-glob "3.3.2"
+    fs-extra "11.1.1"
+    got "13.0.0"
+
 "@plasmohq/parcel-runtime@0.21.1":
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/@plasmohq/parcel-runtime/-/parcel-runtime-0.21.1.tgz#df6abd9ce368b9fcd4c6c8299953c52f86a8dc97"
@@ -6019,7 +6032,7 @@ fast-glob@3.3.1:
     merge2 "^1.3.0"
     micromatch "^4.0.4"
 
-fast-glob@^3.2.9, fast-glob@^3.3.0, fast-glob@^3.3.1:
+fast-glob@3.3.2, fast-glob@^3.2.9, fast-glob@^3.3.0, fast-glob@^3.3.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.2.tgz#a904501e57cfdd2ffcded45e99a54fef55e46129"
   integrity sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==
