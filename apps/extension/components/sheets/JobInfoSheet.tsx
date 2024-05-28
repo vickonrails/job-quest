@@ -38,6 +38,16 @@ interface AddJobResponse {
 
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            window.parent.document.body.style.pointerEvents = 'auto'
+        }, 1000)
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, []);
+
     const { jobInfo } = props
     const url = getJobUrl()
     const { isLoading, job, refresh } = useJob(url, {
