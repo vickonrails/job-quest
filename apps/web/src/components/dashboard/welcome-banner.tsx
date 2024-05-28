@@ -18,7 +18,7 @@ export async function JobsSummaryCards({ className, dashboardSummary, ...rest }:
             {...rest}
         >
             <Greeting profile={profile ?? undefined} />
-            <main className="flex gap-4 h-60 items-stretch">
+            <main className="flex gap-4 h-48 items-stretch">
                 <SummaryCard
                     title="Recently Added"
                     href="/dashboard/details?card=recently_added"
@@ -55,7 +55,7 @@ export async function JobsSummaryCards({ className, dashboardSummary, ...rest }:
 function Greeting({ profile }: { profile?: Profile }) {
     if (profile?.full_name) {
         return (
-            <h2 className="w-full text-3xl font-bold my-6">
+            <h2 className="w-full text-xl font-medium mb-4">
                 Welcome {profile?.full_name?.split(' ')[0]}
             </h2>
         )

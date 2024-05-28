@@ -24,23 +24,23 @@ export function SummaryCard({ title, type, className, icon: Icon, count = 0, ...
     return (
         <Link
             className={cn(
-                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full opacity-95 bg-gradient-to-tr group hover:opacity-100',
+                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full opacity-90 bg-gradient-to-tr group hover:opacity-100',
                 gradientClasses,
                 className
             )}
             {...rest}
         >
-            <span className="transition-transform bg-white h-6 w-6 rounded-full text-xs font-bold text-black text-center flex self-end justify-center group-hover:scale-125 group-focus-within:scale-125">
+            <span className="transition-transform bg-neutral-200 h-6 w-6 rounded-full text-xs font-bold text-neutral-700 text-center flex self-end justify-center group-hover:scale-105">
                 <span className="m-auto">
                     {count}
                 </span>
             </span>
             {Icon && (
                 <div className="flex-1 grid">
-                    <Icon className="transition-transform m-auto group-hover:scale-125 group-focus-within:scale-125" size={50} />
+                    <Icon className="transition-transform m-auto group-hover:scale-125 group-focus-within:scale-125" size={30} />
                 </div>
             )}
-            <h3 className="transition-transform text-xl text-center font-medium group-hover:-translate-y-4 group-focus-within:-translate-y-4">{title}</h3>
+            <h3 className="transition-transform text-lg text-center text-neutral-100 font-medium group-hover:-translate-y-2 group-focus-within:-translate-y-2">{title}</h3>
         </Link>
     )
 }

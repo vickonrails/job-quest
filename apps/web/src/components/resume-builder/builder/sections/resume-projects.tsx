@@ -15,6 +15,7 @@ import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddSectionBtn } from './add-section-button';
+import { AddProjectItemDropdown } from './add-item-dropdown';
 
 interface ProjectsSectionProps {
     form: UseFormReturn<{ projects: Project[] }>
@@ -82,12 +83,26 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
         showDeleteDialog({ ...project, id: project.id });
     }
 
+    const handleAddItem = (project: Project) => {
+        append({ ...project, resume_id: params.id, id: uuid() })
+    }
+
+    const handleAddBlank = () => {
+        append(getDefaultProject({ userId }))
+    }
+
     return (
         <section className="mb-4">
             <h3 className="font-medium text-lg">Projects</h3>
             <p className="mb-4 text-sm text-muted-foreground">Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects.</p>
             <ProjectForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
-            <MenuBar
+            <AddProjectItemDropdown
+                items={templates}
+                title="Add Project"
+                onAddBlank={handleAddBlank}
+                onAddItem={handleAddItem}
+            />
+            {/* <MenuBar
                 contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
                 triggerProps={{ className: 'text-primary hover:text-primary' }}
                 Header="From your profile"
@@ -117,7 +132,7 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
                     <p>Add Blank</p>
                     <p className="text-sm text-muted-foreground">Add from scratch</p>
                 </MenuItem>
-            </MenuBar>
+            </MenuBar> */}
 
             <AlertDialog
                 open={isOpen}

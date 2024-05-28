@@ -84,7 +84,7 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
     }
 
     return (
-        <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
+        <section className="bg-neutral-100 flex-1 p-6 overflow-auto flex flex-col items-end">
             <header className="flex justify-between w-full items-center mb-2">
                 <Select
                     options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}

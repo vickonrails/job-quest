@@ -9,10 +9,10 @@ import { cn, formatDate } from 'shared';
 
 export function ResumePreviewCard({ resume, className }: { resume: Resume, className?: string }) {
     return (
-        <Link href={`/resumes/${resume.id}`} className={cn('w-[32%] border rounded-md p-4 group hover:border-primary', className)}>
-            <article className="rounded-lg flex gap-2 items-center">
+        <Link href={`/resumes/${resume.id}`} className={cn('w-[32%] border rounded-sm p-4 group', className)}>
+            <article className="flex gap-2 items-center">
                 <div className={cn('transition-colors h-24 p-2 w-1/3 text-3xl bg-muted font-bold grid')} >
-                    <GanttChartSquare size={40} className="transition-transform m-auto group-hover:scale-125" />
+                    <GanttChartSquare size={40} className="text-muted-foreground transition-transform m-auto group-hover:scale-125" />
                 </div>
                 <div>
                     <h3 className="transition-transform font-medium leading-tight mb-1 group-hover:translate-y-0.5 group-hover:text-primary">{resume.title}</h3>

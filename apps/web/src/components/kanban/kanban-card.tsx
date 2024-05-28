@@ -1,19 +1,24 @@
 'use client'
 
-import { MenuBar, MenuItem, Separator } from '@/components/menubar'
 import { Draggable } from '@hello-pangea/dnd'
 import { type Job } from 'lib/types'
-import { FileText, MoreVertical, PanelRightClose, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { cn } from 'shared'
 import { Rating } from 'ui'
+import { KanbanCardDropdownMenu } from './kanban-card-dropdown'
 import { type KanbanCardProps } from './kanban-column'
 
 export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: KanbanCardProps) {
     const router = useRouter()
-    const navigateToJob = (job: Job) => {
+    const onDetailedViewClick = () => {
         return router.push(`/jobs-tracker/${job.id}`);
+    }
+    const onQuickViewClick = () => {
+        openEditSheet?.(job)
+    }
+    const onShowDeleteModal = () => {
+        openDeleteDialog?.(job)
     }
 
     return (
@@ -33,8 +38,13 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                             {job.company_site && <Image width={20} height={20} src={`https://logo.clearbit.com/${job.company_site}`} alt="" />}
                             <p className="text-sm text-muted-foreground">{job.company_name}</p>
                         </div>
+                        <KanbanCardDropdownMenu
+                            onQuickViewClick={onQuickViewClick}
+                            onDetailedViewClick={onDetailedViewClick}
+                            onDeleteClick={onShowDeleteModal}
+                        />
 
-                        <MenuBar
+                        {/* <MenuBar
                             triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
                             contentProps={{ side: 'bottom', align: 'end' }}
                             trigger={<MoreVertical size={16} />}
@@ -61,7 +71,7 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                             >
                                 Delete
                             </MenuItem>
-                        </MenuBar>
+                        </MenuBar> */}
                     </div>
                     <div className="mb-2 text-sm">
                         <h3 className="font-medium">{job.position}</h3>

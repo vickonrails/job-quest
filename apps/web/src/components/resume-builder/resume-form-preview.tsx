@@ -75,12 +75,12 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                         form={workExperienceForm}
                     />
                     <EducationSection
-                        userId={resume.id}
+                        userId={resume.user_id}
                         form={educationForm}
                         templates={educationTemplates}
                     />
                     <ProjectsSection
-                        userId={resume.id}
+                        userId={resume.user_id}
                         form={projectsForm}
                         templates={projectsTemplates}
                     />

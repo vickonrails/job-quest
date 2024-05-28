@@ -16,8 +16,8 @@ export const NavLink = ({ href, ...props }: LinkProps) => {
         <Link
             onClick={handleClick}
             className={cn(
-                'flex items-center py-2 px-3 rounded-lg text-sm select-none text-muted-foreground',
-                isActiveNav ? 'text-primary-light font-medium' : '',
+                'flex items-center py-2 px-3 rounded-lg text-sm select-none text-muted-foreground hover:bg-muted',
+                isActiveNav ? 'text-accent-foreground font-medium bg-muted' : '',
                 props.disabled && 'cursor-not-allowed'
             )}
             href={props.disabled ? '' : href}

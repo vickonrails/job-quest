@@ -7,7 +7,7 @@ const Logo: FC<LogoProps> = ({ className, ...rest }) => {
     return (
         <h1 className={
             clsx(
-                'text-primary text-xl font-medium',
+                'text-muted-foreground hover:text-accent-foreground text-xl font-medium',
                 className
             )
         } {...rest}>JobQuest</h1>

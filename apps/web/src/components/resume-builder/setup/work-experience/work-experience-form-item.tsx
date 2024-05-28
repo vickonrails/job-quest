@@ -133,7 +133,7 @@ function Header({ form, index }: { form: UseFormReturn<{ workExperience: WorkExp
     return (
         <header className="flex items-start justify-between group cursor-pointer hover:text-primary w-full p-4">
             <div>
-                <p className="flex gap-2 select-none font-medium">{job_title || 'Untitled...'}</p>
+                <p className="flex gap-2 select-none text-accent-foreground font-medium">{job_title || 'Untitled...'}</p>
                 <span className="text-sm text-muted-foreground">{company_name || 'Untitled...'}
                     <DateRenderer startDate={start_date} endDate={end_date ?? ''} />
                 </span>

@@ -1,6 +1,5 @@
 import { updateEducation } from '@/actions/resume';
 import { AlertDialog } from '@/components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { EducationForm } from '@/components/resume-builder/setup/education/education-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
@@ -9,12 +8,11 @@ import { type Education } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
-import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from './add-section-button';
+import { AddEducationItemDropdown } from './add-item-dropdown';
 
 interface EducationSectionProps {
     form: UseFormReturn<{ education: Education[] }>
@@ -43,7 +41,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
 
     const saveFn = useCallback(async ({ education }: { education: Education[] }) => {
         const { success, error } = await updateEducation(education, [], params.id, userId)
-        if (success && error) {
+        if (!success && error) {
             toast({
                 variant: 'destructive',
                 title: 'An error occurred'
@@ -84,6 +82,15 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
         }
     }, [watchedData, debouncedSubmit])
 
+    const handleAddBlank = () => {
+        append(getDefaultEducation({ userId }))
+    }
+
+    const handleAddItem = (education: Education) => {
+        const newEducation = generateNewExperience({ ...education, resume_id: params.id })
+        append(newEducation)
+    }
+
     return (
         <section className="mb-4">
             <h3 className="font-medium text-lg">Education</h3>
@@ -96,39 +103,13 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
                 onDeleteClick={handleDeleteClick}
                 setHighlightsToDelete={() => {/** */ }}
             />
-            <MenuBar
-                contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                triggerProps={{ className: 'text-primary hover:text-primary' }}
-                Header="From your profile"
-                trigger={(
-                    <AddSectionBtn>
-                        Add Education
-                    </AddSectionBtn>
-                )}
-                onClick={e => e.stopPropagation()}
-            >
-                {templates?.map((education) => {
-                    const { institution, field_of_study, id, start_date, end_date } = education
-                    const endDate = end_date ? formatDate(end_date) : 'Now'
 
-                    const newWorkExperience = generateNewExperience({ ...education, resume_id: params.id })
-                    return (
-                        <MenuItem className="py-2" key={id} onClick={() => append(newWorkExperience)}>
-                            <p className="font-medium">{institution} - {field_of_study}</p>
-                            <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>
-                        </MenuItem>
-                    )
-                })}
-
-                <Separator />
-                <MenuItem
-                    className="py-2"
-                    onClick={() => append(getDefaultEducation({ userId }))}
-                >
-                    <p>Add Blank</p>
-                    <p className="text-sm text-muted-foreground">Add from scratch</p>
-                </MenuItem>
-            </MenuBar>
+            <AddEducationItemDropdown
+                items={templates}
+                title="Add Education"
+                onAddBlank={handleAddBlank}
+                onAddItem={handleAddItem}
+            />
 
             <AlertDialog
                 open={isOpen}

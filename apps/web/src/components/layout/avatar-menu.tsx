@@ -22,7 +22,7 @@ export function AvatarMenu({ profile }: { profile?: Profile | null }) {
                     <Avatar size="sm" alt={profile?.full_name ?? ''} fallbackText={avatarDisplay} />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-56" align="end" sideOffset={15}>
                 <DropdownMenuLabel>{profile?.full_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/profile/setup')}>Update Profile</DropdownMenuItem>
