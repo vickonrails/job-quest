@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Banner } from 'ui';
 import { AuthGuard } from '~components/auth-guard';
-import { isLinkedIn } from '~contents';
+import { isLinkedIn } from '~contents/linkedin';
 import { useJob } from '~hooks/useJob';
 import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
@@ -37,6 +37,16 @@ interface AddJobResponse {
 
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            window.parent.document.body.style.pointerEvents = 'auto'
+        }, 1000)
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, []);
+
     const { jobInfo } = props
     // TODO: this is going to fetch the job using the link to check if its in the database
     const { isLoading, job, refresh } = useJob(getJobUrl(), { defaultData: getDefaultJobData(jobInfo) })
