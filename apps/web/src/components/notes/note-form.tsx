@@ -44,14 +44,13 @@ function NoteForm({ job }: { job: Job }) {
                 title: 'Note added',
             })
         } catch (err) {
-            alert('Error')
             // do I still need to do all the error things? Or does the react-query library do that for me?
         }
     }
 
     return (
         <form onSubmit={handleCreateNote} className="flex flex-col gap-4 items-start">
-            <Textarea value={note} required onChange={val => setNote(val.target.value)} />
+            <Textarea value={note} required onChange={val => setNote(val.target.value)} containerProps={{ className: 'w-full' }} />
             <Button variant="outline" loading={isAddingNotes} disabled={!note}>Add notes</Button>
         </form>
     )

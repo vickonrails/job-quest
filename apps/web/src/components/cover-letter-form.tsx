@@ -31,15 +31,18 @@ export default function CoverLetterForm({ job, coverLetter }: { job: Job, coverL
     })
 
     return (
-        <form className="flex flex-col items-start h-full p-1 flex-1 w-3/5 pb-6">
+        <form className="flex flex-col gap-2 items-start h-full p-1 flex-1 w-3/5 pb-6">
             <Textarea
                 onChange={ev => setValue(ev.target.value)}
                 placeholder="Write your cover letter here"
                 rows={20}
                 value={value}
                 // disabled={writing}
-                className="w-full p-4 pb-0 flex-1 text-accent-foreground mb-2 border"
+                className="w-full h-full p-4 pb-0 flex-1 text-accent-foreground rounded-sm mb-2 border"
                 autoFocus
+                containerProps={{
+                    className: 'w-full flex-1'
+                }}
             />
             <div className="flex gap-2 w-full justify-end items-center">
                 {saving && (

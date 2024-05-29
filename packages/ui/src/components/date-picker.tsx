@@ -4,39 +4,40 @@ import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import * as React from 'react'
 
+import { formatToUTC } from 'shared'
 import { type SelectSingleEventHandler } from 'react-day-picker'
 import { cn } from 'shared'
 import { Button } from './button'
 import { Calendar, type CalendarProps } from './calendar'
+import { Label } from './label'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from './popover'
-import { Label } from './label'
 
 type DatePickerProps = CalendarProps & {
     label?: string
     hint?: string | React.ReactNode
-    onChange?: (date: Date) => void
+    onChange?: (date: Date | string) => void
     placeholder?: string
 }
 
-export function DatePicker({ selected, onChange, hint, label, mode = 'single' }: DatePickerProps) {
+export function DatePicker({ selected, onChange, hint, label }: DatePickerProps) {
     const [date, setDate] = React.useState<Date | undefined>(selected)
     const [open, setOpen] = React.useState(false)
     const id = React.useId()
 
     const handleDateChange: SelectSingleEventHandler = (_, selectedDay) => {
-        if (!selectedDay) return;
-        onChange?.(selectedDay)
+        if (!selectedDay) return
+        onChange?.(formatToUTC(selectedDay))
         setDate(selectedDay)
         setOpen(false)
     }
 
     return (
         <div className="flex flex-col">
-            {label && <Label htmlFor={id} className="block m-1.5 font-normal text-sm text-muted-foreground select-none">{label}</Label>}
+            {label && <Label htmlFor={id}>{label}</Label>}
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button

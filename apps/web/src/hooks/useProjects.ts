@@ -17,8 +17,7 @@ export function useProjects() {
     const queryResult = useQuery(['projects'], () => fetchProjects({ userId: user?.id, client }));
     const form = useForm<{ projects: Project[] }>({
         defaultValues: { projects: queryResult.data?.length ? queryResult.data : [getDefaultProject({ userId: user?.id })] },
-        mode: 'onChange',
-        // criteriaMode: 'all'
+        mode: 'onChange'
     })
 
     const fieldsArr = useFieldArray({

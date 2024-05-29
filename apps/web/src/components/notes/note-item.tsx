@@ -6,7 +6,8 @@ import { type Note, type NoteUpdateDTO } from 'lib/types'
 import { Trash } from 'lucide-react'
 import React, { useCallback, useState, type HTMLAttributes } from 'react'
 import { cn, formatDate } from 'shared'
-import { Button, Textarea } from 'ui'
+import { Textarea } from 'ui/textarea'
+import { Button } from 'ui/button'
 
 interface NoteItemProps extends HTMLAttributes<HTMLElement> {
     /** note to edit */

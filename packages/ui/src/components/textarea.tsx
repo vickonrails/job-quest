@@ -1,17 +1,18 @@
-import { Label } from '@radix-ui/react-label'
+import { Label } from './label'
 import * as React from 'react'
 
 import { cn } from 'shared'
 
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string
+  containerProps?: React.HTMLAttributes<HTMLDivElement>
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, ...props }, ref) => {
+  ({ className, label, containerProps, ...props }, ref) => {
     const id = React.useId()
     return (
-      <div>
+      <div {...containerProps}>
         {label && <Label htmlFor={id}>{label}</Label>}
         <textarea
           id={id}

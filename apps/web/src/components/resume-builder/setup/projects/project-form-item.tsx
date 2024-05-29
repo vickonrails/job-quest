@@ -70,8 +70,7 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
     const { register, clearErrors, getValues, setError } = form
     const fieldErrs = form.formState.errors?.projects?.[index] ?? {}
 
-    const validate = useCallback(() => {
-        clearErrors()
+    const validate = useCallback((field: string) => {
         const [start_date, end_date] = getValues([
             `projects.${index}.start_date`,
             `projects.${index}.end_date`
@@ -85,17 +84,21 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
         const invalidDuration = isAfter(startDate, endDate)
 
         if (invalidDuration) {
-            setError(`projects.${index}.end_date`, {
-                message: 'End date cannot be earlier than start date'
-            })
-            setError(`projects.${index}.start_date`, {
-                message: 'Start date cannot be later than end date'
-            })
-            return false;
+            return field === 'start_date' ?
+                'Start date cannot be later than end date' :
+                'End date cannot be earlier than start date'
+
+            // setError(`projects.${index}.start_date`, {
+            //     message: 'Start date cannot be later than end date'
+            // })
+            // setError(`projects.${index}.end_date`, {
+            //     message: 'End date cannot be earlier than start date'
+            // })
         }
 
+        clearErrors()
         return true
-    }, [setError, getValues, clearErrors, index])
+    }, [getValues, clearErrors, index])
 
     return (
         <AccordionItem
@@ -123,12 +126,12 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
                     <Controller
                         name={`projects.${index}.start_date`}
                         control={form.control}
-                        rules={{ validate, required: true }}
-                        render={({ field }) => {
+                        rules={{ validate: () => validate('start_date'), required: true }}
+                        render={({ field, fieldState: { error } }) => {
                             const value = field.value ? new Date(field.value) : undefined
                             return (
                                 <DatePicker
-                                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                                    hint={<ErrorHint>{error?.message}</ErrorHint>}
                                     mode="single"
                                     label="Start Date"
                                     selected={value}
@@ -141,12 +144,12 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
                     <Controller
                         name={`projects.${index}.end_date`}
                         control={form.control}
-                        rules={{ validate }}
-                        render={({ field }) => {
+                        rules={{ validate: () => validate('end_date') }}
+                        render={({ field, fieldState: { error } }) => {
                             const value = field.value ? new Date(field.value) : undefined
                             return (
                                 <DatePicker
-                                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                                    hint={<ErrorHint>{error?.message}</ErrorHint>}
                                     mode="single"
                                     label="End Date"
                                     selected={value}

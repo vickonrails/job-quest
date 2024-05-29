@@ -1,3 +1,4 @@
+import { signOut } from '@/actions/sign-out'
 import { type Profile } from 'lib/types'
 import { useRouter } from 'next/navigation'
 import { Button } from 'ui/button'
@@ -26,7 +27,7 @@ export function AvatarMenu({ profile }: { profile?: Profile | null }) {
                 <DropdownMenuLabel>{profile?.full_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/profile/setup')}>Update Profile</DropdownMenuItem>
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

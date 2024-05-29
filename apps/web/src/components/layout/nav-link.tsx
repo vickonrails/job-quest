@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from 'shared';
 import { type LinkProps } from '../link';
 
-export const NavLink = ({ href, ...props }: LinkProps) => {
+export const NavLink = ({ href, children, ...props }: LinkProps) => {
     const isActiveNav = useIsActiveNav({ href: href.toString() });
 
     const handleClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -15,14 +15,18 @@ export const NavLink = ({ href, ...props }: LinkProps) => {
     return (
         <Link
             onClick={handleClick}
-            className={cn(
-                'flex items-center py-2 px-3 rounded-lg text-sm select-none text-muted-foreground hover:bg-muted',
-                isActiveNav ? 'text-accent-foreground font-medium bg-muted' : '',
-                props.disabled && 'cursor-not-allowed'
-            )}
+            className={cn('px-3 block border-l-2 border-transparent', isActiveNav && 'border-primary')}
             href={props.disabled ? '' : href}
             {...props}
-        />
+        >
+            <div className={cn(
+                'flex items-center p-2 px-3 rounded-lg text-sm select-none text-muted-foreground hover:bg-muted',
+                isActiveNav ? 'text-accent-foreground font-medium' : '',
+                props.disabled && 'cursor-not-allowed'
+            )}>
+                {children}
+            </div>
+        </Link>
     )
 }
 

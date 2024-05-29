@@ -5,7 +5,9 @@ import { useToast } from '@/components/toast/use-toast';
 import { type Profile } from 'lib/types';
 import { useForm } from 'react-hook-form';
 import { useSetupContext } from 'src/hooks/useSetupContext';
-import { Button, Input, Textarea } from 'ui';
+import { Button } from 'ui/button';
+import { Input } from 'ui/input';
+import { Textarea } from 'ui/textarea';
 import { StepContainer } from './components/container';
 
 export function BasicInformation({ profile }: { profile: Profile }) {
@@ -62,7 +64,9 @@ export function BasicInformation({ profile }: { profile: Profile }) {
                         rows={5}
                         label="Professional summary"
                         placeholder="Professional Summary"
-                        containerClasses="col-span-2"
+                        containerProps={{
+                            className: 'col-span-2'
+                        }}
                         {...register('professional_summary')}
                     />
                     <Input

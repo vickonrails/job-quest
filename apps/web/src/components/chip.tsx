@@ -16,7 +16,7 @@ export const Chip = ({ label, variant = 'plain', onCloseClick, className, ...res
 
     return (
         <div className={cn(
-            'px-3 py-1.5 inline-flex items-center gap-1 mb-2 rounded-full min-w-14 font-medium text-sm mr-2 text-center',
+            'px-3 py-1.5 bg-muted text-muted-foreground inline-flex items-center gap-1 mb-2 rounded-full min-w-14 font-medium text-sm mr-2 text-center',
             'chip',
             variant,
             className

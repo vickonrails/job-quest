@@ -24,7 +24,7 @@ export function SummaryCard({ title, type, className, icon: Icon, count = 0, ...
     return (
         <Link
             className={cn(
-                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center border flex-1 h-full opacity-90 bg-gradient-to-tr group hover:opacity-100',
+                'transition-colors p-4 rounded-lg flex flex-col text-white justify-end items-center flex-1 h-full opacity-90 bg-gradient-to-tr group hover:opacity-100',
                 gradientClasses,
                 className
             )}

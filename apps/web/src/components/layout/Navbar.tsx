@@ -22,7 +22,7 @@ const Navbar: FC<NavbarProps> = async ({ pageTitle, toggleSidebar, ...props }) =
     return (
         <nav data-testid="navbar" className="sticky top-0 border-b" {...props}>
             <section className="p-4 py-1 flex justify-between items-center">
-                <section className="flex items-center gap-2 text-muted-foreground">
+                <section className="flex items-center gap-2">
                     <button onClick={toggleSidebar}>
                         <PanelLeftClose size={22} />
                     </button>

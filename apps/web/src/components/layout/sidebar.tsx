@@ -1,7 +1,9 @@
 import clsx from 'clsx';
-import { Bell, Clipboard, File, FileText, Folder, Grid, User } from 'lucide-react';
+import { FileType, Home, SquareKanban } from 'lucide-react';
+import Image from 'next/image';
 import { type FC, type HTMLAttributes } from 'react';
 import { Logo } from 'ui/logo';
+import LogoImg from '../../../public/logo.png';
 import { NavLink } from './nav-link';
 
 type SidebarProps = HTMLAttributes<HTMLElement>;
@@ -11,30 +13,32 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
     return (
         <aside data-testid="sidebar" className={
             clsx(
-                'p-5 flex-shrink-0 sticky max-h-screen top-0 bg-background border-r',
+                'py-4 flex-shrink-0 sticky max-h-screen top-0 bg-background border-r',
                 className
             )
         } {...rest}>
-            <Logo className="mb-10" />
+            <Logo className="mx-6 mb-8">
+                <Image src={LogoImg} alt="" height={25} width={25} />
+            </Logo>
             <nav>
                 <NavGroup className="mb-6">
                     <NavLink href="/dashboard">
-                        <Grid className="mr-2" />
-                        <span>Dashboard</span>
+                        <Home className="mr-2" />
+                        <span>Home</span>
                     </NavLink>
 
                     <NavLink href="/jobs-tracker">
-                        <Folder className="mr-2" />
+                        <SquareKanban className="mr-2" />
                         <span>Job Tracker</span>
                     </NavLink>
 
                     <NavLink href="/resumes">
-                        <File className="mr-2" />
+                        <FileType className="mr-2" />
                         <span>My Resumes</span>
                     </NavLink>
                 </NavGroup>
 
-                <NavGroup title="labels">
+                {/* <NavGroup title="labels">
                     <NavLink href="/notes" disabled>
                         <FileText className="mr-2" />
                         <span>Notes</span>
@@ -54,7 +58,7 @@ export const Sidebar: FC<SidebarProps> = ({ className, ...rest }) => {
                         <User className="mr-2" />
                         <span>Contacts</span>
                     </NavLink>
-                </NavGroup>
+                </NavGroup> */}
             </nav>
         </aside>
     )
