@@ -18,9 +18,9 @@ export function WorkExperience() {
     const client = createClient()
     const queryClient = useQueryClient()
     const { toast } = useToast()
-    const [idxToRemove, setRemoveIdx] = useState<number>();
+    const [idxToRemove, setRemoveIdx] = useState<number>()
     const { user } = useSetupContext()
-    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience();
+    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience()
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,

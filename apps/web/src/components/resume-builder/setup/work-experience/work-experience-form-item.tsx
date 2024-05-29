@@ -1,11 +1,12 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
-import { Checkbox } from '@/components/checkbox-archive'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
+import { isAfter } from 'date-fns'
 import { type WorkExperience } from 'lib/types'
-import { type Dispatch, type SetStateAction } from 'react'
+import { useCallback, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Input } from 'ui'
+import { DatePicker as NewDatePicker } from 'ui/date-picker'
 import { ErrorHint } from '../components/error-hint'
 import { type BaseFormItemProps } from '../education/education-form-item'
 import { WorkExperienceHighlights } from './work-experience-highlights'
@@ -45,10 +46,37 @@ interface FormItemProps extends BaseFormItemProps {
     onHighlightDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-/** ------------------ Work Experience Form Item ------------------ */
 function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofocus }: FormItemProps) {
-    const { register } = form
-    const fieldErrs = form.formState.errors?.workExperience?.[index] ?? {}
+    const { register, formState: { errors } } = form
+    const fieldErrs = errors?.workExperience?.[index] ?? {}
+
+    // TODO: memoize
+    const validate = useCallback(() => {
+        form.clearErrors()
+        const [start_date, end_date] = form.getValues([
+            `workExperience.${index}.start_date`,
+            `workExperience.${index}.end_date`
+        ])
+
+        if (!start_date || !end_date) return;
+
+        const startDate = new Date(start_date)
+        const endDate = new Date(end_date)
+
+        const invalidDuration = isAfter(startDate, endDate)
+
+        if (invalidDuration) {
+            form.setError(`workExperience.${index}.end_date`, {
+                message: 'End date cannot be earlier than start date'
+            })
+            form.setError(`workExperience.${index}.start_date`, {
+                message: 'Start date cannot be later than end date'
+            })
+            return false;
+        }
+
+        return true
+    }, [form, index])
 
     return (
         <AccordionItem
@@ -79,38 +107,42 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                         placeholder="Location..."
                         {...register(`workExperience.${index}.location`)}
                     />
-                    <Input
-                        type="date"
-                        label="Start Date"
-                        placeholder="Start Date..."
-                        hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
-                        {...register(`workExperience.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
+
+                    <Controller
+                        control={form.control}
+                        name={`workExperience.${index}.start_date`}
+                        rules={{ validate }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <NewDatePicker
+                                    mode="single"
+                                    label="Start Date"
+                                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                                    onChange={(x) => field.onChange(x)}
+                                    selected={value}
+                                />
+                            )
+                        }}
                     />
 
                     <Controller
-                        name={`workExperience.${index}.still_working_here`}
+                        name={`workExperience.${index}.end_date`}
                         control={form.control}
-                        render={({ field: item }) => (
-                            <Checkbox
-                                id={`${field.job_title ?? ''}-${field.company_name ?? ''}-still-working-here`}
-                                label="I'm Still Working Here?"
-                                checked={item.value ?? false}
-                                onCheckedChange={val => item.onChange(val)}
-                                className="h-[84px]"
-                            />
-                        )}
+                        rules={{ validate }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <NewDatePicker
+                                    mode="single"
+                                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                                    label="End Date"
+                                    onChange={(x) => field.onChange(x)}
+                                    selected={value}
+                                />
+                            )
+                        }}
                     />
-
-                    {!field.still_working_here && (
-                        <Input
-                            type="date"
-                            label="End Date"
-                            placeholder="End Date..."
-                            hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
-                            disabled={Boolean(field.still_working_here)}
-                            {...register(`workExperience.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
-                        />
-                    )}
                 </section>
 
                 <WorkExperienceHighlights

@@ -11,6 +11,7 @@ import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
+
     // TODO: error handling
     if (!userId) throw new Error('userId not provided');
     return (await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)).data
