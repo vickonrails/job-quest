@@ -1,5 +1,5 @@
 'use client'
-import { AlertDialog } from '@/components/alert-dialog';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { JobEditSheet } from '@/components/sheet/jobs-edit-sheet';
 import { Edit, MoreVertical, Trash2 } from 'lucide-react';
@@ -79,7 +79,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                 ))}
             </tbody>
 
-            <AlertDialog
+            <DeleteDialog
                 open={deleteModalOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to delete this job?"

@@ -1,6 +1,5 @@
 import { updateProjects } from '@/actions/resume';
-import { AlertDialog } from '@/components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@/components/menubar';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
@@ -9,12 +8,10 @@ import { type Project } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
-import { formatDate } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from './add-section-button';
 import { AddProjectItemDropdown } from './add-item-dropdown';
 
 interface ProjectsSectionProps {
@@ -102,39 +99,8 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
                 onAddBlank={handleAddBlank}
                 onAddItem={handleAddItem}
             />
-            {/* <MenuBar
-                contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                triggerProps={{ className: 'text-primary hover:text-primary' }}
-                Header="From your profile"
-                trigger={(
-                    <AddSectionBtn>
-                        Add Project
-                    </AddSectionBtn>
-                )}
-                onClick={e => e.stopPropagation()}
-            >
-                {templates?.map((project) => {
-                    const { title, id, start_date, end_date } = project
-                    const endDate = end_date ? formatDate(end_date) : 'Now'
-                    return (
-                        <MenuItem className="py-2" key={id} onClick={() => append({ ...project, resume_id: params.id, id: uuid() })}>
-                            <p className="font-medium">{title}</p>
-                            {start_date && <p className="text-sm text-muted-foreground">{formatDate(start_date)} - {endDate}</p>}
-                        </MenuItem>
-                    )
-                })}
 
-                <Separator />
-                <MenuItem
-                    className="py-2"
-                    onClick={() => append(getDefaultProject({ userId }))}
-                >
-                    <p>Add Blank</p>
-                    <p className="text-sm text-muted-foreground">Add from scratch</p>
-                </MenuItem>
-            </MenuBar> */}
-
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this project"

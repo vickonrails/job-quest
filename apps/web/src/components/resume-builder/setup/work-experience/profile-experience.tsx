@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertDialog } from '@/components/alert-dialog'
+import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
 import { useSetupContext } from '@/hooks/useSetupContext'
 import { createClient } from '@/utils/supabase/client'
@@ -92,7 +92,7 @@ export function WorkExperience() {
                 </form>
             </StepContainer>
 
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this experience"

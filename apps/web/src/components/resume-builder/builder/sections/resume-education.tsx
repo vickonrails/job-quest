@@ -1,5 +1,5 @@
 import { updateEducation } from '@/actions/resume';
-import { AlertDialog } from '@/components/alert-dialog';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { EducationForm } from '@/components/resume-builder/setup/education/education-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
@@ -111,7 +111,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
                 onAddItem={handleAddItem}
             />
 
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this Education?"

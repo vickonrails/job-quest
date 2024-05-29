@@ -6,7 +6,7 @@ import { type WorkExperience } from 'lib/types'
 import { useCallback, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Input } from 'ui'
-import { DatePicker as NewDatePicker } from 'ui/date-picker'
+import { DatePicker } from 'ui/date-picker'
 import { ErrorHint } from '../components/error-hint'
 import { type BaseFormItemProps } from '../education/education-form-item'
 import { WorkExperienceHighlights } from './work-experience-highlights'
@@ -115,7 +115,7 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                         render={({ field }) => {
                             const value = field.value ? new Date(field.value) : undefined
                             return (
-                                <NewDatePicker
+                                <DatePicker
                                     mode="single"
                                     label="Start Date"
                                     hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
@@ -133,7 +133,7 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                         render={({ field }) => {
                             const value = field.value ? new Date(field.value) : undefined
                             return (
-                                <NewDatePicker
+                                <DatePicker
                                     mode="single"
                                     hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
                                     label="End Date"

@@ -1,5 +1,5 @@
 import { deleteWorkExperience, updateWorkExperiences } from '@/actions/resume';
-import { AlertDialog } from '@/components/alert-dialog';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
@@ -96,7 +96,7 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
                     onAddItem={handleItemAdded}
                     onAddBlank={handleBlankAdd}
                 />
-                <AlertDialog
+                <DeleteDialog
                     open={isOpen}
                     title="Delete Confirmation"
                     description="Are you sure you want to remove this experience"

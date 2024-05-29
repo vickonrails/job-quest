@@ -1,16 +1,18 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
+import { Chip } from '@/components/chip'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
+import { isAfter } from 'date-fns'
+import { type Project } from 'lib/types'
 import { Trash2 } from 'lucide-react'
-import { createRef, useEffect, useState, type ChangeEvent } from 'react'
-import { useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { createRef, useCallback, useEffect, useState, type ChangeEvent } from 'react'
+import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { formatDate } from 'shared'
-import { Input } from 'ui/input'
 import { Button } from 'ui/button'
+import { DatePicker } from 'ui/date-picker'
+import { Input } from 'ui/input'
 import { Textarea } from 'ui/textarea'
 import { ErrorHint } from '../components/error-hint'
 import { type BaseFormItemProps } from '../education/education-form-item'
-import { type Project } from 'lib/types'
-import { Chip } from '@/components/chip'
 
 interface ProjectsFieldsProps extends BaseFormItemProps {
     form: UseFormReturn<{ projects: Project[] }, 'projects'>
@@ -65,8 +67,35 @@ interface FormItemProps extends BaseFormItemProps {
 }
 
 function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProps) {
-    const { register, } = form
+    const { register, clearErrors, getValues, setError } = form
     const fieldErrs = form.formState.errors?.projects?.[index] ?? {}
+
+    const validate = useCallback(() => {
+        clearErrors()
+        const [start_date, end_date] = getValues([
+            `projects.${index}.start_date`,
+            `projects.${index}.end_date`
+        ])
+
+        if (!start_date || !end_date) return;
+
+        const startDate = new Date(start_date)
+        const endDate = new Date(end_date)
+
+        const invalidDuration = isAfter(startDate, endDate)
+
+        if (invalidDuration) {
+            setError(`projects.${index}.end_date`, {
+                message: 'End date cannot be earlier than start date'
+            })
+            setError(`projects.${index}.start_date`, {
+                message: 'Start date cannot be later than end date'
+            })
+            return false;
+        }
+
+        return true
+    }, [setError, getValues, clearErrors, index])
 
     return (
         <AccordionItem
@@ -91,17 +120,40 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
                         hint={<ErrorHint>{fieldErrs.url?.message}</ErrorHint>}
                         {...register(`projects.${index}.url`, { required: { message: 'URL is required', value: true } })}
                     />
-                    <Input
-                        type="date"
-                        label="Start Date"
-                        placeholder="Start Date..."
-                        {...register(`projects.${index}.start_date`)}
+                    <Controller
+                        name={`projects.${index}.start_date`}
+                        control={form.control}
+                        rules={{ validate, required: true }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <DatePicker
+                                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                                    mode="single"
+                                    label="Start Date"
+                                    selected={value}
+                                    onChange={val => field.onChange(val)}
+                                />
+                            )
+                        }}
                     />
-                    <Input
-                        type="date"
-                        label="End Date"
-                        placeholder="End Date..."
-                        {...register(`projects.${index}.end_date`)}
+
+                    <Controller
+                        name={`projects.${index}.end_date`}
+                        control={form.control}
+                        rules={{ validate }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <DatePicker
+                                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                                    mode="single"
+                                    label="End Date"
+                                    selected={value}
+                                    onChange={val => field.onChange(val)}
+                                />
+                            )
+                        }}
                     />
 
                     <Textarea
