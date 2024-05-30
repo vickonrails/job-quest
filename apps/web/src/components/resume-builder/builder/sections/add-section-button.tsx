@@ -7,7 +7,7 @@ import { Button, type ButtonProps } from 'ui/button'
  */
 export const AddSectionBtn = forwardRef<HTMLButtonElement, ButtonProps>(({ children, ...props }, ref) => {
     return (
-        <Button type="button" variant="ghost" {...props} ref={ref}>
+        <Button type="button" variant="secondary" {...props} ref={ref}>
             <span className="text-sm">{children}</span>
             <ChevronDown size={16} />
         </Button>

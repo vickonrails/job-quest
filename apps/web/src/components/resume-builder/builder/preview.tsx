@@ -88,7 +88,7 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
             {/* <ResumePreviewDropdown /> */}
             <header className="flex justify-end w-full items-center gap-3 mb-2">
                 {isSubmitting && <Spinner className="h-6 w-6" />}
-                <Button size="sm" type="button" disabled={downloading} variant="secondary" className="flex items-center gap-1" onClick={handleExport}>
+                <Button size="sm" type="button" disabled={downloading} variant="ghost" className="flex items-center gap-1 bg-muted" onClick={handleExport}>
                     <Share className="text-xs h-4 w-4" />
                     {downloading ? 'Exporting...' : 'Export'}
                 </Button>

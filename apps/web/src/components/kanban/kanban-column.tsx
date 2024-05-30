@@ -23,10 +23,10 @@ interface KanbanColumnProps {
 function ColumnHeaders({ column }: { column: KanbanColumn }) {
     const { bgColor, textColor } = getColumnHeaderProps(column)
     return (
-        <header className="flex justify-between items-center sticky top-0 p-2 pb-1">
-            <h2 className={cn('text-sm w-full bg-background text-white justify-between flex rounded-md font-medium p-1 px-3 select-none shadow-sm')} data-testid="column-title">
-                <span className={textColor}>{column.title}</span>
-                <div className={cn('text-xs p-1 text-white py-0 rounded-md select-none grid', bgColor)}>
+        <header className="flex justify-between items-center sticky top-0 p-2 py-3 pb-0 mb-2">
+            <h2 className={cn('text-sm w-full text-muted justify-between flex font-medium p-1 select-none')} data-testid="column-title">
+                <span className="text-secondary-foreground" /*className={textColor}*/>{column.title}</span>
+                <div className={cn('text-xs p-1 text-white py-0 rounded-sm select-none grid', bgColor)}>
                     <span className="m-auto">{column.jobs.length}</span>
                 </div>
             </h2>
@@ -36,13 +36,13 @@ function ColumnHeaders({ column }: { column: KanbanColumn }) {
 
 export default function KanbanColumnCmp({ column, openEditSheet, openDeleteDialog, KanbanCard = DefaultKanbanCard }: KanbanColumnProps) {
     return (
-        <div className="min-w-[220px] h-full flex-1 bg-muted overflow-hidden" data-testid="kanban-column">
+        <div className="min-w-[220px] h-full flex-1 bg-kanban-col overflow-hidden rounded-sm" data-testid="kanban-column">
             <ColumnHeaders column={column} />
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (
                     <div
                         className={cn(
-                            'flex flex-col rounded-sm p-2 pb-14 overflow-auto h-full gap-2 min-h-[100px] transition-colors duration-0',
+                            'flex flex-col p-2 pb-14 overflow-auto h-full gap-2 min-h-[100px] transition-colors duration-0',
                             snapshot.isDraggingOver && 'bg-kanban-col'
                         )}
                         ref={provided.innerRef}
@@ -51,7 +51,6 @@ export default function KanbanColumnCmp({ column, openEditSheet, openDeleteDialo
                         {column.jobs.map((job, index) => {
                             return (
                                 <KanbanCard
-                                    // className={snapshot.'rotate'}
                                     key={job.id}
                                     job={job}
                                     index={index}

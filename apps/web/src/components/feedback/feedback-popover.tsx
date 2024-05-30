@@ -24,7 +24,7 @@ export function Feedback() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="secondary" size="sm">Feedback</Button>
+                <Button variant="outline" size="sm">Feedback</Button>
             </PopoverTrigger>
             <PopoverContent className="w-80"
                 onFocusOutside={ev => ev.preventDefault()}

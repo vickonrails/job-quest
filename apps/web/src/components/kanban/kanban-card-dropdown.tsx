@@ -12,7 +12,7 @@ export function KanbanCardDropdownMenu({ onQuickViewClick, onDeleteClick, onDeta
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="p-2 h-auto w-auto transition-opacity opacity-0 group-hover:opacity-100 active:opacity-100">
+                <Button variant="ghost" size="icon" className="p-0 h-auto w-auto transition-opacity opacity-0 group-hover:opacity-100 active:opacity-100">
                     <MoreVertical size={16} />
                 </Button>
             </DropdownMenuTrigger>
