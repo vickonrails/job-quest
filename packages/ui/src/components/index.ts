@@ -1,4 +1,3 @@
-export * from './button-testing'
 export * from './input'
 export * from './rating'
 export * from './select'

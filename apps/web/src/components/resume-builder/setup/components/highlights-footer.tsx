@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react';
-import { Button } from 'ui';
+import { Button } from 'ui/button';
 
 export function HighlightFooter({ onDeleteClick, addHighlight }: { onDeleteClick: () => void, addHighlight: () => void }) {
     return (

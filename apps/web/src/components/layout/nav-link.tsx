@@ -5,17 +5,18 @@ import { usePathname } from 'next/navigation';
 import { cn } from 'shared';
 import { type LinkProps } from '../link';
 
-export const NavLink = ({ href, children, ...props }: LinkProps) => {
+export const NavLink = ({ href, children, className, ...props }: LinkProps) => {
     const isActiveNav = useIsActiveNav({ href: href.toString() });
 
     const handleClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         if (props.disabled) ev.preventDefault();
+        if (props.onClick) props.onClick?.(ev)
     }
 
     return (
         <Link
             onClick={handleClick}
-            className={cn('px-3 block border-l-2 border-transparent', isActiveNav && 'border-primary')}
+            className={cn('px-3 block border-l-2 border-transparent', isActiveNav && 'border-primary', className)}
             href={props.disabled ? '' : href}
             {...props}
         >

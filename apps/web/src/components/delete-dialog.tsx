@@ -34,6 +34,3 @@ export function DeleteDialog({ open, description, title, onOk, onCancel, isProce
         </AlertDialog>
     )
 }
-
-
-

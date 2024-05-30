@@ -1,4 +1,3 @@
-import { Typography } from '@/components/typography'
 import * as RdxDialog from '@radix-ui/react-dialog'
 import { type ReactNode } from 'react'
 import { cn } from 'shared'
@@ -24,7 +23,7 @@ export function Dialog({ children, title, contentProps, ...rest }: DialogProps) 
                     className={cn('bg-white w-full max-w-[500px] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] fixed rounded-md box-content flex flex-col', contentClassName)}
                     {...restContentProps}
                 >
-                    <Typography variant="display-sm-md" className="px-4 py-3">{title}</Typography>
+                    <p className="font-medium text-base px-4 py-3">{title}</p>
                     <hr />
 
                     <div className="flex-1 overflow-y-auto">

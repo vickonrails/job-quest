@@ -34,7 +34,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
 
     return (
         <>
-            <tbody>
+            <tbody className="text-muted-foreground">
                 {items.map((item, index) => (
                     <tr
                         className={cn(
@@ -44,7 +44,7 @@ export function TableBody<T extends BaseEntity>({ items, columns, actions, hideA
                         onClick={_ => onRowClick?.(item.id)}
                     >
                         {!hideActions && (
-                            <td className="pl-4 border-b border-l">
+                            <td className="pl-4 border-b border-l text-muted-foreground">
                                 <MenuBar
                                     triggerProps={{ className: 'data-[state=open]:outline rounded-sm outline-gray-300' }}
                                     trigger={<MoreVertical size={16} />}

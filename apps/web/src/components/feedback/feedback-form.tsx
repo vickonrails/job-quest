@@ -1,6 +1,6 @@
 import { createFeedback, type FeedbackFormValues } from '@/utils/create-feedback'
 import { Controller, type UseFormReturn } from 'react-hook-form'
-import { Select, type SelectOption } from 'ui'
+import { Select, type SelectOption } from 'ui/select'
 import { Button } from 'ui/button'
 import { Checkbox } from 'ui/checkbox'
 import { Label } from 'ui/label'

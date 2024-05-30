@@ -12,7 +12,7 @@ const Logo: FC<LogoProps> = ({ className, children, ...rest }) => {
             )
         } {...rest}>
             {children}
-            <span>JobQuest</span>
+            <span className="select-none text-primary">JobQuest</span>
         </h1>
     )
 }
