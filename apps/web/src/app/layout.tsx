@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <>
             <html lang="en" suppressHydrationWarning>
                 <head />
-                <body>
+                <body className="overflow-auto">
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"

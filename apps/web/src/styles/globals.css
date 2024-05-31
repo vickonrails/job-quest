@@ -33,3 +33,24 @@
     @apply hidden;
   }
 }
+
+@layer components {
+  .landing-page {
+    position: relative;
+      width: 100%;
+      background: 
+        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
+        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
+        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
+        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
+        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%);
+      background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%, 1px 100%;
+      background-position: 2%, 25%, 50%, 75%, 98%;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: Arial, sans-serif;
+  }
+}
