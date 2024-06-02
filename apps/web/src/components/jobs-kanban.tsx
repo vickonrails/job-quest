@@ -11,6 +11,7 @@ import { Button } from 'ui/button';
 import { Spinner } from 'ui/spinner';
 import { AlertDialog } from './alert-dialog';
 import JobsKanban from './kanban/kanban-container';
+import { MovingDialog } from './moving-dialog';
 import { JobEditSheet } from './sheet/jobs-edit-sheet';
 
 const FullViewButton = ({ job }: { job?: Job }) => {
@@ -56,6 +57,7 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}
                 </h1>
+                <MovingDialog />
                 <Button onClick={() => openEditSheet()}>Add New</Button>
             </section>
             <JobsKanban

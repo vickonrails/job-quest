@@ -3,12 +3,11 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import * as React from 'react'
 import { cn } from 'shared'
+import { Button } from 'ui'
 
 const SheetRoot = SheetPrimitive.Root
 
 export const SheetTrigger = SheetPrimitive.Trigger
-
-const SheetClose = SheetPrimitive.Close
 
 const SheetPortal = ({
   ...props
@@ -114,7 +113,9 @@ const SheetTitle = React.forwardRef<
       className={cn('text-base font-semibold text-foreground', className)}
       {...props}
     />
-    <button onClick={onClose}><X className="w-4 h-4 text-muted-foreground" /></button>
+    <Button size="icon" variant="ghost" onClick={onClose}>
+      <X className="w-4 h-4 text-muted-foreground" />
+    </Button>
   </header>
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
@@ -131,18 +132,22 @@ const SheetDescription = React.forwardRef<
 ))
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
-
 export type SheetProps = SheetPrimitive.DialogProps & {
-  title?: string
+  title?: string | React.ReactNode
+  ref?: React.ElementRef<typeof SheetPrimitive.Content>
 }
 
-export function Sheet({ open, children, title, onOpenChange, ...rest }: SheetProps) {
+export const Sheet = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Content>,
+  SheetProps
+>(({ children, open, title, onOpenChange, ...rest }, ref) => {
   return (
     <SheetRoot open={open} {...rest}>
-      <SheetContent>
+      <SheetContent ref={ref}>
         {title && <SheetTitle className="mb-3" onClose={() => onOpenChange(false)}>{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>
   )
-}
+})
+Sheet.displayName = 'Sheet'
