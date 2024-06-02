@@ -19,7 +19,7 @@ export function AvatarMenu({ profile }: { profile?: Profile | null }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="unstyled" size="auto">
+                <Button>
                     <Avatar size="sm" alt={profile?.full_name ?? ''} fallbackText={avatarDisplay} />
                 </Button>
             </DropdownMenuTrigger>

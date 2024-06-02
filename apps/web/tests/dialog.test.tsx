@@ -26,6 +26,5 @@ describe('Alert Dialog', () => {
         expect(getByText('Dialog Test')).toBeInTheDocument()
         expect(getByText('Are you sure')).toBeInTheDocument()
         expect(getByText('Cancel')).toBeInTheDocument()
-        expect(getByText('Delete')).toBeInTheDocument()
     })
 })

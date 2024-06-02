@@ -1,4 +1,4 @@
-import React from 'react'
+import { Feedback } from '@/components/feedback/feedback-popover';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 // import { FeedbackButton } from '../src/components/feedback-widget';
@@ -11,7 +11,7 @@ describe('Feedback Form', () => {
     const setup = () => {
         return {
             user: userEvent.setup(),
-            ...render(<></>)
+            ...render(<Feedback />)
         }
     }
 

@@ -226,7 +226,9 @@ export function EducationHighlights({ form, index, onDeleteClick, entity, setHig
                         <Textarea
                             placeholder="A summary of what you did in this role"
                             label={idx === 0 ? 'Highlights' : ''}
-                            containerClasses="w-full mb-1"
+                            containerProps={{
+                                className: 'w-full mb-1'
+                            }}
                             rows={2}
                             {...form.register(`education.${index}.highlights.${idx}.text`)}
                         />
