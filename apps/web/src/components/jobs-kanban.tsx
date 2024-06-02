@@ -11,6 +11,7 @@ import { Button } from 'ui/button';
 import { Spinner } from 'ui/spinner';
 import { DeleteDialog } from './delete-dialog';
 import JobsKanban from './kanban/kanban-container';
+import { MovingDialog } from './moving-dialog';
 import { JobEditSheet } from './sheet/jobs-edit-sheet';
 
 const FullViewButton = ({ job }: { job?: Job }) => {
