@@ -8,7 +8,8 @@ import { useJob } from '~hooks/useJob';
 import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
 import { JobInfoTabs } from './job-info-tabs';
-import { Sheet, type SheetProps } from './sheet';
+import { MovableDialog } from './movable-dialog';
+import { type SheetProps } from './sheet';
 
 export interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
@@ -37,23 +38,21 @@ interface AddJobResponse {
 
 // TODO: improve this to just take the job object
 export function JobInfoSheet(props: JobInfoSheetProps) {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            window.parent.document.body.style.pointerEvents = 'auto'
-        }, 1000)
-
-        return () => {
-            clearTimeout(timer)
-        }
-    }, []);
-
     const { jobInfo } = props
-    // TODO: this is going to fetch the job using the link to check if its in the database
-    const { isLoading, job, refresh } = useJob(getJobUrl(), { defaultData: getDefaultJobData(jobInfo) })
-    const form = useForm<JobInsertDTO>({
-        defaultValues: { id: job ? job.id : '', ...props.jobInfo }
+    const url = getJobUrl()
+    const { isLoading, job, refresh } = useJob(url, {
+        defaultData: getDefaultJobData(jobInfo)
     })
-    const [showBanner, setShowBanner] = useState({ show: false, error: false })
+    const form = useForm<JobInsertDTO>({
+        defaultValues: {
+            id: job ? job.id : '',
+            ...props.jobInfo
+        }
+    })
+
+    const [showBanner, setShowBanner] = useState({
+        show: false, error: false
+    })
 
     useEffect(() => {
         if (!job) return
@@ -89,7 +88,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     const { show, error } = showBanner
 
     return (
-        <Sheet {...props}>
+        <MovableDialog {...props}>
             <AuthGuard>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
                     <div className="tiptap hidden"></div>
@@ -105,10 +104,6 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                     />
                 </form>
             </AuthGuard>
-        </Sheet>
+        </MovableDialog>
     )
 }
-
-
-
-
