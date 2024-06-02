@@ -87,7 +87,7 @@ function HorizontalLine() {
 }
 
 /**
- * Waitlist
+ * Waitlist   
  */
 function Waitlist() {
     return (

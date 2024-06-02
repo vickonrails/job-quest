@@ -1,4 +1,4 @@
-import { Education, type Project, type WorkExperience } from 'lib/types'
+import { type Education, type Project, type WorkExperience } from 'lib/types'
 import {
     DropdownMenu,
     DropdownMenuContent,
