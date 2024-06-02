@@ -51,7 +51,7 @@ function NoteForm({ job }: { job: Job }) {
 
     return (
         <form onSubmit={handleCreateNote} className="flex flex-col gap-4 items-start">
-            <Textarea value={note} required onChange={val => setNote(val.target.value)} containerClasses="w-full" />
+            <Textarea value={note} required onChange={val => setNote(val.target.value)} />
             <Button variant="outline" loading={isAddingNotes} disabled={!note}>Add notes</Button>
         </form>
     )

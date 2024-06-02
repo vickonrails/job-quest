@@ -63,9 +63,9 @@ interface AvatarFallbackProps extends HTMLAttributes<HTMLDivElement> {
 function AvatarFallback({ size, className, border = 'round', text }: AvatarFallbackProps) {
     const variantColors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500']
     return (
-        <div className={cn(avatarVariants({ size, border }), 'text-white', hashColors(text, variantColors), className)}>
+        <div className={cn(avatarVariants({ size, border }), hashColors(text, variantColors), className)}>
             <div
-                className={cn('flex items-center justify-center h-full w-full uppercase', size === 'sm' && 'text-xs')}
+                className={cn('flex items-center justify-center h-full w-full text-white uppercase', size === 'sm' && 'text-xs')}
             >
                 {getDisplayText(text)}
             </div>

@@ -15,9 +15,10 @@ export default async function CoverLetter({ params }: { params: { job: string } 
                 <div className="flex h-full gap-1">
                     <CoverLetterForm coverLetter={coverLetter} job={job} />
                     <div className="p-4 w-2/5 border overflow-auto mt-1">
-                        <p>{job?.position}</p>
+                        <p className="mb-2">{job?.position}</p>
                         <div
-                            className="text-neutral-600 text-sm"
+                            id="__description"
+                            className="text-sm text-muted-foreground"
                             dangerouslySetInnerHTML={{ __html: job?.description ?? '' }}
                         />
                     </div>

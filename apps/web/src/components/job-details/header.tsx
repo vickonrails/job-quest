@@ -1,10 +1,10 @@
-import hashColors from '@/utils/hash-colors'
 import { getDisplayText } from '@/components/avatar'
-import { Typography } from '@/components/typography'
+import hashColors from '@/utils/hash-colors'
+import { type Job } from 'lib/types'
 import { ExternalLink } from 'lucide-react'
 import { Status_Lookup, cn, formatDate } from 'shared'
-import { Button, Rating } from 'ui'
-import { type Job } from 'lib/types'
+import { Button } from 'ui/button'
+import { Rating } from 'ui/rating'
 
 export function Header({ job, onEditClick }: { job: Job, onEditClick: (job: Job) => void }) {
     const status = Status_Lookup.find((x, idx) => idx === job.status)
@@ -14,9 +14,9 @@ export function Header({ job, onEditClick }: { job: Job, onEditClick: (job: Job)
                 <div className="mr-4">
                     <DefaultImage companyName={job.company_name} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 text-muted-foreground">
                     <div className="flex items-center gap-3">
-                        <Typography variant="display-xs-md" className="mb-1 text-base-col">{job.position}</Typography>
+                        <h1 className="text-accent-foreground mb-1 text-base-col text-2xl font-medium">{job.position}</h1>
                         <Button size="sm" variant="outline" onClick={_ => onEditClick(job)} className="inline-block py-1">Edit</Button>
                     </div>
                     <ul className="flex gap-6 text-light-text list-disc">

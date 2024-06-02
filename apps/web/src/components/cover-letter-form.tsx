@@ -7,6 +7,7 @@ import { isAIFeatureEnabled } from '@/utils'
 import { type CoverLetter, type Job } from 'lib/types'
 import { Save, Wand2 } from 'lucide-react'
 import { useMemo } from 'react'
+import { Textarea } from 'ui/textarea'
 import { Button } from 'ui/button'
 import { Spinner } from 'ui/spinner'
 
@@ -31,7 +32,7 @@ export default function CoverLetterForm({ job, coverLetter }: { job: Job, coverL
 
     return (
         <form className="flex flex-col items-start h-full p-1 flex-1 w-3/5 pb-6">
-            <textarea
+            <Textarea
                 onChange={ev => setValue(ev.target.value)}
                 placeholder="Write your cover letter here"
                 rows={20}

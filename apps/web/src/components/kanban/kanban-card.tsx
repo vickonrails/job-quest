@@ -3,10 +3,10 @@
 import { MenuBar, MenuItem, Separator } from '@/components/menubar'
 import { Draggable } from '@hello-pangea/dnd'
 import { type Job } from 'lib/types'
-import { FileText, PanelRightClose, Trash2 } from 'lucide-react'
+import { FileText, MoreVertical, PanelRightClose, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { MoreVertical } from 'lucide-react'
+import { cn } from 'shared'
 import { Rating } from 'ui'
 import { type KanbanCardProps } from './kanban-column'
 
@@ -22,7 +22,7 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                 <article
                     onClick={() => openEditSheet?.(job)}
                     data-testid="kanban-card"
-                    className="flex flex-col border-1 border p-3 rounded-md select-none bg-white items-start group"
+                    className={cn('flex flex-col border-1 border bg-background p-3 rounded-md select-none items-start group')}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

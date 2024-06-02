@@ -3,12 +3,11 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import * as React from 'react'
 import { cn } from 'shared'
+import { Button } from 'ui'
 
 const SheetRoot = SheetPrimitive.Root
 
 export const SheetTrigger = SheetPrimitive.Trigger
-
-const SheetClose = SheetPrimitive.Close
 
 const SheetPortal = ({
   ...props
@@ -67,10 +66,10 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+      {/* <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-4 w-4 text-foreground" />
         <span className="sr-only">Close</span>
-      </SheetPrimitive.Close>
+      </SheetPrimitive.Close> */}
     </SheetPrimitive.Content>
   </>
 ))
@@ -82,7 +81,7 @@ const SheetHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-2 text-center sm:text-left',
+      'flex flex-col space-y-2 text-center sm:text-left bg-black',
       className
     )}
     {...props}
@@ -106,13 +105,18 @@ SheetFooter.displayName = 'SheetFooter'
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title
-    ref={ref}
-    className={cn('text-base font-semibold text-foreground', className)}
-    {...props}
-  />
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & { onClose: () => void }
+>(({ className, onClose, ...props }, ref) => (
+  <header className="flex justify-between items-start">
+    <SheetPrimitive.Title
+      ref={ref}
+      className={cn('text-base font-semibold text-foreground', className)}
+      {...props}
+    />
+    <Button size="icon" variant="ghost" onClick={onClose}>
+      <X className="w-4 h-4 text-muted-foreground" />
+    </Button>
+  </header>
 ))
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
@@ -128,18 +132,22 @@ const SheetDescription = React.forwardRef<
 ))
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
-
 export type SheetProps = SheetPrimitive.DialogProps & {
-  title?: string
+  title?: string | React.ReactNode
+  ref?: React.ElementRef<typeof SheetPrimitive.Content>
 }
 
-export function Sheet({ open, children, title, ...rest }: SheetProps) {
+export const Sheet = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Content>,
+  SheetProps
+>(({ children, open, title, onOpenChange, ...rest }, ref) => {
   return (
     <SheetRoot open={open} {...rest}>
-      <SheetContent>
-        {title && <SheetTitle className="mb-3">{title}</SheetTitle>}
+      <SheetContent ref={ref}>
+        {title && <SheetTitle className="mb-3" onClose={() => onOpenChange(false)}>{title}</SheetTitle>}
         {children}
       </SheetContent>
     </SheetRoot>
   )
-}
+})
+Sheet.displayName = 'Sheet'

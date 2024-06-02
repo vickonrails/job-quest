@@ -5,26 +5,40 @@
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "files": [
+    "tailwind.config.ts"
+  ],
   "exports": {
     "./button": "./src/components/button.tsx",
     "./auth-card": "./src/components/auth-card.tsx",
     "./logo": "./src/components/logo.tsx",
     "./spinner": "./src/components/spinner.tsx",
     "./input": "./src/components/input.tsx",
-    "./textarea": "./src/components/textarea.tsx",
     "./banner": "./src/components/banner.tsx",
+    "./styles": "./src/globals.css",
+    "./dropdown-menu": "./src/components/dropdown-menu.tsx",
+    "./textarea": "./src/components/textarea.tsx",
+    "./checkbox": "./src/components/checkbox.tsx",
+    "./popover": "./src/components/popover.tsx",
+    "./label": "./src/components/label.tsx",
+    "./rating": "./src/components/rating.tsx",
+    "./dialog": "./src/components/dialog.tsx",
+    "./tailwind.config": "./tailwind.config.ts",
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
-    "lucide-react": "^0.274.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7",
-    "shared": "*"
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.379.0",
+    "shared": "*",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",

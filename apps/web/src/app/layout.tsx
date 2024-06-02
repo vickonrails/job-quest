@@ -1,16 +1,25 @@
 import '@/styles/globals.css';
+import 'ui/styles';
 
-// TODO: add metadata
-// TODO: fix font family
+import { ThemeProvider } from '@/providers/theme-provider';
+import { type ReactNode } from 'react';
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
-    );
+        <>
+            <html lang="en" suppressHydrationWarning>
+                <head />
+                <body>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        {children}
+                    </ThemeProvider>
+                </body>
+            </html>
+        </>
+    )
 }

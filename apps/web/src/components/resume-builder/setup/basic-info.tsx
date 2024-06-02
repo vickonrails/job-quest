@@ -42,7 +42,7 @@ export function BasicInformation({ profile }: { profile: Profile }) {
             description="Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count." data-testid="basic-information"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="grid grid-cols-2 gap-4 p-4 border bg-white mb-8">
+                <section className="grid grid-cols-2 gap-4 p-4 border mb-8">
                     <Input
                         autoFocus
                         data-testid="fullname"

@@ -1,9 +1,8 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
-import { Checkbox } from '@/components/checkbox'
+import { Checkbox } from '@/components/checkbox-archive'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
-import { useSetupContext } from '@/hooks/useSetupContext'
-import { type Highlight, type Education } from 'lib/types'
+import { type Education, type Highlight } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Input, Textarea } from 'ui'
@@ -78,7 +77,7 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
             header={<Header form={form} index={index} />}
             value={field.id}
             key={field.id}
-            className="border bg-white mb-3 rounded-sm"
+            className="border mb-3 rounded-sm"
         >
             <div className="p-4 pt-0">
                 <section className="mb-4 grid grid-cols-2 gap-3 rounded-md">

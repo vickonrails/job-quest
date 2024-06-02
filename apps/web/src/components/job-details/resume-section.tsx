@@ -1,16 +1,12 @@
 'use client'
 
-import { MenuBar, MenuItem, Separator } from '@/components/menubar';
 import { ResumePreviewCard } from '@/components/resume-card';
 import { createClient } from '@/utils/supabase/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
-import { ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { cn } from 'shared';
-import { Button } from 'ui';
-import { Spinner } from 'ui/spinner';
 import { v4 as uuid } from 'uuid';
+import { ResumeSelectDropdown } from './resume-select-dropdown';
 
 export function ResumeSection({ job }: { job: Job }) {
     const queryClient = useQueryClient();
@@ -67,25 +63,12 @@ export function ResumeSection({ job }: { job: Job }) {
                 )}
             </div>
 
-            <div className="flex gap-2">
-                <MenuBar
-                    trigger={
-                        <Button variant="outline" className={cn('flex items-center gap-1', updateResumeMutation.isLoading && 'opacity-80 pointer-events-none')}>
-                            <span>{job.resume_id ? 'Replace Resume' : 'Add Resume'}</span>
-                            <ChevronDown size={16} />
-                        </Button>
-                    }
-                >
-                    {data?.map(x => (
-                        <MenuItem className="text-muted-foreground py-2" key={x.title} onClick={() => attachResume(x.id)}>{x.title}</MenuItem>
-                    ))}
-                    <Separator />
-                    <MenuItem className="text-primary py-2" onClick={navigateToNew}>
-                        Create From Blank
-                    </MenuItem>
-                </MenuBar>
-                {updateResumeMutation.isLoading && <Spinner />}
-            </div>
+            <ResumeSelectDropdown
+                onClickNew={navigateToNew}
+                isUpdating={updateResumeMutation.isLoading}
+                attachResume={attachResume}
+                resumes={data ?? []}
+            />
         </section>
     )
 }

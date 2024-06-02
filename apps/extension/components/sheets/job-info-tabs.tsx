@@ -3,7 +3,7 @@ import { Controller, type UseFormReturn } from 'react-hook-form';
 import { cn } from 'shared';
 import { Button, Rating, Spinner, Textarea } from 'ui';
 import Tiptap from '~components/tiptap';
-import { isLinkedIn } from '~contents';
+import { isLinkedIn } from '~contents/linkedin';
 import type { JobInsertDTO } from '~types';
 import { PopupHeader } from './popup-header';
 

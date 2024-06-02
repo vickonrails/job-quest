@@ -16,7 +16,7 @@ export const JobDetails = ({ job }: { job: Job }) => {
 
     return (
         <>
-            <div className="flex bg-white gap-4">
+            <div className="flex gap-4">
                 <div className="flex-2 grow-0 basis-2/3">
                     <Header job={job} onEditClick={showEditSheet} />
                     <JobDescription job={job} />

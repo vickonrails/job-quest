@@ -47,7 +47,7 @@ export function BasicInfoSection({ form }: BasicInfoForm) {
                 </p>
             </header>
 
-            <section className="grid grid-cols-2 gap-4 bg-white mb-8">
+            <section className="grid grid-cols-2 gap-4 mb-8">
                 <Input
                     autoFocus
                     data-testid="fullname"
