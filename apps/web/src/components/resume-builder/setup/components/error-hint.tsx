@@ -1,8 +1,11 @@
 import { type HTMLAttributes } from 'react'
 import { cn } from 'shared'
 
-export function ErrorHint({ className, ...rest }: HTMLAttributes<HTMLParagraphElement>) {
+export function ErrorHint({ className, children, ...rest }: HTMLAttributes<HTMLParagraphElement>) {
+    if (!children) return
     return (
-        <p className={cn('text-sm text-red-500', className)} {...rest} />
+        <p className={cn('text-sm text-red-500', className)} {...rest}>
+            {children}
+        </p>
     )
 }

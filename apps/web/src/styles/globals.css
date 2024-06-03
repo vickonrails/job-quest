@@ -36,6 +36,8 @@
 
 @layer components {
   .landing-page {
+    --primary-foreground: 215 20.2% 65.1%;
+
     position: relative;
       width: 100%;
       background: 
