@@ -1,20 +1,47 @@
+import { addUserToWaitList } from '@/actions/user/add-user-to-waitlist'
 import { Title } from '@radix-ui/react-dialog'
-import { type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from 'ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader } from 'ui/dialog'
 import { Input } from 'ui/input'
+import { useLandingPageContext } from './landing-page/landing-page-context'
 import { ErrorHint } from './resume-builder/setup/components/error-hint'
+import { useToast } from './toast/use-toast'
 
 type DeleteDialogProps = React.ComponentProps<typeof Dialog> & {
     title: string | ReactNode
 }
 
-export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
-    const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm({ defaultValues: { firstName: '', email: '' } })
+type User = {
+    email: string,
+    firstName: string
+}
 
-    const onSubmit = (values: any) => {
-        console.log({ values })
+export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
+    const { register, reset, handleSubmit, formState: { isSubmitting, errors } } = useForm<User>({ defaultValues: { firstName: '', email: '' } })
+    const [formError, setFormError] = useState('')
+    const { closeWaitListModal, setUserAddedToWaitList } = useLandingPageContext()
+    const { toast } = useToast()
+
+    useEffect(() => {
+        return () => setFormError('')
+    }, [open])
+
+    const onSubmit = async (values: User) => {
+        setFormError('')
+        const { success, error } = await addUserToWaitList(values)
+        if (!success && error) {
+            setFormError(error)
+            return;
+        }
+
+        reset()
+        setUserAddedToWaitList()
+        closeWaitListModal()
+        toast({
+            title: 'Added to wait list'
+        })
     }
 
     return (
@@ -26,7 +53,6 @@ export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
                 <DialogDescription>
                     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
                         <Input
-                            placeholder="John"
                             label="First name"
                             {...register('firstName', {
                                 required: { message: 'First name is required', value: true }
@@ -35,13 +61,14 @@ export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
                         />
 
                         <Input
-                            placeholder="john@gmail.com"
+                            placeholder="Jane@gmail.com"
                             label="Email address"
                             {...register('email', {
                                 required: { message: 'Email address is required', value: true }
                             })}
                             hint={<ErrorHint>{errors.email?.message}</ErrorHint>}
                         />
+                        <ErrorHint>{formError}</ErrorHint>
                         <Button loading={isSubmitting}>Join</Button>
                     </form>
                 </DialogDescription>

@@ -43,3 +43,6 @@ yarn-error.log*
 
 # ignore resume templates
 **/resume-templates.css
+
+# video files
+/videos/

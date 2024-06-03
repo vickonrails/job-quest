@@ -8,7 +8,8 @@ const server = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   FEEDBACK_URL: z.string(),
   FEEDBACK_ANON_KEY: z.string(),
-  PDF_EXPORT_API_SERVICE_URL: z.string()
+  PDF_EXPORT_API_SERVICE_URL: z.string(),
+  LOOPS_API_KEY: z.string()
 });
 
 /**
@@ -30,7 +31,8 @@ const processEnv = {
   FEEDBACK_URL: process.env.FEEDBACK_URL,
   FEEDBACK_ANON_KEY: process.env.FEEDBACK_ANON_KEY,
   NEXT_PUBLIC_AI_FEATURES_ENABLED: process.env.NEXT_PUBLIC_AI_FEATURES_ENABLED,
-  PDF_EXPORT_API_SERVICE_URL: process.env.PDF_EXPORT_API_SERVICE_URL
+  PDF_EXPORT_API_SERVICE_URL: process.env.PDF_EXPORT_API_SERVICE_URL,
+  LOOPS_API_KEY: process.env.LOOPS_API_KEY
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

@@ -26,6 +26,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/videos/*": [
+        "./videos/*"
       ]
     },
     "plugins": [
@@ -39,6 +42,7 @@
     "tests",
     ".eslintrc.cjs",
     "next.config.mjs",
+    "video.d.ts",
     "next-env.d.ts",
     "vitest/setup.ts",
     "tailwind.config.ts",

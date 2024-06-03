@@ -5,9 +5,9 @@ import { Button } from 'ui/button';
 import { useLandingPageContext } from './landing-page-context';
 
 export function Nav() {
-    const { openWaitListModal } = useLandingPageContext()
+    const { openWaitListModal, isOnWaitList } = useLandingPageContext()
     return (
-        <nav className="flex items-center w-full rounded-full p-3 pl-4 justify-between gap-2">
+        <nav className="flex items-center w-full rounded-full py-3 justify-between gap-2">
             <Link href="/" className="font-medium flex items-center">
                 <Image className="rounded-sm" src="/logo.png" width={35} height={35} alt="" />
                 {/* JobQuest */}
@@ -17,7 +17,7 @@ export function Nav() {
                     <span>See Demo</span>
                     <ExternalLink size={20} />
                 </Link>
-                <Button size="sm" onClick={openWaitListModal}>Early Access</Button>
+                <Button disabled={isOnWaitList} size="sm" onClick={openWaitListModal}>Early Access</Button>
             </section>
         </nav>
     )

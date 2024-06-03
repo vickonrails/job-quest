@@ -1,6 +1,5 @@
 import { Sidebar } from '@/components/layout/sidebar';
 import { getUser, getUserProfile } from '@/db/api';
-import { ReactQueryClientProvider } from '@/react-query/query-provider';
 import '@/styles/globals.css';
 import { cn } from 'shared';
 
@@ -17,12 +16,10 @@ export default async function RootLayout({
     if (!profile || !user) return null;
 
     return (
-        <ReactQueryClientProvider>
-            <div className={cn('flex h-full max-w-screen-2xl m-auto')}>
-                <Sidebar className="basis-60" profile={profile} user={user} />
-                {children}
-            </div>
-        </ReactQueryClientProvider>
+        <div className={cn('flex h-full max-w-screen-2xl m-auto')}>
+            <Sidebar className="basis-60" profile={profile} user={user} />
+            {children}
+        </div>
     );
 }
 

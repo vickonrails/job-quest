@@ -4,9 +4,12 @@ import { type ReactNode, createContext, useContext } from 'react';
 import { useWaitListDialog } from './wait-list';
 import { WaitListDialog } from '../waitlist-dialog';
 
-export const LandingPageContext = createContext<Omit<ReturnType<typeof useWaitListDialog>, 'closeWaitListModal'>>({
+export const LandingPageContext = createContext<ReturnType<typeof useWaitListDialog>>({
     open: false,
-    openWaitListModal: () => {/** */ }
+    openWaitListModal: () => {/** */ },
+    closeWaitListModal: () => {/** */ },
+    isOnWaitList: false,
+    setUserAddedToWaitList: () => {/** */ }
 });
 
 export function useLandingPageContext() {
@@ -14,9 +17,9 @@ export function useLandingPageContext() {
 }
 
 export function LandingPageProvider({ children }: { children: ReactNode }) {
-    const { open, openWaitListModal, closeWaitListModal } = useWaitListDialog()
+    const { open, openWaitListModal, closeWaitListModal, isOnWaitList, setUserAddedToWaitList } = useWaitListDialog()
     return (
-        <LandingPageContext.Provider value={{ open, openWaitListModal }}>
+        <LandingPageContext.Provider value={{ open, openWaitListModal, closeWaitListModal, isOnWaitList, setUserAddedToWaitList }}>
             {children}
             <WaitListDialog
                 open={open}

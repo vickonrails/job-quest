@@ -6,14 +6,14 @@ import { WaitList } from '@/components/landing-page/wait-list';
 
 export default function LandingPage() {
     return (
-        <LandingPageProvider>
-            <div className="landing-page py-10 max-w-7xl mx-auto">
-                <div className="z-10 flex flex-col items-center gap-4">
+        <div className="landing-page py-10 px-4 max-w-7xl mx-auto animate-in">
+            <LandingPageProvider>
+                <div className="z-10 flex flex-col items-stretch gap-4 w-full">
                     <Header />
                     <WaitList />
                     <Footer />
                 </div>
-            </div>
-        </LandingPageProvider>
+            </LandingPageProvider>
+        </div>
     )
 }

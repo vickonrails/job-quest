@@ -36,16 +36,16 @@
 
 @layer components {
   .landing-page {
-    --primary-foreground: 215 20.2% 65.1%;
+    --primary-foreground: 210 40% 98%;
 
     position: relative;
       width: 100%;
       background: 
-        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
-        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
-        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
-        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%),
-        linear-gradient(to bottom, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%);
+        linear-gradient(to bottom, hsl(var(--landing-page-line)) 0%, hsl(var(--landing-page-line)) 100%),
+        linear-gradient(to bottom, hsl(var(--landing-page-line)) 0%, hsl(var(--landing-page-line)) 100%),
+        linear-gradient(to bottom, hsl(var(--landing-page-line)) 0%, hsl(var(--landing-page-line)) 100%),
+        linear-gradient(to bottom, hsl(var(--landing-page-line)) 0%, hsl(var(--landing-page-line)) 100%),
+        linear-gradient(to bottom, hsl(var(--landing-page-line)) 0%, hsl(var(--landing-page-line)) 100%);
       background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%, 1px 100%;
       background-position: 2%, 25%, 50%, 75%, 98%;
       background-repeat: no-repeat;
