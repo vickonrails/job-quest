@@ -1,5 +1,5 @@
 import { Move } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from 'ui';
 import { Sheet } from './sheet';
 import type { DialogProps } from '@radix-ui/react-dialog';

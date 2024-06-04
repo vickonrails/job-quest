@@ -134,7 +134,7 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export type SheetProps = SheetPrimitive.DialogProps & {
   title?: string | React.ReactNode
-  ref?: React.ElementRef<typeof SheetPrimitive.Content>
+  // ref?: React.ElementRef<typeof SheetPrimitive.Content>
 }
 
 export const Sheet = React.forwardRef<

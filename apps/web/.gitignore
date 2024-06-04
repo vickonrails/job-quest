@@ -38,6 +38,8 @@ yarn-error.log*
 # vercel
 .vercel
 
+videos/
+
 # typescript
 *.tsbuildinfo
 
