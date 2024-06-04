@@ -13,7 +13,7 @@
     "db:seed": "bun run ./src/utils/seed.ts",
     "test:coverage": "vitest --coverage",
     "migration:add": "npx supabase db diff -f",
-    "postbuild": "npx tailwindcss -i . src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
+    "postbuild": "pnpm dlx tailwindcss -i src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
     "clean": "rm -rf node_modules .next .cache dist .turbo"
   },
   "dependencies": {
@@ -52,11 +52,14 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "ui": "workspace:*",
+    "use-deep-compare-effect": "^1.8.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@tanstack/eslint-plugin-query": "^4.32.5",
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^16.0.0",
     "@types/uuid": "^9.0.7"
   },
   "ct3aMetadata": {

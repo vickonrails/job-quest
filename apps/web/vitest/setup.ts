@@ -1,7 +1,9 @@
-import matchers from '@testing-library/jest-dom/matchers';
-import { expect, vi } from 'vitest';
-import { MockPointerEvent } from './mock-pointer-events'
 import { QueryClient } from '@tanstack/react-query';
+import * as matchers from '@testing-library/jest-dom/matchers';
+import '@testing-library/jest-dom/vitest';
+import { expect, vi } from 'vitest';
+import { MockPointerEvent } from './mock-pointer-events';
+
 
 const ResizeObserverMock = vi.fn(() => ({
     observe: vi.fn(),
