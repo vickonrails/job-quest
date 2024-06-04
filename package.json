@@ -13,7 +13,8 @@
     "test": "turbo test",
     "build": "turbo build --filter=!extension",
     "lint": "turbo lint",
-    "clean": "turbo clean && rm -rf node_modules yarn.lock"
+    "clean:node_modules": "rm -rf node_modules pnpm.lock.yaml .turbo",
+    "clean:all": "turbo clean && pnpm clean:node_modules"
   },
   "dependencies": {
     "@radix-ui/react-toast": "^1.1.5",
@@ -28,8 +29,6 @@
     "web": "link:packages/apps/web"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^14.3.1",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.1",
     "@types/prettier": "^2.7.3",

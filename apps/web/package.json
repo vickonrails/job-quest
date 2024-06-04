@@ -13,11 +13,11 @@
     "db:seed": "bun run ./src/utils/seed.ts",
     "test:coverage": "vitest --coverage",
     "migration:add": "npx supabase db diff -f",
-    "postbuild": "npx tailwindcss -i . src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
+    "postbuild": "pnpm dlx tailwindcss -i src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
     "clean": "rm -rf node_modules .next .cache dist .turbo"
   },
   "dependencies": {
-    "@hello-pangea/dnd": "^16.5.0",
+    "@hello-pangea/dnd": "^16.6.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -47,7 +47,6 @@
     "next-video": "^1.0.7",
     "openai": "^4.28.0",
     "qs": "^6.11.2",
-    "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.49.3",
     "resume-templates": "workspace:*",
     "shared": "workspace:*",
@@ -55,11 +54,14 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "ui": "workspace:*",
+    "use-deep-compare-effect": "^1.8.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@tanstack/eslint-plugin-query": "^4.32.5",
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^16.0.0",
     "@types/uuid": "^9.0.7"
   },
   "ct3aMetadata": {

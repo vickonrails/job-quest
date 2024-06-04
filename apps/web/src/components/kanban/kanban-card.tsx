@@ -29,7 +29,6 @@ export function KanbanCard({ job, index, openEditSheet, openDeleteDialog }: Kanb
                     data-testid="kanban-card"
                     className={cn('flex flex-col bg-background p-3 rounded-md select-none items-start group shadow-sm')}
                     ref={provided.innerRef}
-                    {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     {...provided.draggableProps.style}
                 >

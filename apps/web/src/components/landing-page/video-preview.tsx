@@ -1,4 +1,4 @@
-import DemoVideo from '@/videos/Job.quest-demo-dark.mp4'
+import { env } from '@/env.mjs'
 import Video from 'next-video'
 /**
  * Demo Video
@@ -7,7 +7,7 @@ export function VideoPreview() {
     return (
         <div className="border shadow-md rounded-lg w-full">
             <Video
-                src={DemoVideo}
+                playbackId={env.NEXT_PUBLIC_MUX_PLAYBACK_ID}
                 controls={false}
                 autoPlay
                 muted
