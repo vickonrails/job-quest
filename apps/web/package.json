@@ -13,7 +13,8 @@
     "db:seed": "bun run ./src/utils/seed.ts",
     "test:coverage": "vitest --coverage",
     "migration:add": "npx supabase db diff -f",
-    "postbuild": "npx tailwindcss -i ./src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts"
+    "postbuild": "npx tailwindcss -i . src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
+    "clean": "rm -rf node_modules .next .cache dist .turbo"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.5.0",
@@ -48,13 +49,12 @@
     "qs": "^6.11.2",
     "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.49.3",
-    "resume-templates": "*",
-    "shared": "*",
+    "resume-templates": "workspace:*",
+    "shared": "workspace:*",
     "supabase": "^1.106.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
-    "ui": "*",
-    "uuid": "^9.0.1",
+    "ui": "workspace:*",
     "zod": "^3.21.4"
   },
   "devDependencies": {

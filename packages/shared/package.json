@@ -5,7 +5,8 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean": "rm -rf node_modules .turbo"
   },
   "dependencies": {
     "clsx": "^2.1.0",

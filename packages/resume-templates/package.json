@@ -6,9 +6,10 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean": "rm -rf node_modules .turbo"
   },
   "dependencies": {
-    "shared": "*"
+    "shared": "workspace:*"
   }
 }

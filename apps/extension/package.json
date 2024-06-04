@@ -8,7 +8,7 @@
     "dev": "plasmo dev",
     "package": "plasmo package",
     "build": "plasmo build",
-    "clean": "rm -rf build && rm -rf .plasmo & plasmo dev"
+    "clean": "rm -rf build .plasmo node_modules .turbo"
   },
   "dependencies": {
     "@plasmohq/messaging": "0.5.0",
@@ -21,15 +21,18 @@
     "@tiptap/pm": "^2.2.4",
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.270.0",
-    "plasmo": "0.82.1",
-    "react-dom": "18.2.0",
-    "shared": "*",
+    "plasmo": "0.82.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "shared": "workspace:*",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "ui": "*"
+    "ui": "workspace:*"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.0",
