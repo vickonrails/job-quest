@@ -1,5 +1,5 @@
 'use client'
-import { AlertDialog } from '@/components/alert-dialog';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { createClient } from '@/utils/supabase/client';
 import { type Job, type Note } from 'lib/types';
 import { type HTMLAttributes } from 'react';
@@ -50,7 +50,7 @@ function NotesList({ job, ...rest }: NoteListProps) {
                 />
             ))}
 
-            <AlertDialog
+            <DeleteDialog
                 open={deleteModalOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to delete this note?"

@@ -1,7 +1,5 @@
 import { deleteWorkExperience, updateWorkExperiences } from '@/actions/resume';
-import { AlertDialog } from '@/components/alert-dialog';
-import { MenuBar, MenuItem, Separator } from '@/components/menubar';
-import { DateRenderer } from '@/components/resume-builder/date-renderer';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { debounce } from '@/utils/debounce';
@@ -13,7 +11,7 @@ import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import { getDefaultExperience } from 'src/hooks/useWorkExperience';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
-import { AddSectionBtn } from './add-section-button';
+import { AddExperienceItemDropdown } from './add-item-dropdown';
 
 /**
  * Work Experience section in resume builder
@@ -77,47 +75,28 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
         }
     }, [watchedData, debouncedSubmit])
 
+    const handleItemAdded = (experience: WorkExperience) => {
+        const newWorkExperience = generateNewExperience(experience)
+        append(newWorkExperience)
+    }
+
+    const handleBlankAdd = () => {
+        append(getDefaultExperience({ userId }))
+    }
+
     return (
         <form onSubmit={handleSubmit(saveFn)}>
             <section className="mb-4">
                 <h3 className="font-medium text-lg">Work Experience</h3>
                 <p className="mb-4 text-sm text-muted-foreground">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.</p>
                 <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={setHighlightToDelete} />
-                <MenuBar
-                    contentProps={{ side: 'bottom', align: 'start', className: 'min-w-72 shadow-sm' }}
-                    triggerProps={{ className: 'text-primary hover:text-primary' }}
-                    Header="From your profile"
-                    trigger={(
-                        <AddSectionBtn>
-                            Add Experience
-                        </AddSectionBtn>
-                    )}
-                    onClick={e => e.stopPropagation()}
-                >
-                    {templates?.map((experience) => {
-                        const newWorkExperience = generateNewExperience(experience)
-                        return (
-                            <MenuItem className="py-2" key={experience.id} onClick={() => append(newWorkExperience)}>
-                                {experience.job_title}
-                                <p className="text-sm text-muted-foreground flex gap-1">
-                                    <span>{experience.company_name}</span>
-                                    <span><DateRenderer startDate={experience.start_date} endDate={experience.end_date ?? ''} /></span>
-                                </p>
-                            </MenuItem>
-                        )
-                    })}
-
-                    <Separator />
-                    <MenuItem
-                        className="py-2"
-                        onClick={() => append(getDefaultExperience({ userId }))}
-                    >
-                        <p>Add Blank</p>
-                        <p className="text-sm text-muted-foreground">Add from scratch</p>
-                    </MenuItem>
-                </MenuBar>
-
-                <AlertDialog
+                <AddExperienceItemDropdown
+                    items={templates}
+                    title="Add Experience"
+                    onAddItem={handleItemAdded}
+                    onAddBlank={handleBlankAdd}
+                />
+                <DeleteDialog
                     open={isOpen}
                     title="Delete Confirmation"
                     description="Are you sure you want to remove this experience"
@@ -127,7 +106,7 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
                     isProcessing={loading}
                 />
             </section>
-        </form>
+        </form >
     )
 }
 

@@ -9,7 +9,7 @@ import type { Job, JobInsertDTO } from '~types';
 import { getJobUrl } from '~utils/get-job-content';
 import { JobInfoTabs } from './job-info-tabs';
 import { MovableDialog } from './movable-dialog';
-import { Sheet, type SheetProps } from './sheet';
+import { type SheetProps } from './sheet';
 
 export interface JobInfoSheetProps extends SheetProps {
     onSubmit: () => void
@@ -88,7 +88,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     const { show, error } = showBanner
 
     return (
-        <Sheet open={true} {...props}>
+        <MovableDialog open={true} {...props}>
             <AuthGuard>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
                     <div className="tiptap hidden"></div>
@@ -104,6 +104,6 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                     />
                 </form>
             </AuthGuard>
-        </Sheet>
+        </MovableDialog>
     )
 }

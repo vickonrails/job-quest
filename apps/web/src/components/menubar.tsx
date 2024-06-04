@@ -44,7 +44,6 @@ function MenuBar({ trigger, triggerProps, children, contentProps, Header, ...res
                         )} {...restContentProps}
                     >
                         {Header && <MenubarHeader Header={Header} />}
-
                         {children}
                     </RadixMenuBar.Content>
                 </RadixMenuBar.Portal>

@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { Button } from 'ui/button'
 import { Spinner } from 'ui/spinner'
-import { AlertDialog } from '../alert-dialog'
+import { DeleteDialog } from '../delete-dialog'
 import BackButton from '../back-button'
 import { Preview } from './builder/preview'
 import { Skills } from './builder/sections'
@@ -75,12 +75,12 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                         form={workExperienceForm}
                     />
                     <EducationSection
-                        userId={resume.id}
+                        userId={resume.user_id}
                         form={educationForm}
                         templates={educationTemplates}
                     />
                     <ProjectsSection
-                        userId={resume.id}
+                        userId={resume.user_id}
                         form={projectsForm}
                         templates={projectsTemplates}
                     />
@@ -94,7 +94,7 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                 workExperienceForm={workExperienceForm}
                 projectsForm={projectsForm}
             />
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description={<DeleteDescription resumeId={resume.id} />}

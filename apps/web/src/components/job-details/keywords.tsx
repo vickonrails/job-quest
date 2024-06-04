@@ -7,7 +7,7 @@ import { type Job } from 'lib/types';
 import { ChevronDown, ChevronUp, Wand2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useJobKeywords } from 'src/hooks/useJobKeywords';
-import { Button } from 'ui';
+import { Button } from 'ui/button';
 
 /**
  * KeywordsSection

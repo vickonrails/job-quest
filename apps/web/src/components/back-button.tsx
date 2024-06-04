@@ -2,7 +2,7 @@
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { type MouseEventHandler } from 'react'
-import { Button, type ButtonProps } from 'ui'
+import { Button, type ButtonProps } from 'ui/button'
 
 /**
  *

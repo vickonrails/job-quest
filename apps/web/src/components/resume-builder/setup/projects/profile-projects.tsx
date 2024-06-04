@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertDialog } from '@/components/alert-dialog'
+import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { createRef, useEffect, useState } from 'react'
@@ -112,7 +112,7 @@ export default function ProjectsView() {
                 </form>
             </StepContainer>
 
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this experience"

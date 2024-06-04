@@ -26,7 +26,7 @@ export default function NewButton() {
     }
 
     return (
-        <Button onClick={handleCreateNew} disabled={creating}>
+        <Button size="sm" loading={creating} onClick={handleCreateNew} disabled={creating}>
             {creating ? 'Creating...' : 'Create New'}
         </Button>
     )

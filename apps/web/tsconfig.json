@@ -29,6 +29,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/videos/*": [
+        "./videos/*"
       ]
     },
     "plugins": [
@@ -42,11 +45,13 @@
     "tests",
     ".eslintrc.cjs",
     "next.config.mjs",
+    "video.d.ts",
     "next-env.d.ts",
     "vitest/setup.ts",
     "tailwind.config.ts",
     "tailwind.pdf.config.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/shared/src/utils/format-to-utc.ts"
   ],
   "exclude": [
     "node_modules"

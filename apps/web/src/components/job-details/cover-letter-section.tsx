@@ -2,7 +2,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button } from 'ui'
+import { Button } from 'ui/button'
 
 export function CoverLetterSection({ jobId }: { jobId: string }) {
     const router = useRouter()

@@ -91,7 +91,6 @@ export async function updateEducation(education: Education[], highlightsToDelete
     try {
         const { error } = await client.from('education').upsert(preparedEducation);
         if (error) throw error;
-
         const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
         if (highlightsError) throw highlightsError
         revalidateTag('education')

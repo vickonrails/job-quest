@@ -4,7 +4,8 @@ import { debounce } from '@/utils/debounce';
 import { type Resume } from 'lib/types';
 import { useCallback, useRef } from 'react';
 import { useWatch, type UseFormReturn } from 'react-hook-form';
-import { Input, Textarea } from 'ui';
+import { Input, } from 'ui/input';
+import { Textarea } from 'ui/textarea';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 /**
@@ -67,7 +68,9 @@ export function BasicInfoSection({ form }: BasicInfoForm) {
                     rows={5}
                     label="Professional summary"
                     placeholder="Professional Summary"
-                    containerClasses="col-span-2"
+                    containerProps={{
+                        className: 'col-span-2'
+                    }}
                     {...register('resume.professional_summary')}
                 />
                 <Input

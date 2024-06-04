@@ -2,10 +2,13 @@ import { Accordion, AccordionItem } from '@/components/accordion'
 import { Checkbox } from '@/components/checkbox-archive'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
+import { isAfter } from 'date-fns'
 import { type Education, type Highlight } from 'lib/types'
-import { type Dispatch, type SetStateAction } from 'react'
+import { useCallback, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Input, Textarea } from 'ui'
+import { DatePicker } from 'ui/date-picker'
+import { Input } from 'ui/input'
+import { Textarea } from 'ui/textarea'
 import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
@@ -69,8 +72,35 @@ interface FormItemProps extends BaseFormItemProps {
 }
 
 function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
-    const { register } = form
+    const { register, getValues, setError, clearErrors } = form
     const fieldErrs = form.formState.errors?.education?.[index] ?? {}
+
+    const validate = useCallback(() => {
+        clearErrors()
+        const [start_date, end_date] = getValues([
+            `education.${index}.start_date`,
+            `education.${index}.end_date`
+        ])
+
+        if (!start_date || !end_date) return;
+
+        const startDate = new Date(start_date)
+        const endDate = new Date(end_date)
+
+        const invalidDuration = isAfter(startDate, endDate)
+
+        if (invalidDuration) {
+            setError(`education.${index}.end_date`, {
+                message: 'End date cannot be earlier than start date'
+            })
+            setError(`education.${index}.start_date`, {
+                message: 'Start date cannot be later than end date'
+            })
+            return false;
+        }
+
+        return true
+    }, [setError, getValues, clearErrors, index])
 
     return (
         <AccordionItem
@@ -107,12 +137,22 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
                         placeholder="Location..."
                         {...register(`education.${index}.location`)}
                     />
-                    <Input
-                        type="date"
-                        label="Start Date"
-                        placeholder="Start Date..."
-                        hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
-                        {...register(`education.${index}.start_date`, { required: { message: 'Start date is required', value: true } })}
+                    <Controller
+                        name={`education.${index}.start_date`}
+                        control={form.control}
+                        rules={{ validate, required: true }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <DatePicker
+                                    hint={<ErrorHint>{fieldErrs.start_date?.message}</ErrorHint>}
+                                    mode="single"
+                                    label="Start Date"
+                                    selected={value}
+                                    onChange={val => field.onChange(val)}
+                                />
+                            )
+                        }}
                     />
                     <Controller
                         name={`education.${index}.still_studying_here`}
@@ -127,16 +167,23 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
                         )}
                     />
 
-                    {!field.still_studying_here && (
-                        <Input
-                            type="date"
-                            label="End Date"
-                            placeholder="End Date..."
-                            hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
-                            disabled={Boolean(field.still_studying_here)}
-                            {...register(`education.${index}.end_date`, { required: { message: 'End date is required', value: true } })}
-                        />
-                    )}
+                    <Controller
+                        name={`education.${index}.end_date`}
+                        control={form.control}
+                        rules={{ validate, required: true, }}
+                        render={({ field }) => {
+                            const value = field.value ? new Date(field.value) : undefined
+                            return (
+                                <DatePicker
+                                    hint={<ErrorHint>{fieldErrs.end_date?.message}</ErrorHint>}
+                                    mode="single"
+                                    label="End Date"
+                                    selected={value}
+                                    onChange={val => field.onChange(val)}
+                                />
+                            )
+                        }}
+                    />
                 </section>
 
                 <EducationHighlights
@@ -179,7 +226,9 @@ export function EducationHighlights({ form, index, onDeleteClick, entity, setHig
                         <Textarea
                             placeholder="A summary of what you did in this role"
                             label={idx === 0 ? 'Highlights' : ''}
-                            containerClasses="w-full mb-1"
+                            containerProps={{
+                                className: 'w-full mb-1'
+                            }}
                             rows={2}
                             {...form.register(`education.${index}.highlights.${idx}.text`)}
                         />

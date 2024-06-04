@@ -39,7 +39,7 @@ export default async function DashboardPage() {
 function RecentResume({ resumes }: { resumes: Resume[] }) {
     return (
         <>
-            <h2 className="w-full text-md font-medium my-4 mt-6">Recent Resumes</h2>
+            <h2 className="w-full text-md text-muted-foreground font-medium my-4 mt-6">Recent Resumes</h2>
             <section className="flex flex-wrap gap-4">
                 {resumes.map(resume => (
                     <ResumePreviewCard key={resume.id} resume={resume} />

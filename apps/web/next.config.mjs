@@ -22,7 +22,8 @@ const config = {
   images: {
     domains: [
       'avatars.githubusercontent.com',
-      'logo.clearbit.com'
+      'logo.clearbit.com',
+      'lh3.googleusercontent.com'
     ]
   },
   // images: {

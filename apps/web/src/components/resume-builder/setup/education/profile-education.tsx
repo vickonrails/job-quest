@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertDialog } from '@/components/alert-dialog';
+import { DeleteDialog } from '@/components/delete-dialog';
 import { useToast } from '@/components/toast/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
@@ -100,7 +100,7 @@ export function EducationStep() {
                     />
                 </form>
             </StepContainer>
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this education"

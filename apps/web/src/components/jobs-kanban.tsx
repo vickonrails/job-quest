@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from 'ui/button';
 import { Spinner } from 'ui/spinner';
-import { AlertDialog } from './alert-dialog';
+import { DeleteDialog } from './delete-dialog';
 import JobsKanban from './kanban/kanban-container';
 import { JobEditSheet } from './sheet/jobs-edit-sheet';
 
@@ -56,7 +56,7 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}
                 </h1>
-                <Button onClick={() => openEditSheet()}>Add New</Button>
+                <Button size="sm" onClick={() => openEditSheet()}>Add New</Button>
             </section>
             <JobsKanban
                 openEditSheet={openEditSheet}
@@ -75,7 +75,7 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
                 />
             )}
 
-            <AlertDialog
+            <DeleteDialog
                 open={deleteModalOpen}
                 title="Delete Confirmation"
                 description={deleteTextWarning}

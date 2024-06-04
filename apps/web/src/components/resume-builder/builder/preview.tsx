@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { type DeepPartialSkipArrayKey, type UseFormReturn } from 'react-hook-form';
 import { Complex, Simple, type FormValues } from 'resume-templates';
-import { Button, Select } from 'ui';
+import { Button } from 'ui/button';
 import { Spinner } from 'ui/spinner';
 
 /**
@@ -84,8 +84,16 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
     }
 
     return (
-        <section className="bg-gray-100 flex-1 p-6 overflow-auto flex flex-col items-end">
-            <header className="flex justify-between w-full items-center mb-2">
+        <section className="bg-gray-200  selection:bg-blue-200 flex-1 p-6 overflow-auto flex flex-col items-end">
+            {/* <ResumePreviewDropdown /> */}
+            <header className="flex justify-end w-full items-center gap-3 mb-2">
+                {isSubmitting && <Spinner className="h-6 w-6" />}
+                <Button size="sm" type="button" disabled={downloading} variant="ghost" className="flex items-center gap-1 bg-muted" onClick={handleExport}>
+                    <Share className="text-xs h-4 w-4" />
+                    {downloading ? 'Exporting...' : 'Export'}
+                </Button>
+            </header>
+            {/* <header className="flex justify-between w-full items-center mb-2">
                 <Select
                     options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
                     trigger="Select template"
@@ -101,10 +109,10 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
                         {downloading ? 'Exporting...' : 'Export'}
                     </Button>
                 </div>
-            </header>
+            </header> */}
 
             {/* TODO: fix button loading states for all variants */}
-            <div className="bg-white w-full">
+            <div className="bg-white text-black w-full">
                 <ResumeTemplate
                     values={{ resume, workExperience, projects, education }}
                     template={resumeTemplate}

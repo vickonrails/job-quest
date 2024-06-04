@@ -7,9 +7,12 @@ import { createClient } from '@/utils/supabase/client';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
 import { Status_Lookup } from 'shared';
-import { Input, Rating, Select } from 'ui';
+import { Rating } from 'ui/rating';
+import { Input } from 'ui/input';
 import { Button } from 'ui/button';
+import { Select } from 'ui/select';
 import { Sheet, type SheetProps } from './sheet';
+import { Label } from 'ui/label';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
@@ -62,7 +65,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                     />
 
                     <div className="mb-4">
-                        <div className="mb-3 text-sm">Rating</div>
+                        <Label className="mb-3">Rating</Label>
                         <Controller
                             name="priority"
                             control={control}
@@ -83,7 +86,7 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                         render={({ field }) => (
                             <Select
                                 options={statusOptions}
-                                label="Select"
+                                label="Select status"
                                 value={String(field.value)}
                                 trigger="Select a status"
                                 onValueChange={(val: string) => field.onChange(Number(val))}

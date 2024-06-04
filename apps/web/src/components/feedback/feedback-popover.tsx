@@ -1,7 +1,7 @@
 'use client'
 
 import { type FeedbackFormValues } from '@/utils/create-feedback'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, MessageSquarePlus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Button } from 'ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from 'ui/popover'
@@ -24,11 +24,16 @@ export function Feedback() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">Feedback</Button>
+                <Button className="w-full text-left" variant="ghost" size="sm">
+                    <MessageSquarePlus className="mr-2" />
+                    Feedback
+                </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80"
                 onFocusOutside={ev => ev.preventDefault()}
                 onInteractOutside={handleInteractOutside}
+                side="top"
+                align="start"
             >
                 {submitSuccessful ? (
                     <section className="flex gap-2 flex-col items-center py-4">

@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertDialog } from '@/components/alert-dialog'
+import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
 import { useSetupContext } from '@/hooks/useSetupContext'
 import { createClient } from '@/utils/supabase/client'
@@ -18,9 +18,9 @@ export function WorkExperience() {
     const client = createClient()
     const queryClient = useQueryClient()
     const { toast } = useToast()
-    const [idxToRemove, setRemoveIdx] = useState<number>();
+    const [idxToRemove, setRemoveIdx] = useState<number>()
     const { user } = useSetupContext()
-    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience();
+    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience()
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,
@@ -92,7 +92,7 @@ export function WorkExperience() {
                 </form>
             </StepContainer>
 
-            <AlertDialog
+            <DeleteDialog
                 open={isOpen}
                 title="Delete Confirmation"
                 description="Are you sure you want to remove this experience"

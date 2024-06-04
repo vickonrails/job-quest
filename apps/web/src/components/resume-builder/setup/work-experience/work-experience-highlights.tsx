@@ -1,7 +1,7 @@
 import { type Highlight, type WorkExperience } from 'lib/types'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useFieldArray, type UseFormReturn } from 'react-hook-form'
-import { Textarea } from 'ui'
+import { Textarea } from 'ui/textarea'
 import { v4 as uuid } from 'uuid'
 import { HighlightFooter } from '../components/highlights-footer'
 
@@ -15,7 +15,6 @@ interface HighlightsProps {
 
 export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, onHighlightDelete }: HighlightsProps) {
     const { fields, remove, append } = useFieldArray({ name: `workExperience.${index}.highlights`, control: form.control, keyName: '_id' })
-    // const { user } = useSetupContext();
 
     const handleRemove = (idx: number) => {
         const highlight = fields[idx]
@@ -33,7 +32,9 @@ export function WorkExperienceHighlights({ form, index, onDeleteClick, entity, o
                         <Textarea
                             placeholder="A summary of what you did in this role"
                             label={idx === 0 ? 'Highlights' : ''}
-                            containerClasses="w-full mb-1"
+                            containerProps={{
+                                className: 'w-full mb-1'
+                            }}
                             rows={2}
                             {...form.register(`workExperience.${index}.highlights.${idx}.text`, { required: true, min: 5 })}
                         />

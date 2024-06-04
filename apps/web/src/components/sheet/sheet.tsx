@@ -4,7 +4,7 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from 'shared'
-import { Button } from 'ui'
+import { Button } from 'ui/button'
 
 const SheetRoot = SheetPrimitive.Root
 

@@ -3,14 +3,17 @@ import { type FC, type HTMLAttributes } from 'react';
 
 type LogoProps = HTMLAttributes<HTMLElement>;
 
-const Logo: FC<LogoProps> = ({ className, ...rest }) => {
+const Logo: FC<LogoProps> = ({ className, children, ...rest }) => {
     return (
         <h1 className={
             clsx(
-                'text-primary text-xl font-medium',
+                'text-muted-foreground flex gap-2 hover:text-accent-foreground text-base',
                 className
             )
-        } {...rest}>JobQuest</h1>
+        } {...rest}>
+            {children}
+            <span className="select-none text-primary">JobQuest</span>
+        </h1>
     )
 }
 

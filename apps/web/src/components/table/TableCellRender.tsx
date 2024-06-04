@@ -1,5 +1,4 @@
 import { Avatar } from '@/components/avatar';
-import { Typography } from '@/components/typography';
 import { formatDate } from 'shared';
 import clsx from 'clsx';
 import { type HTMLAttributes } from 'react';
@@ -51,9 +50,9 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const formattedDate = formatDate(splitDate)
             return (
                 <td className={classNames} {...rest}>
-                    <Typography variant="body-sm" className="overflow-ellipsis overflow-hidden">
+                    <p className="overflow-ellipsis overflow-hidden">
                         {formattedDate}
-                    </Typography>
+                    </p>
                 </td>
             );
 
@@ -61,11 +60,11 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const { src, text: logoText } = value as LogoWithTextCellType<T>
             return (
                 <td className={classNames} {...rest}>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                         <Avatar alt="" size="sm" fallbackText={logoText} src={src} />
-                        <Typography variant="body-sm">
+                        <p className="text-sm">
                             {logoText}
-                        </Typography>
+                        </p>
                     </div>
                 </td>
             )
@@ -83,9 +82,9 @@ export const TableCellRender = <T,>({ type, value, className, ...rest }: CellRen
             const { text } = value as TextCellType<T>
             return (
                 <td className={classNames} {...rest}>
-                    <Typography variant="body-sm" className="text-base-col py-3 overflow-ellipsis overflow-hidden">
+                    <div className="text-base-col text-sm py-3 overflow-ellipsis overflow-hidden">
                         {text}
-                    </Typography>
+                    </div>
                 </td>
             );
     }

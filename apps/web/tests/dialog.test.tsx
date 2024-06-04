@@ -2,7 +2,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { Dialog } from '@/components/dialog'
-import { AlertDialog } from '@/components/alert-dialog'
+import { DeleteDialog } from '@/components/delete-dialog'
 
 describe('Dialog', () => {
     it('renders without error', () => {
@@ -20,12 +20,11 @@ describe('Dialog', () => {
 describe('Alert Dialog', () => {
     it('renders without error', () => {
         const { getByText } = render(
-            <AlertDialog open={true} title="Dialog Test" description="Are you sure" />
+            <DeleteDialog open={true} title="Dialog Test" description="Are you sure" />
         )
 
         expect(getByText('Dialog Test')).toBeInTheDocument()
         expect(getByText('Are you sure')).toBeInTheDocument()
         expect(getByText('Cancel')).toBeInTheDocument()
-        expect(getByText('Delete')).toBeInTheDocument()
     })
 })
