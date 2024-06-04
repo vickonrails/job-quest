@@ -37,8 +37,9 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-videos/
+# /path/to/folder/**/*.avi
+# /path/to/folder/**/*.mov
+# /path/to/folder/**/*.mkv
 
 # typescript
 *.tsbuildinfo
@@ -46,5 +47,8 @@ videos/
 # ignore resume templates
 **/resume-templates.css
 
-# video files
-/videos/
+# Video files
+videos/**/*.mp4
+videos/**/*.avi
+videos/**/*.mov
+videos/**/*.mkv

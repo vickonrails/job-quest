@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createClient } from './utils/supabase/server';
 
 const protectedRoutes = ['/dashboard', '/job-tracker', '/resumes', 'profile']
+const isProd = process.env.NODE_ENV === 'production'
 
 export async function middleware(request: NextRequest) {
     const url = new URL(request.url)
@@ -10,6 +11,12 @@ export async function middleware(request: NextRequest) {
     const client = createClient()
     const { data: { user } } = await client.auth.getUser()
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
+
+    // prevent exploration of app for now
+    if (isProd && url.pathname !== '/') {
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+    }
 
     // redirect unauthorized users
     if (isProtectedRoute && !user) {
