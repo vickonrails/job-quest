@@ -3,7 +3,6 @@
  * This is especially useful for Docker builds.
  */
 !process.env.SKIP_ENV_VALIDATION && (await import('./src/env.mjs'));
-import { withNextVideo } from 'next-video/process'
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -34,4 +33,4 @@ const config = {
   //   ]
   // }
 };
-export default withNextVideo(config);
+export default config;

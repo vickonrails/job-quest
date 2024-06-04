@@ -29,7 +29,7 @@ function HorizontalLine() {
 export function Footer() {
     return (
         <footer className="w-full">
-            <Image src="/job.quest.1.dark.png" height={100} width={1000} alt="" className="w-full -mb-[1000px]" />
+            <Image src="/screenshot-tracker.png" height={100} width={1000} alt="" className="w-full -mb-[1000px]" />
         </footer>
     )
 }
