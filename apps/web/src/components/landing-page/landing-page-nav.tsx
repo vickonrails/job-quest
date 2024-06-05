@@ -13,7 +13,7 @@ export function Nav() {
                 {/* JobQuest */}
             </Link>
             <section className="flex gap-3 flex-row items-center text-sm">
-                <Link href="https://demo.getjobquest.com" target="_blank" className="transition text-accent-foreground/75 hover:text-secondary-foreground hover:underline flex gap-1 items-center">
+                <Link href="https://youtu.be/oFBXAUy4Jkw" target="_blank" className="transition text-accent-foreground/75 hover:text-secondary-foreground hover:underline flex gap-1 items-center">
                     <span>See Demo</span>
                     <ExternalLink size={20} />
                 </Link>
