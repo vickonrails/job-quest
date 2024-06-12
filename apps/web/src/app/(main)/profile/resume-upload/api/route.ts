@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { Project, type ProjectInsertDTO, type EducationInsertDTO, type ProfileInsertDTO, type WorkExperienceInsertDTO } from 'lib/types';
+import { Project, type ProjectInsertDTO, type EducationInsertDTO, type ProfileInsertDTO, type WorkExperienceInsertDTO, type WorkExperience } from 'lib/types';
 import { revalidateTag } from 'next/cache';
 import OpenAI from 'openai';
 import { ChatCompletion, type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
@@ -13,51 +13,41 @@ interface ResponseFormat {
     projects: ProjectInsertDTO[]
 }
 
-
-
-
-
-// const format: ResponseFormat = {
-//     profile: {
-//         id: '',
-//         full_name: '',
-//         email_address: '',
-//         location: '',
-//         professional_summary: '',
-//         title: '',
-//         skills: [{ label: '' }],
-//         github_url: '',
-//         personal_website: '',
-//         linkedin_url: ''
-//     },
-//     workExperience: [{
-//         job_title: '',
-//         location: '',
-//         company_name: '',
-//         end_date: '',
-//         start_date: '',
-//         still_working_here: false
-//     }],
-//     education: [{
-//         start_date: '',
-//         end_date: '',
-//         degree: '',
-//         field_of_study: '',
-//         institution: '',
-//         still_studying_here: false,
-//         location: '',
-//         highlights: [{ text: '' }],
-//     }],
-//     projects: [{
-//         description: '',
-//         end_date: '',
-//         start_date: '',
-//         skills: [{ label: '' }],
-//         id: '',
-//         title: '',
-//         url: ''
-//     }]
+// const profile = {
+//     email_address: '',
+//     full_name: 'Jordan Smith',
+//     github_url: '',
+//     id: '6479241a-7e1f-40a8-9928-84447674f8d2',
+//     linkedin_url: '',
+//     location: '',
+//     personal_website: '',
+//     professional_summary: 'Software developer with 5 years of experience developing innovative applications, seeking to leverage programming skills to solve complex problems.',
+//     skills: [{ label: 'Javascript' }],
+//     title: 'Software Developer',
 // }
+
+type WorkExperienceDTO = Omit<WorkExperience, 'id' | 'resume_id' | 'created_at' | 'updated_at'>;
+
+// const workExperiences: WorkExperienceDTO[] = [
+//     {
+//         company_name: 'TechInnovations Inc.',
+//         end_date: null,
+//         job_title: 'Software Developer',
+//         location: '',
+//         start_date: '2021-01-01',
+//         still_working_here: true,
+//         user_id: '6479241a-7e1f-40a8-9928-84447674f8d2'
+//     },
+//     {
+//         company_name: 'NextGen Solutions',
+//         end_date: '2021-05-31',
+//         job_title: 'Junior Software Developer',
+//         location: '',
+//         start_date: '2019-07-01',
+//         still_working_here: false,
+//         user_id: '6479241a-7e1f-40a8-9928-84447674f8d2'
+//     }
+// ]
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -79,7 +69,6 @@ function getInstruction(resumeText: string) {
       
       {
           "profile": {
-              "id": "",
               "full_name": "",
               "email_address": "",
               "location": "",
@@ -128,7 +117,7 @@ function getInstruction(resumeText: string) {
 
 export async function POST(request: Request) {
     const client = createClient();
-
+    // TODO: this is going to erase data from previous resume in order to avoid duplicates or other complex situations
     const { data, error } = await client.auth.getUser()
     if (!data || error) throw error;
 
@@ -146,41 +135,34 @@ export async function POST(request: Request) {
         if (!response) throw new Error('No response from GPT')
 
         const gptResponse: ResponseFormat = JSON.parse(response)
-        const { profile } = gptResponse
+        const { profile, workExperience, projects, education } = gptResponse
 
-        if (profile) {
+        if (profile && workExperience && projects) {
+            const enrichedProjects = projects.map((project) => ({ ...project, user_id: data.user.id }))
+            const enrichedExperience = workExperience.map((we) => ({ ...we, user_id: data.user.id }))
+            const enrichedEducation = education.map((edu) => ({ ...edu, user_id: data.user.id }))
+
             const { error } = await client.rpc('setup_profile', {
                 profile,
+                work_experience: enrichedExperience,
+                projects: enrichedProjects,
+                education: enrichedEducation,
                 user_id: data.user.id
             })
 
             if (error) throw error
+
+            await client.from('profiles').update({ is_profile_setup: true }).eq('id', data.user.id)
+
             revalidateTag(`profile-${data.user.id}`)
+            revalidateTag('workExperiences')
+            revalidateTag('projects')
+            revalidateTag('education')
         }
 
-        // if (workExperience) {
-        //     const { error } = await client.from('work_experience').upsert(workExperience.map((we) => ({ ...we, user_id: data.user.id })))
-        //     if (error) throw error
-        //     revalidateTag('workExperiences')
-        // }
-
-        // if (projects) {
-        //     const { error } = await client.from('projects').upsert(projects.map((we) => ({ ...we, user_id: data.user.id })))
-        //     if (error) throw error
-        //     revalidateTag('projects')
-        // }
-
-        // if (education) {
-        //     const { error } = await client.from('education').upsert(education.map((we) => ({ ...we, user_id: data.user.id })))
-        //     if (error) throw error
-        //     revalidateTag('education')
-        // }
-
-        return Response.json(gptResponse)
+        return Response.json({ success: true })
 
     } catch (e) {
-        console.log(e)
-        return new Response(e.message, { status: 500 })
+        return Response.json({ success: false, error: e }, { status: 501 })
     }
-
 }

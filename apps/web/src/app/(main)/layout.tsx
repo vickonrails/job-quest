@@ -1,6 +1,8 @@
+import { ProfileSetupBanner } from '@/components/layout/profile-setup-banner';
 import { Sidebar } from '@/components/layout/sidebar';
 import { getUser, getUserProfile } from '@/db/api';
 import '@/styles/globals.css';
+import { type Profile } from 'lib/types';
 import { cn } from 'shared';
 
 // TODO: add metadata
@@ -17,18 +19,21 @@ export default async function RootLayout({
 
     return (
         <div className={cn('flex h-full max-w-screen-2xl m-auto')}>
-            {/* <Sidebar className="basis-60" profile={profile} user={user} /> */}
-            {children}
+            <Sidebar className="basis-60" profile={profile} user={user} />
+            <MainShell profile={profile}>
+                {children}
+            </MainShell>
         </div>
     );
 }
 
 
-export function MainShell({ title, children }: { title: string | React.ReactNode, children: React.ReactNode }) {
+export function MainShell({ children, profile }: { children: React.ReactNode, profile: Profile }) {
     return (
         <main className="flex-1 overflow-hidden flex flex-col">
-            {/* <Navbar pageTitle={title} /> */}
+            <ProfileSetupBanner profile={profile} />
             {children}
         </main>
     )
 }
+

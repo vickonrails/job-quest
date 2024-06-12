@@ -30,6 +30,7 @@
     "./alert-dialog": "./src/components/alert-dialog.tsx",
     "./date-picker": "./src/components/date-picker.tsx",
     "./progress": "./src/components/progress.tsx",
+    "./alert": "./src/components/alert.tsx",
     "./tailwind.config": "./tailwind.config.ts",
     ".": "./src/index.ts"
   },

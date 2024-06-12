@@ -1,7 +1,6 @@
 import ResumeFormBuilder from '@/components/resume-builder/resume-form-preview';
 import { getEducation, getProjects, getResume, getWorkExperience } from '@/db/api';
 import { Suspense } from 'react';
-import { MainShell } from '../../layout';
 
 export default async function ResumeDetails({ params }: { params: { id: string } }) {
     const resumeId = params.id
@@ -21,17 +20,15 @@ export default async function ResumeDetails({ params }: { params: { id: string }
     if (!resume || !workExperience || !education || !projects) return;
 
     return (
-        <MainShell title={`Resume  -  ${resume.title ?? ''}`}>
-            <Suspense fallback={<p>Loading...</p>}>
-                <main className="overflow-auto">
-                    <ResumeFormBuilder
-                        resume={resume}
-                        workExperience={workExperience}
-                        education={education}
-                        projects={projects}
-                    />
-                </main>
-            </Suspense>
-        </MainShell>
+        <Suspense fallback={<p>Loading...</p>}>
+            <main className="overflow-auto">
+                <ResumeFormBuilder
+                    resume={resume}
+                    workExperience={workExperience}
+                    education={education}
+                    projects={projects}
+                />
+            </main>
+        </Suspense>
     )
 }

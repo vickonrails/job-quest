@@ -106,7 +106,7 @@ export default function ProjectsView() {
                     <SectionFooter
                         addText="Add Project"
                         isSubmitting={formState.isSubmitting}
-                        saveDisabled={fields.length <= 0}
+                        saveDisabled={fields.length <= 0 || !form.formState.isValid}
                         onAppendClick={() => append(getDefaultProject({ userId: user?.id }))}
                     />
                 </form>

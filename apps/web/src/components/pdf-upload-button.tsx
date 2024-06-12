@@ -5,7 +5,7 @@ import { useCallback, useRef, type ChangeEvent } from 'react';
 import { Button, type ButtonProps } from 'ui/button';
 
 interface PDFUploadButtonProps extends ButtonProps {
-    onFilePicked?: (file: ArrayBuffer) => void
+    onFilePicked?: (file: ArrayBuffer, filename: string) => void
 }
 
 export function PDFUploadButton({ onFilePicked, onClick, ...rest }: PDFUploadButtonProps) {
@@ -16,10 +16,11 @@ export function PDFUploadButton({ onFilePicked, onClick, ...rest }: PDFUploadBut
         if (!file) return
         const reader = new FileReader()
         reader.readAsArrayBuffer(file)
+        const filename = getFilename(file.name) // ???
         reader.onload = (evt) => {
             const result = evt.target?.result;
             const filename = getFilename(file.name) // ???
-            onFilePicked?.(result as ArrayBuffer)
+            onFilePicked?.(result as ArrayBuffer, filename)
             if (inputRef.current) inputRef.current.value = '';
 
             // make request to backend with file buffer
