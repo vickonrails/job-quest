@@ -22,9 +22,6 @@ export function PDFUploadButton({ onFilePicked, onClick, ...rest }: PDFUploadBut
             const filename = getFilename(file.name) // ???
             onFilePicked?.(result as ArrayBuffer, filename)
             if (inputRef.current) inputRef.current.value = '';
-
-            // make request to backend with file buffer
-            console.log({ result, filename })
         }
     }, [onFilePicked])
 

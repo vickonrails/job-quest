@@ -20,7 +20,7 @@ export function WorkExperience() {
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>()
     const { user } = useSetupContext()
-    const { experiences, form, fieldsArr, updateExperiences, setHighlightsToDelete } = useWorkExperience()
+    const { experiences, form, fieldsArr, updateExperiences } = useWorkExperience()
     const { append, fields, remove } = fieldsArr
     const {
         showDeleteDialog,
@@ -30,7 +30,9 @@ export function WorkExperience() {
         setIsOpen,
         isOpen
     } = useDeleteModal({
-        onDelete: async (id: string) => { await deleteExperience(id, client) }
+        onDelete: async (id: string) => {
+            await deleteExperience(id, client)
+        }
     });
 
     const handleDeleteClick = (experience: IWorkExperience, index: number) => {
@@ -55,8 +57,8 @@ export function WorkExperience() {
     }
 
     const onDeleteOk = async () => {
-        await handleDelete();
         remove(idxToRemove);
+        await handleDelete();
         await queryClient.refetchQueries(['work_experience']);
     }
 
@@ -79,7 +81,6 @@ export function WorkExperience() {
                         form={form}
                         fields={fields}
                         onDeleteClick={handleDeleteClick}
-                        onHighlightDelete={setHighlightsToDelete}
                         autofocus
                         defaultOpen
                     />

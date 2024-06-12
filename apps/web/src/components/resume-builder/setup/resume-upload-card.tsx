@@ -47,7 +47,6 @@ export function UploadResumeCard() {
                 setUploading(false)
             }
         } catch (error) {
-            console.error(error)
             toast({
                 title: 'An error occurred',
                 variant: 'destructive'

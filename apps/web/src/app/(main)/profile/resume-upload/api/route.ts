@@ -1,9 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
-import { Project, type ProjectInsertDTO, type EducationInsertDTO, type ProfileInsertDTO, type WorkExperienceInsertDTO, type WorkExperience } from 'lib/types';
+import { type EducationInsertDTO, type ProfileInsertDTO, type ProjectInsertDTO, type WorkExperience, type WorkExperienceInsertDTO } from 'lib/types';
 import { revalidateTag } from 'next/cache';
 import OpenAI from 'openai';
-import { ChatCompletion, type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
-import { parse } from 'path';
+import { type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
 
 interface ResponseFormat {

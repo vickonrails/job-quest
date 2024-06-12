@@ -37,7 +37,7 @@ export default function SetupNav() {
 
             <Alert className="text-sm">
                 <AlertTitle>Setup With Resume</AlertTitle>
-                <AlertDescription className="text-muted-foreground">Setup your profile by uploading a resume. Vital information is extracted into your profile. {" "}
+                <AlertDescription className="text-muted-foreground">Setup your profile by uploading a resume. Vital information is extracted into your profile. {' '}
                     <Link href="/profile/resume-upload" className="text-accent-foreground hover:underline">Upload Now</Link>
                 </AlertDescription>
             </Alert>

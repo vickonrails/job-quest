@@ -115,11 +115,6 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
  */
 function generateNewExperience(experience: WorkExperience): WorkExperience {
     const id = uuid();
-    const highlights = experience.highlights?.map(x => {
-        x.id = uuid()
-        x.work_experience_id = id
-        return x
-    }).filter(x => x)
 
-    return { ...experience, id, highlights }
+    return { ...experience, id }
 }

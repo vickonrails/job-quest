@@ -76,6 +76,7 @@ export type Database = {
           degree: string | null
           end_date: string | null
           field_of_study: string | null
+          highlights: string | null
           id: string
           institution: string | null
           location: string | null
@@ -90,6 +91,7 @@ export type Database = {
           degree?: string | null
           end_date?: string | null
           field_of_study?: string | null
+          highlights?: string | null
           id?: string
           institution?: string | null
           location?: string | null
@@ -104,6 +106,7 @@ export type Database = {
           degree?: string | null
           end_date?: string | null
           field_of_study?: string | null
+          highlights?: string | null
           id?: string
           institution?: string | null
           location?: string | null
@@ -123,55 +126,6 @@ export type Database = {
           },
           {
             foreignKeyName: 'public_education_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      highlights: {
-        Row: {
-          education_id: string | null
-          id: string
-          text: string
-          type: string | null
-          user_id: string
-          work_experience_id: string | null
-        }
-        Insert: {
-          education_id?: string | null
-          id?: string
-          text: string
-          type?: string | null
-          user_id: string
-          work_experience_id?: string | null
-        }
-        Update: {
-          education_id?: string | null
-          id?: string
-          text?: string
-          type?: string | null
-          user_id?: string
-          work_experience_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'highlights_education_id_fkey'
-            columns: ['education_id']
-            isOneToOne: false
-            referencedRelation: 'education'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'highlights_work_experience_id_fkey'
-            columns: ['work_experience_id']
-            isOneToOne: false
-            referencedRelation: 'work_experience'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'public_highlights_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
@@ -363,6 +317,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           end_date: string | null
+          highlights: string | null
           id: string
           resume_id: string | null
           skills: Database['public']['CompositeTypes']['skill'][] | null
@@ -376,6 +331,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           end_date?: string | null
+          highlights?: string | null
           id?: string
           resume_id?: string | null
           skills?: Database['public']['CompositeTypes']['skill'][] | null
@@ -389,6 +345,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           end_date?: string | null
+          highlights?: string | null
           id?: string
           resume_id?: string | null
           skills?: Database['public']['CompositeTypes']['skill'][] | null
@@ -476,6 +433,7 @@ export type Database = {
           company_name: string | null
           created_at: string | null
           end_date: string | null
+          highlights: string | null
           id: string
           job_title: string | null
           location: string | null
@@ -489,6 +447,7 @@ export type Database = {
           company_name?: string | null
           created_at?: string | null
           end_date?: string | null
+          highlights?: string | null
           id?: string
           job_title?: string | null
           location?: string | null
@@ -502,6 +461,7 @@ export type Database = {
           company_name?: string | null
           created_at?: string | null
           end_date?: string | null
+          highlights?: string | null
           id?: string
           job_title?: string | null
           location?: string | null
@@ -542,7 +502,10 @@ export type Database = {
       setup_profile: {
         Args: {
           user_id: string
-          profile: Json
+          profile: Database['public']['CompositeTypes']['profile_type']
+          work_experience: Database['public']['CompositeTypes']['work_experience_type'][]
+          projects: Database['public']['CompositeTypes']['project_type'][]
+          education: Database['public']['CompositeTypes']['education_type'][]
         }
         Returns: undefined
       }
@@ -551,8 +514,47 @@ export type Database = {
       [_ in never]: never
     }
     CompositeTypes: {
+      education_type: {
+        degree: string | null
+        end_date: string | null
+        field_of_study: string | null
+        institution: string | null
+        location: string | null
+        start_date: string | null
+        still_studying_here: boolean | null
+        user_id: string | null
+      }
+      profile_type: {
+        email_address: string | null
+        full_name: string | null
+        location: string | null
+        professional_summary: string | null
+        title: string | null
+        skills: Database['public']['CompositeTypes']['skill'][] | null
+        github_url: string | null
+        personal_website: string | null
+        linkedin_url: string | null
+      }
+      project_type: {
+        description: string | null
+        end_date: string | null
+        skills: Database['public']['CompositeTypes']['skill'][] | null
+        start_date: string | null
+        title: string | null
+        url: string | null
+        user_id: string | null
+      }
       skill: {
         label: string | null
+      }
+      work_experience_type: {
+        company_name: string | null
+        end_date: string | null
+        job_title: string | null
+        location: string | null
+        start_date: string | null
+        still_working_here: boolean | null
+        user_id: string | null
       }
     }
   }

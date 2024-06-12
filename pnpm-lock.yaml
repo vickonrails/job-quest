@@ -259,6 +259,15 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@9.3.4)
+      '@tiptap/pm':
+        specifier: ^2.2.4
+        version: 2.4.0
+      '@tiptap/react':
+        specifier: ^2.2.4
+        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: ^2.2.4
+        version: 2.4.0(@tiptap/pm@2.4.0)
       '@types/pdf-parse':
         specifier: ^1.1.4
         version: 1.1.4
