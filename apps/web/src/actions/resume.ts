@@ -1,5 +1,7 @@
 'use server'
 
+import pdfParse from 'pdf-parse/lib/pdf-parse';
+
 import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/server';
 import { type Education, type Highlight, type Project, type Resume, type ResumeInsert, type WorkExperience } from 'lib/types';

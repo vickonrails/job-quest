@@ -14,7 +14,9 @@ export type WorkExperience = Database['public']['Tables']['work_experience']['Ro
 export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experience']['Insert'];
 
 export type Education = Database['public']['Tables']['education']['Row'] & { highlights?: Highlight[] };
+export type EducationInsertDTO = Database['public']['Tables']['education']['Insert'] & { highlights?: Highlight[] };
 export type Project = Database['public']['Tables']['projects']['Row'];
+export type ProjectInsertDTO = Database['public']['Tables']['projects']['Insert'];
 export type Resume = Database['public']['Tables']['resumes']['Row'];
 export type ResumeInsert = Database['public']['Tables']['resumes']['Insert'];
 export type CoverLetter = Database['public']['Tables']['cover_letters']['Row'];

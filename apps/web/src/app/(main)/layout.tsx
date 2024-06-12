@@ -17,7 +17,7 @@ export default async function RootLayout({
 
     return (
         <div className={cn('flex h-full max-w-screen-2xl m-auto')}>
-            <Sidebar className="basis-60" profile={profile} user={user} />
+            {/* <Sidebar className="basis-60" profile={profile} user={user} /> */}
             {children}
         </div>
     );

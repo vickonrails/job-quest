@@ -55,7 +55,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'public_cover_letters_job_id_fkey'
+            foreignKeyName: 'cover_letters_job_id_fkey'
             columns: ['job_id']
             isOneToOne: false
             referencedRelation: 'jobs'
@@ -80,7 +80,7 @@ export type Database = {
           institution: string | null
           location: string | null
           resume_id: string | null
-          start_date: string
+          start_date: string | null
           still_studying_here: boolean | null
           updated_at: string | null
           user_id: string
@@ -94,7 +94,7 @@ export type Database = {
           institution?: string | null
           location?: string | null
           resume_id?: string | null
-          start_date: string
+          start_date?: string | null
           still_studying_here?: boolean | null
           updated_at?: string | null
           user_id: string
@@ -108,7 +108,7 @@ export type Database = {
           institution?: string | null
           location?: string | null
           resume_id?: string | null
-          start_date?: string
+          start_date?: string | null
           still_studying_here?: boolean | null
           updated_at?: string | null
           user_id?: string
@@ -480,7 +480,7 @@ export type Database = {
           job_title: string | null
           location: string | null
           resume_id: string | null
-          start_date: string
+          start_date: string | null
           still_working_here: boolean | null
           updated_at: string | null
           user_id: string | null
@@ -493,7 +493,7 @@ export type Database = {
           job_title?: string | null
           location?: string | null
           resume_id?: string | null
-          start_date: string
+          start_date?: string | null
           still_working_here?: boolean | null
           updated_at?: string | null
           user_id?: string | null
@@ -506,7 +506,7 @@ export type Database = {
           job_title?: string | null
           location?: string | null
           resume_id?: string | null
-          start_date?: string
+          start_date?: string | null
           still_working_here?: boolean | null
           updated_at?: string | null
           user_id?: string | null
@@ -539,7 +539,13 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      setup_profile: {
+        Args: {
+          user_id: string
+          profile: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
