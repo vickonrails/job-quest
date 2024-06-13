@@ -21,7 +21,6 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
-    const [highlightsToDelete, setHighlightToDelete] = useState<string[]>([])
 
     const { handleSubmit } = form
 
@@ -51,14 +50,14 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     }
 
     const saveFn = useCallback(async (values: { workExperience: WorkExperience[] }) => {
-        const { success, error } = await updateWorkExperiences(values.workExperience, highlightsToDelete, params.id, userId);
+        const { success, error } = await updateWorkExperiences(values.workExperience, params.id, userId);
         if (!success && error) {
             toast({
                 variant: 'destructive',
                 title: 'An error occurred'
             })
         }
-    }, [toast, params.id, highlightsToDelete, userId])
+    }, [toast, params.id, userId])
 
     const watchedData = useWatch({
         control: form.control,
@@ -89,7 +88,7 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
             <section className="mb-4">
                 <h3 className="font-medium text-lg">Work Experience</h3>
                 <p className="mb-4 text-sm text-muted-foreground">Detail your professional history, including past positions held, responsibilities, key achievements, and the skills you developed. Tailor this section to the job you&apos;re applying for.</p>
-                <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} onHighlightDelete={setHighlightToDelete} />
+                <WorkExperienceForm fields={fields} form={form} onDeleteClick={handleDeleteClick} />
                 <AddExperienceItemDropdown
                     items={templates}
                     title="Add Experience"

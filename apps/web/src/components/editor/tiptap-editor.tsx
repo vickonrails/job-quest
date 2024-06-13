@@ -2,7 +2,8 @@
 import { TextAlign } from '@tiptap/extension-text-align'
 import { EditorContent, useEditor, type EditorEvents } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useCallback, useId, type ReactNode } from 'react'
+import { useCallback, useId, type HTMLAttributes, type ReactNode } from 'react'
+import { cn } from 'shared'
 import { Label } from 'ui/label'
 import { EditorMenu } from './editor-header'
 
@@ -10,9 +11,11 @@ interface TipTapProps {
     value?: string
     label?: ReactNode
     onChange?: (text: string) => void
+    className?: string
+    containerProps?: HTMLAttributes<HTMLElement>
 }
 
-export function Editor({ value, label, onChange }: TipTapProps) {
+export function Editor({ value, label, onChange, containerProps, className }: TipTapProps) {
     const id = useId()
 
     const onUpdate = useCallback(({ editor }: EditorEvents['update']) => {
@@ -33,7 +36,7 @@ export function Editor({ value, label, onChange }: TipTapProps) {
         onUpdate: onUpdate,
         editorProps: {
             attributes: {
-                class: 'border list-disc border-t-0 rounded-none text-sm text-accent-foreground p-3 leading-7 max-h-36 overflow-auto',
+                class: cn('border list-disc border-t-0 rounded-none text-sm text-accent-foreground p-3 leading-7 overflow-auto w-full', className),
                 id
             }
         },
@@ -41,12 +44,14 @@ export function Editor({ value, label, onChange }: TipTapProps) {
         content: value ?? ''
     })
 
+    const containerClassName = containerProps?.className
+
     return (
         <>
             {label && <Label onClick={() => editor?.chain().focus()} htmlFor={id}>{label}</Label>}
-            <div className="tiptap-editor">
+            <div className={cn('tiptap-editor flex flex-col w-full h-full', containerClassName)}>
                 <EditorMenu editor={editor} />
-                <EditorContent editor={editor} id={id} />
+                <EditorContent className="flex-1 overflow-auto" editor={editor} id={id} />
             </div>
         </>
     )

@@ -9,7 +9,7 @@ export default async function CoverLetter({ params }: { params: { job: string } 
     if (!job || !coverLetter) return
 
     return (
-        <section className="p-6 overflow-hidden">
+        <section className="p-6 overflow-hidden h-full">
             <BackButton>Back to Job</BackButton>
             <div className="flex h-full gap-1">
                 <CoverLetterForm coverLetter={coverLetter} job={job} />
