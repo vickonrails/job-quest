@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { useCallback, useId, type HTMLAttributes, type ReactNode } from 'react'
 import { cn } from 'shared'
 import { Label } from 'ui/label'
-import { EditorMenu } from './editor-header'
+import { EditorHeader } from './editor-header'
 
 interface TipTapProps {
     value?: string
@@ -13,9 +13,10 @@ interface TipTapProps {
     onChange?: (text: string) => void
     className?: string
     containerProps?: HTMLAttributes<HTMLElement>
+    EditorHeaderRight?: React.ReactNode
 }
 
-export function Editor({ value, label, onChange, containerProps, className }: TipTapProps) {
+export function Editor({ value, label, onChange, containerProps, className, EditorHeaderRight }: TipTapProps) {
     const id = useId()
 
     const onUpdate = useCallback(({ editor }: EditorEvents['update']) => {
@@ -50,7 +51,7 @@ export function Editor({ value, label, onChange, containerProps, className }: Ti
         <>
             {label && <Label onClick={() => editor?.chain().focus()} htmlFor={id}>{label}</Label>}
             <div className={cn('tiptap-editor flex flex-col w-full h-full', containerClassName)}>
-                <EditorMenu editor={editor} />
+                <EditorHeader editor={editor} Right={EditorHeaderRight} />
                 <EditorContent className="flex-1 overflow-auto" editor={editor} id={id} />
             </div>
         </>

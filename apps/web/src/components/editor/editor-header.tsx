@@ -4,71 +4,82 @@ import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, List, Strikethrough }
 import { type HTMLAttributes } from 'react'
 import { cn } from 'shared'
 
-export function EditorMenu({ editor }: { editor: EditorProps | null }) {
+export interface EditorHeaderProps {
+    editor: EditorProps | null
+    Right?: React.ReactNode
+}
+
+export function EditorHeader({ editor, Right }: EditorHeaderProps) {
     if (!editor) return null
 
     return (
-        <header className="border flex gap-2 shadow-sm p-2">
-            <section className="flex gap-1 border-r pr-2">
-                <EditorHeaderButton
-                    editor={editor}
-                    name="bold"
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                >
-                    <Bold size={14} />
-                </EditorHeaderButton>
+        <header className="border flex justify-between items-center shadow-sm p-2">
+            <section className="flex gap-2">
+                <section className="flex gap-1 border-r pr-2">
+                    <EditorHeaderButton
+                        editor={editor}
+                        name="bold"
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                    >
+                        <Bold size={14} />
+                    </EditorHeaderButton>
 
-                <EditorHeaderButton
-                    editor={editor}
-                    name="italic"
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                >
-                    <Italic size={14} />
-                </EditorHeaderButton>
+                    <EditorHeaderButton
+                        editor={editor}
+                        name="italic"
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                    >
+                        <Italic size={14} />
+                    </EditorHeaderButton>
 
-                <EditorHeaderButton
-                    editor={editor}
-                    name="strike"
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
-                >
-                    <Strikethrough size={14} />
-                </EditorHeaderButton>
-            </section>
+                    <EditorHeaderButton
+                        editor={editor}
+                        name="strike"
+                        onClick={() => editor.chain().focus().toggleStrike().run()}
+                    >
+                        <Strikethrough size={14} />
+                    </EditorHeaderButton>
+                </section>
 
-            <section className="flex gap-1 border-r pr-2">
-                <EditorHeaderButton
-                    editor={editor}
-                    name={{ textAlign: 'left' }}
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                >
-                    <AlignLeft size={14} />
-                </EditorHeaderButton>
+                <section className="flex gap-1 border-r pr-2">
+                    <EditorHeaderButton
+                        editor={editor}
+                        name={{ textAlign: 'left' }}
+                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                    >
+                        <AlignLeft size={14} />
+                    </EditorHeaderButton>
 
-                <EditorHeaderButton
-                    editor={editor}
-                    name={{ textAlign: 'center' }}
-                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                >
-                    <AlignCenter size={14} />
-                </EditorHeaderButton>
+                    <EditorHeaderButton
+                        editor={editor}
+                        name={{ textAlign: 'center' }}
+                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                    >
+                        <AlignCenter size={14} />
+                    </EditorHeaderButton>
 
-                <EditorHeaderButton
-                    editor={editor}
-                    name={{ textAlign: 'right' }}
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                >
-                    <AlignRight size={14} />
-                </EditorHeaderButton>
+                    <EditorHeaderButton
+                        editor={editor}
+                        name={{ textAlign: 'right' }}
+                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                    >
+                        <AlignRight size={14} />
+                    </EditorHeaderButton>
+                </section>
+
+                <section>
+                    <EditorHeaderButton
+                        editor={editor}
+                        name="bulletList"
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    >
+                        <List size={14} />
+                    </EditorHeaderButton>
+                </section>
             </section>
 
             <section>
-                <EditorHeaderButton
-                    editor={editor}
-                    name="bulletList"
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
-                >
-                    <List size={14} />
-                </EditorHeaderButton>
+                {Right}
             </section>
         </header>
     )
