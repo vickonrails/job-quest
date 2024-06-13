@@ -1,8 +1,10 @@
-import { EditorContent, useEditor, type Editor, type EditorEvents } from '@tiptap/react'
+
+import { TextAlign } from '@tiptap/extension-text-align'
+import { EditorContent, useEditor, type EditorEvents } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Bold } from 'lucide-react'
-import { type ReactNode, useId, useCallback } from 'react'
+import { useCallback, useId, type ReactNode } from 'react'
 import { Label } from 'ui/label'
+import { EditorMenu } from './editor-header'
 
 interface TipTapProps {
     value?: string
@@ -10,7 +12,7 @@ interface TipTapProps {
     onChange?: (text: string) => void
 }
 
-export function TipTap({ value, label, onChange }: TipTapProps) {
+export function Editor({ value, label, onChange }: TipTapProps) {
     const id = useId()
 
     const onUpdate = useCallback(({ editor }: EditorEvents['update']) => {
@@ -22,12 +24,16 @@ export function TipTap({ value, label, onChange }: TipTapProps) {
         extensions: [
             StarterKit.configure({
                 heading: false
+            }),
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+                alignments: ['left', 'center', 'right']
             })
         ],
         onUpdate: onUpdate,
         editorProps: {
             attributes: {
-                class: 'border border-t-0 text-sm text-accent-foreground p-3 leading-7',
+                class: 'border list-disc border-t-0 rounded-none text-sm text-accent-foreground p-3 leading-7 max-h-36 overflow-auto',
                 id
             }
         },
@@ -37,20 +43,11 @@ export function TipTap({ value, label, onChange }: TipTapProps) {
 
     return (
         <>
-            {label && <Label htmlFor={id}>{label}</Label>}
-            <div>
+            {label && <Label onClick={() => editor?.chain().focus()} htmlFor={id}>{label}</Label>}
+            <div className="tiptap-editor">
+                <EditorMenu editor={editor} />
                 <EditorContent editor={editor} id={id} />
             </div>
         </>
-    )
-}
-
-function EditorMenu({ editor }: { editor: Editor | null }) {
-    if (!editor) return null
-
-    return (
-        <header className="border shadow-sm">
-            <button onClick={() => editor.chain().toggleBold().run()} type="button"><Bold /></button>
-        </header>
     )
 }

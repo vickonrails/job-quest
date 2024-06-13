@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
+import { Editor } from '@/components/editor/tiptap-editor'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
-import { TipTap } from '@/components/tiptap'
 import { isAfter } from 'date-fns'
 import { type WorkExperience } from 'lib/types'
 import { useCallback, type Dispatch, type SetStateAction } from 'react'
@@ -9,8 +9,8 @@ import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 
 import { DatePicker } from 'ui/date-picker'
 import { Input } from 'ui/input'
 import { ErrorHint } from '../components/error-hint'
-import { type BaseFormItemProps } from '../education/education-form-item'
 import { HighlightFooter } from '../components/highlights-footer'
+import { type BaseFormItemProps } from '../education/education-form-item'
 
 interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
@@ -145,17 +145,19 @@ function FormItem({ form, index, onDeleteClick, field, autofocus }: FormItemProp
                     />
                 </section>
 
-                <Controller
-                    name={`workExperience.${index}.highlights`}
-                    control={form.control}
-                    render={({ field }) => (
-                        <TipTap
-                            value={field.value ?? ''}
-                            label="Highlights"
-                            onChange={text => field.onChange(text)}
-                        />
-                    )}
-                />
+                <section className="mb-4">
+                    <Controller
+                        name={`workExperience.${index}.highlights`}
+                        control={form.control}
+                        render={({ field }) => (
+                            <Editor
+                                value={field.value ?? ''}
+                                label="Highlights"
+                                onChange={text => field.onChange(text)}
+                            />
+                        )}
+                    />
+                </section>
 
                 <HighlightFooter onDeleteClick={() => onDeleteClick(field, index)} />
             </div>

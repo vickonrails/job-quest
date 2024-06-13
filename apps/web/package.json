@@ -35,6 +35,7 @@
     "@tanstack/react-table": "^8.9.3",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "@testing-library/user-event": "^14.5.2",
+    "@tiptap/extension-text-align": "^2.4.0",
     "@tiptap/pm": "^2.2.4",
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
