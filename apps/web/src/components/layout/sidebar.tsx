@@ -9,6 +9,8 @@ import LogoImg from '../../../public/logo.png';
 import { Feedback } from '../feedback/feedback-popover';
 import { NavLink } from './nav-link';
 import { ProfileDropdown } from './profile-dropdown';
+import { Button } from 'ui/button';
+import Link from 'next/link';
 
 type SidebarProps = HTMLAttributes<HTMLElement> & { profile: Profile, user: User };
 
@@ -45,30 +47,18 @@ export const Sidebar: FC<SidebarProps> = ({ profile, user, className, ...rest })
                             <span>My Resumes</span>
                         </NavLink>
                     </NavGroup>
-
-
-                    {/* <NavGroup title="labels">
-                    <NavLink href="/notes" disabled>
-                        <FileText className="mr-2" />
-                        <span>Notes</span>
-                    </NavLink>
-
-                    <NavLink href="/reminder" disabled>
-                        <Bell className="mr-2" />
-                        <span>Reminders</span>
-                    </NavLink>
-
-                    <NavLink href="/documents" disabled>
-                        <Clipboard className="mr-2" />
-                        <span>Documents</span>
-                    </NavLink>
-
-                    <NavLink href="/contacts" disabled>
-                        <User className="mr-2" />
-                        <span>Contacts</span>
-                    </NavLink>
-                </NavGroup> */}
                 </nav>
+            </section>
+
+            <section className="border mx-3 p-3 rounded-md flex flex-col gap-3">
+                <header>
+                    <h2 className="text-sm font-medium">Setup Browser Extension</h2>
+                    <p className="text-sm text-muted-foreground">Save time and get the most out of JobQuest by installing the accompanying Chrome extension. </p>
+                </header>
+                <Button size="sm" asChild>
+                    <Link href="https://developer.chrome.com/" target="_blank" rel="noreferrer noopener">Install</Link>
+                </Button>
+
             </section>
 
             <section className="p-3">
