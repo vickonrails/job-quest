@@ -12,23 +12,59 @@ export async function middleware(request: NextRequest) {
     const { data: { user } } = await client.auth.getUser()
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
 
-    // prevent exploration of app for now
-    if (isProd && url.pathname !== '/') {
-        url.pathname = '/'
-        return NextResponse.redirect(url)
+    if (!user) {
+        if (url.pathname === '/auth') {
+            return response
+        }
+
+        if (isProtectedRoute) {
+            url.pathname = '/auth'
+            return NextResponse.redirect(url)
+        }
     }
 
-    // redirect unauthorized users
-    if (isProtectedRoute && !user) {
-        url.pathname = '/auth'
-        return NextResponse.redirect(url);
-    }
-
-    // take user to dashboard if they're logged in
-    if (user && url.pathname === '/auth') {
+    if (url.pathname === '/auth') {
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)
     }
+
+    // if (user && isProtectedRoute) {
+    //     const { data: profile } = await client.from('profiles').select('*').eq('id', user.id).single();
+    //     if (profile && !profile.is_profile_setup) {
+    //         url.pathname = '/profile/resume-upload'
+    //         return NextResponse.redirect(url)
+    //     }
+    // }
+
+    // redirect unauthorized users
+    // if (isProtectedRoute && !user) {
+    //     url.pathname = '/auth'
+    //     return NextResponse.redirect(url);
+    // }
+
+    // if (!user) {
+    //     url.pathname = '/auth'
+    //     return NextResponse.redirect(url);
+    // }
+
+    // // take user to dashboard if they're logged in
+    // if (user && url.pathname === '/auth') {
+    //     url.pathname = '/dashboard'
+    //     return NextResponse.redirect(url)
+    // }
+
+    // // TODO: feature where we redirect to the intended page right before the redirection to the profile setup
+    // if (user && (isProtectedRoute || url.pathname === '/auth')) {
+    //     const { data } = await client.from('profiles').select('*').eq('id', user.id).single();
+    //     if (!data) {
+    //         // todo: handle profile not created
+    //     }
+
+    //     if (!data?.is_profile_setup) {
+    //         url.pathname = '/profile/resume-upload'
+    //         return NextResponse.redirect(url)
+    //     }
+    // }
 
     return response;
 }

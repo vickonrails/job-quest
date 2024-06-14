@@ -76,11 +76,8 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                         <p className="text-xs text-muted-foreground">{location}</p>
                                     )}
                                 </div>
-                                <ul className="text-xs list-disc ml-3 flex flex-col gap-1">
-                                    {highlights?.map((highlight) => (
-                                        <li key={highlight.id}>{highlight.text}</li>
-                                    ))}
-                                </ul>
+
+                                <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                             </div>
                         </article>
                     )
@@ -90,7 +87,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
             <section>
                 <SectionHeading title="EDUCATION" />
                 {education?.map((education, idx) => {
-                    const { end_date, start_date, institution, degree, field_of_study, location } = education
+                    const { end_date, start_date, institution, highlights, degree, field_of_study, location } = education
                     return (
                         <article className="flex mb-4" key={idx}>
                             <div className="flex-1">
@@ -100,10 +97,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                 </header>
                                 <DateRange startDate={start_date} endDate={end_date ?? 'Till Date'} />
 
-                                {/* <ul className="text-xs text-muted-foreground list-disc flex flex-col gap-1">
-                                    <HighlightsList highlights={highlights ?? []} />
-                                    {highlights}
-                                </ul> */}
+                                <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                             </div>
                         </article>
                     )
@@ -114,13 +108,13 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
             <section>
                 <SectionHeading title="OTHER PROJECTS" />
                 {projects?.map((project, idx) => {
-                    const { description, skills, title, url } = project
+                    const { skills, title, url, highlights } = project
                     return (
                         <article className="flex mb-4" key={idx}>
                             <div className="flex-1">
                                 <header className="text-xs mb-1">
                                     <h2 className="font-bold">{title} ({url && <a href={url} className="text-xs text-primary">Link</a>})</h2>
-                                    {description && <p>{description}</p>}
+                                    <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                                 </header>
 
                                 <section>
@@ -131,9 +125,6 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                     )}
                                 </section>
 
-                                {/* <div className="text-xs text-muted-foreground">
-                                    {highlights}
-                                </div> */}
                             </div>
                         </article>
                     )

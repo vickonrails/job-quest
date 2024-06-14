@@ -40,7 +40,7 @@ export function useDeleteModal<T extends BaseEntity>(initialProps: UseDeleteProp
     }, [initialProps, toast, entity])
 
     const showDeleteDialog = useCallback((item: T) => {
-        setIsOpen(true);
+        setIsOpen(true)
         setEntity(item)
     }, [])
 

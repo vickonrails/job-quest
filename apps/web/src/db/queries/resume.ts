@@ -1,11 +1,11 @@
 import { type Client } from '@/queries';
 
 export async function fetchWorkExperience(client: Client, userId: string) {
-    return (await client.from('work_experience').select('*, highlights ( * )').eq('user_id', userId).throwOnError()).data
+    return (await client.from('work_experience').select().eq('user_id', userId).throwOnError()).data
 }
 
 export async function fetchEducation(client: Client, userId: string) {
-    return (await client.from('education').select('*, highlights ( * )').eq('user_id', userId).throwOnError()).data
+    return (await client.from('education').select().eq('user_id', userId).throwOnError()).data
 }
 
 export async function fetchProjects(client: Client, userId: string) {

@@ -1,5 +1,6 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
 import { Chip } from '@/components/chip'
+import { Editor } from '@/components/editor/tiptap-editor'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { isAfter } from 'date-fns'
 import { type Project } from 'lib/types'
@@ -10,7 +11,6 @@ import { formatDate } from 'shared'
 import { Button } from 'ui/button'
 import { DatePicker } from 'ui/date-picker'
 import { Input } from 'ui/input'
-import { Textarea } from 'ui/textarea'
 import { ErrorHint } from '../components/error-hint'
 import { type BaseFormItemProps } from '../education/education-form-item'
 
@@ -159,12 +159,19 @@ function FormItem({ form, field, index, onDeleteClick, autofocus }: FormItemProp
                         }}
                     />
 
-                    <Textarea
-                        label="Description"
-                        // containerClasses="col-span-2 w-full"
-                        // className='col-span-2 w-full'
-                        placeholder="A brief description of the project..."
-                        {...register(`projects.${index}.description`)}
+                </section>
+
+                <section className="mb-4">
+                    <Controller
+                        name={`projects.${index}.highlights`}
+                        control={form.control}
+                        render={({ field }) => (
+                            <Editor
+                                value={field.value ?? ''}
+                                label="Highlights"
+                                onChange={text => field.onChange(text)}
+                            />
+                        )}
                     />
                 </section>
 

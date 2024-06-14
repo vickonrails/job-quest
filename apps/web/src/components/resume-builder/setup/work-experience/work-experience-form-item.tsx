@@ -1,25 +1,25 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
+import { Editor } from '@/components/editor/tiptap-editor'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
 import { isAfter } from 'date-fns'
 import { type WorkExperience } from 'lib/types'
 import { useCallback, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
-import { Input } from 'ui'
 import { DatePicker } from 'ui/date-picker'
+import { Input } from 'ui/input'
 import { ErrorHint } from '../components/error-hint'
+import { HighlightFooter } from '../components/highlights-footer'
 import { type BaseFormItemProps } from '../education/education-form-item'
-import { WorkExperienceHighlights } from './work-experience-highlights'
 
 interface WorkExperienceFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ workExperience: WorkExperience[] }, 'workExperience'>
     fields: FieldArrayWithId<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>[],
     onDeleteClick: (experience: WorkExperience, index: number) => void
-    onHighlightDelete: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Form ------------------ */
-export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDelete, defaultOpen, ...rest }: WorkExperienceFormProps) {
+export function WorkExperienceForm({ form, fields, onDeleteClick, defaultOpen, ...rest }: WorkExperienceFormProps) {
     const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
         <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
@@ -30,7 +30,6 @@ export function WorkExperienceForm({ form, fields, onDeleteClick, onHighlightDel
                     index={index}
                     onDeleteClick={onDeleteClick}
                     field={field}
-                    onHighlightDelete={onHighlightDelete}
                     {...rest}
                 />
             ))}
@@ -46,7 +45,7 @@ interface FormItemProps extends BaseFormItemProps {
     onHighlightDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofocus }: FormItemProps) {
+function FormItem({ form, index, onDeleteClick, field, autofocus }: FormItemProps) {
     const { register, formState: { errors } } = form
     const fieldErrs = errors?.workExperience?.[index] ?? {}
 
@@ -145,13 +144,21 @@ function FormItem({ form, index, onDeleteClick, field, onHighlightDelete, autofo
                     />
                 </section>
 
-                <WorkExperienceHighlights
-                    form={form}
-                    index={index}
-                    entity={field}
-                    onDeleteClick={() => onDeleteClick(field, index)}
-                    onHighlightDelete={onHighlightDelete}
-                />
+                <section className="mb-4">
+                    <Controller
+                        name={`workExperience.${index}.highlights`}
+                        control={form.control}
+                        render={({ field }) => (
+                            <Editor
+                                value={field.value ?? ''}
+                                label="Highlights"
+                                onChange={text => field.onChange(text)}
+                            />
+                        )}
+                    />
+                </section>
+
+                <HighlightFooter onDeleteClick={() => onDeleteClick(field, index)} />
             </div>
         </AccordionItem>
     )

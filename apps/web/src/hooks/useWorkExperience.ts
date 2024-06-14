@@ -1,20 +1,18 @@
 import { invalidateCacheAction } from '@/actions';
-import { setEntityId } from '@/utils/set-entity-id';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type Highlight, type WorkExperience } from 'lib/types';
-import { useEffect, useState } from 'react';
+import { type WorkExperience } from 'lib/types';
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { type Database } from 'shared';
 import { v4 as uuid } from 'uuid';
 import { useSetupContext } from './useSetupContext';
 
 export async function fetchWorkExperience({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-
     // TODO: error handling
     if (!userId) throw new Error('userId not provided');
-    return (await client.from('work_experience').select('*, highlights ( * )').filter('resume_id', 'is', null).eq('user_id', userId)).data
+    return (await client.from('work_experience').select('*').filter('resume_id', 'is', null).eq('user_id', userId)).data
 }
 
 export function useWorkExperience() {
@@ -25,7 +23,7 @@ export function useWorkExperience() {
     const form = useForm<{ workExperience: WorkExperience[] }>({
         defaultValues: { workExperience: queryResult.data?.length ? queryResult.data : [getDefaultExperience({ userId: user?.id })] }
     })
-    const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
+    // const [highlightsToDelete, setHighlightsToDelete] = useState<string[]>([])
 
     const fieldsArr = useFieldArray({
         name: 'workExperience',
@@ -37,7 +35,6 @@ export function useWorkExperience() {
     const updateExperiences = useMutation({
         mutationFn: async ({ values }: { values: WorkExperience[] }) => {
             if (!user?.id) return
-            const highlights: Highlight[] = []
 
             try {
                 const preparedValues = values.map(work => {
@@ -45,34 +42,38 @@ export function useWorkExperience() {
                         work.id = uuid()
                     }
 
-                    if (work.highlights) {
-                        highlights.push(...work.highlights)
-                        delete work.highlights
-                    }
+                    // if (work.highlights) {
+                    //     highlights.push(...work.highlights)
+                    //     delete work.highlights
+                    // }
 
+                    // TODO: still fix this logic
                     if ((work.still_working_here && work.end_date) || !work.end_date) {
                         work.end_date = null
                     }
                     return work
                 })
 
-                const { data, error } = await client.from('work_experience').upsert(preparedValues).select('*').returns<WorkExperience[]>();
+                const { data, error } = await client.from('work_experience')
+                    .upsert(preparedValues).select('*')
+                    .returns<WorkExperience[]>();
+
                 if (error) throw new Error(error.message)
 
-                if (highlightsToDelete.length > 0) {
-                    const result = await client.from('highlights').delete().in('id', highlightsToDelete);
-                    if (result.error) throw new Error(result.error.message)
-                }
+                // if (highlightsToDelete.length > 0) {
+                //     const result = await client.from('highlights').delete().in('id', highlightsToDelete);
+                //     if (result.error) throw new Error(result.error.message)
+                // }
 
-                const preparedHighlights = highlights.filter(x => x.work_experience_id).map(highlight => setEntityId<Highlight>(highlight))
-                const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
-                if (highlightsError) throw new Error(highlightsError.message);
+                // const preparedHighlights = highlights.filter(x => x.work_experience_id).map(highlight => setEntityId<Highlight>(highlight))
+                // const { error: highlightsError } = await client.from('highlights').upsert(preparedHighlights).select();
+                // if (highlightsError) throw new Error(highlightsError.message);
 
-                const newWorkExperience = data.map(experience => {
-                    experience.highlights = highlights.filter(x => x.work_experience_id === experience.id)
-                    return experience;
-                })
-                return newWorkExperience
+                // const newWorkExperience = data.map(experience => {
+                //     experience.highlights = highlights.filter(x => x.work_experience_id === experience.id)
+                //     return experience;
+                // })
+                return data
             } catch (error) {
                 throw error
             }
@@ -93,8 +94,7 @@ export function useWorkExperience() {
         experiences: queryResult,
         form,
         fieldsArr,
-        updateExperiences,
-        setHighlightsToDelete
+        updateExperiences
     }
 }
 
@@ -121,7 +121,7 @@ export function getDefaultExperience({ userId }: { userId?: string }) {
         job_title: '',
         location: '',
         user_id: userId,
-        highlights: [{ work_experience_id: id, user_id: userId, text: '', type: 'work_experience' }],
+        highlights: '',
     } as unknown as WorkExperience
 
     return experience

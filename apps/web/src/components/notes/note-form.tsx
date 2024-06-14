@@ -44,6 +44,10 @@ function NoteForm({ job }: { job: Job }) {
                 title: 'Note added',
             })
         } catch (err) {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred'
+            })
             // do I still need to do all the error things? Or does the react-query library do that for me?
         }
     }

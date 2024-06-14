@@ -101,7 +101,6 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
                 fields={fields}
                 form={form}
                 onDeleteClick={handleDeleteClick}
-                setHighlightsToDelete={() => {/** */ }}
             />
 
             <AddEducationItemDropdown
@@ -129,11 +128,5 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
  */
 function generateNewExperience(education: Education): Education {
     const id = uuid();
-    const highlights = education.highlights?.map(x => {
-        x.id = uuid()
-        x.education_id = id
-        return x
-    }).filter(x => x)
-
-    return { ...education, id, highlights }
+    return { ...education, id, highlights: '' }
 }

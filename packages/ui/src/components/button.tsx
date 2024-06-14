@@ -39,6 +39,7 @@ export interface ButtonProps
   VariantProps<typeof buttonVariants> {
   asChild?: boolean
   loading?: boolean
+  loadingContent?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -52,8 +53,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <span className="flex justify-center">
+          <span className="flex justify-center items-center">
             <Spinner className="h-6 w-6" variant={variant === 'outline' ? 'primary' : 'secondary'} />
+            {props.loadingContent && <span className="ml-2">{props.loadingContent}</span>}
           </span>
         ) : children}
       </Comp>
