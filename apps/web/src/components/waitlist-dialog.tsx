@@ -19,7 +19,7 @@ type User = {
 }
 
 export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
-    const { register, reset, handleSubmit, formState: { isSubmitting, errors } } = useForm<User>({ defaultValues: { firstName: '', email: '' } })
+    const { register, reset, handleSubmit, formState: { isSubmitting, isSubmitSuccessful, errors } } = useForm<User>({ defaultValues: { firstName: '', email: '' } })
     const [formError, setFormError] = useState('')
     const { closeWaitListModal, setUserAddedToWaitList } = useLandingPageContext()
     const { toast } = useToast()
@@ -69,7 +69,7 @@ export function WaitListDialog({ open, title, ...rest }: DeleteDialogProps) {
                             hint={<ErrorHint>{errors.email?.message}</ErrorHint>}
                         />
                         <ErrorHint>{formError}</ErrorHint>
-                        <Button loading={isSubmitting}>Join</Button>
+                        <Button disabled={isSubmitSuccessful} loading={isSubmitting}>Join</Button>
                     </form>
                 </DialogDescription>
                 <DialogFooter>

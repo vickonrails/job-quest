@@ -2,10 +2,9 @@ import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from 'ui/button';
-import { useLandingPageContext } from './landing-page-context';
 
 export function Nav() {
-    const { openWaitListModal, isOnWaitList } = useLandingPageContext()
+    // const { openWaitListModal, isOnWaitList } = useLandingPageContext()
     return (
         <nav className="flex items-center w-full rounded-full py-3 justify-between gap-2">
             <Link href="/" className="font-medium flex items-center">
@@ -17,7 +16,11 @@ export function Nav() {
                     <span>See Demo</span>
                     <ExternalLink size={20} />
                 </Link>
-                <Button disabled={isOnWaitList} size="sm" onClick={openWaitListModal}>Early Access</Button>
+                <Button asChild size="sm">
+                    <Link href="/waitlist">
+                        Join Waitlist
+                    </Link>
+                </Button>
             </section>
         </nav>
     )

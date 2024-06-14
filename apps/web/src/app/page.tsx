@@ -8,7 +8,7 @@ export default function LandingPage() {
     return (
         <div className="landing-page py-10 px-4 max-w-7xl mx-auto animate-in">
             <LandingPageProvider>
-                <div className="z-10 flex flex-col items-stretch gap-4 w-full">
+                <div className="z-10 flex flex-col items-stretch gap-28 w-full">
                     <Header />
                     <WaitList />
                     <Footer />

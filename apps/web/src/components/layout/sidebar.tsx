@@ -2,10 +2,8 @@ import { type User } from '@supabase/supabase-js';
 import clsx from 'clsx';
 import { type Profile } from 'lib/types';
 import { BetweenHorizonalEnd, FileType, Home, SquareKanban } from 'lucide-react';
-import Image from 'next/image';
 import { type FC, type HTMLAttributes } from 'react';
 import { Logo } from 'ui/logo';
-import LogoImg from '../../../public/logo.png';
 import { Feedback } from '../feedback/feedback-popover';
 import { NavLink } from './nav-link';
 import { ProfileDropdown } from './profile-dropdown';
@@ -23,9 +21,7 @@ export const Sidebar: FC<SidebarProps> = ({ profile, user, className, ...rest })
         } {...rest}>
             <section className="flex-1">
                 <section className="flex justify-between ml-6 mr-3">
-                    <Logo className="mb-8">
-                        <Image src={LogoImg} alt="" height={25} width={25} />
-                    </Logo>
+                    <Logo className="mb-8" />
                     <BetweenHorizonalEnd className="text-muted-foreground" size={20} />
                 </section>
                 <nav>
