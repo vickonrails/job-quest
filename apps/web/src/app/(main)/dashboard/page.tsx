@@ -4,11 +4,6 @@ import { ResumePreviewCard } from '@/components/resume-card';
 import { createClient } from '@/utils/supabase/server';
 import { type Resume } from 'lib/types';
 
-async function getDashboardSummary() {
-    const sb = createClient();
-    return await sb.from('jobs_dashboard_v').select();
-}
-
 async function getResumes() {
     const sb = createClient()
     const { data: { user } } = await sb.auth.getUser()
@@ -17,14 +12,24 @@ async function getResumes() {
     return data
 }
 
+export async function getSummaryCardData() {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) throw new Error('unauthorized');
+
+    const { data, error } = await client.rpc('get_job_stage_counts', { userid: user.id }).single()
+    if (error) throw error
+    return data
+}
+
 export default async function DashboardPage() {
-    const { data } = await getDashboardSummary()
     const resumes = await getResumes()
+    const data = await getSummaryCardData()
 
     return (
         <section className="flex w-full overflow-auto h-full flex-1 gap-4 p-6">
             <section className="flex-1">
-                <JobsSummaryCards className="mb-4" dashboardSummary={data ?? []} />
+                <JobsSummaryCards className="mb-4" dashboardSummary={data} />
                 <hr />
                 <RecentResume resumes={resumes ?? []} />
             </section>

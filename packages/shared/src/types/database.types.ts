@@ -499,6 +499,17 @@ export type Database = {
       }
     }
     Functions: {
+      get_job_stage_counts: {
+        Args: {
+          userid: string
+        }
+        Returns: {
+          recently_added: number
+          favorites: number
+          applying: number
+          interviewing: number
+        }[]
+      }
       setup_profile: {
         Args: {
           user_id: string
