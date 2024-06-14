@@ -27,7 +27,7 @@ export function Header() {
             </header>
 
             <VideoPreview />
-            {/* <HorizontalLine /> */}
+            <HorizontalLine />
         </div>
     )
 }

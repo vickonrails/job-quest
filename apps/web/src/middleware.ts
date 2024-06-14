@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createClient } from './utils/supabase/server';
 
 const protectedRoutes = ['/dashboard', '/job-tracker', '/resumes', 'profile']
+const waitListRoutes = ['/waitlist', '/']
 const isProd = process.env.NODE_ENV === 'production'
 
 export async function middleware(request: NextRequest) {
@@ -13,9 +14,9 @@ export async function middleware(request: NextRequest) {
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
 
     // prevent exploration of app for now
-    if (isProd && url.pathname !== '/') {
+    if (isProd && !waitListRoutes.includes(url.pathname)) {
         url.pathname = '/'
-        return NextResponse.redirect(url)
+        return NextResponse.redirect(url);
     }
 
     // redirect unauthorized users

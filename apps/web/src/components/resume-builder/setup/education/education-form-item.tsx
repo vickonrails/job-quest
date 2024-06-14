@@ -5,14 +5,14 @@ import { isAfter } from 'date-fns'
 import { type Education, type Highlight } from 'lib/types'
 import { useCallback, type Dispatch, type SetStateAction } from 'react'
 import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Checkbox } from 'ui/checkbox'
 import { DatePicker } from 'ui/date-picker'
 import { Input } from 'ui/input'
+import { Label } from 'ui/label'
 import { Textarea } from 'ui/textarea'
 import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
-import { Checkbox } from 'ui/checkbox'
-import { Label } from 'ui/label'
 
 export interface BaseFormItemProps {
     autofocus?: boolean
