@@ -1,26 +1,8 @@
 import { DashboardSidebar } from '@/components/dashboard/dashboard-siderbar';
 import { JobsSummaryCards } from '@/components/dashboard/welcome-banner';
 import { ResumePreviewCard } from '@/components/resume-card';
-import { createClient } from '@/utils/supabase/server';
+import { getResumes, getSummaryCardData } from '@/db/api';
 import { type Resume } from 'lib/types';
-
-async function getResumes() {
-    const sb = createClient()
-    const { data: { user } } = await sb.auth.getUser()
-    if (!user) return null;
-    const { data } = await sb.from('resumes').select().eq('user_id', user?.id).order('updated_at', { ascending: false }).limit(5)
-    return data
-}
-
-export async function getSummaryCardData() {
-    const client = createClient()
-    const { data: { user } } = await client.auth.getUser()
-    if (!user) throw new Error('unauthorized');
-
-    const { data, error } = await client.rpc('get_job_stage_counts', { userid: user.id }).single()
-    if (error) throw error
-    return data
-}
 
 export default async function DashboardPage() {
     const resumes = await getResumes()

@@ -9,6 +9,8 @@ export type NoteInsertDTO = Database['public']['Tables']['notes']['Insert'];
 export type NoteUpdateDTO = Database['public']['Tables']['notes']['Update'];
 export type Note = Database['public']['Tables']['notes']['Row'];
 
+export type SetupProfile = Database['public']['Functions']['setup_profile']['Args'];
+
 export type WorkExperience = Database['public']['Tables']['work_experience']['Row']
 export type WorkExperienceInsertDTO = Database['public']['Tables']['work_experience']['Insert'];
 

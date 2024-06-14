@@ -1,5 +1,4 @@
-import { type getSummaryCardData } from '@/app/(main)/dashboard/page';
-import { getUserProfile } from '@/db/api';
+import { getUserProfile, type getSummaryCardData } from '@/db/api';
 import { type Profile } from 'lib/types';
 import { Building, FolderHeart, ListStart, Timer } from 'lucide-react';
 import { type HTMLAttributes } from 'react';

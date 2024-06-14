@@ -60,16 +60,16 @@ export function Complex({ values }: { values: DeepPartialSkipArrayKey<FormValues
                                     <h3 className="font-bold text-xs">{experience.job_title}</h3>
                                     <p className="text-xs">{experience.company_name}</p>
                                     <div className="flex items-center">
-                                        <DateRange endDate={experience.end_date ?? ''} startDate={experience.start_date} />
+                                        <DateRange endDate={experience.end_date ?? ''} startDate={experience.start_date ?? ''} />
                                         <span className="text-xs">- {experience.location}</span>
                                     </div>
                                 </header>
 
-                                <ul className="list-disc ml-4">
+                                {/* <ul className="list-disc ml-4">
                                     {experience.highlights?.map(highlight => (
                                         <li className="text-xs" key={highlight.id}>{highlight.text}</li>
                                     ))}
-                                </ul>
+                                </ul> */}
                             </article>
                         ))}
                     </section>
@@ -85,11 +85,11 @@ export function Complex({ values }: { values: DeepPartialSkipArrayKey<FormValues
                                     <p className="text-xs">{education.institution}</p>
                                 </header>
 
-                                <ul className="text-xs list-disc ml-4">
+                                {/* <ul className="text-xs list-disc ml-4">
                                     {education.highlights?.map(highlight => (
                                         <li key={highlight.id}>{highlight.text}</li>
                                     ))}
-                                </ul>
+                                </ul> */}
                             </section>
                         ))}
                     </section>

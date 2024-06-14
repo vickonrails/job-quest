@@ -19,7 +19,8 @@ const months = [
     'Dec',
 ]
 
-export function formatDate(dateString: string, short = false) {
+export function formatDate(dateString?: string | null, short = false) {
+    if (!dateString) return '';
     const date = new Date(dateString);
     if (date.toString() === 'Invalid Date') return dateString;
     const month = months[date.getMonth()] as string;

@@ -1,52 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
-import { type EducationInsertDTO, type ProfileInsertDTO, type ProjectInsertDTO, type WorkExperience, type WorkExperienceInsertDTO } from 'lib/types';
+import { type SetupProfile } from 'lib/types';
 import { revalidateTag } from 'next/cache';
 import OpenAI from 'openai';
 import { type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
-
-interface ResponseFormat {
-    profile: ProfileInsertDTO
-    workExperience: WorkExperienceInsertDTO[]
-    education: EducationInsertDTO[]
-    projects: ProjectInsertDTO[]
-}
-
-// const profile = {
-//     email_address: '',
-//     full_name: 'Jordan Smith',
-//     github_url: '',
-//     id: '6479241a-7e1f-40a8-9928-84447674f8d2',
-//     linkedin_url: '',
-//     location: '',
-//     personal_website: '',
-//     professional_summary: 'Software developer with 5 years of experience developing innovative applications, seeking to leverage programming skills to solve complex problems.',
-//     skills: [{ label: 'Javascript' }],
-//     title: 'Software Developer',
-// }
-
-type WorkExperienceDTO = Omit<WorkExperience, 'id' | 'resume_id' | 'created_at' | 'updated_at'>;
-
-// const workExperiences: WorkExperienceDTO[] = [
-//     {
-//         company_name: 'TechInnovations Inc.',
-//         end_date: null,
-//         job_title: 'Software Developer',
-//         location: '',
-//         start_date: '2021-01-01',
-//         still_working_here: true,
-//         user_id: '6479241a-7e1f-40a8-9928-84447674f8d2'
-//     },
-//     {
-//         company_name: 'NextGen Solutions',
-//         end_date: '2021-05-31',
-//         job_title: 'Junior Software Developer',
-//         location: '',
-//         start_date: '2019-07-01',
-//         still_working_here: false,
-//         user_id: '6479241a-7e1f-40a8-9928-84447674f8d2'
-//     }
-// ]
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -78,13 +35,14 @@ function getInstruction(resumeText: string) {
               "personal_website": "",
               "linkedin_url": ""
           },
-          "workExperience": [{
+          "work_experience": [{
               "job_title": "",
               "location": "",
               "company_name": "",
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
-              "still_working_here": false
+              "still_working_here": false,
+              "highlights": ""
           }],
           "education": [{
               "start_date": YYYY-MM-DD or null,
@@ -93,15 +51,16 @@ function getInstruction(resumeText: string) {
               "field_of_study": "",
               "institution": "",
               "still_studying_here": boolean,
-              "location": ""
+              "location": "",
+              "highlights": ""
           }],
           "projects": [{
-              "description": "",
+            "highlights": "", // description of project
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
               "skills": [{"label": ""}],
               "title": "",
-              "url": ""
+              "url": "",
           }]
       }
       
@@ -133,12 +92,12 @@ export async function POST(request: Request) {
         const response = completion.choices[0]?.message.content
         if (!response) throw new Error('No response from GPT')
 
-        const gptResponse: ResponseFormat = JSON.parse(response)
-        const { profile, workExperience, projects, education } = gptResponse
+        const gptResponse: SetupProfile = JSON.parse(response)
+        const { profile, work_experience, projects, education } = gptResponse
 
-        if (profile && workExperience && projects) {
+        if (profile && work_experience && projects) {
             const enrichedProjects = projects.map((project) => ({ ...project, user_id: data.user.id }))
-            const enrichedExperience = workExperience.map((we) => ({ ...we, user_id: data.user.id }))
+            const enrichedExperience = work_experience.map((we) => ({ ...we, user_id: data.user.id }))
             const enrichedEducation = education.map((edu) => ({ ...edu, user_id: data.user.id }))
 
             const { error } = await client.rpc('setup_profile', {
@@ -161,7 +120,6 @@ export async function POST(request: Request) {
         return Response.json({ success: true })
 
     } catch (e) {
-        console.error(e)
         return Response.json({ success: false, error: e }, { status: 501 })
     }
 }

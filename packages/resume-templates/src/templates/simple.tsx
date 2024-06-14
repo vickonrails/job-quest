@@ -18,7 +18,7 @@ export function SectionHeading({ title, ...rest }: HTMLAttributes<HTMLHeadingEle
     )
 }
 
-export function DateRange({ startDate, endDate }: { startDate?: string, endDate?: string }) {
+export function DateRange({ startDate, endDate }: { startDate?: string | null, endDate?: string }) {
     if (!(startDate)) return null;
     return (
         <div className="text-xs text-muted-foreground pr-2">
@@ -69,7 +69,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                     {(company_name && job_title) && (
                                         <div className="flex gap-2 items-center justify-between">
                                             <h2 className="font-bold text-xs">{job_title} - {company_name}</h2>
-                                            <DateRange startDate={start_date} endDate={end_date ?? 'Till Date'} />
+                                            <DateRange startDate={start_date ?? ''} endDate={end_date ?? 'Till Date'} />
                                         </div>
                                     )}
                                     {location && (
@@ -77,7 +77,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                     )}
                                 </div>
 
-                                <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
+                                <div className="text-xs text-muted-foreground" dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                             </div>
                         </article>
                     )
