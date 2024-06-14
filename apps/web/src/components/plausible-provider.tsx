@@ -6,7 +6,7 @@ import { env } from '@/env.mjs';
 
 export default function Plausible({ children }: { children: React.ReactNode }) {
     return (
-        <PlausibleProvider domain={env.SITE_URL}>
+        <PlausibleProvider domain={env.NEXT_PUBLIC_SITE_URL}>
             {children}
         </PlausibleProvider>
     )
