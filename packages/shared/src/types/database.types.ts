@@ -512,7 +512,7 @@ export type Database = {
       }
       setup_profile: {
         Args: {
-          user_id: string
+          user_id_param: string
           profile: Database['public']['CompositeTypes']['profile_type']
           work_experience: Database['public']['CompositeTypes']['work_experience_type'][]
           projects: Database['public']['CompositeTypes']['project_type'][]
