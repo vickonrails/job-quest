@@ -1,8 +1,9 @@
+'use client'
+
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { Button } from 'ui/button'
-import { useLandingPageContext } from './landing-page-context'
 
 export function useWaitListDialog() {
     const [open, setOpen] = useState(false)
@@ -20,7 +21,6 @@ export function useWaitListDialog() {
 }
 
 export function WaitList() {
-    const { openWaitListModal, isOnWaitList } = useLandingPageContext()
     return (
         <section className="text-left md:text-center md:mx-auto pt-20 pb-28 max-w-5xl md:max-w-3xl">
             <section className="mb-6">
@@ -33,7 +33,9 @@ export function WaitList() {
                     <span>See Demo</span>
                     <ExternalLink size={20} />
                 </Link>
-                <Button disabled={isOnWaitList} className="order-1" onClick={openWaitListModal}>Early Access</Button>
+                <Button className="order-1" asChild>
+                    <Link href="/waitlist">Early Access</Link>
+                </Button>
             </section>
         </section>
     )
