@@ -17,7 +17,7 @@ interface TableProps<T> extends HTMLAttributes<HTMLTableElement> {
     /** data to render */
     data: T[]
     /** actions to perform on table rows */
-    actions: TableActions
+    actions?: TableActions
     hideActions?: boolean
 
     disabled?: boolean

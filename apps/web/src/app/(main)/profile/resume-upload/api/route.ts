@@ -75,7 +75,6 @@ function getInstruction(resumeText: string) {
 
 export async function POST(request: Request) {
     const client = createClient();
-    // TODO: this is going to erase data from previous resume in order to avoid duplicates or other complex situations
     const { data, error } = await client.auth.getUser()
     if (!data || error) throw error;
 

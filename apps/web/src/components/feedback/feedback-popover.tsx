@@ -26,7 +26,7 @@ export function Feedback() {
             <PopoverTrigger asChild>
                 <Button
                     className="w-full justify-start rounded-md text-muted-foreground hover:text-muted-foreground"
-                    variant="ghost" size="sm"
+                    variant="ghost" size="xs"
                 >
                     <MessageSquarePlus className="mr-2" />
                     <span>Feedback</span>
