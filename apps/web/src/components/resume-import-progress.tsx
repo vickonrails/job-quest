@@ -1,25 +1,21 @@
 'use client'
 
-import { FileText, X } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import Link from 'next/link'
 import * as React from 'react'
 import { Button } from 'ui/button'
 
-import { Progress } from 'ui/progress'
+interface ResumeImportProgress {
+    filename: string,
+    isUploading: boolean
+    children?: React.ReactNode
+    LoadingComponent: React.ComponentType<{ filename: string }>
+}
 
-export function ResumeImportProgress({ filename, isUploading }: { filename: string, isUploading: boolean }) {
+export function ResumeImportProgress({ filename, isUploading, LoadingComponent }: ResumeImportProgress) {
     if (isUploading) {
         return (
-            <section className="bg-accent rounded-md p-4 mb-3">
-                <header className="flex justify-between gap-2 items-center">
-                    <FileText className="text-muted-foreground" />
-                    <div className="flex-1 text-muted-foreground">
-                        <h2 className="text-sm font-medium">Uploading {filename ?? 'your file'}...</h2>
-                        <p className="text-xs">Might take a while (Extracting important information)...</p>
-                    </div>
-                </header>
-                <Progress className="mt-2" value={50} />
-            </section>
+            <LoadingComponent filename={filename} />
         )
     }
 
