@@ -1,20 +1,21 @@
 'use client'
 
 import { type JobImportColumns } from '@/app/(main)/jobs-tracker/import-jobs/api/route'
-import { FileText, UploadCloud } from 'lucide-react'
+import { FileText, FileWarning, UploadCloud } from 'lucide-react'
 import { useState } from 'react'
 import { Status_Lookup } from 'shared'
-import { Progress } from 'ui/progress'
+import { Alert, AlertDescription, AlertTitle } from 'ui/alert'
 import { UploadButton } from '../pdf-upload-button'
 import { ResumeImportProgress } from '../resume-import-progress'
 import { type Column } from '../table'
 import { useToast } from '../toast/use-toast'
 import { UploadCardContent, UploadCardHint, type SupportedFormats } from './upload-card'
 
-// TODO: haven an intermediate component
-
 const maxSize = 5
 
+/**
+ * fetch function to import jobs
+ */
 async function importJobs(file: ArrayBuffer): Promise<any> {
     const headers = { 'Content-Type': 'application/octet-stream' }
     const response = await fetch('import-jobs/api', {
@@ -24,47 +25,46 @@ async function importJobs(file: ArrayBuffer): Promise<any> {
     })
 
     if (!response.ok) {
-        // throw error
+        const { error, success } = await response.json() as { error: string, success: boolean }
+        if (!success) {
+            throw new Error(error)
+        }
     }
 
     return await response.json()
 }
 
-export const columns: Column<JobImportColumns> = [
-    { header: 'Position', type: 'text', renderValue: (item) => ({ text: item.position }) },
-    { header: 'Company Name', type: 'logoWithText', renderValue: (item) => ({ text: item.company_name }) },
-    {
-        header: 'Status', type: 'text', renderValue: (item) => {
-            const status = Status_Lookup.find((x, idx) => idx === Number(item.status))
-            return { text: status ?? '' }
-        }
-    },
-    { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: Number(item.priority) ?? 0 }) },
-]
-
+/**
+ * Content of JobImport upload component
+ */
 export function JobsImportContent({ supportedFormats = [], setJobs }: { supportedFormats: SupportedFormats[], jobs: JobImportColumns[], setJobs: (jobs: JobImportColumns[]) => void }) {
     const [uploading, setUploading] = useState(false)
     const [filename, setFilename] = useState('')
+    const [errors, setErrors] = useState('')
     const { toast } = useToast()
 
     const onFilePicked = async (file: ArrayBuffer, filename: string) => {
+        setErrors('')
         setUploading(true)
         setFilename(filename)
         try {
-            const { data, success } = await importJobs(file)
-            if (!success) throw new Error('An error occurred')
+            const { data, success, error } = await importJobs(file)
+            if (!success) throw new Error(error)
             setJobs(data)
-            setUploading(false)
             toast({
                 title: 'Jobs imported successfully',
                 variant: 'success'
             })
         } catch (error) {
+            if (error instanceof Error) {
+                setErrors(error.message)
+                toast({
+                    title: 'An error occurred',
+                    variant: 'destructive'
+                })
+            }
+        } finally {
             setUploading(false)
-            toast({
-                title: 'An error occurred',
-                variant: 'destructive'
-            })
         }
     }
 
@@ -72,6 +72,7 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
         <>
             <section className="mb-4">
                 <UploadCardContent>
+                    {errors && <UploadErrorHint error={errors} />}
                     <span className="border rounded-full p-3" >
                         <UploadCloud size={30} />
                     </span >
@@ -106,6 +107,9 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
     )
 }
 
+/**
+ * Show progress of the import
+ */
 function LoadingComponent({ filename }: { filename: string }) {
     return (
         <section className="bg-accent rounded-md p-4 mb-3">
@@ -116,8 +120,21 @@ function LoadingComponent({ filename }: { filename: string }) {
                     <p className="text-xs">Might take a while (Extracting important information)...</p>
                 </div>
             </header>
-            <Progress className="mt-2" value={50} />
         </section>
     )
 }
 
+/**
+ * show errors from the import
+ */
+function UploadErrorHint({ error }: { error: string }) {
+    const errors = error.split('\n');
+
+    return (
+        <Alert className="bg-destructive-foreground text-sm text-destructive">
+            <FileWarning size={18} />
+            <AlertTitle>Invalid import data</AlertTitle>
+            <AlertDescription className="text-muted-foreground">{errors.map(err => <div key={err}>{err}</div>)}</AlertDescription>
+        </Alert>
+    )
+}

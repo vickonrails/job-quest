@@ -61,6 +61,7 @@
     "tailwindcss-animate": "^1.0.6",
     "ui": "workspace:*",
     "use-deep-compare-effect": "^1.8.1",
+    "yup": "^1.4.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
