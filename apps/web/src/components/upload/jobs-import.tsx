@@ -1,13 +1,13 @@
 'use client'
 
 import { type JobImportColumns } from '@/app/(main)/jobs-tracker/import-jobs/api/route'
-import { FileText, FileWarning, UploadCloud } from 'lucide-react'
+import { FileText, FileWarning, Import } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
-import { Status_Lookup } from 'shared'
 import { Alert, AlertDescription, AlertTitle } from 'ui/alert'
+import { Button } from 'ui/button'
 import { UploadButton } from '../pdf-upload-button'
-import { ResumeImportProgress } from '../resume-import-progress'
-import { type Column } from '../table'
+import { UploadImportProgress } from '../resume-import-progress'
 import { useToast } from '../toast/use-toast'
 import { UploadCardContent, UploadCardHint, type SupportedFormats } from './upload-card'
 
@@ -74,11 +74,11 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
                 <UploadCardContent>
                     {errors && <UploadErrorHint error={errors} />}
                     <span className="border rounded-full p-3" >
-                        <UploadCloud size={30} />
+                        <Import size={30} />
                     </span >
                     <div className="text-center max-w-sm">
                         <p className="text-muted-foreground text-sm">
-                            Upload an {supportedFormats.join(', ')} file to import your jobs
+                            File must contain the following compulsory columns: <span className="font-bold text-accent-foreground">position, company_name, link</span>. Additional columns are location, status, priority, description.
                         </p>
                     </div>
 
@@ -98,11 +98,21 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
                 </UploadCardHint>
             </section >
 
-            <ResumeImportProgress
+            <UploadImportProgress
                 filename={filename}
                 isUploading={uploading}
                 LoadingComponent={LoadingComponent}
-            />
+            >
+                <section className="bg-accent rounded-md p-4 py-2 mb-3">
+                    <header className="flex justify-between gap-2 items-center">
+                        <FileText className="text-muted-foreground" />
+                        <h2 className="text-sm flex-1 font-medium text-muted-foreground">For column info, see sample file</h2>
+                        <Button variant="outline" size="xs" asChild>
+                            <Link target="_blank" rel="noreferrer noopener" href="https://docs.google.com/spreadsheets/d/1aT5emXRjGsfSnRHOUJLnLLdFF3ztG3-y0K21jyI1350/edit?usp=sharing">See Sample</Link>
+                        </Button>
+                    </header>
+                </section>
+            </UploadImportProgress>
         </>
     )
 }

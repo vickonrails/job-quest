@@ -3,7 +3,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react'
 import { cn } from 'shared'
 
-export type SupportedFormats = 'pdf' | 'xlsx' | 'xls'
+export type SupportedFormats = 'pdf' | 'csv'
 
 export interface UploadCardProps extends HTMLAttributes<HTMLDivElement> {
     title: string

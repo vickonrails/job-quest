@@ -25,7 +25,7 @@ const columns: Column<JobImportColumns> = [
     { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: Number(item.priority) ?? 0 }) },
 ]
 
-const supportedFormats: SupportedFormats[] = ['xlsx', 'xls']
+const supportedFormats: SupportedFormats[] = ['csv']
 
 export default function ImportJobs() {
     const [isImporting, setIsImporting] = useState(false)
@@ -86,7 +86,7 @@ export default function ImportJobs() {
                         setJobs={setJobs}
                         supportedFormats={supportedFormats} />
                 )}
-                title="Import jobs"
+                title="Import jobs (CSV)"
                 supportedFormats={supportedFormats}
                 maxSize={12}
             />

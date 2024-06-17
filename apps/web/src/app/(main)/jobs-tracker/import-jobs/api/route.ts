@@ -9,7 +9,7 @@ const jobSchema = object({
     company_name: string().required(),
     description: string(),
     status: number(),
-    link: string(),
+    link: string().required(),
     location: string(),
     priority: number()
 })

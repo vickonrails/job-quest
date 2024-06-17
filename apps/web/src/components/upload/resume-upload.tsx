@@ -1,15 +1,15 @@
 'use client'
 
+import { ChevronRight, FileText, UploadCloud } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useToast } from '../toast/use-toast'
-import { UploadButton } from '../pdf-upload-button'
-import { type SupportedFormats, UploadCardContent, UploadCardHint } from './upload-card'
-import { ResumeImportProgress } from '../resume-import-progress'
-import Link from 'next/link'
 import { Button } from 'ui/button'
-import { ChevronRight, FileText, UploadCloud } from 'lucide-react'
 import { Progress } from 'ui/progress'
+import { UploadButton } from '../pdf-upload-button'
+import { UploadImportProgress } from '../resume-import-progress'
+import { useToast } from '../toast/use-toast'
+import { UploadCardContent, UploadCardHint, type SupportedFormats } from './upload-card'
 
 // TODO: haven an intermediate component
 async function extractResumeData(file: ArrayBuffer): Promise<string> {
@@ -88,11 +88,21 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
             </section>
 
             <>
-                <ResumeImportProgress
+                <UploadImportProgress
                     filename={filename}
                     isUploading={uploading}
                     LoadingComponent={LoadingComponent}
-                />
+                >
+                    <section className="bg-accent rounded-md p-4 py-2 mb-3">
+                        <header className="flex justify-between gap-2 items-center">
+                            <FileText className="text-muted-foreground" />
+                            <h2 className="text-sm flex-1 font-medium text-muted-foreground">Simple PDFs work best</h2>
+                            <Button variant="outline" size="xs" asChild>
+                                <Link target="_blank" rel="noreferrer noopener" href="https://docs.google.com/document/d/1FRwpN1Tv0-DFrzMJ8RhArsBugeiC4YI_PwlVrgXIaJk/edit?usp=sharing">See Sample</Link>
+                            </Button>
+                        </header>
+                    </section>
+                </UploadImportProgress>
 
                 <div className="flex justify-end items-center">
                     <Link href="/profile/setup">
