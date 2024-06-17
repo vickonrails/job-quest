@@ -27,7 +27,6 @@ export default async function RootLayout({
     );
 }
 
-
 export function MainShell({ children, profile }: { children: React.ReactNode, profile: Profile }) {
     return (
         <main className="flex-1 overflow-hidden flex flex-col">

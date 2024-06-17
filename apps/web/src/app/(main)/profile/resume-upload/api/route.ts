@@ -108,10 +108,10 @@ export async function POST(request: Request) {
                 user_id_param: data.user.id
             })
 
-            if (error) throw error
+            if (error) throw new Error(error.message)
             await client.from('profiles').update({ is_profile_setup: true }).eq('id', data.user.id)
 
-            revalidateTag(`profile-${data.user.id}`)
+            revalidateTag(`profiles_${data.user.id}`)
             revalidateTag('workExperiences')
             revalidateTag('projects')
             revalidateTag('education')
@@ -120,6 +120,8 @@ export async function POST(request: Request) {
         return Response.json({ success: true })
 
     } catch (e) {
-        return Response.json({ success: false, error: e }, { status: 501 })
+        if (e instanceof Error) {
+            return Response.json({ success: false, error: e.message }, { status: 501 })
+        }
     }
 }

@@ -9,7 +9,7 @@ export async function updateProfile({ profile, userId }: { profile: Profile, use
     try {
         const { error } = await client.from('profiles').update({ ...profile, id: userId }).eq('id', userId);
         if (error) throw error
-        revalidateTag(`profile-${userId}`)
+        revalidateTag(`profiles_${userId}`)
         return { success: true }
     } catch {
         return {

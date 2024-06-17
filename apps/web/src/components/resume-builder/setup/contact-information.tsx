@@ -16,7 +16,7 @@ export default function ContactInformation({ profile }: { profile: Profile }) {
     const onSubmit = async (values: Profile) => {
         try {
             if (!profile.id) return
-            const newProfile: Profile = { ...profile, ...values }
+            const newProfile: Profile = { ...profile, ...values, is_profile_setup: true }
             const { success } = await updateProfile({ profile: newProfile, userId: profile?.id })
             if (!success) throw new Error()
             toast({

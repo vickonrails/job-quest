@@ -54,11 +54,11 @@ export async function getUserProfile() {
     if (!user) {
         redirect('/auth')
     }
-    const tags = ['profile', user.id]
+
     return unstable_cache(
         async (userId) => await fetchUserProfileQuery(client, userId),
-        tags,
-        { tags: [tags.join('-')] }
+        [`profiles_${user.id}`],
+        { tags: [`profiles_${user.id}`] }
     )(user.id)
 }
 

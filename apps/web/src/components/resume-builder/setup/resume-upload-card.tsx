@@ -3,11 +3,10 @@
 import { PDFUploadButton } from '@/components/pdf-upload-button'
 import { ResumeImportProgress } from '@/components/resume-import-progress'
 import { useToast } from '@/components/toast/use-toast'
-import { AlertCircleIcon, ChevronRight, UploadCloud, X } from 'lucide-react'
+import { ChevronRight, UploadCloud } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Alert, AlertDescription, AlertTitle } from 'ui/alert'
 import { Button } from 'ui/button'
 
 async function extractResumeData(file: ArrayBuffer): Promise<string> {
@@ -19,7 +18,10 @@ async function extractResumeData(file: ArrayBuffer): Promise<string> {
     })
 
     if (!response.ok) {
-        // throw error
+        const { error, success } = await response.json() as { error: string, success: boolean }
+        if (!success) {
+            throw new Error(error)
+        }
     }
 
     return await response.json()
@@ -38,19 +40,21 @@ export function UploadResumeCard() {
             // TODO: better error handling here
             // FInd a way to determine if there was an error or not
             const response = await extractResumeData(file)
+            // clear it here
             if (response) {
                 toast({
                     title: 'Profile uploaded successfully',
                     variant: 'success'
                 })
                 router.push('/profile/setup')
-                setUploading(false)
             }
         } catch (error) {
             toast({
                 title: 'An error occurred',
                 variant: 'destructive'
             })
+        } finally {
+            setUploading(false)
         }
     }
 

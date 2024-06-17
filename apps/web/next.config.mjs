@@ -26,11 +26,10 @@ const config = {
       'lh3.googleusercontent.com'
     ]
   },
-  // images: {
-  //   remotePatterns: [
-  //     { protocol: 'https', hostname: 'avatars.githubusercontent.com', pathname: '/' },
-  //     { protocol: 'https', hostname: 'logo.clearbit.com', pathname: 'microsoft.com' },
-  //   ]
-  // }
+  logging: {
+    fetches: {
+      fullUrl: true
+    }
+  }
 };
 export default config;
