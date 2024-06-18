@@ -19,7 +19,7 @@ export interface UploadCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export function UploadCardContent({ className, children }: HTMLAttributes<HTMLDivElement> & { children: ReactNode }) {
     return (
-        <div className={cn('flex flex-col gap-4 items-center border-dashed border border-blue-200 p-6 py-14 rounded-md mb-1', className)}>
+        <div className={cn('flex flex-col gap-4 items-center border-dashed border border-blue-200 p-4 px-6 py-14 rounded-md mb-1', className)}>
             {children}
         </div>
     )

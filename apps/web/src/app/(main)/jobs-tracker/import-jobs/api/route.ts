@@ -89,7 +89,7 @@ async function validateItems(jobs: JobImportColumns[], userId: string) {
     }
 
     if (validationErrors.length > 0) {
-        const errors = validationErrors.map(e => e.message)
+        const errors = validationErrors.map(e => e.errors.join(', '))
         throw new Error(errors.join('\n'))
     }
 

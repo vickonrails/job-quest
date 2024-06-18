@@ -12,7 +12,7 @@ const Logo: FC<LogoProps> = ({ className, children, ...rest }) => {
             )
         } {...rest}>
             {children}
-            <img src="logo.png" className="h-7 w-7 rounded-sm" alt="" />
+            <img src="/logo.png" className="h-7 w-7 rounded-sm" alt="" />
             <span className="select-none">JobQuest</span>
         </h1>
     )

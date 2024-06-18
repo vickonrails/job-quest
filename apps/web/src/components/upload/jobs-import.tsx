@@ -141,7 +141,7 @@ function UploadErrorHint({ error }: { error: string }) {
     const errors = error.split('\n');
 
     return (
-        <Alert className="bg-destructive-foreground text-sm text-destructive">
+        <Alert className="bg-accent text-sm text-accent-foreground border-destructive">
             <FileWarning size={18} />
             <AlertTitle>Invalid import data</AlertTitle>
             <AlertDescription className="text-muted-foreground">{errors.map(err => <div key={err}>{err}</div>)}</AlertDescription>
