@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteJob } from '@/actions/job';
+import { deleteJob } from '@/db/actions/job';
 import { useDeleteModal } from '@/hooks/useDeleteModal';
 import { useEditSheet } from '@/hooks/useEditModal';
 import { type Job } from 'lib/types';

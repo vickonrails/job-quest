@@ -1,4 +1,4 @@
-import { addUserToWaitList } from '@/actions/user/add-user-to-waitlist'
+import { addUserToWaitList } from '@/db/actions/user/add-user-to-waitlist'
 import { Title } from '@radix-ui/react-dialog'
 import { useEffect, useState, type ReactNode } from 'react'
 import { useForm } from 'react-hook-form'

@@ -1,6 +1,6 @@
 'use client'
 
-import { updateCoverLetter } from '@/actions/job'
+import { updateCoverLetter } from '@/db/actions/job'
 import { useCoverLetter } from '@/hooks/useCoverLetter'
 import { type Client } from '@/queries'
 import { isAIFeatureEnabled } from '@/utils'

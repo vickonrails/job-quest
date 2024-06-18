@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteResume } from '@/actions/resume'
+import { deleteResume } from '@/db/actions/resume'
 import { useDeleteModal } from '@/hooks/useDeleteModal'
 import { createClient } from '@/utils/supabase/client'
 import { useQuery } from '@tanstack/react-query'

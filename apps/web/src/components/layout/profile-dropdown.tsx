@@ -1,6 +1,6 @@
 'use client'
 
-import { signOut } from '@/actions/sign-out';
+import { signOut } from '@/db/actions/sign-out';
 import { type User } from '@supabase/supabase-js';
 import { type Profile } from 'lib/types';
 import { ChevronUp, LogOut, Palette, Trash, User as UserIcon } from 'lucide-react';

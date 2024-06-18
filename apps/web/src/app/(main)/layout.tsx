@@ -1,6 +1,7 @@
 import { ProfileSetupBanner } from '@/components/layout/profile-setup-banner';
 import { Sidebar } from '@/components/layout/sidebar';
-import { getUser, getUserProfile } from '@/db/api';
+import { getUser } from '@/db/api';
+import { getUserProfile } from '@/db/api/profile';
 import '@/styles/globals.css';
 import { type Profile } from 'lib/types';
 import { cn } from 'shared';

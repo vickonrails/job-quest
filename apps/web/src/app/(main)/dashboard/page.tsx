@@ -1,7 +1,8 @@
+import { getSummaryCardData } from '@/api/jobs';
+import { getResumes } from '@/api/resume';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-siderbar';
 import { JobsSummaryCards } from '@/components/dashboard/welcome-banner';
 import { ResumePreviewCard } from '@/components/resume-card';
-import { getResumes, getSummaryCardData } from '@/db/api';
 import { type Resume } from 'lib/types';
 
 export default async function DashboardPage() {

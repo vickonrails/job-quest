@@ -1,18 +1,15 @@
 'use client'
 
-import { updateProfile } from '@/actions/profile/setup';
+import { Chip } from '@/components/chip';
 import { useToast } from '@/components/toast/use-toast';
+import { updateProfile } from '@/db/actions/profile/setup';
 import { type Profile } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
-import { useSetupContext } from 'src/hooks/useSetupContext';
-import { Input } from 'ui/input';
 import { Button } from 'ui/button';
-import { StepContainer } from '../components/container';
-import { Chip } from '@/components/chip';
+import { Input } from 'ui/input';
 
-export default function Skills({ profile }: { profile: Profile }) {
-    const { next, user } = useSetupContext()
+export default function ProfileSkills({ profile }: { profile: Profile }) {
     const form = useForm<Profile>({ defaultValues: { skills: profile.skills ?? [] } })
     const formRef = createRef<HTMLFormElement>()
     const { toast } = useToast()
@@ -35,12 +32,10 @@ export default function Skills({ profile }: { profile: Profile }) {
 
     const onSubmit = async () => {
         const skills = form.getValues('skills');
-        if (!user?.id) return;
         try {
             const newProfile: Profile = { ...profile, skills }
-            const { success } = await updateProfile({ profile: newProfile, userId: user?.id })
-            if (!success) throw new Error()
-            next();
+            const { success, error } = await updateProfile({ profile: newProfile })
+            if (!success) throw new Error(error)
         } catch (error) {
             toast({
                 title: 'An error occured',
@@ -50,18 +45,12 @@ export default function Skills({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer
-            data-testid="skills"
-            title="Skills"
-            description="Highlight the skills that set you apart, including technical and soft skills. Focus on those that are most relevant to the job you want."
-        >
-            <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
-                <section className="p-4 border mb-8">
-                    <SkillsForm form={form} />
-                </section>
-                <Button type="submit" loading={form.formState.isSubmitting}>Save & Proceed</Button>
-            </form>
-        </StepContainer>
+        <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
+            <section className="p-4 border mb-8">
+                <SkillsForm form={form} />
+            </section>
+            <Button type="submit" loading={form.formState.isSubmitting}>Save & Proceed</Button>
+        </form>
     )
 }
 

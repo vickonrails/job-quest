@@ -1,6 +1,6 @@
 'use client'
 
-import { updateJob } from '@/actions/job';
+import { updateJob } from '@/db/actions/job';
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint';
 import { useToast } from '@/components/toast/use-toast';
 import { createClient } from '@/utils/supabase/client';

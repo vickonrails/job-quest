@@ -1,13 +1,16 @@
+import { getEducation } from '@/api/education';
+import { getProjects } from '@/api/projects';
+import { getResume } from '@/api/resume';
+import { getWorkExperience } from '@/api/work-experience';
 import ResumeFormBuilder from '@/components/resume-builder/resume-form-preview';
-import { getEducation, getProjects, getResume, getWorkExperience } from '@/db/api';
 import { Suspense } from 'react';
 
 export default async function ResumeDetails({ params }: { params: { id: string } }) {
     const resumeId = params.id
     const resumePromise = getResume(resumeId)
-    const workExperiencePromise = getWorkExperience();
-    const educationPromise = getEducation();
-    const projectsPromise = getProjects();
+    const workExperiencePromise = getWorkExperience({ resumeId });
+    const educationPromise = getEducation({ resumeId });
+    const projectsPromise = getProjects({ resumeId });
 
     const [resume, workExperience, education, projects] = await Promise.all([
         resumePromise,

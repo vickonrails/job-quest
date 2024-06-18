@@ -112,9 +112,9 @@ export async function POST(request: Request) {
             await client.from('profiles').update({ is_profile_setup: true }).eq('id', data.user.id)
 
             revalidateTag(`profiles_${data.user.id}`)
-            revalidateTag('workExperiences')
-            revalidateTag('projects')
-            revalidateTag('education')
+            revalidateTag(`work_experience_${data.user.id}`)
+            revalidateTag(`projects_${data.user.id}`)
+            revalidateTag(`education_${data.user.id}`)
         }
 
         return Response.json({ success: true })

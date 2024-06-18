@@ -1,5 +1,5 @@
 
-import { updateResume } from '@/actions/resume';
+import { updateResume } from '@/db/actions/resume';
 import { debounce } from '@/utils/debounce';
 import { type Resume } from 'lib/types';
 import { useCallback, useRef } from 'react';
@@ -18,9 +18,9 @@ export function BasicInfoSection({ form }: BasicInfoForm) {
 
     const saveFn = useCallback(async ({ resume }: { resume: Resume }) => {
         resume.id = resume.id ?? '';
-        const { success } = await updateResume(resume)
-        if (!success) {
-            throw new Error()
+        const { success, error } = await updateResume(resume)
+        if (!success && error) {
+            throw new Error(error)
         }
     }, [])
 

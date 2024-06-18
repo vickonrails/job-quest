@@ -1,15 +1,20 @@
-import ProfileSetup from '@/components/resume-builder/setup/components/profile-setup'
-import { getUser, getUserProfile } from '@/db/api'
+import { BasicInformationForm } from '@/components/resume-builder/setup/basic-info';
+import { StepContainer } from '@/components/resume-builder/setup/components/container';
+import { getUserProfile } from '@/db/api/profile';
 
-export default async function ProfileSetupPage() {
-  const { data: profile } = await getUserProfile()
-  const { data } = await getUser()
-  const user = data.user
-  if (!profile || !user) return <p>No Profile oh</p>
+export default async function BasicInformation() {
+    const { data } = await getUserProfile();
 
-  return (
-    <div className="overflow-auto flex">
-      <ProfileSetup profile={profile} user={user} />
-    </div>
-  )
+    if (!data) {
+        return null;
+    }
+
+    return (
+        <StepContainer
+            title="Basic Information"
+            description="Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count." data-testid="basic-information"
+        >
+            <BasicInformationForm profile={data} />
+        </StepContainer>
+    )
 }
