@@ -12,14 +12,14 @@ import { TableCellRender } from './TableCellRender';
 interface TableBody<T> {
     items: T[]
     columns: Column<T>
-    actions: TableActions;
+    actions?: TableActions;
     hideActions?: boolean
 }
 /** 
  * Table body component
  */
 export function TableBody<T extends BaseEntity>({ items, columns, actions, hideActions }: TableBody<T>) {
-    const { onDelete, refresh, onRowClick } = actions
+    const { onDelete, refresh, onRowClick } = actions ?? {}
     // default onDelete, onRowClick, onEditClick
     const {
         showDeleteDialog,

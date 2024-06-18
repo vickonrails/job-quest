@@ -64,7 +64,7 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
     const projects = watchProjects('projects');
     const education = watchEducation('education');
     const [downloading, setDownloading] = useState(false)
-    const [resumeTemplate, setResumeTemplate] = useState<Template>('simple')
+    const [resumeTemplate] = useState<Template>('simple')
 
     const isSubmitting = [resumeForm, workExperienceForm, projectsForm, educationForm].some(x => x.formState.isSubmitting)
 
@@ -93,23 +93,6 @@ export function Preview({ resumeForm, workExperienceForm, projectsForm, educatio
                     {downloading ? 'Exporting...' : 'Export'}
                 </Button>
             </header>
-            {/* <header className="flex justify-between w-full items-center mb-2">
-                <Select
-                    options={[{ label: 'Simple', value: 'simple' }, { label: 'Complex', value: 'complex' }]}
-                    trigger="Select template"
-                    defaultValue="simple"
-                    onValueChange={val => {
-                        setResumeTemplate(val === 'simple' ? 'simple' : 'complex')
-                    }}
-                />
-                <div className="flex items-center gap-4">
-                    {isSubmitting && <Spinner className="h-6 w-6" />}
-                    <Button type="button" disabled={downloading} variant="outline" className="flex items-center gap-1" onClick={handleExport}>
-                        <Share className="text-xs h-4 w-4" />
-                        {downloading ? 'Exporting...' : 'Export'}
-                    </Button>
-                </div>
-            </header> */}
 
             {/* TODO: fix button loading states for all variants */}
             <div className="bg-white text-black w-full">

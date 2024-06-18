@@ -38,7 +38,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "useUnknownInCatchVariables": true,
   },
   "include": [
     "src",
@@ -51,6 +52,7 @@
     "tailwind.config.ts",
     "tailwind.pdf.config.ts",
     ".next/types/**/*.ts",
+    "pdf-parse.d.ts",
     "../../packages/shared/src/utils/format-to-utc.ts"
   ],
   "exclude": [

@@ -2,6 +2,7 @@
 
 import { DeleteDialog } from '@/components/delete-dialog';
 import { useToast } from '@/components/toast/use-toast';
+import { useSetupContext } from '@/hooks/useSetupContext';
 import { createClient } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { type Education } from 'lib/types';
@@ -12,7 +13,6 @@ import { Spinner } from 'ui/spinner';
 import { StepContainer } from '../components/container';
 import { SectionFooter } from '../components/section-footer';
 import { EducationForm } from './education-form-item';
-import { useSetupContext } from '@/hooks/useSetupContext';
 
 export function EducationStep() {
     const client = createClient()
@@ -24,8 +24,7 @@ export function EducationStep() {
         form,
         education,
         fieldsArr,
-        updateEducation,
-        setHighlightsToDelete
+        updateEducation
     } = useEducation();
 
     const { formState } = form
@@ -88,7 +87,6 @@ export function EducationStep() {
                         form={form}
                         fields={fields}
                         onDeleteClick={handleDeleteClick}
-                        setHighlightsToDelete={setHighlightsToDelete}
                         autofocus
                         defaultOpen
                     />

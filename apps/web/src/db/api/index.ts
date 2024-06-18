@@ -137,3 +137,13 @@ export async function getResumes() {
         { tags: [`resumes-${userId}`] }
     )(userId)
 }
+
+export async function getSummaryCardData() {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) throw new Error('unauthorized');
+
+    const { data, error } = await client.rpc('get_job_stage_counts', { userid: user.id }).single()
+    if (error) throw error
+    return data
+}

@@ -13,20 +13,23 @@ export async function middleware(request: NextRequest) {
     const { data: { user } } = await client.auth.getUser()
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
 
-    // prevent exploration of app for now
     if (isProd && !waitListRoutes.includes(url.pathname)) {
         url.pathname = '/'
         return NextResponse.redirect(url);
     }
 
-    // redirect unauthorized users
-    if (isProtectedRoute && !user) {
-        url.pathname = '/auth'
-        return NextResponse.redirect(url);
+    if (!user) {
+        if (url.pathname === '/auth') {
+            return response
+        }
+
+        if (isProtectedRoute) {
+            url.pathname = '/auth'
+            return NextResponse.redirect(url)
+        }
     }
 
-    // take user to dashboard if they're logged in
-    if (user && url.pathname === '/auth') {
+    if (url.pathname === '/auth') {
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)
     }

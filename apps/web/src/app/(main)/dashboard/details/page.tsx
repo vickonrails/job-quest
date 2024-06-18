@@ -2,7 +2,6 @@ import BackButton from '@/components/back-button';
 import JobsTable from '@/components/table/job/jobs-table';
 import { getJobs } from '@/queries/jobs';
 import qs from 'qs';
-import { MainShell } from '../../layout';
 
 const viewLookup = {
     recently_added: { query: 'order_by=created_at.desc&limit=20', title: 'Recently Added' },
@@ -85,14 +84,12 @@ export default async function DashboardOverview({ searchParams }: { searchParams
     const jobs = await getOverviewJobs(searchParams.card)
     const title = viewLookup[searchParams.card].title
     return (
-        <MainShell title={title}>
-            <section className="p-6">
-                <BackButton>
-                    Back to Dashboard
-                </BackButton>
-                <h1 className="my-4 font-bold uppercase">{viewLookup[searchParams.card].title} ({[].length})</h1>
-                <JobsTable jobs={jobs ?? []} hideActions />
-            </section>
-        </MainShell>
+        <section className="p-6">
+            <BackButton>
+                Back to Dashboard
+            </BackButton>
+            <h1 className="my-4 font-bold uppercase">{viewLookup[searchParams.card].title} ({[].length})</h1>
+            <JobsTable jobs={jobs ?? []} hideActions />
+        </section>
     )
 }

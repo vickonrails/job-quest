@@ -1,17 +1,17 @@
-import { getUserProfile } from '@/db/api';
-import { type DashboardSummary, type Profile } from 'lib/types';
+import { getUserProfile, type getSummaryCardData } from '@/db/api';
+import { type Profile } from 'lib/types';
 import { Building, FolderHeart, ListStart, Timer } from 'lucide-react';
-import { useMemo, type HTMLAttributes } from 'react';
+import { type HTMLAttributes } from 'react';
 import { cn } from 'shared';
 import { SummaryCard, SummaryCardType } from './summary-card';
 
 interface WelcomeBannerProps extends HTMLAttributes<HTMLElement> {
-    dashboardSummary: DashboardSummary[]
+    dashboardSummary: Awaited<ReturnType<typeof getSummaryCardData>>
 }
 
-export async function JobsSummaryCards({ className, dashboardSummary, ...rest }: WelcomeBannerProps) {
-    const summaryCount = useMemo(() => getSummaryCount(dashboardSummary), [dashboardSummary])
+export async function JobsSummaryCards({ className, dashboardSummary: summaryCount, ...rest }: WelcomeBannerProps) {
     const { data: profile } = await getUserProfile();
+
     return (
         <section
             className={cn('', className)}
@@ -63,23 +63,3 @@ function Greeting({ profile }: { profile?: Profile }) {
 
     return;
 }
-
-type SummaryCount = { [key: string]: number }
-
-/**
- * gets count of each summary type
- * @param summary 
- * @returns 
- */
-function getSummaryCount(summary: DashboardSummary[]) {
-    const summaryCount: SummaryCount = {}
-
-    summary.forEach(item => {
-        if (item.count && item.field) {
-            summaryCount[item.field] = item.count
-        }
-    })
-
-    return summaryCount
-}
-

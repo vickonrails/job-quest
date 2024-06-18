@@ -24,7 +24,8 @@ const buttonVariants = cva(
         default: 'h-10 px-4 py-2',
         sm: 'h-9 px-3',
         lg: 'h-11 px-4',
-        icon: 'h-10 w-10'
+        icon: 'h-10 w-10',
+        xs: 'h-8 px-2 py-1 text-xs',
       },
     },
     defaultVariants: {
@@ -39,10 +40,11 @@ export interface ButtonProps
   VariantProps<typeof buttonVariants> {
   asChild?: boolean
   loading?: boolean
+  loadingContent?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, loading, disabled, children, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, loading, disabled, children, size, loadingContent, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
@@ -52,8 +54,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <span className="flex justify-center">
+          <span className="flex justify-center items-center">
             <Spinner className="h-6 w-6" variant={variant === 'outline' ? 'primary' : 'secondary'} />
+            {loadingContent && <span className="ml-2">{loadingContent}</span>}
           </span>
         ) : children}
       </Comp>

@@ -1,16 +1,15 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
+import { Editor } from '@/components/editor/tiptap-editor'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
 import { isAfter } from 'date-fns'
-import { type Education, type Highlight } from 'lib/types'
-import { useCallback, type Dispatch, type SetStateAction } from 'react'
-import { Controller, useFieldArray, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { type Education } from 'lib/types'
+import { useCallback } from 'react'
+import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
 import { Checkbox } from 'ui/checkbox'
 import { DatePicker } from 'ui/date-picker'
 import { Input } from 'ui/input'
 import { Label } from 'ui/label'
-import { Textarea } from 'ui/textarea'
-import { v4 as uuid } from 'uuid'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
 
@@ -23,7 +22,6 @@ interface EducationFormProps extends BaseFormItemProps {
     form: UseFormReturn<{ education: Education[] }, 'education'>
     fields: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>[],
     onDeleteClick: (education: Education, index: number) => void
-    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
 /** ------------------ Work Experience Header ------------------ */
@@ -45,7 +43,7 @@ function Header({ form, index }: { form: UseFormReturn<{ education: Education[] 
     )
 }
 
-export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDelete, defaultOpen, ...rest }: EducationFormProps) {
+export function EducationForm({ form, onDeleteClick, fields, defaultOpen, ...rest }: EducationFormProps) {
     const isDefaultOpen = defaultOpen ? (fields[0]?.id ?? '') : ''
     return (
         <Accordion type="single" collapsible defaultValue={isDefaultOpen}>
@@ -56,7 +54,6 @@ export function EducationForm({ form, onDeleteClick, fields, setHighlightsToDele
                     index={index}
                     key={field.id}
                     onDeleteClick={onDeleteClick}
-                    setHighlightsToDelete={setHighlightsToDelete}
                     {...rest}
                 />
             )}
@@ -69,10 +66,9 @@ interface FormItemProps extends BaseFormItemProps {
     index: number,
     field: FieldArrayWithId<{ education: Education[] }, 'education', '_id'>,
     onDeleteClick: (education: Education, index: number) => void
-    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
 }
 
-function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, autofocus }: FormItemProps) {
+function FormItem({ form, index, field, onDeleteClick, autofocus }: FormItemProps) {
     const { register, getValues, setError, clearErrors } = form
     const fieldErrs = form.formState.errors?.education?.[index] ?? {}
 
@@ -189,71 +185,22 @@ function FormItem({ form, index, field, onDeleteClick, setHighlightsToDelete, au
                     />
                 </section>
 
-                <EducationHighlights
-                    form={form}
-                    index={index}
-                    entity={field}
-                    onDeleteClick={() => onDeleteClick(field, index)}
-                    setHighlightsToDelete={setHighlightsToDelete}
-                />
+                <section className="mb-4">
+                    <Controller
+                        name={`education.${index}.highlights`}
+                        control={form.control}
+                        render={({ field }) => (
+                            <Editor
+                                value={field.value ?? ''}
+                                label="Highlights"
+                                onChange={text => field.onChange(text)}
+                            />
+                        )}
+                    />
+                </section>
+
+                <HighlightFooter onDeleteClick={() => onDeleteClick(field, index)} />
             </div>
         </AccordionItem>
     )
 }
-
-interface HighlightsProps {
-    form: UseFormReturn<{ education: Education[] }>
-    index: number,
-    onDeleteClick: () => void
-    entity: Education
-    setHighlightsToDelete?: Dispatch<SetStateAction<string[]>>
-}
-
-export function EducationHighlights({ form, index, onDeleteClick, entity, setHighlightsToDelete }: HighlightsProps) {
-    const { fields, remove, append } = useFieldArray({ name: `education.${index}.highlights`, control: form.control, keyName: '_id' })
-    // const { user } = useSetupContext()
-
-    const handleRemove = (idx: number) => {
-        const highlight = fields[idx]
-        if (highlight?.id) {
-            setHighlightsToDelete?.((prev) => [...prev, highlight.id])
-        }
-        remove(idx)
-    }
-
-    return (
-        <>
-            <section className="mb-4">
-                {fields.map((field, idx) => (
-                    <section key={field._id} className="mb-2 flex flex-col items-end">
-                        <Textarea
-                            placeholder="A summary of what you did in this role"
-                            label={idx === 0 ? 'Highlights' : ''}
-                            containerProps={{
-                                className: 'w-full mb-1'
-                            }}
-                            rows={2}
-                            {...form.register(`education.${index}.highlights.${idx}.text`)}
-                        />
-                        <button className="text-xs" onClick={() => handleRemove(idx)}>Remove</button>
-                    </section>
-                ))}
-            </section>
-
-            <HighlightFooter
-                onDeleteClick={onDeleteClick}
-                addHighlight={() => append(getDefaultEntity({ id: entity.id, userId: entity.user_id }))}
-            />
-        </>
-    )
-}
-
-function getDefaultEntity({ id, userId }: { id: string, userId: string }): Highlight {
-    return {
-        text: '',
-        education_id: id,
-        id: uuid(),
-        user_id: userId,
-        type: ''
-    } as Highlight
-} 
