@@ -1,6 +1,6 @@
+import { getJob } from '@/api/jobs.api';
 import BackButton from '@/components/back-button';
 import { JobDetails } from '@/components/job-details/job-details';
-import { getJob } from '@/db/api';
 
 export default async function JobDetailsPage({ params }: { params: { job: string } }) {
     const { data } = await getJob(params.job)

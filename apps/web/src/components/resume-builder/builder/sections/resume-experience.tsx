@@ -1,4 +1,4 @@
-import { deleteWorkExperience, updateWorkExperiences } from '@/actions/resume';
+import { deleteWorkExperience, updateWorkExperiences } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useToast } from '@/components/toast/use-toast';
@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { getDefaultExperience } from 'src/hooks/useWorkExperience';
+import { getDefaultExperience } from 'src/hooks/use-work-experience';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddExperienceItemDropdown } from './add-item-dropdown';
@@ -50,14 +50,14 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     }
 
     const saveFn = useCallback(async (values: { workExperience: WorkExperience[] }) => {
-        const { success, error } = await updateWorkExperiences(values.workExperience, params.id, userId);
+        const { success, error } = await updateWorkExperiences(values.workExperience, params.id);
         if (!success && error) {
             toast({
                 variant: 'destructive',
                 title: 'An error occurred'
             })
         }
-    }, [toast, params.id, userId])
+    }, [toast, params.id])
 
     const watchedData = useWatch({
         control: form.control,

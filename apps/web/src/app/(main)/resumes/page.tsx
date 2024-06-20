@@ -1,6 +1,6 @@
 import NewButton from '@/components/resume-builder/new-button';
 import { ResumePreviewCard } from '@/components/resume-card';
-import { getResumes } from '@/db/api';
+import { getResumes } from '@/api/resume.api';
 
 export default async function ResumePage() {
     const resumes = await getResumes();

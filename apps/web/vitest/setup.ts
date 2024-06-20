@@ -3,6 +3,7 @@ import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
 import { expect, vi } from 'vitest';
 import { MockPointerEvent } from './mock-pointer-events';
+import { usePathname } from 'next/navigation';
 
 
 const ResizeObserverMock = vi.fn(() => ({
@@ -40,6 +41,7 @@ vi.mock('next/navigation', () => ({
             pathname: ''
         };
     },
+    usePathname() { return '' }
 }));
 
 

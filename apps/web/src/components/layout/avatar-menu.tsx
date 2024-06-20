@@ -1,4 +1,4 @@
-import { signOut } from '@/actions/sign-out'
+import { signOut } from '@/db/api/actions/sign-out.action'
 import { type Profile } from 'lib/types'
 import { useRouter } from 'next/navigation'
 import { Button } from 'ui/button'

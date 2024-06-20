@@ -1,12 +1,10 @@
 'use client'
 
-import { updateCoverLetter } from '@/actions/job'
+import { updateCoverLetter } from '@/db/api/jobs.api'
 import { useCoverLetter } from '@/hooks/useCoverLetter'
 import { type Client } from '@/queries'
-import { isAIFeatureEnabled } from '@/utils'
 import { type CoverLetter, type Job } from 'lib/types'
 import { Copy } from 'lucide-react'
-import { useMemo } from 'react'
 import { cn } from 'shared'
 import { Spinner } from 'ui/spinner'
 import { Editor } from './editor/tiptap-editor'

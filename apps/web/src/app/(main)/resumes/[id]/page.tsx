@@ -1,5 +1,8 @@
+import { getEducation } from '@/db/api/education.api';
+import { getProjects } from '@/api/projects.api';
+import { getResume } from '@/api/resume.api';
+import { getWorkExperience } from '@/db/api/work-experience.api';
 import ResumeFormBuilder from '@/components/resume-builder/resume-form-preview';
-import { getEducation, getProjects, getResume, getWorkExperience } from '@/db/api';
 import { Suspense } from 'react';
 
 export default async function ResumeDetails({ params }: { params: { id: string } }) {

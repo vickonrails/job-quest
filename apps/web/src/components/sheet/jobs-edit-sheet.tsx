@@ -1,18 +1,18 @@
 'use client'
 
-import { updateJob } from '@/actions/job';
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint';
 import { useToast } from '@/components/toast/use-toast';
+import { updateJob } from '@/db/api/jobs.api';
 import { createClient } from '@/utils/supabase/client';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
 import { Status_Lookup } from 'shared';
-import { Rating } from 'ui/rating';
-import { Input } from 'ui/input';
 import { Button } from 'ui/button';
+import { Input } from 'ui/input';
+import { Label } from 'ui/label';
+import { Rating } from 'ui/rating';
 import { Select } from 'ui/select';
 import { Sheet, type SheetProps } from './sheet';
-import { Label } from 'ui/label';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T

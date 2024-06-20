@@ -1,4 +1,4 @@
-import { updateProjects } from '@/actions/resume';
+import { updateProjects } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
 import { useToast } from '@/components/toast/use-toast';
@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { deleteProject, getDefaultProject } from 'src/hooks/useProjects';
+import { deleteProject, getDefaultProject } from '@/hooks/use-profile-projects';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddProjectItemDropdown } from './add-item-dropdown';

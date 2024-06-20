@@ -1,17 +1,14 @@
 'use client'
 
-import { updateProfile } from '@/actions/profile/setup';
 import { useToast } from '@/components/toast/use-toast';
+import { updateProfile } from '@/db/api/actions/profile.action';
 import { type Profile } from 'lib/types';
 import { useForm } from 'react-hook-form';
-import { useSetupContext } from 'src/hooks/useSetupContext';
 import { Button } from 'ui/button';
 import { Input } from 'ui/input';
 import { Textarea } from 'ui/textarea';
-import { StepContainer } from './components/container';
 
-export function BasicInformation({ profile }: { profile: Profile }) {
-    const { next, user } = useSetupContext()
+export function BasicInformationForm({ profile }: { profile: Profile }) {
     const { toast } = useToast()
     const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<Profile>({
         defaultValues: {
@@ -24,12 +21,15 @@ export function BasicInformation({ profile }: { profile: Profile }) {
 
     // TODO: add validation
     const onSubmit = async (profile: Profile) => {
-        if (!user) return;
-
         try {
-            const { success } = await updateProfile({ profile, userId: user.id })
+            const { success } = await updateProfile({ profile })
             if (!success) throw new Error();
-            next();
+            toast({
+                title: 'Profile updated successfully',
+                variant: 'success'
+            })
+
+            // TODO: navigate to next step
         } catch (error) {
             toast({
                 title: 'An error occured',
@@ -39,45 +39,40 @@ export function BasicInformation({ profile }: { profile: Profile }) {
     }
 
     return (
-        <StepContainer
-            title="Basic Information"
-            description="Provide your full name, professional title, and a brief overview of your personal profile. This section is your first impression, so make it count." data-testid="basic-information"
-        >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <section className="grid grid-cols-2 gap-4 p-4 border mb-8">
-                    <Input
-                        autoFocus
-                        data-testid="fullname"
-                        label="Fullname"
-                        hint={<p className="text-destructive">{errors.full_name?.message}</p>}
-                        placeholder="fullname"
-                        {...register('full_name', { required: { message: 'Name is required', value: true } })}
-                    />
-                    <Input
-                        data-testid="title"
-                        label="Title"
-                        placeholder="Title"
-                        {...register('title')}
-                    />
-                    <Textarea
-                        data-testid="summary"
-                        rows={5}
-                        label="Professional summary"
-                        placeholder="Professional Summary"
-                        containerProps={{
-                            className: 'col-span-2'
-                        }}
-                        {...register('professional_summary')}
-                    />
-                    <Input
-                        data-testid="location"
-                        label="Location"
-                        placeholder="Location"
-                        {...register('location')}
-                    />
-                </section>
-                <Button loading={isSubmitting}>Save & Proceed</Button>
-            </form>
-        </StepContainer>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <section className="grid grid-cols-2 gap-4 mb-4">
+                <Input
+                    autoFocus
+                    data-testid="fullname"
+                    label="Fullname"
+                    hint={<p className="text-destructive">{errors.full_name?.message}</p>}
+                    placeholder="fullname"
+                    {...register('full_name', { required: { message: 'Name is required', value: true } })}
+                />
+                <Input
+                    data-testid="title"
+                    label="Title"
+                    placeholder="Title"
+                    {...register('title')}
+                />
+                <Textarea
+                    data-testid="summary"
+                    rows={5}
+                    label="Professional summary"
+                    placeholder="Professional Summary"
+                    containerProps={{
+                        className: 'col-span-2'
+                    }}
+                    {...register('professional_summary')}
+                />
+                <Input
+                    data-testid="location"
+                    label="Location"
+                    placeholder="Location"
+                    {...register('location')}
+                />
+            </section>
+            <Button loading={isSubmitting}>Save & Proceed</Button>
+        </form>
     )
 }

@@ -1,5 +1,5 @@
+import { getJobs } from '@/api/jobs.api';
 import JobsKanbanContainer from '@/components/jobs-kanban';
-import { getJobs } from '@/db/api';
 import { type Job } from 'lib/types';
 
 export default async function JobTrackerPage() {

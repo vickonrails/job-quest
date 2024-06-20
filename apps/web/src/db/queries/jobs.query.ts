@@ -1,6 +1,6 @@
 import { type Client } from '@/queries';
 import { type Job, type Resume, type ResumeInsert } from 'lib/types';
-import { getUserProfile } from '../api';
+import { getUserProfile } from '../api/profile.api';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -14,11 +14,6 @@ export interface JobFetchOptions {
     initialData?: Job[],
     jobId?: string
 }
-
-// TODO: get all jobs
-// export async function fetchAllJobs(client: Client) {
-//     return client.from('jobs').select('position, id, order_column')
-// }
 
 export function fetchJob(client: Client, jobId: string, userId: string) {
     return client.from('jobs').select('*').eq('id', jobId).eq('user_id', userId).single().throwOnError()

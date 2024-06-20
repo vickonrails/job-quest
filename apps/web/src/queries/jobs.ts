@@ -1,4 +1,3 @@
-import { getUser } from '@/db/api';
 import { createClient } from '@/utils/supabase/server';
 import { type Client } from '.';
 
@@ -37,7 +36,7 @@ const defaultQuery: QueryProps = {
 
 export async function getJobs(options?: QueryProps) {
     const client = createClient()
-    const { data: { user } } = await getUser()
+    const { data: { user } } = await client.auth.getUser()
     if (!user) return null;
     return (await fetchJobs(client, { queryProps: options ?? defaultQuery, userId: user.id })).data
 }

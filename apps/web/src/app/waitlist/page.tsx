@@ -1,8 +1,8 @@
 'use client'
 
-import { addUserToWaitList } from '@/actions/user/add-user-to-waitlist'
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint'
 import { useToast } from '@/components/toast/use-toast'
+import { addUserToWaitList } from '@/db/api/actions/add-user-to-waitlist'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { AuthCard } from 'ui/auth-card'

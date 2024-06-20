@@ -1,6 +1,6 @@
 'use client'
 
-import { createResumeFromProfile } from '@/actions/resume'
+import { createResumeFromProfile } from '@/db/api/actions/resume.action'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Button } from 'ui/button'

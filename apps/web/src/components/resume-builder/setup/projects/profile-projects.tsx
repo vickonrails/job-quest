@@ -2,27 +2,22 @@
 
 import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
-import { useQueryClient } from '@tanstack/react-query'
+import { updateProjects } from '@/db/api/actions/projects.action'
+import { deleteProject, getDefaultProject, useProfileProjects } from '@/hooks/use-profile-projects'
+import { createClient } from '@/utils/supabase/client'
+import { type Project } from 'lib/types'
 import { createRef, useEffect, useState } from 'react'
 import { useDeleteModal } from 'src/hooks/useDeleteModal'
-import { deleteProject, getDefaultProject, useProjects } from 'src/hooks/useProjects'
-import { Spinner } from 'ui/spinner'
-import { StepContainer } from '../components/container'
 import { SectionFooter } from '../components/section-footer'
 import { ProjectForm } from './project-form-item'
-import { type Project } from 'lib/types'
-import { createClient } from '@/utils/supabase/client'
-import { useSetupContext } from '@/hooks/useSetupContext'
 
 export type Projects = { projects: Project[] }
 
-export default function ProjectsView() {
-    const queryClient = useQueryClient()
+export default function ProfileProjects({ projects }: Projects) {
     const client = createClient()
-    const { user } = useSetupContext()
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
-    const { projects, form, fieldsArr, updateProjects } = useProjects();
+    const { form, fieldsArr } = useProfileProjects({ projects });
     const { append, fields, remove } = fieldsArr
     const { formState } = form
     const {
@@ -50,7 +45,12 @@ export default function ProjectsView() {
 
     const onSubmit = async (values: { projects: Project[] }) => {
         try {
-            await updateProjects.mutateAsync({ values: values.projects });
+            const { success, error } = await updateProjects({ values: values.projects });
+            if (!success || error) throw new Error(error)
+            toast({
+                title: 'Projects updated',
+                variant: 'success'
+            })
         } catch (error) {
             toast({
                 title: 'An error occured',
@@ -77,40 +77,27 @@ export default function ProjectsView() {
     }, [formRef])
 
     const onDeleteOk = async () => {
-        await handleDelete();
         remove(idxToRemove);
-        await queryClient.refetchQueries(['work_experience']);
+        await handleDelete();
     }
-
-    if (projects.isLoading) return (
-        <div className="inline-grid place-items-center mt-12 w-full" data-testid="projects-spinner">
-            <Spinner />
-        </div>
-    )
 
     return (
         <>
-            <StepContainer
-                data-testid="projects"
-                title="Projects"
-                description="Showcase specific projects you&apos;ve worked on that demonstrate your expertise and contributions. Include outcomes, technologies used, and your role in these projects."
-            >
-                <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
-                    <ProjectForm
-                        fields={fields}
-                        form={form}
-                        onDeleteClick={handleDeleteClick}
-                        autofocus
-                        defaultOpen
-                    />
-                    <SectionFooter
-                        addText="Add Project"
-                        isSubmitting={formState.isSubmitting}
-                        saveDisabled={fields.length <= 0 || !form.formState.isValid}
-                        onAppendClick={() => append(getDefaultProject({ userId: user?.id }))}
-                    />
-                </form>
-            </StepContainer>
+            <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef}>
+                <ProjectForm
+                    fields={fields}
+                    form={form}
+                    onDeleteClick={handleDeleteClick}
+                    autofocus
+                    defaultOpen
+                />
+                <SectionFooter
+                    addText="Add Project"
+                    isSubmitting={formState.isSubmitting}
+                    saveDisabled={fields.length <= 0 || !form.formState.isValid}
+                    onAppendClick={() => append(getDefaultProject({ userId: '' }))}
+                />
+            </form>
 
             <DeleteDialog
                 open={isOpen}

@@ -1,15 +1,16 @@
-import { updateEducation } from '@/actions/resume';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { EducationForm } from '@/components/resume-builder/setup/education/education-form-item';
 import { useToast } from '@/components/toast/use-toast';
+import { deleteEducation } from '@/db/api/actions/education.action';
+import { updateEducation } from '@/db/api/actions/resume.action';
 import { debounce } from '@/utils/debounce';
 import { createClient } from '@/utils/supabase/client';
 import { type Education } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
+import { getDefaultEducation } from 'src/hooks/use-profile-education';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { deleteEducation, getDefaultEducation } from 'src/hooks/useEducation';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddEducationItemDropdown } from './add-item-dropdown';
@@ -23,7 +24,6 @@ interface EducationSectionProps {
  * Education section in resume builder
 */
 export function EducationSection({ form, templates, userId }: EducationSectionProps) {
-    const client = createClient();
     const { toast } = useToast()
     const params = useParams() as { id: string }
     const [idxToRemove, setRemoveIdx] = useState<number>();
@@ -40,7 +40,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
     });
 
     const saveFn = useCallback(async ({ education }: { education: Education[] }) => {
-        const { success, error } = await updateEducation(education, [], params.id, userId)
+        const { success, error } = await updateEducation(education, params.id)
         if (!success && error) {
             toast({
                 variant: 'destructive',
@@ -48,7 +48,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
             })
         }
 
-    }, [params.id, toast, userId])
+    }, [params.id, toast])
 
     const {
         showDeleteDialog,
@@ -58,7 +58,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
         setIsOpen,
         isOpen
     } = useDeleteModal({
-        onDelete: async (id: string) => { await deleteEducation(id, client) }
+        onDelete: async (id: string) => { await deleteEducation(id) }
     });
 
     // TODO: do I need to show the modal for unsaved items?
