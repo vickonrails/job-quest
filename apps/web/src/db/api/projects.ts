@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchProjects } from '../queries/resume';
 
@@ -9,9 +8,5 @@ export async function getProjects({ resumeId }: { resumeId?: string | null }) {
     if (!user) {
         redirect('/auth')
     }
-    return unstable_cache(
-        async () => await fetchProjects(client, { userId: user.id, resumeId }),
-        ['projects', user.id],
-        { tags: [`projects_${user.id}`] }
-    )()
+    return await fetchProjects(client, { userId: user.id, resumeId })
 }

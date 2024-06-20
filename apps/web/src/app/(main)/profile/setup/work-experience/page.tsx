@@ -1,9 +1,9 @@
 import { StepContainer } from '@/components/resume-builder/setup/components/container'
 import { ProfileWorkExperience } from '@/components/resume-builder/setup/work-experience/profile-work-experience'
-import { getWorkExperience } from '@/db/api/work-experience'
+import { getProfileWorkExperience } from '@/db/api/work-experience'
 
 export default async function WorkExperience() {
-    const workExperiences = await getWorkExperience({ resumeId: null })
+    const workExperiences = await getProfileWorkExperience()
     if (!workExperiences) return null
 
     return (

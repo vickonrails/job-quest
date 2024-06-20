@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchResume } from '../queries/jobs';
 import { fetchResumes } from '../queries/resume';
@@ -18,13 +17,7 @@ export async function getResume(resumeId: string) {
     }
 
     const userId = user.id
-    const tags = ['resumes', resumeId]
-
-    return unstable_cache(
-        async (resumeId, userId) => await fetchResume(client, { resumeId, userId }),
-        tags,
-        { tags: [`resume_${user.id}`] }
-    )(resumeId, userId,)
+    return await fetchResume(client, { resumeId, userId })
 }
 
 // TODO merge to one
@@ -40,10 +33,5 @@ export async function getResumes() {
         redirect('/auth')
     }
     const userId = user.id
-
-    return unstable_cache(
-        async (userId) => await fetchResumes(client, userId),
-        ['resumes', userId],
-        { tags: [`resumes-${userId}`] }
-    )(userId)
+    return await fetchResumes(client, userId)
 }

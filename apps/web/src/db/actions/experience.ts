@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { type WorkExperience } from 'lib/types';
-import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { v4 as uuid } from 'uuid'
 
@@ -16,7 +15,6 @@ export async function deleteWorkExperience(id: string) {
     try {
         const { error } = await client.from('work_experience').delete().eq('id', id)
         if (error) throw new Error(error.message)
-        revalidateTag(`work_experience_${user.id}`)
         // TODO: can we use this deleteProfileExperience function in other places? like the resume builder?
     } catch (error) {
         if (error instanceof Error) {
@@ -48,7 +46,6 @@ export async function updateWorkExperience({ values }: { values: WorkExperience[
 
         const { error } = await client.from('work_experience').upsert(preparedValues)
         if (error) throw new Error(error.message)
-        revalidateTag(`work_experience_${user.id}`)
 
     } catch (error) {
         if (error instanceof Error) {

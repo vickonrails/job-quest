@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { unstable_cache } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { fetchUserProfileQuery } from '../queries/auth'
 
@@ -13,23 +12,14 @@ export async function getUserProfile() {
     if (!user) {
         redirect('/auth')
     }
-
-    return unstable_cache(
-        async (userId) => await fetchUserProfileQuery(client, userId),
-        [`profiles_${user.id}`],
-        { tags: [`profiles_${user.id}`] }
-    )(user.id)
+    return await fetchUserProfileQuery(client, user.id)
 }
 
 /**
  *  get logged in user
  * @returns
  */
-export function getUser() {
+export async function getUser() {
     const client = createClient();
-    return unstable_cache(
-        async () => await client.auth.getUser(),
-        ['user'],
-        { tags: ['user'] }
-    )()
+    return await client.auth.getUser()
 }

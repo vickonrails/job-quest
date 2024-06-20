@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { type CoverLetter, type Job } from 'lib/types';
-import { revalidateTag } from 'next/cache';
 import { v4 as uuid } from 'uuid';
 
 // TODO: remove the userId
@@ -30,8 +29,6 @@ export async function updateJob(job: Job, userId: string) {
         const { error } = await client.from('jobs').upsert({ ...job, user_id: userId }).eq('id', job.id)
         if (error) throw error
 
-        revalidateTag(`jobs-${job.id}`)
-        revalidateTag('jobs')
         return { success: true }
 
     } catch (error) {
@@ -44,7 +41,6 @@ export async function deleteJob(id: string) {
         const client = createClient()
         const { error } = await client.from('jobs').delete().eq('id', id);
         if (error) throw error
-        revalidateTag('jobs')
         return { success: true }
     } catch (error) {
         return { success: false, error }
@@ -56,7 +52,6 @@ export async function updateCoverLetter(coverLetter: CoverLetter, userId: string
     try {
         const { error } = await client.from('cover_letters').upsert(coverLetter).eq('user_id', userId).eq('job_id', jobId);
         if (error) throw error
-        revalidateTag(`cover-letters-${coverLetter.job_id}`)
         return { success: true }
     } catch (error) {
         return { success: false, error }

@@ -1,6 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
 import { type SetupProfile } from 'lib/types';
-import { revalidateTag } from 'next/cache';
 import OpenAI from 'openai';
 import { type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
@@ -110,11 +109,6 @@ export async function POST(request: Request) {
 
             if (error) throw new Error(error.message)
             await client.from('profiles').update({ is_profile_setup: true }).eq('id', data.user.id)
-
-            revalidateTag(`profiles_${data.user.id}`)
-            revalidateTag(`work_experience_${data.user.id}`)
-            revalidateTag(`projects_${data.user.id}`)
-            revalidateTag(`education_${data.user.id}`)
         }
 
         return Response.json({ success: true })

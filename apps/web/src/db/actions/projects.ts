@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { type Project } from 'lib/types';
-import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { v4 as uuid } from 'uuid';
 
@@ -22,7 +21,6 @@ export async function updateProjects({ values }: { values: Project[] }) {
 
         const { error } = await client.from('projects').upsert(preparedValues)
         if (error) throw new Error(error.message)
-        revalidateTag(`projects_${user.id}`)
         return { success: true }
     } catch (error) {
         if (error instanceof Error) {

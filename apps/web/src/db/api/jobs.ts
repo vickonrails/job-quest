@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { fetchAllJob, fetchCoverLetter, fetchJob } from '../queries/jobs';
 
@@ -26,11 +25,7 @@ export async function getCoverLetter(jobId: string) {
     if (!user) {
         redirect('/auth')
     }
-    return unstable_cache(
-        async () => await fetchCoverLetter(client, user.id, jobId),
-        ['cover-letters', jobId],
-        { tags: [`cover-letters-${jobId}`] }
-    )()
+    return await fetchCoverLetter(client, user.id, jobId)
 }
 
 /**
@@ -43,12 +38,7 @@ export async function getJob(jobId: string) {
     if (!user) {
         redirect('/auth')
     }
-    const tags = ['jobs', jobId]
-    return unstable_cache(
-        async (jobId) => await fetchJob(client, jobId, user.id),
-        tags,
-        { tags: [tags.join('-')] }
-    )(jobId)
+    return await fetchJob(client, jobId, user.id)
 }
 
 /**

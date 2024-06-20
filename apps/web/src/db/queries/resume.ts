@@ -1,32 +1,35 @@
 import { type Client } from '@/queries';
 
-export async function fetchWorkExperience(client: Client, options: { userId: string, resumeId?: string | null }) {
+export async function fetchWorkExperienceQuery(client: Client, options: { userId: string, resumeId?: string | null }) {
     const { userId, resumeId } = options
-    const query = client.from('work_experience').select().eq('user_id', userId).throwOnError()
-    if (options.resumeId !== undefined) {
-        query.filter('resume_id', 'is', resumeId)
+    let query = client.from('work_experience').select().eq('user_id', userId).throwOnError()
+    if (resumeId === null) {
+        query = query.filter('resume_id', 'is', null)
+    } else if (resumeId !== undefined) {
+        query = query.filter('resume_id', 'eq', resumeId)
     }
-    return (await query).data
-}
 
-export async function fetchProfileWorkExperience(client: Client, userId: string) {
-    return (await client.from('work_experience').select().eq('user_id', userId).filter('resume_id', 'is', null).throwOnError()).data
+    return (await query).data
 }
 
 export async function fetchEducation(client: Client, options: { userId: string, resumeId?: string | null }) {
     const { userId, resumeId } = options
-    const query = client.from('education').select().eq('user_id', userId).throwOnError()
-    if (options.resumeId !== undefined) {
-        query.filter('resume_id', 'is', resumeId)
+    let query = client.from('education').select().eq('user_id', userId).throwOnError()
+    if (resumeId === null) {
+        query = query.filter('resume_id', 'is', null)
+    } else if (resumeId !== undefined) {
+        query = query.filter('resume_id', 'eq', resumeId)
     }
     return (await query).data
 }
 
 export async function fetchProjects(client: Client, options: { userId: string, resumeId?: string | null }) {
     const { userId, resumeId } = options
-    const query = client.from('projects').select('*').eq('user_id', userId).throwOnError()
-    if (options.resumeId !== undefined) {
-        query.filter('resume_id', 'is', resumeId)
+    let query = client.from('projects').select('*').eq('user_id', userId).throwOnError()
+    if (resumeId === null) {
+        query = query.filter('resume_id', 'is', null)
+    } else if (resumeId !== undefined) {
+        query = query.filter('resume_id', 'eq', resumeId)
     }
     return (await query).data
 }

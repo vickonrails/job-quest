@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 export default async function ResumeDetails({ params }: { params: { id: string } }) {
     const resumeId = params.id
     const resumePromise = getResume(resumeId)
-    const workExperiencePromise = getWorkExperience({ resumeId });
+    const workExperiencePromise = getWorkExperience({});
     const educationPromise = getEducation({ resumeId });
     const projectsPromise = getProjects({ resumeId });
 
