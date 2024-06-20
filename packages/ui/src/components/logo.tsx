@@ -7,12 +7,13 @@ const Logo: FC<LogoProps> = ({ className, children, ...rest }) => {
     return (
         <h1 className={
             clsx(
-                'text-muted-foreground flex gap-2 hover:text-accent-foreground text-base',
+                'text-muted-foreground flex items-center gap-2 hover:text-accent-foreground text-base',
                 className
             )
         } {...rest}>
             {children}
-            <span className="select-none text-primary">JobQuest</span>
+            <img src="/logo.png" className="h-7 w-7 rounded-sm" alt="" />
+            <span className="select-none">JobQuest</span>
         </h1>
     )
 }

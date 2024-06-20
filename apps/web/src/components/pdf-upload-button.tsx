@@ -8,7 +8,7 @@ interface PDFUploadButtonProps extends ButtonProps {
     onFilePicked?: (file: ArrayBuffer, filename: string) => void
 }
 
-export function PDFUploadButton({ onFilePicked, onClick, ...rest }: PDFUploadButtonProps) {
+export function UploadButton({ onFilePicked, onClick, children, ...rest }: PDFUploadButtonProps) {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const onChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +35,11 @@ export function PDFUploadButton({ onFilePicked, onClick, ...rest }: PDFUploadBut
                 type="file"
                 ref={inputRef}
                 onChange={onChange}
-                accept=".pdf"
+                // TODO: conform with supported formats
+                accept=".pdf, .csv"
                 className="hidden"
             />
-            <Button onClick={handleClick} {...rest}>Upload PDF Now</Button>
+            <Button onClick={handleClick} {...rest}>{children}</Button>
         </>
     )
 }

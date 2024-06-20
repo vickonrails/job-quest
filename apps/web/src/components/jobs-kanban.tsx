@@ -56,7 +56,12 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
                 <h1 className="text-xl flex font-bold gap-2 items-center">
                     {isUpdating && <Spinner />}
                 </h1>
-                <Button size="sm" onClick={() => openEditSheet()}>Add New</Button>
+                <section>
+                    <Button variant="link" asChild>
+                        <Link href="/jobs-tracker/import-jobs">Import Jobs (CSV)</Link>
+                    </Button>
+                    <Button size="sm" onClick={() => openEditSheet()}>Add New</Button>
+                </section>
             </section>
             <JobsKanban
                 openEditSheet={openEditSheet}

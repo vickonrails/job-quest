@@ -1,5 +1,6 @@
 
-import { useId } from 'react'
+import { type ComponentProps, useId } from 'react'
+import { cn } from 'shared'
 import { Label } from './label'
 import {
     SelectContent,
@@ -10,15 +11,16 @@ import {
     SelectValue
 } from './select-primitives'
 
-export function Select({ options, label, trigger, size = 'md', ...props }: SelectProps) {
+export function Select({ options, label, triggerProps, trigger, hint, size = 'md', ...props }: SelectProps) {
     const selectedOption = options?.find((option) => option.value === props.value)
     const id = useId()
+    const { className: triggerClassName, ...restTriggerProps } = triggerProps ?? {}
 
     return (
-        <SelectRoot {...props}>
-            <label>
+        <div>
+            <SelectRoot {...props}>
                 {label && <Label htmlFor={id}>{label}</Label>}
-                <SelectTrigger className={SIZE_MAP[size]} id={id}>
+                <SelectTrigger className={cn(SIZE_MAP[size], triggerClassName)} id={id} {...restTriggerProps}>
                     <SelectValue placeholder={selectedOption?.label ?? trigger ?? 'Select an option'} />
                 </SelectTrigger>
                 <SelectContent>
@@ -30,8 +32,9 @@ export function Select({ options, label, trigger, size = 'md', ...props }: Selec
                         ))}
                     </SelectGroup>
                 </SelectContent>
-            </label>
-        </SelectRoot>
+            </SelectRoot>
+            {hint && <span className="pt-2 text-sm block text-gray-400 px-2" data-testid="hint">{hint}</span>}
+        </div>
     )
 }
 
@@ -50,5 +53,7 @@ export interface SelectProps extends React.ComponentProps<typeof SelectRoot> {
     options?: SelectOption[]
     trigger?: string
     label?: string
+    hint?: React.ReactNode
     size?: 'sm' | 'md' | 'lg'
+    triggerProps?: ComponentProps<typeof SelectTrigger>
 }

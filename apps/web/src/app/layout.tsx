@@ -4,10 +4,11 @@ import 'ui/styles';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { ReactQueryClientProvider } from '@/react-query/query-provider';
 import { type ReactNode } from 'react';
+import Plausible from '@/components/plausible-provider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <>
+        <Plausible>
             <html lang="en" suppressHydrationWarning>
                 <head />
                 <body className="overflow-auto">
@@ -23,6 +24,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     </ReactQueryClientProvider>
                 </body>
             </html>
-        </>
+        </Plausible>
     )
 }

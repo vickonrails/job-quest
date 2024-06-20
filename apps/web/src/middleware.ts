@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createClient } from './utils/supabase/server';
 
 const protectedRoutes = ['/dashboard', '/job-tracker', '/resumes', 'profile']
+const waitListRoutes = ['/waitlist', '/']
 const isProd = process.env.NODE_ENV === 'production'
 
 export async function middleware(request: NextRequest) {
@@ -11,6 +12,11 @@ export async function middleware(request: NextRequest) {
     const client = createClient()
     const { data: { user } } = await client.auth.getUser()
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
+
+    if (isProd && !waitListRoutes.includes(url.pathname)) {
+        url.pathname = '/'
+        return NextResponse.redirect(url);
+    }
 
     if (!user) {
         if (url.pathname === '/auth') {
@@ -27,44 +33,6 @@ export async function middleware(request: NextRequest) {
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)
     }
-
-    // if (user && isProtectedRoute) {
-    //     const { data: profile } = await client.from('profiles').select('*').eq('id', user.id).single();
-    //     if (profile && !profile.is_profile_setup) {
-    //         url.pathname = '/profile/resume-upload'
-    //         return NextResponse.redirect(url)
-    //     }
-    // }
-
-    // redirect unauthorized users
-    // if (isProtectedRoute && !user) {
-    //     url.pathname = '/auth'
-    //     return NextResponse.redirect(url);
-    // }
-
-    // if (!user) {
-    //     url.pathname = '/auth'
-    //     return NextResponse.redirect(url);
-    // }
-
-    // // take user to dashboard if they're logged in
-    // if (user && url.pathname === '/auth') {
-    //     url.pathname = '/dashboard'
-    //     return NextResponse.redirect(url)
-    // }
-
-    // // TODO: feature where we redirect to the intended page right before the redirection to the profile setup
-    // if (user && (isProtectedRoute || url.pathname === '/auth')) {
-    //     const { data } = await client.from('profiles').select('*').eq('id', user.id).single();
-    //     if (!data) {
-    //         // todo: handle profile not created
-    //     }
-
-    //     if (!data?.is_profile_setup) {
-    //         url.pathname = '/profile/resume-upload'
-    //         return NextResponse.redirect(url)
-    //     }
-    // }
 
     return response;
 }

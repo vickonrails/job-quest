@@ -41,7 +41,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "useUnknownInCatchVariables": true,
   },
   "include": [
     "src",

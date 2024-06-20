@@ -1,5 +1,4 @@
 import { Accordion, AccordionItem } from '@/components/accordion'
-import { Checkbox } from '@/components/checkbox-archive'
 import { Editor } from '@/components/editor/tiptap-editor'
 import { AccordionExpandIcon } from '@/components/resume-builder/accordion-expand-icon'
 import { DateRenderer } from '@/components/resume-builder/date-renderer'
@@ -7,8 +6,10 @@ import { isAfter } from 'date-fns'
 import { type Education } from 'lib/types'
 import { useCallback } from 'react'
 import { Controller, useWatch, type FieldArrayWithId, type UseFormReturn } from 'react-hook-form'
+import { Checkbox } from 'ui/checkbox'
 import { DatePicker } from 'ui/date-picker'
 import { Input } from 'ui/input'
+import { Label } from 'ui/label'
 import { ErrorHint } from '../components/error-hint'
 import { HighlightFooter } from '../components/highlights-footer'
 
@@ -154,12 +155,14 @@ function FormItem({ form, index, field, onDeleteClick, autofocus }: FormItemProp
                         name={`education.${index}.still_studying_here`}
                         control={form.control}
                         render={({ field: item }) => (
-                            <Checkbox
-                                label="I'm Still Studying Here?"
-                                checked={item.value ?? false}
-                                onCheckedChange={val => item.onChange(val)}
-                                className="mt-6"
-                            />
+                            <div className="flex items-center gap-1">
+                                <Checkbox
+                                    id="followUp"
+                                    checked={item.value ?? false}
+                                    onCheckedChange={val => item.onChange(val)}
+                                />
+                                <Label htmlFor="followUp">Would you be open to a short chat?</Label>
+                            </div>
                         )}
                     />
 
