@@ -2,7 +2,7 @@
 
 import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
-import { deleteWorkExperience, updateWorkExperience } from '@/db/actions/experience'
+import { deleteWorkExperience, updateWorkExperience } from '@/db/api/actions/experience.action'
 import { getDefaultExperience, useProfileWorkExperience } from '@/hooks/use-work-experience'
 import { type WorkExperience as IWorkExperience, type WorkExperience } from 'lib/types'
 import { useState } from 'react'
@@ -41,6 +41,12 @@ export function ProfileWorkExperience({ workExperience }: { workExperience: Work
     const onSubmit = async (values: { workExperience: IWorkExperience[] }) => {
         try {
             const response = await updateWorkExperience({ values: values.workExperience })
+            if (response.success) {
+                toast({
+                    title: 'Work Experience updated',
+                    variant: 'success'
+                })
+            }
         } catch (error) {
             toast({
                 title: 'An error occured',

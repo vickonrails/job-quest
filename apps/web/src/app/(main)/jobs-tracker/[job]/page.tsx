@@ -1,4 +1,4 @@
-import { getJob } from '@/api/jobs';
+import { getJob } from '@/api/jobs.api';
 import BackButton from '@/components/back-button';
 import { JobDetails } from '@/components/job-details/job-details';
 

@@ -1,4 +1,4 @@
-import { getJobs } from '@/api/jobs';
+import { getJobs } from '@/api/jobs.api';
 import JobsKanbanContainer from '@/components/jobs-kanban';
 import { type Job } from 'lib/types';
 

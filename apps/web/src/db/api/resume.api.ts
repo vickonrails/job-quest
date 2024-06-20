@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { fetchResume } from '../queries/jobs';
-import { fetchResumes } from '../queries/resume';
+import { fetchResume } from '../queries/jobs.query';
+import { fetchResumes } from '../queries/resume.query';
 
 // TODO: simplify to one getResumes function
 /**

@@ -2,7 +2,7 @@
 
 import { DeleteDialog } from '@/components/delete-dialog'
 import { useToast } from '@/components/toast/use-toast'
-import { updateProjects } from '@/db/actions/projects'
+import { updateProjects } from '@/db/api/actions/projects.action'
 import { deleteProject, getDefaultProject, useProfileProjects } from '@/hooks/use-profile-projects'
 import { createClient } from '@/utils/supabase/client'
 import { type Project } from 'lib/types'

@@ -1,6 +1,6 @@
 'use server'
 
-import { updateProfileQuery } from '@/db/queries/profile';
+import { updateProfileQuery } from '@/db/queries/profile.query';
 import { createClient } from '@/utils/supabase/server';
 import { type Profile } from 'lib/types';
 
@@ -10,6 +10,7 @@ export async function updateProfile({ profile }: { profile: Profile }) {
     try {
         if (!user) throw new Error('User not found')
         const { error } = await updateProfileQuery(client, { profile, id: user.id });
+
         if (error) throw error
         return { success: true }
     } catch (error) {

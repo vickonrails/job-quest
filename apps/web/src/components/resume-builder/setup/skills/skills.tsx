@@ -2,7 +2,7 @@
 
 import { Chip } from '@/components/chip';
 import { useToast } from '@/components/toast/use-toast';
-import { updateProfile } from '@/db/actions/profile/setup';
+import { updateProfile } from '@/db/api/actions/profile.action';
 import { type Profile } from 'lib/types';
 import { createRef, useEffect, useState } from 'react';
 import { useFieldArray, useForm, type UseFormReturn } from 'react-hook-form';
@@ -36,6 +36,10 @@ export default function ProfileSkills({ profile }: { profile: Profile }) {
             const newProfile: Profile = { ...profile, skills }
             const { success, error } = await updateProfile({ profile: newProfile })
             if (!success) throw new Error(error)
+            toast({
+                title: 'Profile updated successfully',
+                variant: 'success'
+            })
         } catch (error) {
             toast({
                 title: 'An error occured',

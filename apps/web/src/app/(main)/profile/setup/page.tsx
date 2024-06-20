@@ -1,6 +1,6 @@
 import { BasicInformationForm } from '@/components/resume-builder/setup/basic-info';
 import { StepContainer } from '@/components/resume-builder/setup/components/container';
-import { getUserProfile } from '@/db/api/profile';
+import { getUserProfile } from '@/api/profile.api';
 
 export default async function BasicInformation() {
     const { data } = await getUserProfile();

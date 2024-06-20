@@ -1,9 +1,9 @@
 import { StepContainer } from '@/components/resume-builder/setup/components/container'
 import { ProfileEducation } from '@/components/resume-builder/setup/education/profile-education'
-import { getEducation } from '@/db/api/education'
+import { getProfileEducation } from '@/db/api/education.api'
 
 export default async function EducationStep() {
-    const education = await getEducation({ resumeId: null })
+    const education = await getProfileEducation()
     if (!education) return null
     return (
         <StepContainer

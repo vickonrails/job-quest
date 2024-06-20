@@ -1,6 +1,6 @@
 import { StepContainer } from '@/components/resume-builder/setup/components/container'
 import ProfileSkills from '@/components/resume-builder/setup/skills/skills'
-import { getUserProfile } from '@/db/api/profile'
+import { getUserProfile } from '@/db/api/profile.api'
 
 export default async function Skills() {
     const { data } = await getUserProfile()

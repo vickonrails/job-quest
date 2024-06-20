@@ -1,4 +1,4 @@
-import { deleteWorkExperience, updateWorkExperiences } from '@/db/actions/resume';
+import { deleteWorkExperience, updateWorkExperiences } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useToast } from '@/components/toast/use-toast';

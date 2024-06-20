@@ -64,14 +64,3 @@ export function getDefaultEducation({ userId }: { userId?: string }) {
 
     return education
 }
-
-export async function fetchEducation({ userId, client }: { userId?: string, client: SupabaseClient<Database> }) {
-    if (!userId) throw new Error('userId not provided');
-    // TODO: error handling
-    const { data } = await client.from('education')
-        .select()
-        .filter('resume_id', 'is', null)
-        .eq('user_id', userId)
-
-    return data
-}

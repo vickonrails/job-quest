@@ -1,6 +1,6 @@
 import { type Client } from '@/queries';
 import { type Job, type Resume, type ResumeInsert } from 'lib/types';
-import { getUserProfile } from '../api/profile';
+import { getUserProfile } from '../api/profile.api';
 
 type SortDirection = 'asc' | 'desc'
 

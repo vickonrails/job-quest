@@ -1,1 +1,1 @@
-export { getUser } from './profile'
+export { getUser } from './profile.api'

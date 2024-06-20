@@ -5,8 +5,6 @@ import Link from 'next/link'
 import * as React from 'react'
 import { Button } from 'ui/button'
 
-import { Progress } from 'ui/progress'
-
 export function ResumeImportProgress({ filename, isUploading }: { filename: string, isUploading: boolean }) {
     if (isUploading) {
         return (
@@ -18,7 +16,6 @@ export function ResumeImportProgress({ filename, isUploading }: { filename: stri
                         <p className="text-xs">Might take a while (Extracting important information)...</p>
                     </div>
                 </header>
-                <Progress className="mt-2" value={50} />
             </section>
         )
     }

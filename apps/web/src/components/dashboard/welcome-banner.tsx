@@ -1,5 +1,5 @@
-import { type getSummaryCardData } from '@/api/jobs';
-import { getUserProfile } from '@/api/profile';
+import { type getSummaryCardData } from '@/db/api/jobs.api';
+import { getUserProfile } from '@/db/api/profile.api';
 import { type Profile } from 'lib/types';
 import { Building, FolderHeart, ListStart, Timer } from 'lucide-react';
 import { type HTMLAttributes } from 'react';

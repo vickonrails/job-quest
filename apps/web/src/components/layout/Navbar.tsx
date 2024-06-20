@@ -1,4 +1,4 @@
-import { getUserProfile } from '@/api/profile';
+import { getUserProfile } from '@/db/api/profile.api';
 import { PanelLeftClose } from 'lucide-react';
 import { type FC, type HTMLAttributes, type ReactNode } from 'react';
 import { Feedback } from '../feedback/feedback-popover';

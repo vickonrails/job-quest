@@ -2,8 +2,8 @@
 
 import { DeleteDialog } from '@/components/delete-dialog';
 import { useToast } from '@/components/toast/use-toast';
-import { deleteEducation } from '@/db/actions/education';
-import { updateEducation } from '@/db/actions/resume';
+import { deleteEducation } from '@/db/api/actions/education.action';
+import { updateEducation } from '@/db/api/actions/resume.action';
 import { getDefaultEducation, useProfileEducation } from '@/hooks/use-profile-education';
 import { type Education } from 'lib/types';
 import { useState } from 'react';

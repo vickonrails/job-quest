@@ -46,10 +46,8 @@ export async function updateWorkExperience({ values }: { values: WorkExperience[
 
         const { error } = await client.from('work_experience').upsert(preparedValues)
         if (error) throw new Error(error.message)
-
+        return { success: true }
     } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message)
-        }
+        return { success: false, message: error instanceof Error ? error.message : 'An error occurred' }
     }
 }

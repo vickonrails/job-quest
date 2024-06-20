@@ -1,5 +1,5 @@
 
-import { updateResume } from '@/db/actions/resume';
+import { updateResume } from '@/db/api/actions/resume.action';
 import { debounce } from '@/utils/debounce';
 import { type Resume } from 'lib/types';
 import { useCallback, useRef } from 'react';

@@ -1,23 +1,23 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { fetchEducation } from '../queries/resume';
+import { fetchEducationQuery } from '../queries/education.query';
 
-export async function getProfileEducation({ resumeId }: { resumeId?: string | null }) {
+export async function getProfileEducation() {
     const client = createClient();
     const { data: { user } } = await client.auth.getUser()
     if (!user) {
         redirect('/auth')
     }
 
-    return await fetchEducation(client, { userId: user.id, resumeId })
+    return await fetchEducationQuery(client, { userId: user.id, resumeId: null })
 }
 
-export async function getEducation({ resumeId }: { resumeId?: string | null }) {
+export async function getEducation() {
     const client = createClient();
     const { data: { user } } = await client.auth.getUser()
     if (!user) {
         redirect('/auth')
     }
 
-    return await fetchEducation(client, { userId: user.id, resumeId })
+    return await fetchEducationQuery(client, { userId: user.id })
 }

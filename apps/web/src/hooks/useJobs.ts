@@ -1,5 +1,5 @@
 
-import { getJobs, type JobFetchOptions } from '@/db/queries/jobs';
+import { getJobs, type JobFetchOptions } from '@/db/queries/jobs.query';
 import { createClient } from '@/utils/supabase/client';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { type Job } from '../../lib/types';

@@ -1,7 +1,7 @@
 'use client'
 
 import { useToast } from '@/components/toast/use-toast';
-import { updateProfile } from '@/db/actions/profile/setup';
+import { updateProfile } from '@/db/api/actions/profile.action';
 import { type Profile } from 'lib/types';
 import { useForm } from 'react-hook-form';
 import { Button } from 'ui/button';

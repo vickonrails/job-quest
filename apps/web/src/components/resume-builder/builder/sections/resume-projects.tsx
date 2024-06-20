@@ -1,4 +1,4 @@
-import { updateProjects } from '@/db/actions/resume';
+import { updateProjects } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
 import { useToast } from '@/components/toast/use-toast';

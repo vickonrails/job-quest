@@ -1,6 +1,7 @@
+
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { fetchUserProfileQuery } from '../queries/auth'
+import { fetchUserProfileQuery } from '../queries/auth.query'
 
 /**
  * Fetches the currently logged in user's profile
