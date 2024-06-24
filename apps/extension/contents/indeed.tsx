@@ -4,7 +4,7 @@ import type { PlasmoCSConfig, PlasmoCSUIProps } from 'plasmo';
 import { useState, type FC } from 'react';
 import { type LinkedInButtonProps } from '~components/linkedin-button';
 import { JobInfoSheet } from '~components/sheets/JobInfoSheet';
-import { getJobDetails } from '~utils/get-job-content';
+import { getJobUrl } from '~utils/get-job-content';
 
 // TODO: research how to only show the button after the page is fully loaded (check out the document.readyState property)
 
@@ -19,26 +19,30 @@ export function getStyle() {
 }
 
 const AnchorTypePrinter: FC<PlasmoCSUIProps> = ({ anchor }) => {
-    const [jobInfo, setJobInfo] = useState(null);
+    const url = getJobUrl()
+    const [open, setOpen] = useState(false);
+    const [jobURL, setJobURL] = useState(url)
+
     const close = () => {
-        setJobInfo(null);
+        setOpen(false);
+    }
+
+    const handleURLChange = () => {
+        setJobURL(getJobUrl())
     }
 
     const handleClick = () => {
-        setJobInfo(getJobDetails());
+        setOpen(true)
     }
-
-    const isOpen = Boolean(jobInfo)
 
     return (
         <section className="page">
-            <CompanionBtn onClick={handleClick} isOpen={isOpen} />
-            {isOpen && (
+            <CompanionBtn onClick={handleClick} isOpen={open} />
+            {open && (
                 <JobInfoSheet
-                    title="Job Info"
-                    open={Boolean(jobInfo)}
-                    jobInfo={jobInfo}
-                    onSubmit={() => {/** */ }}
+                    onURLChange={handleURLChange}
+                    url={jobURL}
+                    open={open}
                     onOpenChange={close}
                 />
             )}

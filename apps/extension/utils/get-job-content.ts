@@ -1,10 +1,7 @@
 import { isLinkedIn } from '~contents/linkedin';
-import type { Job } from '~types';
+import type { JobInsertDTO } from '~types';
 
-/**
- * Get the important content from the web page
- */
-export function getJobDetails(): Partial<Job> {
+function getLinkedInJobDetails() {
     const link = window.location.href;
 
     if (!isLinkedIn) return { link }
@@ -23,16 +20,21 @@ export function getJobDetails(): Partial<Job> {
     }
 
     if (container) {
+        let company, location;
         const info = container.querySelector('.job-details-jobs-unified-top-card__primary-description-without-tagline')
-        const company = info.querySelector('a.app-aware-link')
-        const location = info.childNodes[3] ?? ''
+        if (info) {
+            company = info.querySelector('a.app-aware-link')
+            location = info.childNodes[3] ?? ''
+        }
+
         const details = document.querySelector('.jobs-description__container');
 
         return {
             id: '',
             img: img?.getAttribute('src') ?? '',
-            position: title?.textContent.trim() ?? '',
-            company_name: company.textContent,
+            // position: title?.textContent.trim() ?? '',
+            position: '',
+            company_name: company ? company.textContent : '',
             location: location ? location.textContent.split(' ')[1] : '',
             priority: 1,
             status: 0,
@@ -50,6 +52,13 @@ export function getJobDetails(): Partial<Job> {
         status: 0,
         source
     }
+}
+/**
+ * Get the important content from the web page
+ */
+export function getJobDetails(): JobInsertDTO {
+    // TODO: wait a couple of seconds before returning the job details
+    return getLinkedInJobDetails();
 }
 
 /**

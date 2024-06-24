@@ -3,7 +3,7 @@ import { useAuth } from '~utils/use-auth';
 
 type AuthGuardProps = React.HTMLAttributes<HTMLDivElement>
 
-export function AuthGuard({ children: Cmp }: AuthGuardProps) {
+export function AuthGuard({ children: Cmp, className, ...rest }: AuthGuardProps) {
     const { session, loading } = useAuth();
 
     if (loading) {
@@ -17,6 +17,6 @@ export function AuthGuard({ children: Cmp }: AuthGuardProps) {
     }
 
     return (
-        <section>{Cmp}</section>
+        <section className={className} {...rest}>{Cmp}</section>
     )
 }

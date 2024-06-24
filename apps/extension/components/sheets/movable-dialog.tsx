@@ -1,13 +1,11 @@
-import { Move } from 'lucide-react';
-import React, { useEffect, useRef } from 'react';
-import { Button } from 'ui';
-import { Sheet } from './sheet';
 import type { DialogProps } from '@radix-ui/react-dialog';
+import React, { useEffect, useRef } from 'react';
+import { Sheet } from './sheet';
 
 /**
  * Hook for moving dialog functionality
  */
-function useMovableDialog() {
+export function useMovableDialog() {
     const xOffsetRef = useRef(0);
     const yOffsetRef = useRef(0);
     const isMovingRef = useRef(false);
@@ -71,19 +69,17 @@ function useMovableDialog() {
     return { dialogRef, buttonRef }
 }
 
-type MovableDialogProps = DialogProps
+type MovableDialogProps = DialogProps & {
+    title?: string | React.ReactNode
+}
 
 /**
  * Movable dialog
  */
-export const MovableDialog = ({ children, ...rest }: MovableDialogProps) => {
-    const { buttonRef, dialogRef } = useMovableDialog()
-
+export const MovableDialog = ({ children, title, onOpenChange, ...rest }: MovableDialogProps) => {
     return (
-        <Sheet ref={dialogRef} {...rest}>
-            <Button size="sm" variant="ghost" ref={buttonRef}>
-                <Move />
-            </Button>
+        <Sheet {...rest}>
+
 
             {children}
         </Sheet>
