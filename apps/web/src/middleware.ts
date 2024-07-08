@@ -13,10 +13,10 @@ export async function middleware(request: NextRequest) {
     const { data: { user } } = await client.auth.getUser()
     const isProtectedRoute = protectedRoutes.some(x => x.startsWith(url.pathname))
 
-    if (isProd && !waitListRoutes.includes(url.pathname)) {
-        url.pathname = '/'
-        return NextResponse.redirect(url);
-    }
+    // if (isProd && !waitListRoutes.includes(url.pathname)) {
+    //     url.pathname = '/'
+    //     return NextResponse.redirect(url);
+    // }
 
     if (!user) {
         if (url.pathname === '/auth') {

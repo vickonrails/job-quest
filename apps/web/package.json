@@ -17,6 +17,7 @@
     "clean": "rm -rf node_modules .next .cache dist .turbo"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.34",
     "@hello-pangea/dnd": "^16.5.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
@@ -43,6 +44,8 @@
     "@types/qs": "^6.9.11",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
+    "@uiw/react-json-view": "2.0.0-alpha.24",
+    "ai": "^3.2.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "csv-parse": "^5.5.6",
@@ -67,16 +70,16 @@
     "ui": "workspace:*",
     "use-deep-compare-effect": "^1.8.1",
     "yup": "^1.4.0",
-    "zod": "^3.21.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@tanstack/eslint-plugin-query": "^4.32.5",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.0",
-    "@types/uuid": "^9.0.7",
     "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0"
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^9.0.7"
   },
   "ct3aMetadata": {
     "initVersion": "7.10.3"

@@ -1,8 +1,11 @@
 'use client'
 
-import { deleteJob } from '@/db/api/jobs.api';
+import { deleteJobQuery } from '@/db/queries/jobs.query';
+import { useJobs } from '@/hooks';
 import { useDeleteModal } from '@/hooks/useDeleteModal';
 import { useEditSheet } from '@/hooks/useEditModal';
+import { createClient } from '@/utils/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
@@ -30,8 +33,17 @@ const deleteTextWarning = `
     This action cannot be undone.
 `
 
-export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
+async function deleteJob(id: string) {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user?.id) throw new Error('userId not provided')
+    await deleteJobQuery(client, id, user.id)
+}
+
+export default function JobsKanbanContainer({ jobs: initialData }: { jobs: Job[] }) {
     const [isUpdating, setIsUpdating] = useState(false)
+    const queryClient = useQueryClient()
+    const { data } = useJobs({ initialData })
 
     const {
         showDeleteDialog,
@@ -42,8 +54,8 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
         loading: isDeleting
     } = useDeleteModal({
         onDelete: async (id: string) => {
-            const { success } = await deleteJob(id)
-            if (!success) throw new Error();
+            await deleteJob(id)
+            await queryClient.invalidateQueries(['jobs'])
         }
     })
 
@@ -66,7 +78,7 @@ export default function JobsKanbanContainer({ jobs }: { jobs: Job[] }) {
             <JobsKanban
                 openEditSheet={openEditSheet}
                 openDeleteDialog={showDeleteDialog}
-                jobs={jobs ?? []}
+                jobs={data?.jobs ?? []}
                 onUpdateStart={() => setIsUpdating(true)}
                 onUpdateEnd={() => setIsUpdating(false)}
             />
