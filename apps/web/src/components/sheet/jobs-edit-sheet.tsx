@@ -2,20 +2,26 @@
 
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint';
 import { useToast } from '@/components/toast/use-toast';
-import { updateJob } from '@/db/api/jobs.api';
 import { createClient } from '@/utils/supabase/client';
+import { type SupabaseClient } from '@supabase/supabase-js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
-import { Status_Lookup } from 'shared';
+import { Status_Lookup, type Database } from 'shared';
 import { Button } from 'ui/button';
 import { Input } from 'ui/input';
 import { Label } from 'ui/label';
 import { Rating } from 'ui/rating';
 import { Select } from 'ui/select';
+import { v4 as uuid } from 'uuid';
 import { Sheet, type SheetProps } from './sheet';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
+}
+
+async function updateJob(client: SupabaseClient<Database>, job: Job, userId: string) {
+    return await client.from('jobs').upsert({ ...job, user_id: userId });
 }
 
 /**
@@ -24,30 +30,57 @@ interface JobEditSheetProps<T> extends SheetProps {
 // TODO: unify the shadcn ui & personal input components
 export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const client = createClient();
+    const queryClient = useQueryClient()
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
     const { handleSubmit, reset, register, control, formState: { errors, isSubmitting } } = useForm({ defaultValues: entity })
     const { toast } = useToast()
 
-    const onSubmit = async (job: Job) => {
-        const { data: { user } } = await client.auth.getUser()
-        try {
-            if (!user?.id) throw new Error('Not Authenticated')
-            const result = await updateJob(job, user.id)
-            // TODO: better error message?
-            if (!result.success) throw new Error('')
+    const updateJobMutation = useMutation({
+        mutationFn: async (job: Job) => {
+            const { data: { user } } = await client.auth.getUser()
+            if (!user) return
+
+            const isNew = !Boolean(job.id)
+            if (!job.id) {
+                job.id = uuid();
+            }
+
+            if (isNew) {
+                const { data: count } = await client
+                    .from('jobs')
+                    .select('*')
+                    .order('order_column', { ascending: false })
+                    .eq('status', job.status ?? 0)
+                    .eq('user_id', user.id)
+                    .limit(1).single();
+
+                const maxColumn = !count ? 0 : count?.order_column;
+                job.order_column = maxColumn ? maxColumn + 10 : 10;
+            }
+
+            const { error } = await updateJob(client, job, user.id)
+            if (error) throw error
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['jobs'] })
+            props?.onOpenChange?.(false)
             toast({
                 variant: 'success',
                 title: 'Job updated',
             })
             reset()
-            props?.onOpenChange?.(false)
-        } catch (err) {
+        },
+        onError() {
             toast({
                 variant: 'destructive',
                 title: 'Error updating job',
             })
-        }
+        },
+    })
+
+    const onSubmit = async (job: Job) => {
+        await updateJobMutation.mutateAsync(job)
     }
 
     const initialValues = { ...entity }

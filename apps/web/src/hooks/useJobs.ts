@@ -14,10 +14,10 @@ type JobsResponse = {
 // also research possible ways to add react query in here too
 // TODO: write this hook to handle all querying info - search, pagination, ordering, etc
 export function useJobs(options?: JobFetchOptions): UseQueryResult<JobsResponse> {
+    const initialJobs = options?.initialData ?? []
     const client = createClient()
-    return useQuery({
-        queryKey: ['jobs', options?.jobId ?? ''],
-        queryFn: () => getJobs(client, options)
-    })
-
+    return useQuery(['jobs'],
+        () => getJobs(client, options),
+        { initialData: { jobs: initialJobs, count: initialJobs.length } }
+    )
 }

@@ -139,6 +139,7 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
                             loading={uploading}
                             onFilePicked={onFilePicked}
                             variant="outline"
+                            supportedFormats={['.pdf']}
                         >
                             Select Resume
                         </UploadButton>
