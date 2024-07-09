@@ -3,6 +3,8 @@
 import NoteForm from '@/components/notes/note-form';
 import NotesList from '@/components/notes/note-list';
 import { JobEditSheet } from '@/components/sheet/jobs-edit-sheet';
+import { useJobs } from '@/hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
 import { useEditSheet } from 'src/hooks/useEditModal';
 import { CoverLetterSection } from './cover-letter-section';
@@ -12,27 +14,35 @@ import { ResumeSection } from './resume-section';
 
 export const JobDetails = ({ job }: { job: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
-    if (!job) return;
+    const queryClient = useQueryClient()
+    const { data } = useJobs({ initialData: [job] })
+    const jobDetails = data?.jobs[0];
+    if (!jobDetails) return;
+
+    const invalidateJobDetails = async () => {
+        await queryClient.invalidateQueries({ queryKey: [`jobs_${job.id}`] })
+    }
 
     return (
         <>
             <div className="flex gap-4">
                 <div className="flex-2 grow-0 basis-2/3">
-                    <Header job={job} onEditClick={showEditSheet} />
-                    <JobDescription job={job} />
+                    <Header job={jobDetails} onEditClick={showEditSheet} />
+                    <JobDescription job={jobDetails} />
                 </div>
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3 sticky top-0">
-                    <ResumeSection job={job} />
-                    <CoverLetterSection jobId={job.id} />
+                    <ResumeSection job={jobDetails} />
+                    <CoverLetterSection jobId={jobDetails.id} />
                     <section className="flex flex-col gap-2">
                         <h2>Notes</h2>
-                        <NoteForm job={job} />
-                        <NotesList job={job} />
+                        <NoteForm job={jobDetails} />
+                        <NotesList job={jobDetails} />
                     </section>
                 </div>
             </div>
             {editSheetOpen && (
                 <JobEditSheet
+                    onSuccess={invalidateJobDetails}
                     entity={selectedEntity}
                     open={editSheetOpen}
                     title="Edit Job"

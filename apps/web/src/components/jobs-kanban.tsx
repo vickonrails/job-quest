@@ -62,6 +62,10 @@ export default function JobsKanbanContainer({ jobs: initialData }: { jobs: Job[]
     const { isOpen: editSheetOpen, showEditSheet, selectedEntity, closeEditSheet } = useEditSheet<Job>({})
     const openEditSheet = (job?: Job) => { showEditSheet(job) }
 
+    const onEditSuccess = async () => {
+        await queryClient.invalidateQueries({ queryKey: ['jobs'] })
+    }
+
     return (
         <>
             <section className="flex justify-between items-center mb-3 px-4">
@@ -84,6 +88,7 @@ export default function JobsKanbanContainer({ jobs: initialData }: { jobs: Job[]
             />
             {editSheetOpen && (
                 <JobEditSheet
+                    onSuccess={onEditSuccess}
                     icons={<FullViewButton job={selectedEntity ?? undefined} />}
                     entity={selectedEntity}
                     open={editSheetOpen}

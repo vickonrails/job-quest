@@ -7,9 +7,9 @@ export default function UploadResumePage() {
             <section className="max-w-xl mx-auto mt-20 w-full">
                 <UploadCard
                     maxSize={5}
-                    supportedFormats={['pdf']}
+                    supportedFormats={['.pdf']}
                     title="Setup your Profile"
-                    Content={<ResumeUploadCardContent supportedFormats={['pdf']} />}
+                    Content={<ResumeUploadCardContent supportedFormats={['.pdf']} />}
                 />
             </section>
         </main>

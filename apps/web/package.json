@@ -11,6 +11,7 @@
     "start": "next start",
     "types:gen": "npx supabase gen types typescript --local > ../../packages/shared/src/types/database.types.ts",
     "db:seed": "bun run ./src/utils/seed.ts",
+    "db:reset": "pnpm dlx supabase db reset",
     "test:coverage": "vitest --coverage",
     "migration:add": "pnpm dlx supabase db diff -f",
     "postbuild": "pnpm dlx tailwindcss -i src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",

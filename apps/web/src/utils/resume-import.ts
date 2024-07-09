@@ -3,7 +3,7 @@ import { resumeSchema } from './resume-schema';
 
 export type ProfileSetupType = z.infer<typeof resumeSchema>;
 
-export async function extractResumeData(file: ArrayBuffer, filename: string, onMessage: (text: ProfileSetupType) => void) {
+export async function extractResumeData(file: ArrayBuffer, filename: string, onMessage: (text: ProfileSetupType) => void, onStreamEnd: () => void) {
     const formData = new FormData();
     formData.append('file', new Blob([file]), filename);
     formData.append('filename', filename);
@@ -25,6 +25,8 @@ export async function extractResumeData(file: ArrayBuffer, filename: string, onM
         const objects = chunk.split('\n').filter(Boolean).map(x => JSON.parse(x))[0];
         onMessage(objects)
     }
+
+    onStreamEnd();
 }
 
 export function validateProfile(object: ProfileSetupType) {

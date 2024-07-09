@@ -69,7 +69,7 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
         setFilename(filename)
         setContent(null)
         try {
-            await extractResumeData(file, filename, handleMessage)
+            await extractResumeData(file, filename, handleMessage, () => setUploading(false))
         } catch (error) {
             toast({
                 title: 'An error occurred',
@@ -117,7 +117,7 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
                         </div>
                         <section className="gap-2 flex justify-end pt-3">
                             <Button onClick={handleCancelClick} variant="ghost" size="sm">Cancel</Button>
-                            <Button loading={updateProfileMutation.isLoading} size="sm" onClick={updateProfile}>Proceed</Button>
+                            <Button loading={updateProfileMutation.isLoading} disabled={uploading} size="sm" onClick={updateProfile}>Proceed</Button>
                         </section>
                     </footer>
                 </section>

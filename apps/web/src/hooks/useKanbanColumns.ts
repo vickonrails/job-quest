@@ -29,7 +29,6 @@ export function useKanbanColumns(jobs: KanbanColumn[]) {
         }
     }, [jobs, updateMutation.isLoading])
 
-
     const updateMovedItem = async (movingItemData: ReturnType<typeof getMovingItemData>, involvedColumns: NonNullable<InvolvedColumns>) => {
         const { start, finish } = involvedColumns
         const initialColumns = columns

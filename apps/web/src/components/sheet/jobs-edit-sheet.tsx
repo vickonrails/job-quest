@@ -18,6 +18,7 @@ import { Sheet, type SheetProps } from './sheet';
 
 interface JobEditSheetProps<T> extends SheetProps {
     entity: T
+    onSuccess?: () => Promise<void>
 }
 
 async function updateJob(client: SupabaseClient<Database>, job: Job, userId: string) {
@@ -30,23 +31,33 @@ async function updateJob(client: SupabaseClient<Database>, job: Job, userId: str
 // TODO: unify the shadcn ui & personal input components
 export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const client = createClient();
-    const queryClient = useQueryClient()
+    // const queryClient = useQueryClient()
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
     const { handleSubmit, reset, register, control, formState: { errors, isSubmitting } } = useForm({ defaultValues: entity })
     const { toast } = useToast()
 
+    // TODO: move mutation to outside modal
     const updateJobMutation = useMutation({
         mutationFn: async (job: Job) => {
+            const initialJob = props.entity;
+
             const { data: { user } } = await client.auth.getUser()
             if (!user) return
+
+            let movingColumns;
 
             const isNew = !Boolean(job.id)
             if (!job.id) {
                 job.id = uuid();
             }
 
-            if (isNew) {
+            if (initialJob) {
+                // @ts-ignore
+                movingColumns = props.entity.status !== job.status;
+            }
+
+            if (isNew || movingColumns) {
                 const { data: count } = await client
                     .from('jobs')
                     .select('*')
@@ -58,12 +69,12 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
                 const maxColumn = !count ? 0 : count?.order_column;
                 job.order_column = maxColumn ? maxColumn + 10 : 10;
             }
-
             const { error } = await updateJob(client, job, user.id)
             if (error) throw error
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['jobs'] })
+            props.onSuccess && await props?.onSuccess()
+            // await queryClient.invalidateQueries({ queryKey: ['jobs'] })
             props?.onOpenChange?.(false)
             toast({
                 variant: 'success',
