@@ -4,8 +4,10 @@ import { JobsSummaryCards } from '@/components/dashboard/welcome-banner';
 import { ResumePreviewCard } from '@/components/resume-card';
 import { getSummaryCardData } from '@/db/api/jobs.api';
 import { type Resume } from 'lib/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default async function DashboardPage() {
+    noStore()
     const resumes = await getResumes()
     const data = await getSummaryCardData()
 

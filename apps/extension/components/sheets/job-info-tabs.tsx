@@ -57,7 +57,6 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
 
 /** basic information */
 function BasicInfo({ form, job }: { form: Form, job: JobInsertDTO }) {
-    console.log(form.getValues(), job)
 
     const { control, register } = form
     return (

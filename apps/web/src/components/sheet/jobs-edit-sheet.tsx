@@ -31,7 +31,6 @@ async function updateJob(client: SupabaseClient<Database>, job: Job, userId: str
 // TODO: unify the shadcn ui & personal input components
 export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
     const client = createClient();
-    // const queryClient = useQueryClient()
     const entity = props.entity as Job;
     const statusOptions = Status_Lookup.map((x, idx) => ({ value: String(idx), label: x }))
     const { handleSubmit, reset, register, control, formState: { errors, isSubmitting } } = useForm({ defaultValues: entity })
@@ -53,8 +52,8 @@ export function JobEditSheet<T>(props: JobEditSheetProps<T>) {
             }
 
             if (initialJob) {
-                // @ts-ignore
-                movingColumns = props.entity.status !== job.status;
+                const entity = props.entity as { status: number }
+                movingColumns = entity.status !== job.status;
             }
 
             if (isNew || movingColumns) {

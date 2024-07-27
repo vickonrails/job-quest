@@ -31,7 +31,7 @@ function filteredProjects(resumeId: string, education: Project[]) {
     return education.filter(x => x.resume_id === resumeId)
 }
 
-interface ResumeFormBuilderProps {
+export interface ResumeFormBuilderProps {
     resume: Resume
     workExperience: WorkExperience[]
     education: Education[]
@@ -42,8 +42,9 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
     const router = useRouter();
     const basicInfoForm = useForm<{ resume: Resume }>({ defaultValues: { resume } });
     const workExperienceForm = useForm<{ workExperience: WorkExperience[] }>({ defaultValues: { workExperience: filteredResumeExperience(resume?.id, workExperience) } });
-    const educationForm = useForm<{ education: Education[] }>({ defaultValues: { education: filteredEducation(resume.id, education) } });
-    const projectsForm = useForm<{ projects: Project[] }>({ defaultValues: { projects: filteredProjects(resume.id, projects) } });
+    const educationForm = useForm<{ education: Education[] }>({ defaultValues: { education: filteredEducation(resume?.id, education) } });
+    const projectsForm = useForm<{ projects: Project[] }>({ defaultValues: { projects: filteredProjects(resume?.id, projects) } })
+
     const { showDeleteDialog, isOpen, handleDelete, setIsOpen, onCancel } = useDeleteModal({
         onDelete: async (id) => {
             try {

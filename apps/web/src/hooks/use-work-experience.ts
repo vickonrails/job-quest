@@ -29,7 +29,7 @@ export function useProfileWorkExperience({ workExperience }: { workExperience: W
 /**
  * @returns default experience object
  */
-export function getDefaultExperience({ userId }: { userId?: string }) {
+export function getDefaultExperience({ userId, resumeId }: { userId?: string, resumeId?: string }) {
     const id = uuid()
     const experience = {
         id,
@@ -38,6 +38,7 @@ export function getDefaultExperience({ userId }: { userId?: string }) {
         location: '',
         user_id: userId,
         highlights: '',
+        resume_id: resumeId
     } as unknown as WorkExperience
 
     return experience

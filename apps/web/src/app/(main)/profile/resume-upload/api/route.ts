@@ -37,7 +37,7 @@ function getInstruction(resumeText: string) {
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
               "still_working_here": false,
-              "highlights": ""
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>"
           }],
           "education": [{
               "start_date": YYYY-MM-DD or null,
@@ -47,10 +47,10 @@ function getInstruction(resumeText: string) {
               "institution": "",
               "still_studying_here": boolean,
               "location": "",
-              "highlights": ""
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>"
           }],
           "projects": [{
-            "highlights": "", // description of project
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>",
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
               "skills": [{"label": ""}],
