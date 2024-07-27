@@ -40,13 +40,16 @@
     "@types/chrome": "0.0.243",
     "@types/node": "20.5.0",
     "prettier": "3.0.2",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0"
   },
   "manifest": {
     "key": "$CRX_KEY",
     "permissions": [
       "tabs",
-      "identity"
+      "identity",
+      "webNavigation"
     ],
     "web_accessible_resources": [
       {

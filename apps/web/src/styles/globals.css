@@ -62,4 +62,14 @@
   .tt-active {
     @apply bg-accent-foreground text-accent-foreground;
   }
+
+  .highlights-description { 
+    @apply text-xs;
+  }
+  .highlights-description ul {
+    @apply list-disc;
+  }
+  .highlights-description li {
+    @apply ml-4;
+  }
 }

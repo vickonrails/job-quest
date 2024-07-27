@@ -43,11 +43,11 @@ export default function Waitlist() {
 
     return (
         <AuthCard >
-            <div className="w-full max-w-sm mx-auto">
+            <div className="w-full max-w-sm mx-auto list">
                 <form className="flex flex-col gap-3 w-full" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
                         <h1 className="mb-3 text-3xl font-medium">Join the Waitlist!</h1>
-                        <p className="text-base text-muted-foreground">Get an invite, 1 month free and help shape new features.</p>
+                        <p className="text-base text-muted-foreground">Get an invite and help shape new features.</p>
                     </div>
 
                     <Input

@@ -71,7 +71,7 @@ export function ProfileWorkExperience({ workExperience }: { workExperience: Work
                     defaultOpen
                 />
                 <SectionFooter
-                    addText="Add Education"
+                    addText="Add Experience"
                     saveDisabled={fields.length <= 0 || !form.formState.isValid}
                     isSubmitting={form.formState.isSubmitting}
                     onAppendClick={() => append(getDefaultExperience({ userId: '' }))}

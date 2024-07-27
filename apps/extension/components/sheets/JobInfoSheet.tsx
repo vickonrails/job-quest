@@ -1,33 +1,23 @@
 import { sendToBackground } from '@plasmohq/messaging';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useMessage } from '@plasmohq/messaging/hook';
+import { Grip } from 'lucide-react';
+import { useState } from 'react';
 import { Banner } from 'ui';
 import { AuthGuard } from '~components/auth-guard';
 import { isLinkedIn } from '~contents/linkedin';
 import { useJob } from '~hooks/useJob';
-import type { Job, JobInsertDTO } from '~types';
-import { getJobUrl } from '~utils/get-job-content';
+import type { Job } from '~types';
 import { JobInfoTabs } from './job-info-tabs';
-import { MovableDialog } from './movable-dialog';
-import { type SheetProps } from './sheet';
+import { useMovableDialog } from './movable-dialog';
+import { Sheet, type SheetProps } from './sheet';
 
 export interface JobInfoSheetProps extends SheetProps {
-    onSubmit: () => void
-    jobInfo: Partial<Job>
-}
-
-const getDefaultJobData = (jobInfo: Partial<Job>): JobInsertDTO => {
-    return {
-        ...jobInfo,
-        user_id: '',
-        position: jobInfo.position ?? '',
-        location: jobInfo.location ?? '',
-        company_name: jobInfo.company_name ?? '',
-        description: jobInfo.description ?? '',
-        link: jobInfo.link ?? '',
-        company_site: jobInfo.company_site ?? '',
-        status: 0
-    }
+    onURLChange: (url: string) => void
+    url: string
+    // onSubmit: () => void
+    // job: JobInsertDTO
+    // isLoading?: boolean
+    // setJob: (job: Job) => void
 }
 
 interface AddJobResponse {
@@ -37,27 +27,20 @@ interface AddJobResponse {
 }
 
 // TODO: improve this to just take the job object
-export function JobInfoSheet(props: JobInfoSheetProps) {
-    const { jobInfo } = props
-    const url = getJobUrl()
-    const { isLoading, job, refresh } = useJob(url, {
-        defaultData: getDefaultJobData(jobInfo)
-    })
-    const form = useForm<JobInsertDTO>({
-        defaultValues: {
-            id: job ? job.id : '',
-            ...props.jobInfo
+export function JobInfoSheet({ ...props }: JobInfoSheetProps) {
+    const { job, isLoading, setJob, form } = useJob(props.url)
+
+    useMessage((req, res) => {
+        if (req.name === 'refresh-grabber') {
+            props.onURLChange(window.location.href)
         }
     })
+
+    const { buttonRef, dialogRef } = useMovableDialog()
 
     const [showBanner, setShowBanner] = useState({
         show: false, error: false
     })
-
-    useEffect(() => {
-        if (!job) return
-        form.reset({ ...job })
-    }, [job, form])
 
     const onSubmit = async ({ img, ...data }: Job) => {
         try {
@@ -75,7 +58,7 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
             }
 
             if (res.success) {
-                refresh({ ...res.job, img });
+                setJob({ ...res.job, img });
                 form.reset({ notes: '', ...res.job });
                 setShowBanner({ show: true, error: false })
             }
@@ -88,12 +71,15 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
     const { show, error } = showBanner
 
     return (
-        <MovableDialog open={true} {...props}>
-            <AuthGuard>
+        <Sheet ref={dialogRef} {...props}>
+            <button className="absolute -left-12 shadow-sm border bg-white p-2 cursor-move" ref={buttonRef}>
+                <Grip size={18} />
+            </button>
+            <AuthGuard className="overflow-auto h-full">
                 <form onSubmit={form.handleSubmit(onSubmit)} className="text-accent-foreground">
                     <div className="tiptap hidden"></div>
                     {show && (
-                        <Banner className="flex my-5 gap-2 text-sm" variant={error ? 'error' : 'success'}>
+                        <Banner className="flex m-2 mt-4 gap-2 text-sm" variant={error ? 'error' : 'success'}>
                             {error ? 'Could not add Job' : 'Successful'}
                         </Banner>
                     )}
@@ -104,6 +90,6 @@ export function JobInfoSheet(props: JobInfoSheetProps) {
                     />
                 </form>
             </AuthGuard>
-        </MovableDialog>
+        </Sheet>
     )
 }

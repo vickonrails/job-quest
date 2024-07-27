@@ -5,6 +5,7 @@ const config = {
     content: [
         '../../packages/resume-templates/src/**/*.tsx',
     ],
+    safeList: ['highlights-description']
 }
 
 export default config

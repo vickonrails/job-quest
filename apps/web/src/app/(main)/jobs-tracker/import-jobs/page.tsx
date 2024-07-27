@@ -5,6 +5,7 @@ import { useToast } from '@/components/toast/use-toast';
 import { JobsImportContent } from '@/components/upload/jobs-import';
 import { UploadCard, type SupportedFormats } from '@/components/upload/upload-card';
 import { createClient } from '@/utils/supabase/client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -25,33 +26,48 @@ const columns: Column<JobImportColumns> = [
     { header: 'Rating', type: 'rating', renderValue: (item) => ({ rating: Number(item.priority) ?? 0 }) },
 ]
 
-const supportedFormats: SupportedFormats[] = ['csv']
+const supportedFormats: SupportedFormats[] = ['.csv']
 
 export default function ImportJobs() {
-    const [isImporting, setIsImporting] = useState(false)
+    const client = createClient()
+    const queryClient = useQueryClient()
     const [jobs, setJobs] = useState<JobImportColumns[]>([])
     const { toast } = useToast()
     const router = useRouter()
 
-    const handleImport = async () => {
-        try {
-            setIsImporting(true)
-            const client = createClient()
-            const { data, error } = await client.from('jobs').insert(jobs as Job[]).select()
-            if (error || !data) throw error
+    const importJobsMutation = useMutation({
+        mutationFn: async (jobs: JobImportColumns[]) => {
+            const { data: maxColumns, error: maxColumnErrors } = await client.rpc('get_max_order_by_column')
+            if (maxColumnErrors) throw maxColumnErrors
+            const maxOrderMap = new Map(maxColumns?.map(item => [item.column_id, item.max_order]))
+            const jobsToInsert = jobs.map(job => {
+                const status = job.status || 0
+                const currentMax = maxOrderMap.get(status) || 0
+                maxOrderMap.set(status, currentMax + 10)
+                return { ...job, order_column: currentMax + 10 }
+            })
+
+            const { error } = await client.from('jobs').insert(jobsToInsert as Job[]).select()
+            if (error) throw error
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['jobs'] })
             toast({
                 title: 'Success',
                 description: 'Jobs imported successfully'
             })
             router.push('/jobs-tracker')
-        } catch (err) {
+        },
+        onError() {
             toast({
                 title: 'Error',
                 description: 'There was an error in one or more columns'
             })
-        } finally {
-            setIsImporting(false)
-        }
+        },
+    })
+
+    const handleImport = async () => {
+        await importJobsMutation.mutateAsync(jobs)
     }
 
     if (jobs.length > 0) {
@@ -61,7 +77,7 @@ export default function ImportJobs() {
                     <h1 className="my-4 font-bold uppercase flex-1">Importing {jobs.length} jobs</h1>
                     <Button
                         loadingContent="Importing"
-                        loading={isImporting}
+                        loading={importJobsMutation.isLoading}
                         onClick={handleImport}
                     >
                         <span>Proceed</span>

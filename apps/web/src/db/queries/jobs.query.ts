@@ -1,6 +1,6 @@
 import { type Client } from '@/queries';
 import { type Job, type Resume, type ResumeInsert } from 'lib/types';
-import { getUserProfile } from '../api/profile.api';
+import { fetchUserProfileQuery } from './auth.query';
 
 type SortDirection = 'asc' | 'desc'
 
@@ -32,7 +32,7 @@ export async function fetchResume(client: Client, options: { userId: string, res
     resume = resumeFromDb.data
 
     if (!resume) {
-        const { data: userProfile } = await getUserProfile()
+        const { data: userProfile } = await fetchUserProfileQuery(client, options.userId)
         if (!userProfile) return;
         const resumeToCreate: ResumeInsert = {
             title: userProfile?.title ?? '',
@@ -91,4 +91,8 @@ export async function fetchCoverLetter(client: Client, userId: string, jobId: st
     }
 
     return data
+}
+
+export function deleteJobQuery(client: Client, jobId: string, userId: string) {
+    return client.from('jobs').delete().eq('id', jobId).eq('user_id', userId)
 }

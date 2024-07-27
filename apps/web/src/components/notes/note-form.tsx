@@ -36,7 +36,7 @@ function NoteForm({ job }: { job: Job }) {
                 user_id: user.id,
                 text: note,
                 job_id: job.id,
-                status: job.status
+                status: job.status || 0
             })
             setNote('');
             toast({

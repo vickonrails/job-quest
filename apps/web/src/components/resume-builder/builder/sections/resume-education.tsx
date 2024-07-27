@@ -2,13 +2,15 @@ import { DeleteDialog } from '@/components/delete-dialog';
 import { EducationForm } from '@/components/resume-builder/setup/education/education-form-item';
 import { useToast } from '@/components/toast/use-toast';
 import { deleteEducation } from '@/db/api/actions/education.action';
-import { updateEducation } from '@/db/api/actions/resume.action';
 import { debounce } from '@/utils/debounce';
 import { createClient } from '@/utils/supabase/client';
+import { type SupabaseClient } from '@supabase/supabase-js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Education } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
+import { type Database } from 'shared';
 import { getDefaultEducation } from 'src/hooks/use-profile-education';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import useDeepCompareEffect from 'use-deep-compare-effect';
@@ -20,12 +22,19 @@ interface EducationSectionProps {
     templates: Education[]
     userId: string
 }
+
+async function updateEducationQuery(client: SupabaseClient<Database>, education: Education[]) {
+    return client.from('education').upsert(education).select()
+}
+
 /**
  * Education section in resume builder
 */
 export function EducationSection({ form, templates, userId }: EducationSectionProps) {
     const { toast } = useToast()
     const params = useParams() as { id: string }
+    const client = createClient()
+    const queryClient = useQueryClient()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, remove, append } = useFieldArray<{ education: Education[] }, 'education', '_id'>({
         control: form.control,
@@ -39,15 +48,20 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
         defaultValue: form.getValues('education')
     });
 
-    const saveFn = useCallback(async ({ education }: { education: Education[] }) => {
-        const { success, error } = await updateEducation(education, params.id)
-        if (!success && error) {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurred'
-            })
-        }
+    const updateMutation = useMutation({
+        mutationFn: async (education: Education[]) => {
+            const { data } = await updateEducationQuery(client, education)
+            return data
+        },
+        onSuccess(data) {
+            const newValue = data ? [...data, ...templates] : [...templates]
+            queryClient.setQueryData([`resume_${params.id}`, 'education'], newValue)
+        },
+    })
 
+    const saveFn = useCallback(async ({ education }: { education: Education[] }) => {
+        await updateMutation.mutateAsync(education)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id, toast])
 
     const {
@@ -73,7 +87,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
         remove(idxToRemove);
     }
 
-    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 3000)
+    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 1500)
     const debouncedSubmit = useCallback(debounced, [form.handleSubmit, saveFn])
 
     useDeepCompareEffect(() => {
@@ -83,7 +97,7 @@ export function EducationSection({ form, templates, userId }: EducationSectionPr
     }, [watchedData, debouncedSubmit])
 
     const handleAddBlank = () => {
-        append(getDefaultEducation({ userId }))
+        append(getDefaultEducation({ userId, resume_id: params.id }))
     }
 
     const handleAddItem = (education: Education) => {

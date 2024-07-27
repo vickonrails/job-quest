@@ -1,20 +1,16 @@
 import { createClient } from '@/utils/supabase/server';
-import { type SetupProfile } from 'lib/types';
-import OpenAI from 'openai';
-import { type ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import { resumeSchema } from '@/utils/resume-schema';
+import { openai } from '@ai-sdk/openai';
+import { type CoreMessage, streamObject } from 'ai';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-})
-
 function getInstruction(resumeText: string) {
-    const system: ChatCompletionMessageParam = {
+    const system: CoreMessage = {
         role: 'system',
         content: 'You are a highly accurate and detail-oriented assistant that extracts structured data from resumes. Follow the provided JSON format strictly. If any field is missing in the resume, leave it empty or use default values like empty strings or false for boolean values.'
     };
 
-    const user: ChatCompletionMessageParam = {
+    const user: CoreMessage = {
         role: 'user',
         content: `Extract the following structured JSON data from the provided resume. Ensure that all fields are accurately filled based on the available information. 
         If certain details are not present, leave them as empty strings or default values. 
@@ -41,7 +37,7 @@ function getInstruction(resumeText: string) {
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
               "still_working_here": false,
-              "highlights": ""
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>"
           }],
           "education": [{
               "start_date": YYYY-MM-DD or null,
@@ -51,10 +47,10 @@ function getInstruction(resumeText: string) {
               "institution": "",
               "still_studying_here": boolean,
               "location": "",
-              "highlights": ""
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>"
           }],
           "projects": [{
-            "highlights": "", // description of project
+              "highlights": "<ul><li>Highlights into an unordered list</li></ul>",
               "end_date": YYYY-MM-DD or null,
               "start_date": YYYY-MM-DD or null,
               "skills": [{"label": ""}],
@@ -83,36 +79,35 @@ export async function POST(request: Request) {
         const buffer = Buffer.from(arrayBuffer);
         const { text } = await parsePDF(buffer)
         const instructions = getInstruction(text)
-        const completion = await openai.chat.completions.create({
-            model: 'gpt-4-1106-preview',
-            messages: instructions
+
+        const { partialObjectStream } = await streamObject({
+            model: openai('gpt-4-turbo'),
+            messages: [...instructions],
+            schema: resumeSchema
         });
-        const response = completion.choices[0]?.message.content
-        if (!response) throw new Error('No response from GPT')
 
-        const gptResponse: SetupProfile = JSON.parse(response)
-        const { profile, work_experience, projects, education } = gptResponse
+        const encoder = new TextEncoder();
 
-        if (profile && work_experience && projects) {
-            const enrichedProjects = projects.map((project) => ({ ...project, user_id: data.user.id }))
-            const enrichedExperience = work_experience.map((we) => ({ ...we, user_id: data.user.id }))
-            const enrichedEducation = education.map((edu) => ({ ...edu, user_id: data.user.id }))
+        const stream = new ReadableStream({
+            async start(controller) {
+                for await (const partialObject of partialObjectStream) {
+                    const encodedChunk = encoder.encode(JSON.stringify(partialObject) + '\n');
+                    controller.enqueue(encodedChunk);
+                }
+                controller.close();
+            },
+        });
 
-            const { error } = await client.rpc('setup_profile', {
-                profile,
-                work_experience: enrichedExperience,
-                projects: enrichedProjects,
-                education: enrichedEducation,
-                user_id_param: data.user.id
-            })
+        return new Response(stream, {
+            headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+            },
+        });
+    }
 
-            if (error) throw new Error(error.message)
-            await client.from('profiles').update({ is_profile_setup: true }).eq('id', data.user.id)
-        }
-
-        return Response.json({ success: true })
-
-    } catch (e) {
+    catch (e) {
         if (e instanceof Error) {
             return Response.json({ success: false, error: e.message }, { status: 501 })
         }

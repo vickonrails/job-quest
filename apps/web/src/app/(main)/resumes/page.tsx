@@ -1,8 +1,10 @@
 import NewButton from '@/components/resume-builder/new-button';
 import { ResumePreviewCard } from '@/components/resume-card';
 import { getResumes } from '@/api/resume.api';
+import { unstable_noStore as noStore} from 'next/cache';
 
 export default async function ResumePage() {
+    noStore()
     const resumes = await getResumes();
     return (
         <section className="p-6 overflow-auto">

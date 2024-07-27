@@ -21,7 +21,8 @@ export function KanbanCardDropdownMenu({ onQuickViewClick, onDeleteClick, onDeta
                 <DropdownMenuItem onClick={onDetailedViewClick}>Detailed View</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className="text-destructive-foreground flex-row gap-1 items-center"
+                    variant="destructive"
+                    className="flex-row gap-1 items-center"
                     onClick={onDeleteClick}
                 >
                     <Trash size={16} />

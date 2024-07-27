@@ -32,7 +32,7 @@ const SheetOverlay = React.forwardRef<
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
-  'fixed z-50 gap-4 bg-white p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300 border',
+  'fixed z-50 gap-4 bg-white shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300 border',
   {
     variants: {
       side: {
@@ -41,7 +41,7 @@ const sheetVariants = cva(
           'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
         left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
         right:
-          'right-4 top-[120px] bottom-[60px] max-h-[600px] h-[calc(100% - 180px)] w-2/5 rounded-md data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right max-w-sm overflow-y-auto',
+          'right-4 top-[120px] bottom-[60px] max-h-[600px] h-[calc(100% - 180px)] w-2/5 rounded-md data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right max-w-sm overflow-y-visible',
       },
     },
     defaultVariants: {
@@ -103,7 +103,7 @@ const SheetFooter = ({
 )
 SheetFooter.displayName = 'SheetFooter'
 
-const SheetTitle = React.forwardRef<
+export const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & { onClose: () => void }
 >(({ className, onClose, ...props }, ref) => (
@@ -134,7 +134,6 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export type SheetProps = SheetPrimitive.DialogProps & {
   title?: string | React.ReactNode
-  // ref?: React.ElementRef<typeof SheetPrimitive.Content>
 }
 
 export const Sheet = React.forwardRef<
@@ -144,7 +143,12 @@ export const Sheet = React.forwardRef<
   return (
     <SheetRoot open={open} {...rest}>
       <SheetContent ref={ref}>
+        <Button size="icon" variant="ghost" onClick={() => onOpenChange(false)} className="absolute top-2 right-2">
+          <X className="text-muted-foreground" size={14} />
+        </Button>
+
         {title && <SheetTitle className="mb-3" onClose={() => onOpenChange(false)}>{title}</SheetTitle>}
+
         {children}
       </SheetContent>
     </SheetRoot>

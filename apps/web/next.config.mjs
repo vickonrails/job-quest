@@ -25,11 +25,6 @@ const config = {
       'logo.clearbit.com',
       'lh3.googleusercontent.com'
     ]
-  },
-  logging: {
-    fetches: {
-      fullUrl: true
-    }
   }
 };
 export default config;

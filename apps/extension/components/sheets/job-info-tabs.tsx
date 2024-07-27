@@ -3,7 +3,6 @@ import { Controller, type UseFormReturn } from 'react-hook-form';
 import { cn } from 'shared';
 import { Button, Rating, Spinner, Textarea } from 'ui';
 import Tiptap from '~components/tiptap';
-import { isLinkedIn } from '~contents/linkedin';
 import type { JobInsertDTO } from '~types';
 import { PopupHeader } from './popup-header';
 
@@ -26,15 +25,16 @@ function Trigger({ className, active, ...props }: RadixTabs.TabsTriggerProps & {
 
 export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
     const { formState: { isSubmitting } } = form
+
     const alreadyAdded = job ? job.id : ''
     return (
         <RadixTabs.Root defaultValue="info">
-            <RadixTabs.List className="flex flex-row gap-3 border-b mb-4">
+            <RadixTabs.List className="flex flex-row gap-3 border-b mb-4 px-4 pt-4 pb-2">
                 <Trigger value="info">Info</Trigger>
                 <Trigger value="description">Description</Trigger>
             </RadixTabs.List>
             {fetchingJob ? <SpinnerContainer /> : (
-                <>
+                <section className="px-4">
                     <RadixTabs.Content value="info">
                         <BasicInfo form={form} job={job} />
                     </RadixTabs.Content>
@@ -47,9 +47,9 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
                             {alreadyAdded ? 'Update Job' : 'Add Job'}
                         </Button>
 
-                        {alreadyAdded && <a className="text-center text-sm text-primary underline block" target="_blank" rel="noreferrer noopener" href={`http://127.0.0.1:3000/jobs/${job.id}`}>See in Job Quest</a>}
+                        {alreadyAdded && <a className="text-center text-sm text-primary underline block" target="_blank" rel="noreferrer noopener" href={`http://localhost:3000/jobs-tracker/${job.id}`}>See in Job Quest</a>}
                     </div>
-                </>
+                </section>
             )}
         </RadixTabs.Root>
     )
@@ -57,6 +57,7 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
 
 /** basic information */
 function BasicInfo({ form, job }: { form: Form, job: JobInsertDTO }) {
+
     const { control, register } = form
     return (
         <>
@@ -84,7 +85,6 @@ function BasicInfo({ form, job }: { form: Form, job: JobInsertDTO }) {
                     <Textarea
                         className="py-2"
                         label="Notes" {...register('notes')}
-                        autoFocus={isLinkedIn || false}
                     />
 
                 </section>

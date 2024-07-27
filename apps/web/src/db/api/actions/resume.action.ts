@@ -1,39 +1,9 @@
 'use server'
 
-import { handleApiError } from '@/utils/error-response';
 import { createClient } from '@/utils/supabase/server';
-import { type Education, type Project, type Resume, type ResumeInsert, type WorkExperience } from 'lib/types';
+import { type Education, type ResumeInsert } from 'lib/types';
 
-export async function updateResume(resume: Resume) {
-    try {
-        const client = createClient()
-        const { data: { user } } = await client.auth.getUser()
-        if (!user) throw new Error('Not Authenticated')
-        const { error } = await client.from('resumes').upsert(resume);
-        if (error) throw new Error(error.message)
-        return { success: true, error: null }
-    } catch (error) {
-        return handleApiError(error)
-    }
-}
-
-export async function updateWorkExperiences(workExperience: WorkExperience[], resumeId: string) {
-    const client = createClient();
-    try {
-        const { data: { user } } = await client.auth.getUser()
-        if (!user) throw new Error('Not authenticated')
-        const preparedWorkExperience = workExperience.map((experience) => {
-            experience.resume_id = resumeId
-            return experience
-        });
-        const { error } = await client.from('work_experience').upsert(preparedWorkExperience).eq('user_id', user.id).select()
-        if (error) throw new Error(error.message);
-        return { success: true, error: null }
-    } catch (error) {
-        return handleApiError(error)
-    }
-}
-
+// TODO: can't nuke cause it's been used in the profile setup
 export async function updateEducation(education: Education[], resumeId?: string) {
     const client = createClient()
     const { data: { user } } = await client.auth.getUser()
@@ -59,17 +29,6 @@ export async function updateEducation(education: Education[], resumeId?: string)
         } else {
             return { success: false, error: 'An error occurred' }
         }
-    }
-}
-
-export async function updateProjects(projects: Project[], resumeId: string) {
-    const client = createClient();
-    try {
-        const { error } = await client.from('projects').upsert(projects).eq('resume_id', resumeId)
-        if (error) throw error
-        return { success: true }
-    } catch (error) {
-        return { success: false, error }
     }
 }
 

@@ -87,6 +87,7 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
                         loading={uploading}
                         onFilePicked={onFilePicked}
                         variant="outline"
+                        supportedFormats={['.csv']}
                     >
                         Select File
                     </UploadButton>

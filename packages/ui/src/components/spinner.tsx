@@ -28,8 +28,8 @@ const Spinner: FC<SpinnerProps> = ({ className, variant = 'primary', ...rest }) 
 
 const FullPageSpinner = () => {
     return (
-        <div className="w-full flex h-full items-center flex-col">
-            <Spinner variant="secondary" />
+        <div className="w-full flex h-full items-center flex-col mt-20">
+            <Spinner variant="primary" />
         </div>
     )
 }
