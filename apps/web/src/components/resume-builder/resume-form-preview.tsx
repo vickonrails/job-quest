@@ -102,7 +102,6 @@ export default function ResumeFormBuilder({ resume, workExperience, education, p
                 onOk={handleDelete}
                 onOpenChange={setIsOpen}
                 onCancel={onCancel}
-            // isProcessing={loading}
             />
         </div>
     )
