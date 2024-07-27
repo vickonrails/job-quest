@@ -37,7 +37,17 @@ export default function ImportJobs() {
 
     const importJobsMutation = useMutation({
         mutationFn: async (jobs: JobImportColumns[]) => {
-            const { error } = await client.from('jobs').insert(jobs as Job[]).select()
+            const { data: maxColumns, error: maxColumnErrors } = await client.rpc('get_max_order_by_column')
+            if (maxColumnErrors) throw maxColumnErrors
+            const maxOrderMap = new Map(maxColumns?.map(item => [item.column_id, item.max_order]))
+            const jobsToInsert = jobs.map(job => {
+                const status = job.status || 0
+                const currentMax = maxOrderMap.get(status) || 0
+                maxOrderMap.set(status, currentMax + 10)
+                return { ...job, order_column: currentMax + 10 }
+            })
+
+            const { error } = await client.from('jobs').insert(jobsToInsert as Job[]).select()
             if (error) throw error
         },
         onSuccess: async () => {

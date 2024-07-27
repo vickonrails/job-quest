@@ -48,7 +48,7 @@ export function useProfileEducation({ education }: { education: Education[] }) {
  * 
  * @returns default education object
  */
-export function getDefaultEducation({ userId, resume_id }: { userId?: string, resume_id: string }) {
+export function getDefaultEducation({ userId, resume_id }: { userId?: string, resume_id?: string }) {
     const id = uuid()
     const education = {
         id,

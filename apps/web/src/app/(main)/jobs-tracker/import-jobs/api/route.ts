@@ -14,7 +14,7 @@ const jobSchema = object({
     priority: number()
 })
 
-export type JobImportColumns = Pick<Job, 'position' | 'company_name' | 'description' | 'status' | 'link' | 'location' | 'priority' | 'user_id'>
+export type JobImportColumns = Pick<Job, 'position' | 'company_name' | 'description' | 'status' | 'link' | 'location' | 'priority' | 'user_id' | 'order_column'>
 
 /**
  * Process the buffer and return the parsed CSV data

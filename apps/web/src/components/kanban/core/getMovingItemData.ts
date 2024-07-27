@@ -61,7 +61,8 @@ export function getMovingItemData(result: DropResult, involvedColumn: InvolvedCo
             // moving in between items
             const beforeItem = destinationJobs[destination.index - 1];
             const afterItem = destinationJobs[destination.index];
-            if (!beforeItem?.order_column || afterItem?.order_column == null) return;
+            // if (!beforeItem?.order_column || afterItem?.order_column == null) return;
+            if (beforeItem?.order_column == null || afterItem?.order_column == null) return;
             movingItemOrder = (afterItem?.order_column + beforeItem?.order_column) / 2;
         }
 
