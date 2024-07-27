@@ -15,12 +15,13 @@ import { ResumeSection } from './resume-section';
 export const JobDetails = ({ job }: { job: Job }) => {
     const { isOpen: editSheetOpen, showEditSheet, setIsOpen, selectedEntity } = useEditSheet({});
     const queryClient = useQueryClient()
-    const { data } = useJobs({ initialData: [job] })
+    const { data } = useJobs({ initialData: [job], jobId: job.id })
     const jobDetails = data?.jobs[0];
     if (!jobDetails) return;
 
     const invalidateJobDetails = async () => {
-        await queryClient.invalidateQueries({ queryKey: [`jobs_${job.id}`] })
+        await queryClient.invalidateQueries({ queryKey: ['jobs'] })
+        await queryClient.invalidateQueries({ queryKey: ['jobs', job.id] })
     }
 
     return (

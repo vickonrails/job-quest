@@ -16,7 +16,7 @@ type JobsResponse = {
 export function useJobs(options?: JobFetchOptions): UseQueryResult<JobsResponse> {
     const initialJobs = options?.initialData ?? []
     const client = createClient()
-    return useQuery(['jobs'],
+    return useQuery(['jobs', options?.jobId],
         () => getJobs(client, options),
         { initialData: { jobs: initialJobs, count: initialJobs.length } }
     )

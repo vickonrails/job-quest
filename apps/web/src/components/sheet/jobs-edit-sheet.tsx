@@ -4,7 +4,7 @@ import { ErrorHint } from '@/components/resume-builder/setup/components/error-hi
 import { useToast } from '@/components/toast/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { type SupabaseClient } from '@supabase/supabase-js';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { type Job } from 'lib/types';
 import { Controller, useForm } from 'react-hook-form';
 import { Status_Lookup, type Database } from 'shared';
