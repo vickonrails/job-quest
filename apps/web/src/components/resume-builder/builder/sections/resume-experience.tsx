@@ -1,17 +1,25 @@
-import { deleteWorkExperience, updateWorkExperiences } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { WorkExperienceForm } from '@/components/resume-builder/setup/work-experience/work-experience-form-item';
 import { useToast } from '@/components/toast/use-toast';
+import { deleteWorkExperience } from '@/db/api/actions/resume.action';
 import { debounce } from '@/utils/debounce';
+import { createClient } from '@/utils/supabase/client';
+import { type SupabaseClient } from '@supabase/supabase-js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type WorkExperience } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
-import { useDeleteModal } from 'src/hooks/useDeleteModal';
+import { type Database } from 'shared';
 import { getDefaultExperience } from 'src/hooks/use-work-experience';
+import { useDeleteModal } from 'src/hooks/useDeleteModal';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddExperienceItemDropdown } from './add-item-dropdown';
+
+async function updateWorkExperienceQuery(client: SupabaseClient<Database>, experiences: WorkExperience[]) {
+    return client.from('work_experience').upsert(experiences).select()
+}
 
 /**
  * Work Experience section in resume builder
@@ -21,10 +29,21 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     const { toast } = useToast()
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { fields, append, remove } = useFieldArray<{ workExperience: WorkExperience[] }, 'workExperience', '_id'>({ control: form.control, name: 'workExperience', keyName: '_id' });
+    const client = createClient()
+    const queryClient = useQueryClient()
+
+    const updateMutation = useMutation({
+        mutationFn: async (experiences: WorkExperience[]) => {
+            const { data } = await updateWorkExperienceQuery(client, experiences)
+            return data
+        },
+        onSuccess: (data) => {
+            const newValue = data ? [...data, ...templates] : [...templates]
+            queryClient.setQueryData([`resume_${params.id}`, 'work_experience'], newValue)
+        },
+    })
 
     const { handleSubmit } = form
-
-    // TODO: abstract this to a hook alongside the autosave functionality
 
     const {
         showDeleteDialog,
@@ -50,14 +69,9 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     }
 
     const saveFn = useCallback(async (values: { workExperience: WorkExperience[] }) => {
-        const { success, error } = await updateWorkExperiences(values.workExperience, params.id);
-        if (!success && error) {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurred'
-            })
-        }
-    }, [toast, params.id])
+        await updateMutation.mutateAsync(values.workExperience);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [toast, params.id, client])
 
     const watchedData = useWatch({
         control: form.control,
@@ -65,7 +79,7 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
         defaultValue: form.getValues('workExperience')
     })
 
-    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 3000)
+    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 1500)
     const debouncedSubmit = useCallback(debounced, [form.handleSubmit, saveFn])
 
     useDeepCompareEffect(() => {
@@ -75,12 +89,12 @@ export function WorkExperienceSection({ form, userId, templates }: { form: UseFo
     }, [watchedData, debouncedSubmit])
 
     const handleItemAdded = (experience: WorkExperience) => {
-        const newWorkExperience = generateNewExperience(experience)
+        const newWorkExperience = generateNewExperience({ ...experience, resume_id: params.id })
         append(newWorkExperience)
     }
 
     const handleBlankAdd = () => {
-        append(getDefaultExperience({ userId }))
+        append(getDefaultExperience({ userId, resumeId: params.id }))
     }
 
     return (

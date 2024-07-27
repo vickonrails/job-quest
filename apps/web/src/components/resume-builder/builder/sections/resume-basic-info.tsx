@@ -1,12 +1,19 @@
 
-import { updateResume } from '@/db/api/actions/resume.action';
 import { debounce } from '@/utils/debounce';
+import { createClient } from '@/utils/supabase/client';
+import { type SupabaseClient } from '@supabase/supabase-js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Resume } from 'lib/types';
 import { useCallback, useRef } from 'react';
 import { useWatch, type UseFormReturn } from 'react-hook-form';
+import { type Database } from 'shared';
 import { Input, } from 'ui/input';
 import { Textarea } from 'ui/textarea';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+
+async function updateResumeQuery(resume: Resume, client: SupabaseClient<Database>) {
+    return client.from('resumes').upsert(resume).select();
+}
 
 /**
  * Basic Information section in resume builder
@@ -14,14 +21,26 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 type BasicInfoForm = { form: UseFormReturn<{ 'resume': Resume }> }
 export function BasicInfoSection({ form }: BasicInfoForm) {
     const { formState: { errors }, register } = form;
+    const client = createClient()
+    const queryClient = useQueryClient()
     const formRef = useRef<HTMLFormElement | null>(null);
+
+    // TODO: error handling
+    const updateMutation = useMutation({
+        mutationFn: async (resume: Resume) => {
+            const { data } = await updateResumeQuery(resume, client)
+            return data
+        },
+        onSuccess: (data) => {
+            if (!data) return;
+            queryClient.setQueryData([`resume_${data[0]?.id}`, 'basic_info'], () => data[0])
+        }
+    })
 
     const saveFn = useCallback(async ({ resume }: { resume: Resume }) => {
         resume.id = resume.id ?? '';
-        const { success, error } = await updateResume(resume)
-        if (!success && error) {
-            throw new Error(error)
-        }
+        await updateMutation.mutateAsync(resume)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const watchedData = useWatch({
@@ -30,7 +49,7 @@ export function BasicInfoSection({ form }: BasicInfoForm) {
         name: 'resume'
     });
 
-    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 3000)
+    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 1000)
     const debouncedSubmit = useCallback(debounced, [form.handleSubmit, saveFn])
 
     useDeepCompareEffect(() => {

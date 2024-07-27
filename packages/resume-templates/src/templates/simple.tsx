@@ -77,7 +77,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                     )}
                                 </div>
 
-                                <div className="text-xs text-muted-foreground" dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
+                                <div className="highlights-description" dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                             </div>
                         </article>
                     )
@@ -97,7 +97,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                                 </header>
                                 <DateRange startDate={start_date} endDate={end_date ?? 'Till Date'} />
 
-                                <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
+                                <div className="highlights-description" dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                             </div>
                         </article>
                     )
@@ -114,7 +114,7 @@ export function Simple({ values }: { values: DeepPartialSkipArrayKey<FormValues>
                             <div className="flex-1">
                                 <header className="text-xs mb-1">
                                     <h2 className="font-bold">{title} ({url && <a href={url} className="text-xs text-primary">Link</a>})</h2>
-                                    <div dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
+                                    <div className="highlights-description" dangerouslySetInnerHTML={{ __html: highlights ?? '' }} />
                                 </header>
 
                                 <section>

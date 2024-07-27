@@ -48,7 +48,7 @@ export function useProfileEducation({ education }: { education: Education[] }) {
  * 
  * @returns default education object
  */
-export function getDefaultEducation({ userId }: { userId?: string }) {
+export function getDefaultEducation({ userId, resume_id }: { userId?: string, resume_id: string }) {
     const id = uuid()
     const education = {
         id,
@@ -59,6 +59,7 @@ export function getDefaultEducation({ userId }: { userId?: string }) {
         end_date: '',
         start_date: '',
         user_id: userId,
+        resume_id,
         highlights: [{ education_id: id, user_id: userId, type: 'education', text: '' }],
     } as unknown as Education;
 

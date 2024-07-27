@@ -30,7 +30,7 @@ export async function fetchResume(client: Client, options: { userId: string, res
         .eq('id', options.resumeId).single()
 
     resume = resumeFromDb.data
-    
+
     if (!resume) {
         const { data: userProfile } = await fetchUserProfileQuery(client, options.userId)
         if (!userProfile) return;

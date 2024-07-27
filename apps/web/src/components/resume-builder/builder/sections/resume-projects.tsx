@@ -1,18 +1,24 @@
-import { updateProjects } from '@/db/api/actions/resume.action';
 import { DeleteDialog } from '@/components/delete-dialog';
 import { ProjectForm } from '@/components/resume-builder/setup/projects/project-form-item';
 import { useToast } from '@/components/toast/use-toast';
+import { deleteProject, getDefaultProject } from '@/hooks/use-profile-projects';
 import { debounce } from '@/utils/debounce';
 import { createClient } from '@/utils/supabase/client';
+import { type SupabaseClient } from '@supabase/supabase-js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type Project } from 'lib/types';
 import { useParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useFieldArray, useWatch, type UseFormReturn } from 'react-hook-form';
+import { type Database } from 'shared';
 import { useDeleteModal } from 'src/hooks/useDeleteModal';
-import { deleteProject, getDefaultProject } from '@/hooks/use-profile-projects';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { v4 as uuid } from 'uuid';
 import { AddProjectItemDropdown } from './add-item-dropdown';
+
+async function updateProjectsQuery(client: SupabaseClient<Database>, projects: Project[]) {
+    return client.from('projects').upsert(projects).select()
+}
 
 interface ProjectsSectionProps {
     form: UseFormReturn<{ projects: Project[] }>
@@ -24,7 +30,9 @@ interface ProjectsSectionProps {
 */
 
 export function ProjectsSection({ form, templates, userId }: ProjectsSectionProps) {
-    const client = createClient();
+    const client = createClient()
+    const queryClient = useQueryClient()
+
     const [idxToRemove, setRemoveIdx] = useState<number>();
     const { toast } = useToast();
     const { fields, append, remove } = useFieldArray<{ projects: Project[] }, 'projects', '_id'>({ control: form.control, name: 'projects', keyName: '_id' });
@@ -40,6 +48,18 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
         onDelete: async (id: string) => { await deleteProject(id, client) }
     });
 
+    // TODO: error handling
+    const updateMutation = useMutation({
+        mutationFn: async (experiences: Project[]) => {
+            const { data } = await updateProjectsQuery(client, experiences)
+            return data
+        },
+        onSuccess: (data) => {
+            const newValue = data ? [...data, ...templates] : [...templates]
+            queryClient.setQueryData([`resume_${params.id}`, 'projects'], newValue)
+        },
+    })
+
     const watchedData = useWatch({
         control: form.control,
         name: 'projects',
@@ -47,16 +67,11 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
     });
 
     const saveFn = useCallback(async ({ projects }: { projects: Project[] }) => {
-        const { success } = await updateProjects(projects, params.id)
-        if (!success) {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurreds'
-            })
-        }
-    }, [params.id, toast])
+        await updateMutation.mutateAsync(projects)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params.id])
 
-    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 3000)
+    const debounced = debounce(async () => { await form.handleSubmit(saveFn)() }, 1500)
     const debouncedSubmit = useCallback(debounced, [form.handleSubmit, saveFn])
 
     useDeepCompareEffect(() => {
@@ -85,7 +100,7 @@ export function ProjectsSection({ form, templates, userId }: ProjectsSectionProp
     }
 
     const handleAddBlank = () => {
-        append(getDefaultProject({ userId }))
+        append(getDefaultProject({ userId , resume_id: params.id}))
     }
 
     return (

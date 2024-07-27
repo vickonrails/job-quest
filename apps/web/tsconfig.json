@@ -55,6 +55,7 @@
     "tailwind.config.ts",
     "tailwind.pdf.config.ts",
     ".next/types/**/*.ts",
+    "hooks",
     "pdf-parse.d.ts",
     "../../packages/shared/src/utils/format-to-utc.ts"
   ],
