@@ -3,6 +3,10 @@ import JobsTable from '@/components/table/job/jobs-table';
 import { getJobs } from '@/queries/jobs';
 import qs from 'qs';
 
+export const metadata = {
+    title: 'Job details - JobQuest'
+}
+
 const viewLookup = {
     recently_added: { query: 'order_by=created_at.desc&limit=20', title: 'Recently Added' },
     applying: { query: 'status=1', title: 'Applying' },

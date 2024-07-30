@@ -6,6 +6,10 @@ import { getSummaryCardData } from '@/db/api/jobs.api';
 import { type Resume } from 'lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
+export const metadata = {
+    title: 'Dashboard - JobQuest'
+}
+
 export default async function DashboardPage() {
     noStore()
     const resumes = await getResumes()

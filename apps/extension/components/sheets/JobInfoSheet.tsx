@@ -14,10 +14,6 @@ import { Sheet, type SheetProps } from './sheet';
 export interface JobInfoSheetProps extends SheetProps {
     onURLChange: (url: string) => void
     url: string
-    // onSubmit: () => void
-    // job: JobInsertDTO
-    // isLoading?: boolean
-    // setJob: (job: Job) => void
 }
 
 interface AddJobResponse {

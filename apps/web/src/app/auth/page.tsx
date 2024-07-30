@@ -1,5 +1,10 @@
 import GoogleAuthBtn from '@/components/google-auth-button'
+import { type Metadata } from 'next'
 import { AuthCard } from 'ui/auth-card'
+
+export const metadata: Metadata = {
+    title: 'Create account & Authenticate - JobQuest'
+}
 
 export default function SignIn() {
     return (

@@ -12,7 +12,6 @@ import { Input } from 'ui/input'
 import { Label } from 'ui/label'
 import { Select } from 'ui/select'
 
-
 type User = {
     email: string,
     firstName: string

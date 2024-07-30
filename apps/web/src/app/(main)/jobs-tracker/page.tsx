@@ -3,6 +3,10 @@ import JobsKanbanContainer from '@/components/jobs-kanban';
 import { type Job } from 'lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
+export const metadata = {
+    title: 'Jobs Tracker - JobQuest'
+}
+
 export default async function JobTrackerPage() {
     noStore()
     const { data } = await getJobs()

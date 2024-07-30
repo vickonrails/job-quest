@@ -2,23 +2,7 @@
 
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
 import { Button } from 'ui/button'
-
-export function useWaitListDialog() {
-    const [open, setOpen] = useState(false)
-    const [isOnWaitList, setIsOnWaitList] = useState(false)
-    const openWaitListModal = useCallback(() => setOpen(true), [])
-    const closeWaitListModal = useCallback(() => setOpen(false), [])
-    const setUserAddedToWaitList = useCallback(() => setIsOnWaitList(true), [])
-    return {
-        open,
-        openWaitListModal,
-        closeWaitListModal,
-        isOnWaitList,
-        setUserAddedToWaitList
-    }
-}
 
 export function WaitList() {
     return (

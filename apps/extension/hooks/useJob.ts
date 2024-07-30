@@ -60,27 +60,5 @@ export const useJob = (url: string) => {
             setIsLoading(false)
         })
     }, [url, form])
-
-    // const refetch = useCallback((url: string) => {
-    //     if (!mounted) return;
-    //     setIsLoading(true)
-    //     fetchJob(url).then((res) => {
-    //         const { data, success } = res
-    //         if (success) {
-    //             setJob({ ...data.job, /** img: options?.defaultData.img**/ })
-    //         } else {
-    //             setJob(null)
-    //         }
-    //     }).catch(err => {
-    //         console.error(err)
-    //     }).finally(() => {
-    //         setIsLoading(false)
-    //     })
-    // }, [mounted])
-
-    // const refresh = useCallback((job: Job) => {
-    //     setJob(job)
-    // }, [])
-
     return { isLoading, job, setJob, form }
 }
