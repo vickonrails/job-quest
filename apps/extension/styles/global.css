@@ -65,6 +65,9 @@
     --spacing-5: 1.25rem;
     --spacing-6: 1.5rem;
     --spacing-10: 2.5rem;
+    --spacing-14: 3.5rem;
+
+    --translate-8: 2rem;
 
     --text-xs: 0.75rem;
     --text-sm: 0.85rem;
@@ -86,6 +89,9 @@
     --spacing-5: 2rem;
     --spacing-6: 2.4rem;
     --spacing-10: 4rem;
+    --spacing-14: 5.6rem;
+
+    --translate-8: 3.2rem;
 
     --text-xs: 1.2rem;
     --text-sm: 1.4rem;

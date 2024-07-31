@@ -13,6 +13,9 @@ const config = {
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
       },
+      translate: {
+        8: 'var(--translate-8)'
+      },
       spacing: {
         1.5: 'var(--spacing-1_5)',
         2: 'var(--spacing-2)',
@@ -22,7 +25,8 @@ const config = {
         4: 'var(--spacing-4)',
         5: 'var(--spacing-5)',
         6: 'var(--spacing-6)',
-        10: 'var(--spacing-10)'
+        10: 'var(--spacing-10)',
+        14: 'var(--spacing-14)'
       },
       fontSize: {
         // sm: ["var(--text-sm)", "2rem"],

@@ -7,7 +7,7 @@ function getLinkedInJobDetails() {
     if (!isLinkedIn) return { link }
 
     const isFullPage = window.location.href.includes('jobs/view');
-    let title: HTMLElement | ChildNode | null;
+    let title: HTMLElement | null;
 
     const img = document.querySelector('.jobs-company img');
     const container = document.querySelector('.job-details-jobs-unified-top-card__container--two-pane')
@@ -16,7 +16,7 @@ function getLinkedInJobDetails() {
     if (isFullPage) {
         title = document.querySelector('.job-details-jobs-unified-top-card__job-title');
     } else {
-        title = document.querySelector('.job-details-jobs-unified-top-card__job-title');
+        title = document.querySelector('a[href^="/jobs/view"]');
     }
 
     if (container) {
@@ -32,7 +32,7 @@ function getLinkedInJobDetails() {
         return {
             id: '',
             img: img?.getAttribute('src') ?? '',
-            // position: title?.textContent.trim() ?? '',
+            // position: title.innerText.trim(),
             position: '',
             company_name: company ? company.textContent : '',
             location: location ? location.textContent.split(' ')[1] : '',

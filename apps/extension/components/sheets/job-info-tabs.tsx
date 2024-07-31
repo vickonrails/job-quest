@@ -47,7 +47,7 @@ export function JobInfoTabs({ form, job, fetchingJob }: JobInfoTabsProps) {
                             {alreadyAdded ? 'Update Job' : 'Add Job'}
                         </Button>
 
-                        {alreadyAdded && <a className="text-center text-sm text-primary underline block" target="_blank" rel="noreferrer noopener" href={`http://localhost:3000/jobs-tracker/${job.id}`}>See in Job Quest</a>}
+                        {alreadyAdded && <a className="text-center text-sm text-primary underline block" target="_blank" rel="noreferrer noopener" href={`${process.env.PLASMO_PUBLIC_SITE_URL}jobs-tracker/${job.id}`}>See in Job Quest</a>}
                     </div>
                 </section>
             )}

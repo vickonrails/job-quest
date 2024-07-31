@@ -25,9 +25,9 @@ export function ProfileDropdown({ profile, user }: { profile: Profile, user: Use
                 <button className="w-full justify-between text-muted-foreground hover:text-accent-foreground flex rounded-md hover:bg-muted cursor-default gap-3 px-3 py-2 items-center">
                     <span className="flex gap-2 items-center">
                         <Avatar border="curved" src={profile.avatar_url ?? ''} fallbackText={profile.full_name ?? ''} alt="" />
-                        <span className="flex flex-col items-start">
-                            <span className="text-sm font-medium">{profile.full_name?.split(' ')[0]}</span>
-                            <span className="text-xs text-muted-foreground">victor@gmail.com</span>
+                        <span className="flex flex-col items-start text-left">
+                            <span className="text-sm font-medium ellipses w-32">{profile.full_name?.split(' ')[0]}</span>
+                            <span className="text-xs text-muted-foreground ellipses w-32">{user.email}</span>
                         </span>
                     </span>
                     <ChevronUp size={18} />

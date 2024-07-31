@@ -35,6 +35,9 @@
 }
 
 @layer components {
+  .ellipses {
+    @apply text-ellipsis overflow-hidden whitespace-nowrap;
+  }
   .landing-page {
     --primary-foreground: 210 40% 98%;
 

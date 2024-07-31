@@ -28,6 +28,7 @@ export function JobInfoSheet({ ...props }: JobInfoSheetProps) {
 
     useMessage((req, res) => {
         if (req.name === 'refresh-grabber') {
+            setShowBanner({ error: false, show: false })
             props.onURLChange(window.location.href)
         }
     })

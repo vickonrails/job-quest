@@ -88,10 +88,10 @@ function CompanionBtn({ isOpen, ...props }: LinkedInButtonProps & { isOpen?: boo
     return (
         <button
             onClick={props.onClick}
-            className="h-14 w-14 p-2 flex flex-row fixed bottom-52 transition-transform right-0 translate-x-8  hover:translate-x-0 text-white font-medium" {...props}
+            className="h-14 w-14 p-2 flex flex-row fixed bottom-52 transition-transform right-0 translate-x-8 hover:translate-x-0 text-white font-medium" {...props}
         >
             <div className="bg-primary m-auto rounded-l-md h-full select-none flex-1 flex">
-                <span className="m-auto">JQ</span>
+                <span className="m-auto text-sm">JQ</span>
             </div>
         </button>
     )
