@@ -29,7 +29,7 @@ export const JobDetails = ({ job }: { job: Job }) => {
             <div className="flex gap-4">
                 <div className="flex-2 grow-0 basis-2/3">
                     <Header job={jobDetails} onEditClick={showEditSheet} />
-                    <JobDescription job={jobDetails} />
+                    <JobDescription job={jobDetails} showEditSheet={showEditSheet} />
                 </div>
                 <div className="flex-1 shrink-0 border-l grow-0 basis-1/3 p-6 flex flex-col gap-3 sticky top-0">
                     <ResumeSection job={jobDetails} />
@@ -43,6 +43,7 @@ export const JobDetails = ({ job }: { job: Job }) => {
             </div>
             {editSheetOpen && (
                 <JobEditSheet
+                    showDescription
                     onSuccess={invalidateJobDetails}
                     entity={selectedEntity}
                     open={editSheetOpen}

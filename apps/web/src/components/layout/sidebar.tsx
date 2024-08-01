@@ -52,7 +52,7 @@ export const Sidebar: FC<SidebarProps> = ({ profile, user, className, ...rest })
                     <p className="text-sm text-muted-foreground">Save time and get the most out of JobQuest by installing the accompanying Chrome extension. </p>
                 </header>
                 <Button size="sm" asChild>
-                    <Link href="https://developer.chrome.com/" target="_blank" rel="noreferrer noopener">Install</Link>
+                    <Link href="https://chromewebstore.google.com/detail/jobkjhkfbhaaeieofbbdabiajgmnabmj" target="_blank" rel="noreferrer noopener">Install</Link>
                 </Button>
 
             </section>

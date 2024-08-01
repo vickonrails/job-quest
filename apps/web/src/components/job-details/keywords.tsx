@@ -40,7 +40,7 @@ export function KeywordsSection({ job }: { job: Job }) {
                 />
             ) : (
                 <Button
-                    disabled={!aiFeaturesEnabled}
+                    // disabled={!aiFeaturesEnabled}
                     variant="outline"
                     className="gap-2 items-center"
                     onClick={handleGenerateClick}
