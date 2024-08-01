@@ -37,7 +37,7 @@ export function JobEditSheet<T>({ showDescription = false, ...props }: JobEditSh
     const client = createClient();
     const entity = props.entity as Job;
     const form = useForm({ defaultValues: entity })
-    const { handleSubmit, reset,  formState: { isSubmitting } } = form
+    const { handleSubmit, reset, formState: { isSubmitting } } = form
     const { toast } = useToast()
 
     // TODO: move mutation to outside modal
@@ -101,8 +101,8 @@ export function JobEditSheet<T>({ showDescription = false, ...props }: JobEditSh
 
     return (
         <Sheet icons={props.icons} {...props}>
-            <div className="flex flex-col gap-3">
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3 h-full">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 h-full">
                     {showDescription ?
                         <JobInfoWithSheets form={form} /> :
                         <JobBasicInfo form={form} />
@@ -118,11 +118,11 @@ export function JobEditSheet<T>({ showDescription = false, ...props }: JobEditSh
 function JobInfoWithSheets({ form }: { form: UseFormReturn<Job> }) {
     const { control } = form
     return (
-        <JobSheetTabs>
+        <JobSheetTabs rootClassName="flex-1">
             <Content value="basic-info" className="flex flex-col gap-2 py-3">
                 <JobBasicInfo form={form} />
             </Content>
-            <Content value="description" className="flex flex-col gap-2 pb-3">
+            <Content value="description" className="flex flex-col gap-2 pb-3 flex-1">
                 <Controller
                     name="description"
                     control={control}
@@ -130,6 +130,8 @@ function JobInfoWithSheets({ form }: { form: UseFormReturn<Job> }) {
                         <Editor
                             value={field.value ?? ''}
                             label="Highlights"
+                            rows={20}
+                            containerProps={{className: 'h-[700px]'}}
                             onChange={text => field.onChange(text)}
                         />
                     )}

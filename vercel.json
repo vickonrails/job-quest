@@ -1,0 +1,7 @@
+{
+    "functions": {
+      "src/app/**/route.ts": {
+        "maxDuration": 50
+      }
+    }
+  }
