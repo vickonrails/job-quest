@@ -3,6 +3,7 @@
 import { ErrorHint } from '@/components/resume-builder/setup/components/error-hint'
 import { useToast } from '@/components/toast/use-toast'
 import { addUserToWaitList } from '@/db/api/actions/add-user-to-waitlist'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { AuthCard } from 'ui/auth-card'
@@ -24,6 +25,7 @@ export default function Waitlist() {
     const [formError, setFormError] = useState('')
     const [addedToList, setAddedToList] = useState(false)
     const { toast } = useToast()
+    const router = useRouter()
 
     const onSubmit = async (values: User) => {
         setFormError('')
@@ -41,7 +43,7 @@ export default function Waitlist() {
     }
 
     return (
-        <AuthCard >
+        <AuthCard onLogoClick={() => router.push('/')}>
             <div className="w-full max-w-sm mx-auto list">
                 <form className="flex flex-col gap-3 w-full" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
