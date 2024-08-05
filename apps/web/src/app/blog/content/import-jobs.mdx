@@ -1,0 +1,80 @@
+---
+title: "How to Import Jobs into JobQuest"
+date: "2024-08-05"
+slug: "how-to-import-jobs"
+draft: true
+---
+
+You can bring jobs already tracked somewhere else - Notion, Google sheets, excel, etc. Only CSV imports are supported right now.
+See [example file](https://docs.google.com/spreadsheets/d/1aT5emXRjGsfSnRHOUJLnLLdFF3ztG3-y0K21jyI1350/edit?usp=sharing) or keep reading...
+
+## Steps Overview
+
+1. Duplicate your sheets
+2. [Update the headers](#update-the-headers)
+3. [Export as CSV](#export-as-csv)
+4. Import into JobQuest
+
+## Detailed Guide
+
+### 1. Prepare Your Spreadsheet
+
+Open your preferred spreadsheet application (Google Sheets or Microsoft Excel).
+
+<a name="update-the-headers"></a>
+### 2. Update the Headers
+
+In the first row of your spreadsheet, add the following headers (compulsory columns are in bold)
+
+  - **position** - job title
+  - **company_name** 
+  - **link** - link to full job post/description
+  - location
+  - status - current stage of job application (integer from 0 - 5) See more
+  - priority - how seriously you want to take the job application
+  - description - full text description
+  - source - where you first saw the description
+  - labels
+
+NB: Ensure that the headers are spelled correctly and match the exact format expected by your job tracker. Remember, compulsory columns are in bold
+
+<a name="export-as-csv"></a>
+### 3. Export as CSV
+Most sheets editing applications will provide an export feature, (only csv import is supported right now). 
+
+#### For Google Sheets:
+
+1. Click on "File" in the top menu.
+2. Select "Download" from the dropdown menu.
+3. Choose "Comma-separated values (.csv)" from the options.
+4. The CSV file will be downloaded to your computer.
+
+![Export from Google Sheets](/export-csv-from-google-sheets.png)
+
+#### For Microsoft Excel:
+
+1. Click on "File" in the top menu.
+2. Select "Save As" from the options.
+3. Choose a location to save the file.
+4. In the "Save as type" dropdown, select "CSV (Comma delimited) (*.csv)".
+5. Click "Save".
+
+![Export from Microsoft Excel](/export-csv-from-excel.png)
+
+### 5. Import into Your Job Tracker
+
+1. Click on "Job Tracker"
+2. Look for an "Import Jobs (CSV)" link at the top right
+3. Select the CSV file you just created.
+4. Verify that all jobs have been imported correctly, paying special attention to the compulsory fields.
+5. Profit
+
+![Import jobs into JobQuest](/import-jobs.png)
+
+## Tips
+
+- Always double-check that your compulsory fields (position, company_name, link) are filled for each entry before exporting.
+- Consider doing a test import with a small file first before proceeding with large imports
+- Keep your original spreadsheet as a backup in case you need to make changes and re-import.
+
+By following these steps, you should be able to successfully import your job data into your job tracker. Remember to regularly update and maintain your tracker to keep your job search organized and efficient

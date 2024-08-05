@@ -1,11 +1,11 @@
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import 'ui/styles';
 
+import Plausible from '@/components/plausible-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { ReactQueryClientProvider } from '@/react-query/query-provider';
-import { type ReactNode } from 'react';
-import Plausible from '@/components/plausible-provider';
 import { type Metadata } from 'next';
+import { type ReactNode } from 'react';
 
 export const coreMeta = {
     url: 'https://getjobquest.com',

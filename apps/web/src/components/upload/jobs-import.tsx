@@ -107,9 +107,9 @@ export function JobsImportContent({ supportedFormats = [], setJobs }: { supporte
                 <section className="bg-accent rounded-md p-4 py-2 mb-3">
                     <header className="flex justify-between gap-2 items-center">
                         <FileText className="text-muted-foreground" />
-                        <h2 className="text-sm flex-1 font-medium text-muted-foreground">For column info, see sample file</h2>
+                        <h2 className="text-sm flex-1 font-medium text-muted-foreground">Having trouble importing?</h2>
                         <Button variant="outline" size="xs" asChild>
-                            <Link target="_blank" rel="noreferrer noopener" href="https://docs.google.com/spreadsheets/d/1aT5emXRjGsfSnRHOUJLnLLdFF3ztG3-y0K21jyI1350/edit?usp=sharing">See Sample</Link>
+                            <Link target="_blank" rel="noreferrer noopener" href="/blog/how-to-import-jobs">Read guide</Link>
                         </Button>
                     </header>
                 </section>
