@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable();
+const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullish()
 
 const skillSchema = z.object({
     label: z.string(),
@@ -17,46 +17,44 @@ const emailSchema = z.union([
 ]).optional().nullable();
 
 const profileSchema = z.object({
-    full_name: z.string(),
+    full_name: z.string().optional().nullish(),
     email_address: emailSchema,
-    // email_address: z.string().email(),
-    location: z.string(),
-    professional_summary: z.string(),
-    title: z.string(),
-    skills: z.array(skillSchema),
+    location: z.string().optional().nullish(),
+    title: z.string().optional().nullable(),
+    skills: z.array(skillSchema).optional().nullish(),
     github_url: urlSchema,
+    professional_summary: z.string().optional().nullish(),
     personal_website: urlSchema,
     linkedin_url: urlSchema,
 });
 
 const workExperienceSchema = z.object({
-    job_title: z.string(),
-    location: z.string(),
-    company_name: z.string(),
+    job_title: z.string().optional().nullish(),
+    location: z.string().optional().nullish(),
+    company_name: z.string().optional().nullish(),
     end_date: dateSchema,
     start_date: dateSchema,
-    still_working_here: z.boolean(),
-    highlights: z.string(),
+    still_working_here: z.boolean().optional().nullish(),
+    highlights: z.string().optional().nullish(),
 });
 
 const educationSchema = z.object({
     start_date: dateSchema,
     end_date: dateSchema,
-    degree: z.string(),
-    field_of_study: z.string(),
-    institution: z.string(),
-    still_studying_here: z.boolean(),
-    location: z.string(),
-    highlights: z.string(),
+    degree: z.string().optional().nullable(),
+    field_of_study: z.string().optional().nullable(),
+    institution: z.string().optional().nullable(),
+    still_studying_here: z.boolean().optional().nullable(),
+    location: z.string().optional().nullable(),
+    highlights: z.string().optional().nullable(),
 });
 
 const projectSchema = z.object({
-    highlights: z.string(),
+    highlights: z.string().optional().nullish(),
     end_date: dateSchema,
     start_date: dateSchema,
-    skills: z.array(skillSchema),
-    title: z.string(),
-    // url: z.string().url().optional(),
+    skills: z.array(skillSchema).optional().nullish(),
+    title: z.string().optional().nullish(),
     url: urlSchema,
 });
 

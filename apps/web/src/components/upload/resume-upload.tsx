@@ -33,10 +33,10 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
     const updateProfileMutation = useMutation({
         mutationFn: async ({ values, userId }: { userId: string, values: ProfileSetupType }) => {
             const { education, projects, profile, work_experience } = values
-            const preparedValues = {
+            const preparedValues: ProfileSetupType & { user_id_param: string } = {
                 user_id_param: userId,
                 education: education.map(x => ({ ...x, user_id: userId })),
-                profile: { ...profile, email_address: '', github_url: '', personal_website: '', linkedin_url: '' },
+                profile: { ...profile, email_address: profile.email_address ?? '' },
                 work_experience: work_experience.map(x => ({ ...x, user_id: userId })),
                 projects: projects.map(x => ({ ...x, user_id: userId, description: '', url: '' }))
             }
@@ -44,7 +44,9 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
                 ...preparedValues,
                 user_id_param: userId
             })
-            if (error) throw new Error(error.hint)
+            if (error) {
+                throw new Error(error.hint)
+            }
             return { userId }
         },
         onSuccess: async (_, variables) => {
@@ -96,7 +98,14 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
         if (!values) return
         const { data: { user } } = await client.auth.getUser()
         if (!user) return
-        await updateProfileMutation.mutateAsync({ values, userId: user.id })
+        try {
+            await updateProfileMutation.mutateAsync({ values, userId: user.id })
+        } catch (error) {
+            toast({
+                title: 'An error occurred',
+                variant: 'destructive'
+            })
+        }
     }
 
     return (
