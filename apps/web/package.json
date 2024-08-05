@@ -14,7 +14,7 @@
     "db:reset": "pnpm dlx supabase db reset",
     "test:coverage": "vitest --coverage",
     "migration:add": "pnpm dlx supabase db diff -f",
-    "postbuild": "pnpm dlx tailwindcss -i src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
+    "postbuild": "sass src/styles/globals.scss src/styles/globals.css && pnpm dlx tailwindcss -i src/styles/globals.css -o ./src/styles/resume-templates.css --config ./tailwind.pdf.config.ts",
     "clean": "rm -rf node_modules .next .cache dist .turbo"
   },
   "dependencies": {
@@ -55,6 +55,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.0.3",
     "fast-deep-equal": "^3.1.3",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.344.0",
     "next": "14.2.4",
     "next-plausible": "^3.12.0",
@@ -65,12 +66,18 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.49.3",
+    "rehype-highlight": "^7.0.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
     "resume-templates": "workspace:*",
     "shared": "workspace:*",
     "supabase": "^1.106.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "ui": "workspace:*",
+    "unified": "^11.0.5",
     "use-deep-compare-effect": "^1.8.1",
     "yup": "^1.4.0",
     "zod": "^3.23.8"
@@ -82,7 +89,10 @@
     "@testing-library/react": "^16.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@types/uuid": "^9.0.7"
+    "@types/uuid": "^9.0.7",
+    "postcss": "^8.4.38",
+    "postcss-scss": "^4.0.9",
+    "sass": "^1.77.8"
   },
   "ct3aMetadata": {
     "initVersion": "7.10.3"
