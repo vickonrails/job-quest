@@ -259,6 +259,7 @@ export type Database = {
           email_address: string | null
           full_name: string | null
           github_url: string | null
+          has_tried_browser_extension: boolean | null
           id: string
           is_profile_setup: boolean | null
           linkedin_url: string | null
@@ -275,6 +276,7 @@ export type Database = {
           email_address?: string | null
           full_name?: string | null
           github_url?: string | null
+          has_tried_browser_extension?: boolean | null
           id: string
           is_profile_setup?: boolean | null
           linkedin_url?: string | null
@@ -291,6 +293,7 @@ export type Database = {
           email_address?: string | null
           full_name?: string | null
           github_url?: string | null
+          has_tried_browser_extension?: boolean | null
           id?: string
           is_profile_setup?: boolean | null
           linkedin_url?: string | null

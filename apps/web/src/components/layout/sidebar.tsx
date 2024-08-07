@@ -46,16 +46,9 @@ export const Sidebar: FC<SidebarProps> = ({ profile, user, className, ...rest })
                 </nav>
             </section>
 
-            <section className="border mx-3 p-3 rounded-md flex flex-col gap-3">
-                <header>
-                    <h2 className="text-sm font-medium">Setup Browser Extension</h2>
-                    <p className="text-sm text-muted-foreground">Save time and get the most out of JobQuest by installing the accompanying Chrome extension. </p>
-                </header>
-                <Button size="sm" asChild>
-                    <Link href="https://chromewebstore.google.com/detail/jobkjhkfbhaaeieofbbdabiajgmnabmj" target="_blank" rel="noreferrer noopener">Install</Link>
-                </Button>
-
-            </section>
+            {!profile.has_tried_browser_extension &&
+                <BrowserExtensionBanner />
+            }
 
             <section className="p-3">
                 <Feedback />
@@ -65,6 +58,20 @@ export const Sidebar: FC<SidebarProps> = ({ profile, user, className, ...rest })
                 <ProfileDropdown profile={profile} user={user} />
             </section>
         </aside>
+    )
+}
+
+function BrowserExtensionBanner() {
+    return (
+        <section className="border mx-3 p-3 rounded-md flex flex-col gap-3">
+            <header>
+                <h2 className="text-sm font-medium">Setup Browser Extension</h2>
+                <p className="text-sm text-muted-foreground">Save time and get the most out of JobQuest by installing the accompanying Chrome extension. </p>
+            </header>
+            <Button size="sm" asChild>
+                <Link href="https://chromewebstore.google.com/detail/jobkjhkfbhaaeieofbbdabiajgmnabmj" target="_blank" rel="noreferrer noopener">Install</Link>
+            </Button>
+        </section>
     )
 }
 

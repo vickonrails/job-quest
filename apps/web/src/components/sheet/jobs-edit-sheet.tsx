@@ -131,7 +131,7 @@ function JobInfoWithSheets({ form }: { form: UseFormReturn<Job> }) {
                             value={field.value ?? ''}
                             label="Highlights"
                             rows={20}
-                            containerProps={{className: 'h-[700px]'}}
+                            containerProps={{ className: 'h-[700px]' }}
                             onChange={text => field.onChange(text)}
                         />
                     )}
@@ -167,7 +167,6 @@ function JobBasicInfo({ form }: { form: UseFormReturn<Job> }) {
                         />
                     )}
                 />
-
             </div>
 
             <Controller
@@ -190,10 +189,19 @@ function JobBasicInfo({ form }: { form: UseFormReturn<Job> }) {
                 hint={<ErrorHint>{errors.company_name?.message}</ErrorHint>}
                 {...register('company_name', { required: { value: true, message: 'Company name is required' } })}
             />
+
             <Input
                 placeholder="Location"
                 label="Location"
                 {...register('location')}
+            />
+
+            <Input
+                placeholder="https://"
+                label="Link"
+                type="url"
+                hint={<ErrorHint>{errors.link?.message}</ErrorHint>}
+                {...register('link')}
             />
         </>
     )
