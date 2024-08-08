@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "Job Quest",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Job description grabber for getjobquest.com. Operating system for your job search",
   "author": "Victor Ofoegbu. <victor@getjobquest.com>",
   "scripts": {
@@ -46,7 +46,6 @@
   },
   "manifest": {
     "key": "$CRX_KEY",
-    "version": "0.0.2",
     "permissions": [
       "tabs",
       "webNavigation"

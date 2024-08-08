@@ -26,7 +26,7 @@ const profileSchema = z.object({
     skills: z.array(skillSchema),
     github_url: urlSchema,
     personal_website: urlSchema,
-    linkedin_url: urlSchema,
+    linkedin_url: z.string(),
 });
 
 const workExperienceSchema = z.object({

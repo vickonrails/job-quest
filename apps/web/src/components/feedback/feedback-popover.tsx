@@ -3,11 +3,12 @@
 import { type FeedbackFormValues } from '@/utils/create-feedback'
 import { CheckCircle, MessageSquarePlus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { cn } from 'shared'
 import { Button } from 'ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from 'ui/popover'
 import { FeedbackForm } from './feedback-form'
 
-export function Feedback() {
+export function Feedback({ expanded }: { expanded?: boolean }) {
     const form = useForm<FeedbackFormValues>({
         defaultValues: { content: '', reason: null, mailMe: false }
     })
@@ -25,11 +26,11 @@ export function Feedback() {
         <Popover>
             <PopoverTrigger asChild>
                 <Button
-                    className="w-full justify-start rounded-md text-muted-foreground hover:text-muted-foreground"
+                    className="w-full justify-start rounded-md text-muted-foreground hover:text-muted-foreground p-2 px-3"
                     variant="ghost" size="xs"
                 >
-                    <MessageSquarePlus className="mr-2" />
-                    <span>Feedback</span>
+                    <MessageSquarePlus className={cn(expanded && 'mr-2')} />
+                    {expanded && <span>Feedback</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80"

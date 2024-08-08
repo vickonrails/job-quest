@@ -4,7 +4,7 @@ import { openai } from '@ai-sdk/openai';
 import { type CoreMessage, streamObject } from 'ai';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
 
-export const maxDuration = 60
+export const maxDuration = 80
 
 function getInstruction(resumeText: string) {
     const system: CoreMessage = {

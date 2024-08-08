@@ -8,7 +8,7 @@ export default function UploadResumePage() {
                 <UploadCard
                     maxSize={5}
                     supportedFormats={['.pdf']}
-                    title="Setup your Profile"
+                    title="Setup your Profile (Beta)"
                     Content={<ResumeUploadCardContent supportedFormats={['.pdf']} />}
                 />
             </section>

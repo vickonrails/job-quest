@@ -1,6 +1,7 @@
 'use client'
 
 import { Toaster } from '@/components/toast'
+import { TooltipProvider } from '@/components/tooltip'
 import { ToastProvider } from '@radix-ui/react-toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -23,8 +24,10 @@ export const ReactQueryClientProvider = ({ children }: { children: React.ReactNo
     return (
         <QueryClientProvider client={queryClient}>
             <ToastProvider>
-                {children}
-                <Toaster />
+                <TooltipProvider>
+                    {children}
+                    <Toaster />
+                </TooltipProvider>
             </ToastProvider>
         </QueryClientProvider>
     )

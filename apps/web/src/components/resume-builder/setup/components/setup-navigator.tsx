@@ -3,6 +3,7 @@
 import { Briefcase, Construction, Contact2, GraduationCap, Library, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from 'ui/alert';
+import { Button } from 'ui/button';
 import { SetupLink } from './profile-setup-link';
 
 export default function SetupNav() {
@@ -36,10 +37,12 @@ export default function SetupNav() {
             </ul>
 
             <Alert className="text-sm">
-                <AlertTitle>Setup With Resume</AlertTitle>
-                <AlertDescription className="text-muted-foreground">Setup your profile by uploading a resume. Vital information is extracted into your profile. {' '}
+                <AlertTitle>Setup With Resume (Beta)</AlertTitle>
+                <AlertDescription className="text-muted-foreground mb-3">Setup your profile by uploading a resume. Vital information is extracted into your profile.</AlertDescription>
+                <Button size="xs" asChild>
                     <Link href="/profile/resume-upload" className="text-accent-foreground hover:underline">Upload Now</Link>
-                </AlertDescription>
+                </Button>
+                
             </Alert>
         </aside>
     )
