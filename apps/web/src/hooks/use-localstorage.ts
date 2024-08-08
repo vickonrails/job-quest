@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 
 export function useLocalStorageState<T>({ key, defaultValue }: { key: string, defaultValue: T }) {
-    const [value, setValue] = useState<T>(defaultValue)
-
-    const updateValue = (newValue: T) => {
-        setValue(newValue);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem(key, JSON.stringify(newValue));
+    const [value, setValue] = useState<T>(() => {
+        const item = localStorage.getItem(key)
+        try {
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (error) {
+            return defaultValue;
         }
-    };
+    });
 
     useEffect(() => {
-        const storedItem = localStorage.getItem(key);
-        if (storedItem) {
-            setValue(JSON.parse(storedItem));
-        } else {
-            localStorage.setItem(key, JSON.stringify(defaultValue));
+        if (typeof window === 'undefined') return;
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            // console.error(`Error writing to localStorage: ${error}`);
         }
-    }, [key, defaultValue]);
+    }, [key, value]);
 
-    return { value, setValue: updateValue }
+    return { value, setValue } as const;
 }
