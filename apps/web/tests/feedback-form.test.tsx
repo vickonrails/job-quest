@@ -11,7 +11,7 @@ describe('Feedback Form', () => {
     const setup = () => {
         return {
             user: userEvent.setup(),
-            ...render(<Feedback />)
+            ...render(<Feedback expanded />)
         }
     }
 

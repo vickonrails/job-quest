@@ -11,7 +11,8 @@ export default defineConfig({
     plugins: [tsconfigPaths(), react()],
     test: {
         env: {
-            NEXT_PUBLIC_AI_FEATURES_ENABLED: 'false'
+            NEXT_PUBLIC_AI_FEATURES_ENABLED: 'false',
+            NEXT_PUBLIC_SITE_URL: '',
         },
         watch: false,
         environment: 'jsdom',
