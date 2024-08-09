@@ -3,6 +3,7 @@ import { resumeSchema } from '@/utils/resume-schema';
 import { openai } from '@ai-sdk/openai';
 import { type CoreMessage, streamObject } from 'ai';
 import parsePDF from 'pdf-parse/lib/pdf-parse.js';
+import { base64ToArrayBuffer } from '@/utils/base64-arraybuffer';
 
 export const maxDuration = 80
 
@@ -15,7 +16,7 @@ function getInstruction(resumeText: string) {
     const user: CoreMessage = {
         role: 'user',
         content: `Extract the following structured JSON data from the provided resume. Ensure that all fields are accurately filled based on the available information. 
-        If certain details are not present, leave them as empty strings or default values. 
+        If certain details are not present or incorrect (date, etc), leave them as empty strings or default values. 
         The format for the response should be strictly JSON and include no other text. 
         Respond straight up with {}, and not any code formatting. Your reply will be used directly in the codebase and not presented in a <code> tag, so just return json. 
         The format for the response should be:
@@ -36,14 +37,14 @@ function getInstruction(resumeText: string) {
               "job_title": "",
               "location": "",
               "company_name": "",
-              "end_date": YYYY-MM-DD or null,
-              "start_date": YYYY-MM-DD or null,
+              "end_date": date or null,
+              "start_date": date or null,
               "still_working_here": false,
               "highlights": "<ul><li>Highlights into an unordered list</li></ul>"
           }],
           "education": [{
-              "start_date": YYYY-MM-DD or null,
-              "end_date": YYYY-MM-DD or null,
+              "start_date": date or null,
+              "end_date": date or null,
               "degree": "",
               "field_of_study": "",
               "institution": "",
@@ -53,8 +54,8 @@ function getInstruction(resumeText: string) {
           }],
           "projects": [{
               "highlights": "<ul><li>Highlights into an unordered list</li></ul>",
-              "end_date": YYYY-MM-DD or null,
-              "start_date": YYYY-MM-DD or null,
+              "end_date": date or null,
+              "start_date": date or null,
               "skills": [{"label": ""}],
               "title": "",
               "url": "",
@@ -75,38 +76,21 @@ export async function POST(request: Request) {
     const { data, error } = await client.auth.getUser()
     if (!data || error) throw error;
 
-    const arrayBuffer = await request.arrayBuffer();
+    const { file } = await request.json();
+    const arrayBuffer = base64ToArrayBuffer(file)
 
     try {
         const buffer = Buffer.from(arrayBuffer);
         const { text } = await parsePDF(buffer)
         const instructions = getInstruction(text)
 
-        const { partialObjectStream } = await streamObject({
+        const result = await streamObject({
             model: openai('gpt-4-turbo'),
             messages: [...instructions],
             schema: resumeSchema
         });
 
-        const encoder = new TextEncoder();
-
-        const stream = new ReadableStream({
-            async start(controller) {
-                for await (const partialObject of partialObjectStream) {
-                    const encodedChunk = encoder.encode(JSON.stringify(partialObject) + '\n');
-                    controller.enqueue(encodedChunk);
-                }
-                controller.close();
-            },
-        });
-
-        return new Response(stream, {
-            headers: {
-                'Content-Type': 'text/event-stream',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
-            },
-        });
+        return result.toTextStreamResponse()
     }
 
     catch (e) {

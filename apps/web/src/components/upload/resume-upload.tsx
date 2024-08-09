@@ -11,7 +11,9 @@ import { UploadButton } from '../pdf-upload-button'
 import { useToast } from '../toast/use-toast'
 import { UploadCardContent, UploadCardHint, type SupportedFormats } from './upload-card'
 
-import { extractResumeData, validateProfile, type ProfileSetupType } from '@/utils/resume-import'
+import { validateProfile, type ProfileSetupType } from '@/utils/resume-import'
+import { resumeSchema } from '@/utils/resume-schema'
+import { experimental_useObject as useObject } from 'ai/react'
 import { CodeBlock } from './resume-code-block'
 import { UploadErrorHint } from './resume-upload-hint'
 
@@ -19,16 +21,15 @@ const maxSize = 5
 
 export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats: SupportedFormats[] }) {
     const client = createClient()
+    const router = useRouter()
+    const { toast } = useToast()
     const [uploading, setUploading] = useState(false)
     const [filename, setFilename] = useState('')
-    const { toast } = useToast()
-    const [content, setContent] = useState<ProfileSetupType | null>(null)
-    const [errors, setErrors] = useState<{ message: string, path: string }[]>([])
-    const router = useRouter()
-
-    const handleMessage = (text: ProfileSetupType) => {
-        setContent(text)
-    }
+    const [validationErrors, setValidationErrors] = useState<{ message: string, path: string }[]>([])
+    const { object, submit, isLoading, stop } = useObject<ProfileSetupType, { file: string }>({
+        api: 'resume-upload/api',
+        schema: resumeSchema
+    })
 
     const updateProfileMutation = useMutation({
         mutationFn: async ({ values, userId }: { userId: string, values: ProfileSetupType }) => {
@@ -64,33 +65,27 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
         }
     })
 
-    const onFilePicked = async (file: ArrayBuffer, filename: string) => {
+    const onFilePicked = (file: ArrayBuffer, filename: string) => {
         setUploading(true)
         setFilename(filename)
-        setContent(null)
-        try {
-            await extractResumeData(file, filename, handleMessage, () => setUploading(false))
-        } catch (error) {
-            toast({
-                title: 'An error occurred',
-                variant: 'destructive'
-            })
-        } finally {
-            setUploading(false)
-        }
+        const base64 = btoa(
+            new Uint8Array(file)
+                .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+        submit({ file: base64 })
     }
 
     const handleCancelClick = () => {
-        setContent(null)
+        stop()
     }
 
     const updateProfile = async () => {
-        setErrors([])
-        if (!content) return
-        const { validationErrors, value: values } = validateProfile(content)
+        setValidationErrors([])
+        if (!object) return
+        const { validationErrors, value: values } = validateProfile(object)
         if (validationErrors.length > 0) {
             const errors = validationErrors.map(x => ({ path: x.path.join('.'), message: x.message }))
-            setErrors(errors)
+            setValidationErrors(errors)
             return
         }
         if (!values) return
@@ -104,10 +99,10 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
             {errors.length > 0 && (
                 <UploadErrorHint errors={errors} />
             )}
-            {content ? (
+            {Object.keys(object ?? {}).length > 0 ? (
                 <section>
                     <section className="max-h-96 min-h-96 overflow-auto border p-2">
-                        <CodeBlock value={content} />
+                        <CodeBlock value={object ?? {}} />
                     </section>
                     <footer className="flex justify-between items-center">
                         <div className="flex-1">
@@ -117,7 +112,7 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
                         </div>
                         <section className="gap-2 flex justify-end pt-3">
                             <Button onClick={handleCancelClick} variant="ghost" size="sm">Cancel</Button>
-                            <Button loading={updateProfileMutation.isLoading} disabled={uploading} size="sm" onClick={updateProfile}>Proceed</Button>
+                            <Button loading={updateProfileMutation.isLoading} disabled={isLoading} size="sm" onClick={updateProfile}>Proceed</Button>
                         </section>
                     </footer>
                 </section>
@@ -135,8 +130,8 @@ export function ResumeUploadCardContent({ supportedFormats }: { supportedFormats
                         </div>
 
                         <UploadButton
-                            loadingContent={uploading && 'Uploading...'}
-                            loading={uploading}
+                            loadingContent={isLoading && 'Uploading...'}
+                            loading={isLoading}
                             onFilePicked={onFilePicked}
                             variant="outline"
                             supportedFormats={['.pdf']}

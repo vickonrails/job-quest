@@ -1,6 +1,12 @@
 import { z } from 'zod'
 
-const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable();
+const dateSchema = z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) {
+        const date = new Date(arg);
+        return isNaN(date.getTime()) ? null : date;
+    }
+    return null
+}, z.date().optional().nullable());
 
 const skillSchema = z.object({
     label: z.string(),
@@ -19,7 +25,6 @@ const emailSchema = z.union([
 const profileSchema = z.object({
     full_name: z.string(),
     email_address: emailSchema,
-    // email_address: z.string().email(),
     location: z.string(),
     professional_summary: z.string(),
     title: z.string(),
@@ -51,12 +56,11 @@ const educationSchema = z.object({
 });
 
 const projectSchema = z.object({
-    highlights: z.string(),
+    highlights: z.string().optional().nullable(),
     end_date: dateSchema,
     start_date: dateSchema,
     skills: z.array(skillSchema),
-    title: z.string(),
-    // url: z.string().url().optional(),
+    title: z.string().optional().nullable(),
     url: urlSchema,
 });
 
